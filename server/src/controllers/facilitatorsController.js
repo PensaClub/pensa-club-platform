@@ -61,7 +61,7 @@ facilitatorsController.get(
                         model: user_details,
                         as: 'details',
                         required: false,
-                        attributes: ['firstName', 'lastName', 'imageURL', 'phone'],
+                        attributes: ['firstName', 'lastName', 'imageURL', 'phoneNumber'],
                     },
                 ],
                 limit: limit * 2, // over-fetch so name filter below can still return up to `limit`
@@ -110,7 +110,7 @@ facilitatorsController.get(
                     email: a.email || null,
                     photoUrl: d.imageURL || null,
                     role: a.role,
-                    phone: d.phone || null,
+                    phone: d.phoneNumber || null,
                 };
             });
 

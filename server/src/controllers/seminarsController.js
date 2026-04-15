@@ -56,6 +56,23 @@ const enrichSeminar = (sem) => {
 
 const enrichSeminars = (arr) => (Array.isArray(arr) ? arr.map(enrichSeminar) : arr);
 
+// Re-fetch a seminar after create/update/publish so the response carries the
+// full normalized facilitators[] array (instead of the bare model fields).
+// Mirrors the include used in GET /:slug — facilitator + facilitators include.
+const reloadSeminarWithFacilitators = async (seminarId) => {
+  const fresh = await seminar.findByPk(seminarId, {
+    include: [
+      {
+        model: mentor,
+        as: 'facilitator',
+        attributes: ['id', 'name', 'photoUrl', 'specialization', 'email'],
+      },
+      getFacilitatorsInclude(),
+    ],
+  });
+  return enrichSeminar(fresh);
+};
+
 const { validateBody, validateQuery } = require('../middlewares/validateRequest');
 const {
   seminarCreateSchema,
@@ -3122,7 +3139,7 @@ seminarsController.post(
       res.status(201).json({
         success: true,
         message: 'Seminar created successfully',
-        seminar: newSeminar,
+        seminar: await reloadSeminarWithFacilitators(newSeminar.id),
       });
     } catch (err) {
       console.error('❌ [CREATE SEMINAR] Error:', err);
@@ -3173,7 +3190,7 @@ seminarsController.put(
       res.status(200).json({
         success: true,
         message: 'Seminar updated successfully',
-        seminar: seminarData,
+        seminar: await reloadSeminarWithFacilitators(seminarId),
       });
     } catch (err) {
       console.error('❌ [UPDATE SEMINAR] Error:', err);
@@ -3272,7 +3289,7 @@ seminarsController.post(
       res.status(200).json({
         success: true,
         message: 'Seminar published successfully',
-        seminar: seminarData,
+        seminar: await reloadSeminarWithFacilitators(seminarId),
       });
     } catch (err) {
       console.error('❌ [PUBLISH SEMINAR] Error:', err);

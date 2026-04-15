@@ -214,7 +214,7 @@ const seminarCreateSchema = z.object({
       mentorId: z.coerce.number().int().positive().optional().nullable(),
       adminUserId: z.coerce.number().int().positive().optional().nullable(),
       externalLecturerId: z.coerce.number().int().positive().optional().nullable(),
-      role: z.enum(['lecturer', 'mentor', 'assistant', 'guest']).default('mentor'),
+      role: z.enum(['lecturer', 'mentor', 'assistant', 'guest', 'admin', 'moderator']).default('mentor'),
       isLead: z.boolean().default(false),
       sortOrder: z.coerce.number().int().min(0).default(0),
     })

@@ -82,7 +82,7 @@ module.exports = (sequelize, DataTypes) => {
                 allowNull: false,
                 defaultValue: 'mentor',
                 validate: {
-                    isIn: [['lecturer', 'mentor', 'assistant', 'guest']],
+                    isIn: [['lecturer', 'mentor', 'assistant', 'guest', 'admin', 'moderator']],
                 },
             },
             isLead: {

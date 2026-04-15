@@ -24,8 +24,8 @@ const SeminarCreateForm = () => {
         seminarId,
         seminarSlug,
         seminarData,
-        assignedMentors,
-        setAssignedMentors,
+        facilitators,
+        setFacilitators,
         isLoading,
         isSaving,
         errors,
@@ -103,8 +103,8 @@ const SeminarCreateForm = () => {
                         errors={errors}
                         handleChange={handleChange}
                         updateField={updateField}
-                        assignedMentors={assignedMentors}
-                        setAssignedMentors={setAssignedMentors}
+                        facilitators={facilitators}
+                        setFacilitators={setFacilitators}
                     />
 
                     <SeminarAdditional
