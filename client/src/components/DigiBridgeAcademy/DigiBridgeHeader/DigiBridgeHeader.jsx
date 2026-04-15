@@ -189,7 +189,7 @@ export const DigiBridgeHeader = () => {
                     {/* ===== ДЯСНА ЧАСТ: Actions (отделени) ===== */}
                     <div className="dbh-actions">
                         {/* Back to Pensa */}
-                        <Link to="/" className="dbh-back">
+                        <Link to="/" className="dbh-back" data-no-text-zoom>
                             <span className="dbh-back__icon">←</span>
                             <span className="dbh-back__text">Pensa Club</span>
                         </Link>
