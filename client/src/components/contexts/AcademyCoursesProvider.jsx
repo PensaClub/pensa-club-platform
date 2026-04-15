@@ -217,6 +217,44 @@ export const AcademyCoursesProvider = ({ children }) => {
     }
   }, [coursesService]);
 
+  // Unified facilitator search for seminars — mentors + admins + externals.
+  // Returns { mentors: [], admins: [], externals: [], results: [] }.
+  const searchFacilitators = useCallback(async (query = '', limit = 8) => {
+    try {
+      const data = await coursesService.searchFacilitators(query, limit);
+      return data || { mentors: [], admins: [], externals: [], results: [] };
+    } catch (err) {
+      console.error('Error searching facilitators:', err);
+      return { mentors: [], admins: [], externals: [], results: [] };
+    }
+  }, [coursesService]);
+
+  // External lecturers CRUD
+  const getExternalLecturers = useCallback(async (query = '') => {
+    try {
+      const data = await coursesService.getExternalLecturers(query);
+      return data?.items || [];
+    } catch (err) {
+      console.error('Error loading external lecturers:', err);
+      return [];
+    }
+  }, [coursesService]);
+
+  const createExternalLecturer = useCallback(async (payload) => {
+    const data = await coursesService.createExternalLecturer(payload);
+    return data?.lecturer || null;
+  }, [coursesService]);
+
+  const updateExternalLecturer = useCallback(async (id, payload) => {
+    const data = await coursesService.updateExternalLecturer(id, payload);
+    return data?.lecturer || null;
+  }, [coursesService]);
+
+  const deleteExternalLecturer = useCallback(async (id) => {
+    const data = await coursesService.deleteExternalLecturer(id);
+    return data;
+  }, [coursesService]);
+
   const addCourseMentor = useCallback(async (courseId, mentorData) => {
     const data = await coursesService.addCourseMentor(courseId, mentorData);
     return data;
@@ -2408,6 +2446,12 @@ export const AcademyCoursesProvider = ({ children }) => {
     addCourseMentor,
     updateCourseMentor,
     removeCourseMentor,
+    // Seminar facilitators (unified search + external lecturers CRUD)
+    searchFacilitators,
+    getExternalLecturers,
+    createExternalLecturer,
+    updateExternalLecturer,
+    deleteExternalLecturer,
     // Modules
     getCourseModules,
     createModule,

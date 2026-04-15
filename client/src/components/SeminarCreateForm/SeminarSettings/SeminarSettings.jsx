@@ -3,10 +3,10 @@
 
 import { useTranslation } from 'react-i18next';
 import { Users, Award, AlertCircle, FileText } from 'lucide-react';
-import { AcademyMentorPicker } from '../../AcademyCourses/AcademyMentorPicker/AcademyMentorPicker';
+import FacilitatorPicker from './FacilitatorPicker/FacilitatorPicker';
 import './seminarSettings.css';
 
-const SeminarSettings = ({ seminarData, errors, handleChange, updateField, assignedMentors, setAssignedMentors, seminarId, onOpenTestEditor }) => {
+const SeminarSettings = ({ seminarData, errors, handleChange, updateField, facilitators, setFacilitators, seminarId, onOpenTestEditor }) => {
     const { t } = useTranslation('academy-admin');
 
     const renderError = (field) =>
@@ -20,21 +20,20 @@ const SeminarSettings = ({ seminarData, errors, handleChange, updateField, assig
     return (
         <>
             {/* ============================================= */}
-            {/* Mentor */}
+            {/* Facilitators */}
             {/* ============================================= */}
             <div className="scft-section scft-section-mentor">
                 <div className="scft-section-header">
                     <Users size={20} />
-                    <h2 className="scft-section-title">{t('seminarSettings.mentorTitle', 'Водещ / Ментор')}</h2>
+                    <h2 className="scft-section-title">{t('seminarSettings.facilitatorsTitle', 'Водещи на семинара')}</h2>
                 </div>
                 <p className="scft-section-desc">
-                    {t('seminarSettings.mentorDesc', 'Добавете водещ на семинара. Първият добавен автоматично става главен.')}
+                    {t('seminarSettings.facilitatorsDesc', 'Добавете един или повече водещи (ментори, администратори или външни лектори). Първият добавен автоматично става главен.')}
                 </p>
-                <AcademyMentorPicker
-                    mode="multi"
-                    selected={assignedMentors}
-                    onChange={(mentors) => setAssignedMentors(mentors)}
-                    placeholder={t('seminarSettings.mentorPlaceholder', 'Търси ментор по име...')}
+                <FacilitatorPicker
+                    selected={facilitators}
+                    onChange={(next) => setFacilitators(next)}
+                    placeholder={t('seminarSettings.facilitatorsPlaceholder', 'Търси ментор, админ или външен лектор...')}
                 />
             </div>
 

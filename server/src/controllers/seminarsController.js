@@ -19,7 +19,59 @@ const {
   admin_notification,
   seminar_session,
   session_attendance,
+  seminar_facilitator,
+  external_lecturer,
 } = require('../sequelize/models/index');
+
+const {
+  normalizeFacilitators,
+  pickLeadFacilitator,
+  buildFacilitatorsInclude,
+} = require('../utils/facilitatorHelpers');
+
+// Cached facilitators include spec — used on every seminar SELECT so the
+// response includes an array of all lecturers (mentor + admin + external).
+// Old `as: 'facilitator'` single-mentor include stays alongside for
+// backwards compatibility with legacy clients.
+const getFacilitatorsInclude = () =>
+  buildFacilitatorsInclude({
+    seminar_facilitator,
+    mentor,
+    user_account,
+    user_details,
+    external_lecturer,
+  });
+
+// Normalize a seminar (model or plain) so its `facilitators` array is in
+// the unified frontend-friendly shape: [{type,id,name,email,photoUrl,...}].
+// Adds `leadFacilitator` convenience field. Legacy `facilitator` stays intact.
+const enrichSeminar = (sem) => {
+  if (!sem) return sem;
+  const plain = typeof sem.get === 'function' ? sem.get({ plain: true }) : { ...sem };
+  const normalized = normalizeFacilitators(plain.facilitators || []);
+  plain.facilitators = normalized;
+  plain.leadFacilitator = pickLeadFacilitator(normalized);
+  return plain;
+};
+
+const enrichSeminars = (arr) => (Array.isArray(arr) ? arr.map(enrichSeminar) : arr);
+
+// Re-fetch a seminar after create/update/publish so the response carries the
+// full normalized facilitators[] array (instead of the bare model fields).
+// Mirrors the include used in GET /:slug — facilitator + facilitators include.
+const reloadSeminarWithFacilitators = async (seminarId) => {
+  const fresh = await seminar.findByPk(seminarId, {
+    include: [
+      {
+        model: mentor,
+        as: 'facilitator',
+        attributes: ['id', 'name', 'photoUrl', 'specialization', 'email'],
+      },
+      getFacilitatorsInclude(),
+    ],
+  });
+  return enrichSeminar(fresh);
+};
 
 const { validateBody, validateQuery } = require('../middlewares/validateRequest');
 const {
@@ -86,6 +138,87 @@ const generateUniqueSlug = async (title, existingId = null) => {
   }
 
   return slug;
+};
+
+// ===============================
+// HELPER: Sync facilitators for a seminar
+// ===============================
+// Replaces all seminar_facilitators rows for a seminar with the given array.
+// Each entry must carry { type, (mentorId|adminUserId|externalLecturerId), role, isLead, sortOrder }.
+// Exactly one is_lead=true is enforced (first lead wins, else the first entry).
+// Bumps `times_used` on external_lecturers that are freshly attached.
+// Runs inside a transaction so partial failures don't leave half-assigned rows.
+const syncSeminarFacilitators = async (seminarId, facilitators, transaction = null) => {
+  if (!Array.isArray(facilitators)) return;
+
+  const t = transaction || (await sequelize.transaction());
+  const shouldCommit = !transaction;
+
+  try {
+    // Wipe existing assignments for this seminar — full replace.
+    await seminar_facilitator.destroy({ where: { seminarId }, transaction: t });
+
+    if (facilitators.length === 0) {
+      if (shouldCommit) await t.commit();
+      return;
+    }
+
+    // Normalize + validate each entry before insert.
+    const leadIdx = facilitators.findIndex((f) => f.isLead);
+    const rowsToInsert = facilitators.map((f, idx) => {
+      const row = {
+        seminarId,
+        facilitatorType: f.type,
+        mentorId: null,
+        adminUserId: null,
+        externalLecturerId: null,
+        role: f.role || 'mentor',
+        isLead: leadIdx === -1 ? idx === 0 : idx === leadIdx,
+        sortOrder: typeof f.sortOrder === 'number' ? f.sortOrder : idx,
+      };
+      if (f.type === 'mentor') {
+        if (!f.mentorId) throw new Error('mentor facilitator entry requires mentorId');
+        row.mentorId = f.mentorId;
+      } else if (f.type === 'admin') {
+        if (!f.adminUserId) throw new Error('admin facilitator entry requires adminUserId');
+        row.adminUserId = f.adminUserId;
+      } else if (f.type === 'external') {
+        if (!f.externalLecturerId) throw new Error('external facilitator entry requires externalLecturerId');
+        row.externalLecturerId = f.externalLecturerId;
+      } else {
+        throw new Error(`Unknown facilitator type: ${f.type}`);
+      }
+      return row;
+    });
+
+    await seminar_facilitator.bulkCreate(rowsToInsert, { transaction: t });
+
+    // Bump times_used for any external lecturer now attached.
+    const externalIds = rowsToInsert
+      .filter((r) => r.externalLecturerId)
+      .map((r) => r.externalLecturerId);
+    if (externalIds.length > 0) {
+      await external_lecturer.increment('timesUsed', {
+        by: 1,
+        where: { id: { [Op.in]: externalIds } },
+        transaction: t,
+      });
+    }
+
+    // Keep legacy seminars.mentor_id in sync with the lead mentor (if any)
+    // so existing code paths keep working without an extra join.
+    const leadRow = rowsToInsert.find((r) => r.isLead);
+    const legacyMentorId = leadRow && leadRow.facilitatorType === 'mentor' ? leadRow.mentorId : null;
+    await seminar.update(
+      { mentorId: legacyMentorId },
+      { where: { id: seminarId }, transaction: t }
+    );
+
+    if (shouldCommit) await t.commit();
+  } catch (err) {
+    if (shouldCommit) await t.rollback();
+    throw err;
+  }
 };
 
 // ===============================
@@ -160,6 +293,7 @@ seminarsController.get('/', validateQuery(seminarQuerySchema), async (req, res, 
           as: 'facilitator',
           attributes: ['id', 'name', 'photoUrl', 'specialization'],
         },
+        getFacilitatorsInclude(),
         {
           model: course,
           as: 'course',
@@ -179,7 +313,7 @@ seminarsController.get('/', validateQuery(seminarQuerySchema), async (req, res, 
 
     res.status(200).json({
       success: true,
-      seminars,
+      seminars: enrichSeminars(seminars),
       pagination: {
         page,
         limit,
@@ -214,6 +348,7 @@ seminarsController.get('/upcoming', async (req, res, next) => {
           as: 'facilitator',
           attributes: ['id', 'name', 'photoUrl'],
         },
+        getFacilitatorsInclude(),
       ],
       order: [['scheduledDate', 'ASC']],
       limit: parseInt(limit),
@@ -221,7 +356,7 @@ seminarsController.get('/upcoming', async (req, res, next) => {
 
     res.status(200).json({
       success: true,
-      seminars,
+      seminars: enrichSeminars(seminars),
     });
   } catch (err) {
     console.error('❌ [GET UPCOMING SEMINARS] Error:', err);
@@ -345,6 +480,7 @@ seminarsController.get(
             as: 'facilitator',
             attributes: ['id', 'name', 'photoUrl'],
           },
+          getFacilitatorsInclude(),
           {
             model: user_account,
             as: 'creator',
@@ -361,7 +497,7 @@ seminarsController.get(
 
       res.status(200).json({
         success: true,
-        seminars,
+        seminars: enrichSeminars(seminars),
         pagination: {
           page,
           limit,
@@ -535,6 +671,7 @@ seminarsController.get(
             as: 'facilitator',
             attributes: ['id', 'name'],
           },
+          getFacilitatorsInclude(),
           {
             model: student_seminar,
             as: 'attendances',
@@ -559,6 +696,9 @@ seminarsController.get(
         const guestCount = (plain.guestAttendances || []).length;
         const earnedCredits = (plain.attendances || []).reduce((sum, a) => sum + (a.earnedCredits || 0), 0);
 
+        const facilitatorList = normalizeFacilitators(plain.facilitators || []);
+        const lead = pickLeadFacilitator(facilitatorList);
+
         return {
           id: plain.id,
           title: plain.title,
@@ -568,8 +708,14 @@ seminarsController.get(
           address: plain.address,
           scheduledDate: plain.scheduledDate,
           status: plain.status,
-          facilitator: plain.facilitator?.name || null,
-          facilitatorId: plain.facilitator?.id || null,
+          // NEW: full list of all lecturers for this seminar
+          facilitators: facilitatorList,
+          // Legacy single-lecturer fields for backwards compat with old UI.
+          // Prefer the new junction data (lead facilitator), but fall back to
+          // the mentor-only include if the junction is empty.
+          facilitator: lead?.name ?? plain.facilitator?.name ?? null,
+          facilitatorId: lead?.sourceId ?? plain.facilitator?.id ?? null,
+          facilitatorType: lead?.type ?? (plain.facilitator ? 'mentor' : null),
           registeredCount: plain.registeredCount || 0,
           attendedRegistered: regAttended,
           attendedGuests: guestCount,
@@ -578,12 +724,33 @@ seminarsController.get(
         };
       });
 
-      // Unique mentors for filter
+      // Unique mentors for the legacy filter dropdown (mentor type only).
+      // Kept for backwards compat with any client that still filters by mentor id.
       const mentors = [...new Map(
         seminarsData
-          .filter(s => s.facilitatorId)
+          .filter(s => s.facilitatorType === 'mentor' && s.facilitatorId)
           .map(s => [s.facilitatorId, { id: s.facilitatorId, name: s.facilitator }])
       ).values()];
+
+      // NEW: all unique facilitators across all 3 types, for the new filter dropdown.
+      const facilitatorKey = (f) => `${f.type}:${f.sourceId}`;
+      const allFacilitatorsMap = new Map();
+      for (const s of seminarsData) {
+        for (const f of s.facilitators || []) {
+          if (!f.sourceId) continue;
+          const key = facilitatorKey(f);
+          if (!allFacilitatorsMap.has(key)) {
+            allFacilitatorsMap.set(key, {
+              type: f.type,
+              id: f.sourceId,
+              name: f.name,
+              photoUrl: f.photoUrl,
+              specialization: f.specialization,
+            });
+          }
+        }
+      }
+      const facilitatorsFilter = [...allFacilitatorsMap.values()];
 
       res.status(200).json({
         success: true,
@@ -602,6 +769,7 @@ seminarsController.get(
         monthlyData,
         seminars: seminarsData,
         mentors,
+        facilitatorsFilter,
       });
     } catch (err) {
       console.error('❌ [GET ADMIN SEMINAR STATISTICS] Error:', err);
@@ -876,10 +1044,12 @@ seminarsController.get(
       const where = { ...dateFilter, ...typeFilter, ...statusFilter };
 
       // Fetch seminars
+      const { joinFacilitatorNames } = require('../utils/facilitatorHelpers');
       const seminarsData = await seminar.findAll({
         where,
         include: [
           { model: mentor, as: 'facilitator', attributes: ['id', 'name'] },
+          getFacilitatorsInclude(),
           { model: student_seminar, as: 'attendances', attributes: ['id', 'attended', 'earnedCredits'] },
           { model: seminar_guest_attendance, as: 'guestAttendances', attributes: ['id'] },
         ],
@@ -892,11 +1062,18 @@ seminarsController.get(
         const regAtt = (plain.attendances || []).filter(a => a.attended).length;
         const guestAtt = (plain.guestAttendances || []).length;
         const credits = (plain.attendances || []).reduce((sum, a) => sum + (a.earnedCredits || 0), 0);
+        const facList = normalizeFacilitators(plain.facilitators || []);
+        // Join all lecturers for the PDF column: "Alice, Bob, Carol"
+        // Falls back to the legacy mentor include if the junction is empty.
+        const facilitatorText =
+          facList.length > 0
+            ? joinFacilitatorNames(facList)
+            : (plain.facilitator?.name || '—');
         return {
           date: plain.scheduledDate ? new Date(plain.scheduledDate).toLocaleDateString('bg-BG') : '—',
           title: plain.title || '',
           location: plain.isOnline ? 'Онлайн' : (plain.location || '—'),
-          facilitator: plain.facilitator?.name || '—',
+          facilitator: facilitatorText,
           registered: plain.registeredCount || 0,
           regAttended: regAtt,
           guestAttended: guestAtt,
@@ -1026,12 +1203,25 @@ seminarsController.get(
 
       const seminarData = await seminar.findByPk(seminarId, {
         attributes: ['id', 'title', 'scheduledDate', 'location', 'isOnline'],
-        include: [{ model: mentor, as: 'facilitator', attributes: ['name'] }],
+        include: [
+          { model: mentor, as: 'facilitator', attributes: ['name'] },
+          getFacilitatorsInclude(),
+        ],
       });
 
       if (!seminarData) {
         return res.status(404).json({ success: false, message: 'Seminar not found' });
       }
+
+      // Build a display string for ALL lecturers — mentor(s) + admin(s) + external(s).
+      // The PDF header below prefers this over the legacy single-mentor `facilitator`.
+      const { joinFacilitatorNames } = require('../utils/facilitatorHelpers');
+      const seminarPlain = seminarData.get({ plain: true });
+      const allFacilitators = normalizeFacilitators(seminarPlain.facilitators || []);
+      const lecturerLine =
+        allFacilitators.length > 0
+          ? joinFacilitatorNames(allFacilitators)
+          : (seminarPlain.facilitator?.name || '—');
 
       // Registered (conditionally)
       const registered = includeRegistered
@@ -1124,7 +1314,7 @@ seminarsController.get(
       // Seminar info
       doc.font(font).fontSize(10).fillColor('#374151').text(seminarData.title, { align: 'center' });
       doc.font(font).fontSize(8).fillColor('#6b7280');
-      doc.text(`Дата: ${dateStr}    |    Място: ${seminarData.isOnline ? 'Онлайн' : (seminarData.location || '—')}    |    Лектор: ${seminarData.facilitator?.name || '—'}`, { align: 'center' });
+      doc.text(`Дата: ${dateStr}    |    Място: ${seminarData.isOnline ? 'Онлайн' : (seminarData.location || '—')}    |    Лектор: ${lecturerLine}`, { align: 'center' });
       const summaryText = typeFilter === 'all'
         ? `Общо участници: ${allRows.length} (${registered.length} регистрирани + ${guests.length} гости)`
         : typeFilter === 'registered'
@@ -1588,6 +1778,7 @@ seminarsController.get(
         attributes: ['id', 'title', 'slug', 'scheduledDate', 'isOnline', 'location', 'status'],
         include: [
           { model: mentor, as: 'facilitator', attributes: ['id', 'name'], required: false },
+          getFacilitatorsInclude(),
         ],
         order: [['scheduledDate', 'DESC']],
         limit,
@@ -1643,10 +1834,12 @@ seminarsController.get(
         }
       }
 
+      const { joinFacilitatorNames } = require('../utils/facilitatorHelpers');
       const seminars = rows.map(s => {
         const plain = s.get({ plain: true });
         const counts = mediaCounts[plain.id] || { photos: 0, videos: 0, documents: 0, presentations: 0 };
         counts.attendanceLists = attendanceListCounts[plain.id] || 0;
+        const facList = normalizeFacilitators(plain.facilitators || []);
         return {
           id: plain.id,
           title: plain.title,
@@ -1654,7 +1847,11 @@ seminarsController.get(
           scheduledDate: plain.scheduledDate,
           isOnline: plain.isOnline,
           location: plain.location,
-          facilitator: plain.facilitator?.name || null,
+          // Legacy single-name column (first lecturer only, for backwards compat)
+          facilitator:
+            facList.length > 0 ? joinFacilitatorNames(facList) : (plain.facilitator?.name || null),
+          // New: full normalized array of all lecturers of the seminar
+          facilitators: facList,
           status: plain.status,
           mediaCounts: counts,
         };
@@ -2711,6 +2908,7 @@ seminarsController.get('/:slug', async (req, res, next) => {
           as: 'facilitator',
           attributes: ['id', 'name', 'photoUrl', 'specialization', 'email'],
         },
+        getFacilitatorsInclude(),
         {
           model: course,
           as: 'course',
@@ -2741,7 +2939,7 @@ seminarsController.get('/:slug', async (req, res, next) => {
 
     res.status(200).json({
       success: true,
-      seminar: seminarData,
+      seminar: enrichSeminar(seminarData),
     });
   } catch (err) {
     console.error('❌ [GET SEMINAR BY SLUG] Error:', err);
@@ -2768,6 +2966,7 @@ seminarsController.get(
             as: 'facilitator',
             attributes: ['id', 'name', 'photoUrl', 'specialization', 'email'],
           },
+          getFacilitatorsInclude(),
           {
             model: course,
             as: 'course',
@@ -2819,7 +3018,7 @@ seminarsController.get(
 
       res.status(200).json({
         success: true,
-        seminar: seminarData,
+        seminar: enrichSeminar(seminarData),
       });
     } catch (err) {
       console.error('❌ [GET SEMINAR BY ID] Error:', err);
@@ -2878,6 +3077,8 @@ seminarsController.post(
         tags,
         prerequisites,
         whatToBring,
+        learningPoints,
+        facilitators,
       } = req.body;
 
       const slug = await generateUniqueSlug(title);
@@ -2921,14 +3122,26 @@ seminarsController.post(
         tags,
         prerequisites,
         whatToBring,
+        learningPoints: learningPoints || [],
         status: 'scheduled',
         isPublished: false,
       });
 
+      // Sync multi-facilitator junction rows. If the caller supplied the new
+      // `facilitators` array, use it directly. Otherwise fall back to the
+      // legacy `mentorId` → single lead mentor row.
+      if (Array.isArray(facilitators) && facilitators.length > 0) {
+        await syncSeminarFacilitators(newSeminar.id, facilitators);
+      } else if (mentorId) {
+        await syncSeminarFacilitators(newSeminar.id, [
+          { type: 'mentor', mentorId, role: 'mentor', isLead: true, sortOrder: 0 },
+        ]);
+      }
+
       res.status(201).json({
         success: true,
         message: 'Seminar created successfully',
-        seminar: newSeminar,
+        seminar: await reloadSeminarWithFacilitators(newSeminar.id),
       });
     } catch (err) {
       console.error('❌ [CREATE SEMINAR] Error:', err);
@@ -2949,7 +3162,11 @@ seminarsController.put(
   async (req, res, next) => {
     try {
       const seminarId = parseInt(req.params.id);
-      const updates = req.body;
+      const updates = { ...req.body };
+
+      // Pull facilitators out before `update()` — it's not a column.
+      const facilitatorsPayload = updates.facilitators;
+      delete updates.facilitators;
 
       const seminarData = await seminar.findByPk(seminarId);
 
@@ -2966,10 +3183,16 @@ seminarsController.put(
 
       await seminarData.update(updates);
 
+      // If the caller sent a `facilitators` array, treat it as the new truth
+      // and replace the junction rows. Caller NOT sending it → leave untouched.
+      if (Array.isArray(facilitatorsPayload)) {
+        await syncSeminarFacilitators(seminarId, facilitatorsPayload);
+      }
+
       res.status(200).json({
         success: true,
         message: 'Seminar updated successfully',
-        seminar: seminarData,
+        seminar: await reloadSeminarWithFacilitators(seminarId),
       });
     } catch (err) {
       console.error('❌ [UPDATE SEMINAR] Error:', err);
@@ -3068,7 +3291,7 @@ seminarsController.post(
       res.status(200).json({
         success: true,
         message: 'Seminar published successfully',
-        seminar: seminarData,
+        seminar: await reloadSeminarWithFacilitators(seminarId),
       });
     } catch (err) {
       console.error('❌ [PUBLISH SEMINAR] Error:', err);

@@ -691,6 +691,9 @@
     "inPerson": "Vor Ort",
     "uncategorized": "Seminar",
     "mentor": "Mentor",
+    "admin": "Administrator",
+    "externalLecturer": "Externer Dozent",
+    "plusMore": "+{{count}}",
     "hasTest": "Test"
   },
   "seminarDetail": {
@@ -749,6 +752,22 @@
       "whatToBring": "Was mitbringen",
       "mentor": "Mentor",
       "linkedCourse": "Verknüpfter Kurs"
+    },
+    "facilitators": {
+      "titleSingle": "Seminarleiter",
+      "titleMulti": "Seminarleiter",
+      "leadLabel": "Hauptleiter",
+      "typeMentor": "Mentor",
+      "typeAdmin": "Administrator",
+      "typeExternal": "Externer Dozent",
+      "roles": {
+        "lecturer": "Dozent",
+        "mentor": "Mentor",
+        "assistant": "Assistent",
+        "guest": "Gast",
+        "admin": "Administrator",
+        "moderator": "Moderator"
+      }
     },
     "reviews": {
       "title": "Bewertungen",

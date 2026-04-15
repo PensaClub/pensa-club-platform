@@ -691,6 +691,9 @@
   "inPerson": "In person",
   "uncategorized": "Seminar",
   "mentor": "Mentor",
+  "admin": "Administrator",
+  "externalLecturer": "External lecturer",
+  "plusMore": "+{{count}}",
   "hasTest": "Test"
 },
 "seminarDetail": {
@@ -752,6 +755,22 @@
     "whatToBring": "What to bring",
     "mentor": "Mentor",
     "linkedCourse": "Linked Course"
+  },
+  "facilitators": {
+    "titleSingle": "Seminar facilitator",
+    "titleMulti": "Seminar facilitators",
+    "leadLabel": "Lead facilitator",
+    "typeMentor": "Mentor",
+    "typeAdmin": "Administrator",
+    "typeExternal": "External lecturer",
+    "roles": {
+      "lecturer": "Lecturer",
+      "mentor": "Mentor",
+      "assistant": "Assistant",
+      "guest": "Guest",
+      "admin": "Administrator",
+      "moderator": "Moderator"
+    }
   },
   "reviews": {
     "title": "Reviews",

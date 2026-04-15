@@ -851,10 +851,64 @@
     "thumbnailFormats": "Поддържани формати: JPG, PNG, GIF, WebP",
     "videoUrlWarning": "Това изглежда като видео линк. Тук се добавя само снимка за обложката. Видеата ще могат да се добавят в секция Видеа."
   },
+  "facilitatorPicker": {
+    "searchPlaceholder": "Търси ментор, админ или външен лектор...",
+    "typeToSearch": "Въведи поне 1 символ...",
+    "searching": "Търсене...",
+    "noResults": "Няма резултати",
+    "addExternal": "Добави външен лектор",
+    "setAsLead": "Задай като главен водещ",
+    "remove": "Премахни",
+    "sections": {
+      "mentors": "Ментори",
+      "admins": "Администратори",
+      "externals": "Външни лектори"
+    },
+    "types": {
+      "mentor": "Ментор",
+      "admin": "Админ",
+      "external": "Външен"
+    },
+    "roles": {
+      "lecturer": "Лектор",
+      "mentor": "Ментор",
+      "assistant": "Асистент",
+      "guest": "Гост",
+      "admin": "Администратор",
+      "moderator": "Модератор"
+    }
+  },
+  "externalLecturerModal": {
+    "title": "Външен лектор",
+    "subtitle": "Добави нов външен лектор или избери от съществуващите.",
+    "name": "Име",
+    "namePlaceholder": "Иван Иванов",
+    "email": "Имейл",
+    "phone": "Телефон",
+    "organization": "Организация",
+    "organizationPlaceholder": "Университет, фирма...",
+    "bio": "Кратка биография",
+    "bioPlaceholder": "Опит, специализация, постижения...",
+    "existingMatches": "Съществуващи лектори:",
+    "timesUsed": "{{count}}× ползван",
+    "save": "Запази и добави",
+    "saving": "Запазване...",
+    "cancel": "Отказ",
+    "created": "Външният лектор е създаден",
+    "errors": {
+      "nameRequired": "Името е задължително",
+      "nameMin": "Минимум 2 символа",
+      "emailInvalid": "Невалиден имейл",
+      "createFailed": "Грешка при създаване"
+    }
+  },
   "seminarSettings": {
     "mentorTitle": "Водещ / Ментор",
     "mentorDesc": "Добавете водещ на семинара. Първият добавен автоматично става главен.",
     "mentorPlaceholder": "Търси ментор по име...",
+    "facilitatorsTitle": "Водещи на семинара",
+    "facilitatorsDesc": "Добавете един или повече водещи (ментори, администратори или външни лектори). Първият добавен автоматично става главен.",
+    "facilitatorsPlaceholder": "Търси ментор, админ или външен лектор...",
     "registrationTitle": "Записване",
     "maxParticipants": "Макс. участници",
     "unlimited": "Без ограничение",
@@ -1228,6 +1282,10 @@
     "exportReport": "Свали доклад",
     "exportAttendees": "Свали списък",
     "allMentors": "Всички ментори",
+    "allFacilitators": "Всички водещи",
+    "mentorsGroup": "Ментори",
+    "adminsGroup": "Администратори",
+    "externalsGroup": "Външни лектори",
     "online": "Онлайн",
     "inperson": "Присъствен",
     "noSeminars": "Няма намерени семинари",
