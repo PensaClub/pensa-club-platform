@@ -140,22 +140,44 @@ const SeminarCatalogCard = ({ seminar, status, categoryColor, onClick }) => {
                     </div>
                 )}
 
-                {/* Mentor */}
-                {seminar.facilitator && (
-                    <div className="ascc-mentor">
-                        <div className="ascc-mentor-avatar">
-                            {seminar.facilitator.photoUrl ? (
-                                <img src={seminar.facilitator.photoUrl} alt={seminar.facilitator.name} />
-                            ) : (
-                                <span>👤</span>
-                            )}
+                {/* Lead facilitator + extra count */}
+                {(() => {
+                    const facs = Array.isArray(seminar.facilitators) && seminar.facilitators.length > 0
+                        ? seminar.facilitators
+                        : seminar.facilitator
+                            ? [{ type: 'mentor', name: seminar.facilitator.name, photoUrl: seminar.facilitator.photoUrl, isLead: true }]
+                            : [];
+                    if (facs.length === 0) return null;
+                    const lead = facs.find(f => f.isLead) || facs[0];
+                    const extra = facs.length - 1;
+                    const roleLabel = lead.type === 'admin'
+                        ? t('seminarCard.admin', 'Администратор')
+                        : lead.type === 'external'
+                            ? t('seminarCard.externalLecturer', 'Външен лектор')
+                            : t('seminarCard.mentor', 'Ментор');
+                    return (
+                        <div className="ascc-mentor">
+                            <div className="ascc-mentor-avatar">
+                                {lead.photoUrl ? (
+                                    <img src={lead.photoUrl} alt={lead.name} />
+                                ) : (
+                                    <span>👤</span>
+                                )}
+                            </div>
+                            <div className="ascc-mentor-info">
+                                <span className="ascc-mentor-name">
+                                    {lead.name}
+                                    {extra > 0 && (
+                                        <span className="ascc-mentor-extra">
+                                            {t('seminarCard.plusMore', { count: extra, defaultValue: '+{{count}}' })}
+                                        </span>
+                                    )}
+                                </span>
+                                <span className="ascc-mentor-role">{roleLabel}</span>
+                            </div>
                         </div>
-                        <div className="ascc-mentor-info">
-                            <span className="ascc-mentor-name">{seminar.facilitator.name}</span>
-                            <span className="ascc-mentor-role">{t('seminarCard.mentor', 'Ментор')}</span>
-                        </div>
-                    </div>
-                )}
+                    );
+                })()}
 
                 {/* Footer */}
                 <div className="ascc-footer">

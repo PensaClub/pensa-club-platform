@@ -120,6 +120,33 @@ const sendSeminarReminder = async (phoneNumber, seminarTitle, scheduledDate, loc
 };
 
 /**
+ * Send a reminder SMS TO a facilitator (mentor / admin / external). Uses a
+ * slightly different template because facilitators need to show up early and
+ * often get a different message than attendees.
+ *
+ * Safe to call with null/empty phone — it just resolves false instead of
+ * throwing, so a single missing facilitator phone won't kill a batch cron.
+ */
+const sendSeminarReminderToFacilitator = async (phoneNumber, seminarTitle, scheduledDate, location, isOnline, timeLabel = 'утре', customTemplate = null) => {
+    if (!phoneNumber || String(phoneNumber).trim().length < 8) {
+        return { ok: false, skipped: true, reason: 'no_phone' };
+    }
+    const template = customTemplate || 'Напомняне за водещ: {timeLabel} водите семинар "{title}" {location} на {date}. Моля бъдете готови. - PensaClub';
+    const message = buildMessageFromTemplate(template, {
+        timeLabel,
+        title: seminarTitle,
+        date: formatSmsDate(scheduledDate),
+        location: buildLocationText(isOnline, location),
+    });
+    try {
+        return await sendSMS(phoneNumber, message);
+    } catch (err) {
+        console.error('SMS send to facilitator failed:', err);
+        return { ok: false, error: err?.message || String(err) };
+    }
+};
+
+/**
  * Send seminar registration SMS using DB template
  */
 const sendRegistrationSms = async (phoneNumber, seminarTitle, scheduledDate, location, isOnline, customTemplate = null) => {
@@ -144,4 +171,4 @@ const sendPasswordResetSms = async (phoneNumber, code) => {
     return sendSMS(phoneNumber, message);
 };
 
-module.exports = { sendSMS, sendSeminarReminder, sendRegistrationSms, sendPasswordResetSms, getSmsSettings };
+module.exports = { sendSMS, sendSeminarReminder, sendSeminarReminderToFacilitator, sendRegistrationSms, sendPasswordResetSms, getSmsSettings };

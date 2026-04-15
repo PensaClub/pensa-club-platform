@@ -60,7 +60,7 @@ const formatDateTimeLocal = (dateStr) => {
     return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
 };
 
-const useSeminarCreateForm = () => {
+const useSeminarCreateForm = ({ materialsRef } = {}) => {
     const { slug } = useParams();
     const navigate = useLocalizedNavigate();
     const { t } = useTranslation('academy-admin');
@@ -341,14 +341,28 @@ const useSeminarCreateForm = () => {
             const payload = preparePayload();
 
             let id = seminarId;
+            let slugForFlush = seminarSlug;
             if (id) {
                 await updateSeminar(id, payload);
             } else {
                 const response = await createSeminar(payload);
                 id = response?.seminar?.id || response?.id;
+                const newSlug = response?.seminar?.slug || response?.slug;
                 if (id) {
                     setSeminarId(id);
+                    setSeminarSlug(newSlug || null);
+                    slugForFlush = newSlug || null;
                     sessionStorage.removeItem(STORAGE_KEY);
+                }
+            }
+
+            // Flush any pending materials (files queued before the seminar had
+            // a slug). Must run BEFORE navigate so the files aren't lost.
+            if (slugForFlush && materialsRef?.current?.flushPending) {
+                try {
+                    await materialsRef.current.flushPending(slugForFlush);
+                } catch (err) {
+                    console.error('Error flushing pending materials:', err);
                 }
             }
 
@@ -365,7 +379,7 @@ const useSeminarCreateForm = () => {
         } finally {
             setIsSaving(false);
         }
-    }, [seminarId, preparePayload, validate, createSeminar, updateSeminar, publishSeminar, navigate, t]);
+    }, [seminarId, seminarSlug, preparePayload, validate, createSeminar, updateSeminar, publishSeminar, navigate, t, materialsRef]);
 
     return {
         isEditMode,

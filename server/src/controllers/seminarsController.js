@@ -3077,6 +3077,7 @@ seminarsController.post(
         tags,
         prerequisites,
         whatToBring,
+        learningPoints,
         facilitators,
       } = req.body;
 
@@ -3121,6 +3122,7 @@ seminarsController.post(
         tags,
         prerequisites,
         whatToBring,
+        learningPoints: learningPoints || [],
         status: 'scheduled',
         isPublished: false,
       });

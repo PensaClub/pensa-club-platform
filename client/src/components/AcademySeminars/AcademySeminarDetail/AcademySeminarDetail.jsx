@@ -978,29 +978,77 @@ const AcademySeminarDetail = () => { // НОВО
                                     </section>
                                 )}
 
-                                {/* Mentor */}
-                                {seminar.facilitator && (
-                                    <section className="asd-section">
-                                        <h2 className="asd-section-title">
-                                            <span>👨‍🏫</span>
-                                            {t('seminarDetail.overview.mentor', 'Ментор')}
-                                        </h2>
-                                        <div className="asd-mentor-card">
-                                            <div className="asd-mentor-avatar">
-                                                {seminar.facilitator.photoUrl
-                                                    ? <img src={seminar.facilitator.photoUrl} alt={seminar.facilitator.name} />
-                                                    : <span>👤</span>
-                                                }
+                                {/* Facilitators (mentor / admin / external) */}
+                                {(() => {
+                                    const facilitators = Array.isArray(seminar.facilitators) && seminar.facilitators.length > 0
+                                        ? seminar.facilitators
+                                        : seminar.facilitator
+                                            ? [{
+                                                type: 'mentor',
+                                                name: seminar.facilitator.name,
+                                                photoUrl: seminar.facilitator.photoUrl,
+                                                specialization: seminar.facilitator.specialization,
+                                                isLead: true,
+                                            }]
+                                            : [];
+                                    if (facilitators.length === 0) return null;
+
+                                    // Sort: lead first, then rest.
+                                    const sorted = [...facilitators].sort((a, b) => {
+                                        if (a.isLead && !b.isLead) return -1;
+                                        if (!a.isLead && b.isLead) return 1;
+                                        return 0;
+                                    });
+
+                                    const typeLabel = (type) => {
+                                        if (type === 'mentor') return t('seminarDetail.facilitators.typeMentor', 'Ментор');
+                                        if (type === 'admin') return t('seminarDetail.facilitators.typeAdmin', 'Администратор');
+                                        if (type === 'external') return t('seminarDetail.facilitators.typeExternal', 'Външен лектор');
+                                        return '';
+                                    };
+
+                                    return (
+                                        <section className="asd-section">
+                                            <h2 className="asd-section-title">
+                                                <span>👨‍🏫</span>
+                                                {facilitators.length > 1
+                                                    ? t('seminarDetail.facilitators.titleMulti', 'Водещи на семинара')
+                                                    : t('seminarDetail.facilitators.titleSingle', 'Водещ на семинара')}
+                                            </h2>
+
+                                            <div className="asd-facilitators-grid">
+                                                {sorted.map((f, idx) => (
+                                                    <div
+                                                        key={`${f.type}-${f.sourceId || idx}`}
+                                                        className={`asd-mentor-card${f.isLead ? ' asd-mentor-card--lead' : ''}`}
+                                                    >
+                                                        {f.isLead && (
+                                                            <span className="asd-lead-ribbon" title={t('seminarDetail.facilitators.leadLabel', 'Главен водещ')}>★</span>
+                                                        )}
+                                                        <div className="asd-mentor-avatar">
+                                                            {f.photoUrl
+                                                                ? <img src={f.photoUrl} alt={f.name} />
+                                                                : <span>👤</span>
+                                                            }
+                                                        </div>
+                                                        <div className="asd-mentor-info">
+                                                            <span className="asd-mentor-name">{f.name}</span>
+                                                            <span className="asd-mentor-type-badge">
+                                                                {typeLabel(f.type)}
+                                                                {f.role && f.role !== 'mentor' && ` · ${t(`seminarDetail.facilitators.roles.${f.role}`, f.role)}`}
+                                                            </span>
+                                                            {(f.specialization || f.organization) && (
+                                                                <span className="asd-mentor-spec">
+                                                                    {f.specialization || f.organization}
+                                                                </span>
+                                                            )}
+                                                        </div>
+                                                    </div>
+                                                ))}
                                             </div>
-                                            <div className="asd-mentor-info">
-                                                <span className="asd-mentor-name">{seminar.facilitator.name}</span>
-                                                {seminar.facilitator.specialization && (
-                                                    <span className="asd-mentor-spec">{seminar.facilitator.specialization}</span>
-                                                )}
-                                            </div>
-                                        </div>
-                                    </section>
-                                )}
+                                        </section>
+                                    );
+                                })()}
 
                                 {/* Linked course */}
                                 {seminar.course && (
