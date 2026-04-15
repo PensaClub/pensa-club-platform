@@ -149,18 +149,33 @@ const generateUniqueSlug = async (title, existingId = null) => {
 // Bumps `times_used` on external_lecturers that are freshly attached.
 // Runs inside a transaction so partial failures don't leave half-assigned rows.
 const syncSeminarFacilitators = async (seminarId, facilitators, transaction = null) => {
-  if (!Array.isArray(facilitators)) return;
+  if (!Array.isArray(facilitators)) return { newlyAdded: [] };
 
   const t = transaction || (await sequelize.transaction());
   const shouldCommit = !transaction;
 
   try {
+    // Snapshot existing rows BEFORE destroy so we can diff and figure out
+    // which facilitators are freshly assigned (to notify them).
+    const existingRows = await seminar_facilitator.findAll({
+      where: { seminarId },
+      transaction: t,
+    });
+    const existingKeys = new Set(
+      existingRows.map((r) => {
+        const fk = r.facilitatorType === 'mentor' ? r.mentorId
+          : r.facilitatorType === 'admin' ? r.adminUserId
+          : r.externalLecturerId;
+        return `${r.facilitatorType}:${fk}`;
+      })
+    );
+
     // Wipe existing assignments for this seminar — full replace.
     await seminar_facilitator.destroy({ where: { seminarId }, transaction: t });
 
     if (facilitators.length === 0) {
       if (shouldCommit) await t.commit();
-      return;
+      return { newlyAdded: [] };
     }
 
     // Normalize + validate each entry before insert.
@@ -214,10 +229,173 @@ const syncSeminarFacilitators = async (seminarId, facilitators, transaction = nu
       { where: { id: seminarId }, transaction: t }
     );
 
+    // Collect entries that didn't exist before this sync — these are the
+    // "newly added" ones that should trigger assignment notifications.
+    const newlyAdded = facilitators.filter((f) => {
+      const fk = f.type === 'mentor' ? f.mentorId
+        : f.type === 'admin' ? f.adminUserId
+        : f.externalLecturerId;
+      return !existingKeys.has(`${f.type}:${fk}`);
+    });
+
     if (shouldCommit) await t.commit();
+    return { newlyAdded };
   } catch (err) {
     if (shouldCommit) await t.rollback();
     throw err;
+  }
+};
+
+// ===============================
+// HELPER: Notify newly assigned facilitators
+// ===============================
+// For each newly added facilitator, send:
+//   - in-app notification (only if they have a user_account — mentors + admins)
+//   - email (if we can resolve one)
+//   - SMS (if they have a phone — guarded, never throws)
+//
+// This function NEVER throws. A failure for one facilitator is logged and
+// the loop continues — never crashes the calling create/update request.
+const notifyNewFacilitators = async (seminarId, newlyAdded) => {
+  if (!Array.isArray(newlyAdded) || newlyAdded.length === 0) return;
+
+  try {
+    // Pull seminar + all notification-relevant data for the newly added
+    // facilitators in one query.
+    const sem = await seminar.findByPk(seminarId, {
+      attributes: [
+        'id', 'title', 'slug', 'scheduledDate', 'location', 'isOnline',
+        'meetingLink', 'meetingPassword',
+      ],
+    });
+    if (!sem) return;
+
+    const {
+      sendSeminarReminderToFacilitator,
+    } = require('../utils/smsService');
+    const { user_notification } = require('../sequelize/models/index');
+
+    const roleLabel = (role) => {
+      const map = {
+        lecturer: 'Лектор', mentor: 'Ментор', assistant: 'Асистент',
+        guest: 'Гост', admin: 'Администратор', moderator: 'Модератор',
+      };
+      return map[role] || role || '';
+    };
+
+    for (const f of newlyAdded) {
+      try {
+        let name = null;
+        let email = null;
+        let phone = null;
+        let userAccountId = null;
+
+        if (f.type === 'mentor') {
+          const m = await mentor.findByPk(f.mentorId, {
+            include: [{
+              model: user_account, as: 'user', required: false,
+              attributes: ['id', 'email'],
+              include: [{
+                model: user_details, as: 'details', required: false,
+                attributes: ['phoneNumber', 'firstName', 'lastName'],
+              }],
+            }],
+          });
+          if (m) {
+            name = m.name;
+            email = m.email || m.user?.email || null;
+            phone = m.user?.details?.phoneNumber || null;
+            userAccountId = m.user?.id || null;
+          }
+        } else if (f.type === 'admin') {
+          const a = await user_account.findByPk(f.adminUserId, {
+            attributes: ['id', 'email'],
+            include: [{
+              model: user_details, as: 'details', required: false,
+              attributes: ['firstName', 'lastName', 'phoneNumber'],
+            }],
+          });
+          if (a) {
+            const d = a.details || {};
+            name = [d.firstName, d.lastName].filter(Boolean).join(' ').trim() || a.email;
+            email = a.email || null;
+            phone = d.phoneNumber || null;
+            userAccountId = a.id;
+          }
+        } else if (f.type === 'external') {
+          const e = await external_lecturer.findByPk(f.externalLecturerId);
+          if (e) {
+            name = e.name;
+            email = e.email || null;
+            phone = e.phone || null;
+            // externals have no user_account — no in-app notification
+          }
+        }
+
+        // In-app notification (mentors + admins only)
+        if (userAccountId) {
+          try {
+            await user_notification.create({
+              userId: userAccountId,
+              type: 'facilitator_assigned',
+              title: 'Включени сте като водещ',
+              message: `Добавени сте като водещ на семинар "${sem.title}".`,
+              data: { seminarId: sem.id, slug: sem.slug, role: f.role, facilitatorType: f.type },
+            });
+          } catch (err) {
+            console.error('[notifyNewFacilitators] in-app notification failed:', err?.message || err);
+          }
+        }
+
+        // Email
+        if (email) {
+          try {
+            const tpl = await seminarEmailTemplates.facilitatorAssignment({
+              facilitatorName: name || '',
+              seminarTitle: sem.title,
+              scheduledDate: sem.scheduledDate,
+              location: sem.location,
+              isOnline: sem.isOnline,
+              meetingLink: sem.meetingLink,
+              meetingPassword: sem.meetingPassword,
+              slug: sem.slug,
+              roleLabel: roleLabel(f.role),
+            });
+            await forwardEmailsViaZoho({
+              userEmail: 'pensa.club@gmail.com',
+              subject: tpl.subject,
+              toAddresses: email,
+              formattedBody: tpl.html,
+            });
+          } catch (err) {
+            console.error('[notifyNewFacilitators] email send failed:', err?.message || err);
+          }
+        } else {
+          console.warn(`[notifyNewFacilitators] no email for ${f.type} — skipping email`);
+        }
+
+        // SMS — guarded, only if phone exists and is long enough
+        if (phone && String(phone).trim().length >= 8) {
+          try {
+            await sendSeminarReminderToFacilitator(
+              phone,
+              sem.title,
+              sem.scheduledDate,
+              sem.location,
+              sem.isOnline,
+              'скоро',
+              null
+            );
+          } catch (err) {
+            console.error('[notifyNewFacilitators] SMS send failed:', err?.message || err);
+          }
+        }
+      } catch (err) {
+        console.error('[notifyNewFacilitators] facilitator loop error:', err?.message || err);
+      }
+    }
+  } catch (err) {
+    console.error('[notifyNewFacilitators] top-level error:', err?.message || err);
   }
 };
 
@@ -3130,12 +3308,21 @@ seminarsController.post(
       // Sync multi-facilitator junction rows. If the caller supplied the new
       // `facilitators` array, use it directly. Otherwise fall back to the
       // legacy `mentorId` → single lead mentor row.
+      let syncResult = { newlyAdded: [] };
       if (Array.isArray(facilitators) && facilitators.length > 0) {
-        await syncSeminarFacilitators(newSeminar.id, facilitators);
+        syncResult = await syncSeminarFacilitators(newSeminar.id, facilitators);
       } else if (mentorId) {
-        await syncSeminarFacilitators(newSeminar.id, [
+        syncResult = await syncSeminarFacilitators(newSeminar.id, [
           { type: 'mentor', mentorId, role: 'mentor', isLead: true, sortOrder: 0 },
         ]);
+      }
+
+      // Fire-and-forget assignment notifications. Never awaited so the
+      // create request returns immediately even if SMTP/SMS is slow.
+      if (syncResult?.newlyAdded?.length > 0) {
+        notifyNewFacilitators(newSeminar.id, syncResult.newlyAdded).catch((err) => {
+          console.error('[CREATE SEMINAR] facilitator notification error:', err?.message || err);
+        });
       }
 
       res.status(201).json({
@@ -3186,7 +3373,14 @@ seminarsController.put(
       // If the caller sent a `facilitators` array, treat it as the new truth
       // and replace the junction rows. Caller NOT sending it → leave untouched.
       if (Array.isArray(facilitatorsPayload)) {
-        await syncSeminarFacilitators(seminarId, facilitatorsPayload);
+        const syncResult = await syncSeminarFacilitators(seminarId, facilitatorsPayload);
+        // Fire-and-forget notification only for facilitators who weren't
+        // already on this seminar (diff result from syncSeminarFacilitators).
+        if (syncResult?.newlyAdded?.length > 0) {
+          notifyNewFacilitators(seminarId, syncResult.newlyAdded).catch((err) => {
+            console.error('[UPDATE SEMINAR] facilitator notification error:', err?.message || err);
+          });
+        }
       }
 
       res.status(200).json({
