@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import {
     FolderPlus, Upload, LayoutGrid, List, Search, RefreshCw,
-    Camera, BarChart3, X
+    Camera, BarChart3, X, ClipboardList
 } from 'lucide-react';
 import './cloudStorageToolbar.css';
 
@@ -19,6 +19,7 @@ const CloudStorageToolbar = ({
     onTypeFilterChange,
     onRefresh,
     onSync,
+    onShowSyncReport,
     onAnalytics,
     loading,
     syncing,
@@ -103,6 +104,13 @@ const CloudStorageToolbar = ({
                 </button>
                 <button className="cst-icon-btn cst-icon-sync" onClick={onSync} disabled={syncing} title="Sync">
                     <RefreshCw size={15} className={syncing ? 'cst-spin' : ''} />
+                </button>
+                <button
+                    className="cst-icon-btn"
+                    onClick={onShowSyncReport}
+                    title={t('cloudStorage.syncReport.buttonTooltip', 'Sync Report')}
+                >
+                    <ClipboardList size={15} />
                 </button>
                 <button className="cst-icon-btn cst-icon-analytics" onClick={onAnalytics} title={t('cloudStorage.analytics')}>
                     <BarChart3 size={15} />

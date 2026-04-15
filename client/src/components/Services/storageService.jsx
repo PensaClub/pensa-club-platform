@@ -64,6 +64,14 @@ export const storageServiceFactory = () => {
       return requester.get(`${apiUrl}/admin/storage/sync-status`);
     },
 
+    deleteOrphan: async (table, id) => {
+      return requester.del(`${apiUrl}/admin/storage/orphan`, { table, id });
+    },
+
+    deleteSyncErrorFile: async (path) => {
+      return requester.del(`${apiUrl}/admin/storage/sync-error`, { path });
+    },
+
     initializeStructure: async () => {
       return requester.post(`${apiUrl}/admin/storage/initialize-structure`);
     },
