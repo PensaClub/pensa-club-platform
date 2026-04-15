@@ -155,6 +155,32 @@ export const StorageProvider = ({ children }) => {
     }
   }, [storageService]);
 
+  const deleteOrphan = useCallback(async (table, id) => {
+    if (!isAdmin) {
+      toast.error('Нямате права за тази операция');
+      return;
+    }
+    try {
+      return await storageService.deleteOrphan(table, id);
+    } catch (error) {
+      console.error('Error deleting orphan:', error);
+      throw error;
+    }
+  }, [storageService, isAdmin]);
+
+  const deleteSyncErrorFile = useCallback(async (path) => {
+    if (!isAdmin) {
+      toast.error('Нямате права за тази операция');
+      return;
+    }
+    try {
+      return await storageService.deleteSyncErrorFile(path);
+    } catch (error) {
+      console.error('Error deleting sync-error file:', error);
+      throw error;
+    }
+  }, [storageService, isAdmin]);
+
   const initializeStructure = useCallback(async () => {
     if (!isAdmin) {
       toast.error('Нямате права за тази операция');
@@ -334,6 +360,8 @@ export const StorageProvider = ({ children }) => {
     // Admin operations
     syncStorage,
     getSyncStatus,
+    deleteOrphan,
+    deleteSyncErrorFile,
     initializeStructure,
     createProject,
     // Shared links
@@ -355,7 +383,7 @@ export const StorageProvider = ({ children }) => {
   }), [
     listFiles, uploadFile, createFolder, deleteFile, deleteFolder, renameFile, moveFile,
     getFileInfo, getStorageUsage, getDownloadUrl, searchFiles, getAnalytics,
-    syncStorage, getSyncStatus, initializeStructure, createProject,
+    syncStorage, getSyncStatus, deleteOrphan, deleteSyncErrorFile, initializeStructure, createProject,
     createShareLink, getShareLinks, deleteShareLink, getShareLinkInfo, downloadSharedFile,
     shareWithUser, getSharedWithMe, markShareAsRead, deleteShare, searchUsers,
     getUserSharedFiles, markUserShareAsRead, getSharedFileDownloadUrl,

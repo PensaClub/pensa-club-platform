@@ -931,6 +931,8 @@ storageController.post(
 );
 
 // ─── 12. SYNC STATUS ────────────────────────────────────────────────────────
+// Returns the full last-sync result including orphans[] and errors[] arrays
+// so the admin UI can render a detail report and offer per-row cleanup.
 storageController.get(
     '/sync-status',
     isAuth,
@@ -940,7 +942,12 @@ storageController.get(
             syncInProgress: syncLock,
             lastSyncTime,
             lastSyncResult: lastSyncResult
-                ? { synced: lastSyncResult.synced, orphans: lastSyncResult.orphans.length, errors: lastSyncResult.errors.length }
+                ? {
+                    synced: lastSyncResult.synced,
+                    syncedDetails: lastSyncResult.syncedDetails || [],
+                    orphans: lastSyncResult.orphans || [],
+                    errors: lastSyncResult.errors || [],
+                }
                 : null,
             nextScheduledSync: getNextHourlyCron(),
         });
@@ -956,6 +963,91 @@ function getNextHourlyCron() {
     }
     return next.toISOString();
 }
+
+// ─── 12b. DELETE ORPHAN DB RECORD ───────────────────────────────────────────
+// Removes a DB record whose corresponding file is missing in GCS.
+// Supported tables are constrained to the ones that the sync report produces
+// so an admin can't use this endpoint as a generic row-delete.
+storageController.delete(
+    '/orphan',
+    isAuth,
+    rbac.checkPermission('admin', 'update'),
+    async (req, res, next) => {
+        try {
+            const { table, id } = req.body || {};
+            const allowedTables = ['seminar_media', 'seminar_attendance_list'];
+
+            if (!table || !allowedTables.includes(table)) {
+                return res.status(400).json({ error: 'Invalid table. Must be one of: ' + allowedTables.join(', ') });
+            }
+            if (!id) {
+                return res.status(400).json({ error: 'id is required' });
+            }
+
+            const models = require('../sequelize/models/index');
+            const Model = models[table];
+            if (!Model) {
+                return res.status(400).json({ error: `Model ${table} not found` });
+            }
+
+            const record = await Model.findByPk(id);
+            if (!record) {
+                return res.status(404).json({ error: 'Record not found' });
+            }
+
+            await record.destroy();
+
+            // Also prune this orphan from lastSyncResult so the UI refreshes cleanly.
+            if (lastSyncResult && Array.isArray(lastSyncResult.orphans)) {
+                lastSyncResult.orphans = lastSyncResult.orphans.filter(
+                    (o) => !(o.table === table && String(o.id) === String(id))
+                );
+            }
+
+            res.json({ success: true, table, id });
+        } catch (err) {
+            next(err);
+        }
+    }
+);
+
+// ─── 12c. DELETE SYNC-ERROR FILE ────────────────────────────────────────────
+// Removes a file in GCS that the sync reported as unmapped (e.g. seminar slug
+// doesn't exist). Validates the path is actually in the last sync's errors list
+// so this endpoint can't be used as a generic file-delete bypass.
+storageController.delete(
+    '/sync-error',
+    isAuth,
+    rbac.checkPermission('admin', 'update'),
+    async (req, res, next) => {
+        try {
+            const { path: filePath } = req.body || {};
+            if (!filePath) {
+                return res.status(400).json({ error: 'path is required' });
+            }
+
+            const errorList = lastSyncResult?.errors || [];
+            const isInErrors = errorList.some((e) => e.file === filePath);
+            if (!isInErrors) {
+                return res.status(400).json({ error: 'Path not found in last sync errors. Run sync first.' });
+            }
+
+            const file = bucket.file(filePath);
+            const [exists] = await file.exists();
+            if (exists) {
+                await file.delete();
+            }
+
+            if (lastSyncResult && Array.isArray(lastSyncResult.errors)) {
+                lastSyncResult.errors = lastSyncResult.errors.filter((e) => e.file !== filePath);
+            }
+
+            res.json({ success: true, path: filePath });
+        } catch (err) {
+            next(err);
+        }
+    }
+);
 
 // ─── 13. INITIALIZE FOUNDATION STRUCTURE ─────────────────────────────────────
 storageController.post(
