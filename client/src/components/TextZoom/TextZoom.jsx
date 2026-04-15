@@ -39,17 +39,22 @@ useEffect(() => {
   `);
   
   textElements.forEach(element => {
-    if (!element.closest('.text-zoom-widget')) {
-      if (!element.hasAttribute('data-original-font-size')) {
-        const computedStyle = window.getComputedStyle(element);
-        const originalSize = parseFloat(computedStyle.fontSize);
-        element.setAttribute('data-original-font-size', originalSize);
-      }
-      
-      const originalSize = parseFloat(element.getAttribute('data-original-font-size'));
-      // Използваме setProperty с !important
-      element.style.setProperty('font-size', `${originalSize * scale}px`, 'important');
+    // Skip text-zoom widget itself AND any element / subtree that opts out
+    // via data-no-text-zoom. Used e.g. by DigiBridgeHeader's ".dbh-back"
+    // (Pensa Club link) where the inline !important font-size was clobbering
+    // the component's own CSS.
+    if (element.closest('.text-zoom-widget')) return;
+    if (element.closest('[data-no-text-zoom]')) return;
+
+    if (!element.hasAttribute('data-original-font-size')) {
+      const computedStyle = window.getComputedStyle(element);
+      const originalSize = parseFloat(computedStyle.fontSize);
+      element.setAttribute('data-original-font-size', originalSize);
     }
+
+    const originalSize = parseFloat(element.getAttribute('data-original-font-size'));
+    // Използваме setProperty с !important
+    element.style.setProperty('font-size', `${originalSize * scale}px`, 'important');
   });
   
   const settings = { fontSize, position, backgroundColor, accentColor, transparency };
@@ -67,14 +72,14 @@ useEffect(() => {
   // Само за размера на текста
 const resetTextSize = () => {
   setFontSize(100);
-  
+
   const textElements = document.querySelectorAll('[data-original-font-size]');
   textElements.forEach(element => {
-    if (!element.closest('.text-zoom-widget')) {
-      const originalSize = element.getAttribute('data-original-font-size');
-      // Използваме setProperty с !important
-      element.style.setProperty('font-size', `${originalSize}px`, 'important');
-    }
+    if (element.closest('.text-zoom-widget')) return;
+    if (element.closest('[data-no-text-zoom]')) return;
+    const originalSize = element.getAttribute('data-original-font-size');
+    // Използваме setProperty с !important
+    element.style.setProperty('font-size', `${originalSize}px`, 'important');
   });
 };
 
