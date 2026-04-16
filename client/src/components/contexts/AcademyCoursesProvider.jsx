@@ -1310,6 +1310,30 @@ export const AcademyCoursesProvider = ({ children }) => {
     }
   }, []);
 
+  const removePlatformAttendee = useCallback(async (seminarId, studentId) => {
+    try {
+      const response = await coursesService.removePlatformAttendee(seminarId, studentId);
+      toast.success(response?.message || 'Участникът е премахнат');
+      return response;
+    } catch (error) {
+      console.error('Error removing platform attendee:', error);
+      toast.error(error?.errors?.[0] || error?.message || 'Грешка при премахване на участник');
+      throw error;
+    }
+  }, []);
+
+  const removeGuestAttendee = useCallback(async (seminarId, guestId) => {
+    try {
+      const response = await coursesService.removeGuestAttendee(seminarId, guestId);
+      toast.success(response?.message || 'Гостът е премахнат');
+      return response;
+    } catch (error) {
+      console.error('Error removing guest attendee:', error);
+      toast.error(error?.errors?.[0] || error?.message || 'Грешка при премахване на гост');
+      throw error;
+    }
+  }, []);
+
   // =========================================================
   //                    ENROLLMENT
   // =========================================================
@@ -2543,6 +2567,8 @@ export const AcademyCoursesProvider = ({ children }) => {
     bulkMixedAttendance,
     markSeminarAttended,
     getFullAttendance,
+    removePlatformAttendee,
+    removeGuestAttendee,
     // Enrollment
     getMyEnrollments,
     enrollInCourse,
