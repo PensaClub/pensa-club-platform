@@ -243,8 +243,8 @@ const [showTestEditor, setShowTestEditor] = useState(false);
                 ? String(seminarData.tags).split(',').map(t => t.trim()).filter(Boolean)
                 : [],
             learningPoints: (seminarData.learningPoints || []).filter(p => p.trim()),
-            scheduledDate: seminarData.scheduledDate || null,
-            scheduledEndDate: seminarData.scheduledEndDate || null,
+            scheduledDate: seminarData.scheduledDate ? new Date(seminarData.scheduledDate).toISOString() : null,
+            scheduledEndDate: seminarData.scheduledEndDate ? new Date(seminarData.scheduledEndDate).toISOString() : null,
             durationMinutes: seminarData.durationMinutes ? Number(seminarData.durationMinutes) : 90,
             timezone: seminarData.timezone || 'Europe/Sofia',
             isOnline: seminarData.isOnline,
