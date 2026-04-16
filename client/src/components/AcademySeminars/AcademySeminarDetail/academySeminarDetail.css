@@ -836,7 +836,9 @@
     cursor: pointer;
     transition: all 0.2s;
 }
-
+.asd-tab span{
+    font-size: 0.85rem;
+}
 .asd-tab svg {
     flex-shrink: 0;
 }

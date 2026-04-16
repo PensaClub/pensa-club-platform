@@ -28,7 +28,7 @@ useEffect(() => {
   const scale = fontSize / 100;
   
   const textElements = document.querySelectorAll(`
-    body, p, span, div, a, li, td, th, h1, h2, h3, h4, h5, h6,
+    body, p, div, a, li, td, th, h1, h2, h3, h4, h5, h6,
     strong, b, em, i, u, blockquote, cite, code, pre,
     input, textarea, button, label, 
     .club-card-title, .club-card-description, .club-card-stat-label,
