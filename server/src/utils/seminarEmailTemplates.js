@@ -133,6 +133,44 @@ const seminarEmailTemplates = {
       html: wrapAcademyTemplate('Ново записване за семинар', body),
     };
   },
+
+  // 5. Facilitator assignment notification — sent when someone is added as
+  // a seminar facilitator (mentor / admin / external lecturer).
+  facilitatorAssignment: async ({ facilitatorName, seminarTitle, scheduledDate, location, isOnline, meetingLink, meetingPassword, slug, roleLabel }) => {
+    const dateStr = scheduledDate
+      ? new Date(scheduledDate).toLocaleDateString('bg-BG', {
+          day: '2-digit', month: 'long', year: 'numeric',
+          hour: '2-digit', minute: '2-digit',
+        })
+      : '';
+
+    const locationText = isOnline ? 'Онлайн' : (location || 'Уточнява се');
+    const seminarUrl = slug ? `https://pensa.club/academy/seminars/${slug}` : 'https://pensa.club/academy/seminars';
+
+    const body =
+      greeting(facilitatorName || '') +
+      paragraph('Включени сте като водещ на семинар в <strong>DigiBridge Academy</strong>.') +
+      infoTable(
+        infoRow('Семинар', seminarTitle || '') +
+        (roleLabel ? infoRow('Роля', roleLabel) : '') +
+        infoRow('Дата', dateStr) +
+        infoRow('Място', locationText) +
+        (isOnline && meetingLink
+          ? infoRow('Линк за среща', `<a href="${meetingLink}" style="color:#0d9488;">${meetingLink}</a>`)
+          : '') +
+        (isOnline && meetingPassword
+          ? infoRow('Парола', `<strong>${meetingPassword}</strong>`)
+          : '')
+      ) +
+      paragraph('Моля, планирайте участието си навреме. Можете да видите пълните детайли на семинара от бутона по-долу.') +
+      ctaButton(seminarUrl, 'Виж семинара') +
+      `<p style="color:#374151;font-size:15px;line-height:1.7;margin:16px 0 0;">С уважение,<br><strong style="color:#0d9488;">Екипът на DigiBridge Academy</strong></p>`;
+
+    return {
+      subject: `Включени сте като водещ на семинар: ${seminarTitle || ''}`.trim(),
+      html: wrapAcademyTemplate('Водещ на семинар', body),
+    };
+  },
 };
 
 const ACADEMY_LOGO = 'https://pensa.club/images/homePage/logo.png';
