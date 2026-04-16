@@ -1140,7 +1140,7 @@ const AcademySeminarDetail = () => { // НОВО
             </main>
 
             {/* Reviews section */}
-            {seminar && new Date(seminar.scheduledDate) <= new Date() && (
+            {seminar && (
                 <section className="asd-reviews-section">
                     <div className="asd-container">
                         <h2 className="asd-section-title">
