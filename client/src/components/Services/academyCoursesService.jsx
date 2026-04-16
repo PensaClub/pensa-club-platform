@@ -469,6 +469,14 @@ checkSeminarRegistration: async (seminarId) => { // НОВО
       return requester.get(`${apiUrl}/academy/seminars/${seminarId}/attendance/full`);
     },
 
+    removePlatformAttendee: async (seminarId, studentId) => {
+      return requester.del(`${apiUrl}/academy/seminars/${seminarId}/attendance/platform/${studentId}`);
+    },
+
+    removeGuestAttendee: async (seminarId, guestId) => {
+      return requester.del(`${apiUrl}/academy/seminars/${seminarId}/attendance/guest/${guestId}`);
+    },
+
     inviteGuestToRegister: async (guestAttendanceId) => {
       return requester.post(`${apiUrl}/academy/seminars/admin/guests/${guestAttendanceId}/invite`);
     },

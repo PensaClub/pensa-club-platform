@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { useAcademyCourses } from '../../../contexts/AcademyCoursesProvider';
 import {
     Search, UserPlus, Loader2, Users,
-    CheckCircle, Globe, User, AlertCircle, Send, Info,
+    CheckCircle, Globe, User, AlertCircle, Send, Info, X, Trash2,
 } from 'lucide-react';
 import { toast } from 'react-toastify';
 import './attendanceForm.css';
@@ -21,6 +21,8 @@ const AttendanceForm = ({ seminar }) => {
         markSeminarAttended,
         getFullAttendance,
         inviteGuestToRegister,
+        removePlatformAttendee,
+        removeGuestAttendee,
     } = useAcademyCourses();
 
     // Search
@@ -52,6 +54,10 @@ const AttendanceForm = ({ seminar }) => {
     // Guest email conflict (existing user found during add-guest)
     const [guestConflictModal, setGuestConflictModal] = useState(null);
     const [registeringExistingUser, setRegisteringExistingUser] = useState(false);
+
+    // Remove participant confirmation
+    const [removeConfirm, setRemoveConfirm] = useState(null); // { participant, onConfirm }
+    const [removingId, setRemovingId] = useState(null);
 
     // =========================================================
     //                    LOAD PARTICIPANTS
@@ -294,6 +300,34 @@ const AttendanceForm = ({ seminar }) => {
             // toast вече е показан от provider-а
         } finally {
             setInvitingGuestId(null);
+        }
+    };
+
+    // =========================================================
+    //                    REMOVE PARTICIPANT
+    // =========================================================
+
+    const handleRemoveClick = (participant) => {
+        setRemoveConfirm(participant);
+    };
+
+    const handleRemoveConfirm = async () => {
+        if (!removeConfirm) return;
+        const p = removeConfirm;
+        const key = `${p.type}-${p.id}`;
+        setRemovingId(key);
+        try {
+            if (p.type === 'guest') {
+                await removeGuestAttendee(seminar.id, p.id);
+            } else {
+                await removePlatformAttendee(seminar.id, p.studentId);
+            }
+            await loadParticipants();
+            setRemoveConfirm(null);
+        } catch {
+            // toast shown in provider
+        } finally {
+            setRemovingId(null);
         }
     };
 
@@ -581,6 +615,19 @@ const AttendanceForm = ({ seminar }) => {
                                                     {t('attendanceForm.alreadyRegistered', 'Регистриран')}
                                                 </span>
                                             )}
+
+                                            {/* Remove button */}
+                                            <button
+                                                className="satf-btn-remove"
+                                                onClick={() => handleRemoveClick(p)}
+                                                disabled={removingId === key}
+                                                title={t('attendanceForm.remove', 'Премахни от списъка')}
+                                                aria-label={t('attendanceForm.remove', 'Премахни от списъка')}
+                                            >
+                                                {removingId === key
+                                                    ? <Loader2 size={14} className="satf-spin" />
+                                                    : <X size={14} />}
+                                            </button>
                                         </div>
                                     );
                                 })}
@@ -642,13 +689,26 @@ const AttendanceForm = ({ seminar }) => {
                                                 {t('attendanceForm.alreadyRegistered', 'Регистриран')}
                                             </span>
                                         )}
+
+                                        {/* Remove button */}
+                                        <button
+                                            className="satf-btn-remove"
+                                            onClick={() => handleRemoveClick(p)}
+                                            disabled={removingId === `${p.type}-${p.id}`}
+                                            title={t('attendanceForm.remove', 'Премахни от списъка')}
+                                            aria-label={t('attendanceForm.remove', 'Премахни от списъка')}
+                                        >
+                                            {removingId === `${p.type}-${p.id}`
+                                                ? <Loader2 size={14} className="satf-spin" />
+                                                : <X size={14} />}
+                                        </button>
                                     </div>
                                 ))}
                             </div>
                         </div>
                     )}
                 </div>
-               
+
             </div>
 
             {/* Modal: Email entered for guest already belongs to a platform user */}
@@ -736,6 +796,51 @@ const AttendanceForm = ({ seminar }) => {
                         <button className="satf-modal-btn" onClick={() => setExistingUserModal(null)}>
                             {t('attendanceForm.understood', 'Разбрах')}
                         </button>
+                    </div>
+                </div>
+            )}
+
+            {/* Modal: Confirm remove participant */}
+            {removeConfirm && (
+                <div className="satf-modal-overlay" onClick={() => !removingId && setRemoveConfirm(null)}>
+                    <div className="satf-modal" onClick={(e) => e.stopPropagation()}>
+                        <div className="satf-modal-icon satf-modal-icon-danger">
+                            <Trash2 size={32} />
+                        </div>
+                        <h3 className="satf-modal-title">
+                            {t('attendanceForm.removeTitle', 'Премахване на участник')}
+                        </h3>
+                        <p className="satf-modal-text">
+                            {t('attendanceForm.removeText', 'Сигурни ли сте, че искате да премахнете')}{' '}
+                            <strong>{removeConfirm.name}</strong>{' '}
+                            {t('attendanceForm.removeTextSuffix', 'от списъка?')}
+                        </p>
+                        {removeConfirm.earnedCredits > 0 && (
+                            <p className="satf-modal-text satf-modal-text-secondary">
+                                {t('attendanceForm.removeCreditsWarning', 'Този участник е получил')}{' '}
+                                <strong>{removeConfirm.earnedCredits}</strong>{' '}
+                                {t('attendanceForm.removeCreditsWarningSuffix', 'кредита, които ще бъдат премахнати заедно със записа.')}
+                            </p>
+                        )}
+                        <div className="satf-modal-actions">
+                            <button
+                                className="satf-modal-btn satf-modal-btn-secondary"
+                                onClick={() => setRemoveConfirm(null)}
+                                disabled={!!removingId}
+                            >
+                                {t('attendanceForm.cancel', 'Отказ')}
+                            </button>
+                            <button
+                                className="satf-modal-btn satf-modal-btn-danger"
+                                onClick={handleRemoveConfirm}
+                                disabled={!!removingId}
+                            >
+                                {removingId
+                                    ? <Loader2 size={14} className="satf-spin" />
+                                    : <Trash2 size={14} />}
+                                <span>{t('attendanceForm.removeBtn', 'Премахни')}</span>
+                            </button>
+                        </div>
                     </div>
                 </div>
             )}

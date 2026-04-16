@@ -4758,12 +4758,15 @@ seminarsController.get(
           email: data.guestEmail || null,
           phone: data.guestPhone,
           participationLevel: data.participationLevel,
+          attended: true,
           attendedAt: data.createdAt,
           convertedToUserId: data.convertedToUserId || null,
         };
       });
 
-      // Split: "attended today" stay in participants list, "attended before today" go to attended list
+      // Split: attended today → "participants" (can still adjust participation level),
+      // attended before today → "attended" (frozen history).
+      // Applies symmetrically to platform users AND guests.
       const today = new Date();
       today.setHours(0, 0, 0, 0);
 
@@ -4774,15 +4777,9 @@ seminarsController.get(
         return attendedDate < today;
       };
 
-      // Participants = all registered + attended today (still active for today's session)
-      const registered = formattedPlatform.filter(a => !isAttendedBeforeToday(a));
-      // Attended = attended before today (previous days) + ALL guests (guests are always attended)
-      // Note: guests are excluded from `registered` list (which is platform-only),
-      // so we include them all here to make sure they appear in the UI.
-      const attended = [
-        ...formattedPlatform.filter(a => isAttendedBeforeToday(a)),
-        ...formattedGuests,
-      ];
+      const allAttendees = [...formattedPlatform, ...formattedGuests];
+      const registered = allAttendees.filter(a => !isAttendedBeforeToday(a));
+      const attended = allAttendees.filter(a => isAttendedBeforeToday(a));
 
       res.status(200).json({
         success: true,
@@ -4802,6 +4799,81 @@ seminarsController.get(
     }
   }
 );
+
+// ===============================
+// DELETE /api/academy/seminars/:id/attendance/platform/:studentId
+// Премахване на платформен участник от семинара
+// ===============================
+seminarsController.delete(
+  '/:id/attendance/platform/:studentId',
+  isAuth,
+  rbac.checkPermission('seminar', 'update'),
+  async (req, res, next) => {
+    try {
+      const seminarId = parseInt(req.params.id);
+      const studentId = parseInt(req.params.studentId);
+
+      const seminarData = await seminar.findByPk(seminarId);
+      if (!seminarData) {
+        return res.status(404).json({ success: false, message: 'Seminar not found' });
+      }
+
+      const attendance = await student_seminar.findOne({ where: { seminarId, studentId } });
+      if (!attendance) {
+        return res.status(404).json({ success: false, message: 'Attendance record not found' });
+      }
+
+      await attendance.destroy();
+
+      const [attendedCount, registeredCount] = await Promise.all([
+        student_seminar.count({ where: { seminarId, attended: true } }),
+        student_seminar.count({ where: { seminarId } }),
+      ]);
+      await seminarData.update({ attendedCount, registeredCount });
+
+      res.status(200).json({
+        success: true,
+        message: 'Participant removed successfully',
+      });
+    } catch (err) {
+      console.error('❌ [REMOVE PLATFORM ATTENDEE] Error:', err);
+      next(err);
+    }
+  }
+);
+
+// ===============================
+// DELETE /api/academy/seminars/:id/attendance/guest/:guestId
+// Премахване на гост от семинара
+// ===============================
+seminarsController.delete(
+  '/:id/attendance/guest/:guestId',
+  isAuth,
+  rbac.checkPermission('seminar', 'update'),
+  async (req, res, next) => {
+    try {
+      const seminarId = parseInt(req.params.id);
+      const guestId = parseInt(req.params.guestId);
+
+      const { seminar_guest_attendance } = require('../sequelize/models/index');
+      const guestRecord = await seminar_guest_attendance.findOne({ where: { id: guestId, seminarId } });
+      if (!guestRecord) {
+        return res.status(404).json({ success: false, message: 'Guest attendance not found' });
+      }
+
+      await guestRecord.destroy();
+
+      res.status(200).json({
+        success: true,
+        message: 'Guest removed successfully',
+      });
+    } catch (err) {
+      console.error('❌ [REMOVE GUEST ATTENDEE] Error:', err);
+      next(err);
+    }
+  }
+);
+
 // ===============================
 // REVIEWS
 // ===============================

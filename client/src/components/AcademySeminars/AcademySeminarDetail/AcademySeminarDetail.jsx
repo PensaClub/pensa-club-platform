@@ -879,6 +879,36 @@ const AcademySeminarDetail = () => { // НОВО
                 </section>
             )}
 
+            {/* ========== RECORDED VIDEO (when not live) ========== */}
+            {status !== 'live' && videos.length > 0 && (() => {
+                const firstVideo = videos[0];
+                const embedUrl = getEmbedUrl(firstVideo.videoUrl);
+                const isFile = firstVideo.videoProvider === 'file'
+                    || firstVideo.videoUrl?.match(/\.(mp4|webm|mov)(\?|$)/i);
+                if (!embedUrl && !isFile) return null;
+                return (
+                    <section className="asd-live-section">
+                        <div className="asd-container">
+                            {embedUrl ? (
+                                <div className="asd-video-player">
+                                    <iframe
+                                        src={embedUrl}
+                                        title={firstVideo.title || seminar.title}
+                                        className="asd-video-iframe"
+                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                        allowFullScreen
+                                    />
+                                </div>
+                            ) : (
+                                <video controls className="asd-video-native" preload="metadata">
+                                    <source src={firstVideo.videoUrl} />
+                                </video>
+                            )}
+                        </div>
+                    </section>
+                );
+            })()}
+
             {/* ========== MAIN ========== */}
             <main className="asd-main">
                 <div className="asd-container">

@@ -721,3 +721,89 @@
 [data-theme="light"] .satf-attended-name { color: #475569; }
 [data-theme="light"] .satf-attended-meta { color: #94a3b8; }
 [data-theme="light"] .satf-attended-credits { color: #94a3b8; }
+
+/* =========================================================
+   REMOVE PARTICIPANT BUTTON + DANGER MODAL
+   ========================================================= */
+
+.satf-btn-remove {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+    width: 30px;
+    height: 30px;
+    border: 1px solid rgba(220, 38, 38, 0.3);
+    border-radius: 6px;
+    background: rgba(220, 38, 38, 0.08);
+    color: #ef4444;
+    font-size: inherit;
+    cursor: pointer;
+    transition: all 0.15s;
+    flex-shrink: 0;
+}
+
+.satf-btn-remove:hover:not(:disabled) {
+    background: rgba(220, 38, 38, 0.18);
+    border-color: rgba(220, 38, 38, 0.5);
+    color: #dc2626;
+}
+
+.satf-btn-remove:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+[data-theme="light"] .satf-btn-remove {
+    background: rgba(220, 38, 38, 0.06);
+    border-color: rgba(220, 38, 38, 0.2);
+    color: #dc2626;
+}
+
+[data-theme="light"] .satf-btn-remove:hover:not(:disabled) {
+    background: rgba(220, 38, 38, 0.12);
+    border-color: rgba(220, 38, 38, 0.4);
+}
+
+.satf-modal-icon-danger {
+    background: rgba(220, 38, 38, 0.12) !important;
+    color: #ef4444 !important;
+}
+
+[data-theme="light"] .satf-modal-icon-danger {
+    background: rgba(220, 38, 38, 0.08) !important;
+    color: #dc2626 !important;
+}
+
+.satf-modal-btn-danger {
+    background: rgba(220, 38, 38, 0.15);
+    color: #ef4444;
+    border: 1px solid rgba(220, 38, 38, 0.3);
+}
+
+.satf-modal-btn-danger:hover:not(:disabled) {
+    background: rgba(220, 38, 38, 0.25);
+    border-color: rgba(220, 38, 38, 0.5);
+    color: #fff;
+}
+
+[data-theme="light"] .satf-modal-btn-danger {
+    background: rgba(220, 38, 38, 0.1);
+    color: #dc2626;
+    border-color: rgba(220, 38, 38, 0.25);
+}
+
+[data-theme="light"] .satf-modal-btn-danger:hover:not(:disabled) {
+    background: #dc2626;
+    color: #fff;
+    border-color: #dc2626;
+}
+
+@media (max-width: 767px) {
+    .satf-btn-remove {
+        width: 32px;
+        height: 32px;
+        padding: 8px;
+        margin-top: 6px;
+    }
+}
