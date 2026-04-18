@@ -207,7 +207,7 @@ export const Profile = () => {
     await i18next.changeLanguage(lang);
     rawNavigate(targetPath, { replace: true });
   };
-  const { t, i18n } = useTranslation(['admin', 'clubs']);
+  const { t, i18n } = useTranslation(['admin', 'clubs', 'profile']);
   const currentLanguage = i18n.language;
   const [menuOpen, setMenuOpen] = useState(false);
   const { isFinish, profileData, isAdmin, isModerator, addressId, isMentor } = useContext(UserContext);
@@ -284,7 +284,7 @@ export const Profile = () => {
       "/profile/publications": t("profile.publications"),
       "/profile/stories": t("profile.stories"),
       "/profile/publication-create": t("profile.publicationCreate"),
-      "/profile/clubs": t("myClubs.clubs"),
+      "/profile/clubs": t("clubs:myClubs.clubs"),
       "/profile/club-create": t("profile.clubCreate"),
       "/profile/club-drafts": t("profile.clubDrafts"),
       "/profile/clubs-admin": t("profile.clubsAdmin"),
@@ -297,7 +297,7 @@ export const Profile = () => {
       "/profile/students-overview": t("admin.students.overview"),
       "/profile/student-applications": t("admin.students.applications"),
       "/profile/mentor-profile": t("profile.mentorProfile"),
-      "/profile/my-reviews": t("profile.myReviews"),
+      "/profile/my-reviews": t("profile:profile.myReviews"),
       "/admin/useful-links/create": t("admin.usefulLinks.create"),
       "/admin/useful-links": t("admin.usefulLinks.list"),
       "/admin/fact-check": t("admin.factCheck.title"),
@@ -745,7 +745,7 @@ export const Profile = () => {
                   >
                     <span className="link-content">
                       <AcademyIcon />
-                      {t("profile.myForum", "Моят форум")}
+                      {t("profile:profile.myForum", "Моят форум")}
                     </span>
                   </a>
                 </li>
@@ -756,7 +756,7 @@ export const Profile = () => {
                   >
                     <span className="link-content">
                       <StoriesIcon />
-                      {t("profile.myReviews")}
+                      {t("profile:profile.myReviews")}
                     </span>
                   </NavLink>
                 </li>
@@ -767,7 +767,7 @@ export const Profile = () => {
                   >
                     <span className="link-content">
                       <AvatarIcon />
-                      {t("profile.avatar", "Аватар")}
+                      {t("profile:profile.avatar", "Аватар")}
                     </span>
                   </NavLink>
                 </li>
@@ -779,7 +779,7 @@ export const Profile = () => {
                   >
                     <span className="link-content">
                       <ClubsIcon />
-                      {t("myClubs.clubs")}
+                      {t("clubs:myClubs.clubs")}
                     </span>
                     <span className={`arrow-icon ${subMenuStates.clubs ? 'rotated' : ''}`}>
                       {subMenuStates.clubs ? <DownArrowIcon /> : <ArrowIcon />}
@@ -1338,7 +1338,7 @@ export const Profile = () => {
                     >
                       <span className="link-content">
                         <StoriesIcon />
-                        {t("profile.stories")}
+                        {t("profile:profile.stories")}
                       </span>
                     </NavLink>
                   </li>
