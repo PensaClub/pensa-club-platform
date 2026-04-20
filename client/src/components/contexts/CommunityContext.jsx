@@ -249,24 +249,23 @@ export const CommunityProvider = ({ children }) => {
         }
     };
 
-    const subscribeNewUser = async (username, email) => {
+    const subscribeNewUser = async (username, email, source) => {
         try {
             setIsLoading(true);
-            const response = await communityService.subscribeNewUser(username, email);
-            setIsLoading(false);  
-            notify("email-send")    
-             return response;
+            const response = await communityService.subscribeNewUser(username, email, source);
+            setIsLoading(false);
+            if (response?.alreadySubscribed) {
+                return response;
+            }
+            notify("email-send");
+            return response;
         } catch (e) {
-            if(e?.message ==="Subscriber already exists.") 
-                notify('subscriber-exists');
-            else if (e?.message === "Username must be between 3 and 16 characters long." )
-                notify('subscribe-username-length');
-            else if (e?.message === "Username must start with a letter, can only contain letters, numbers, and underscores" )
-                notify('subscribe-username-content');
-            else 
+            if (e?.statusCode === 429) {
+                notify('error', { message: e.message });
+            } else {
                 notify('error', e);
+            }
             showErrorAndSetTimeouts(e.message);
-            // throw e;
         } finally {
             setIsLoading(false);
         }
@@ -281,9 +280,43 @@ export const CommunityProvider = ({ children }) => {
         } catch (e) {
             notify('error');
             showErrorAndSetTimeouts(e.message);
-    
         } finally {
             setIsLoading(false);
+        }
+    };
+    const deleteSubscriber = async (id) => {
+        try {
+            const response = await communityService.deleteSubscriber(id);
+            await getSubscribeEmails();
+            return response;
+        } catch (e) {
+            notify('error', e);
+            throw e;
+        }
+    };
+    const getPreferencesByToken = async (token) => {
+        try {
+            return await communityService.getPreferencesByToken(token);
+        } catch (e) {
+            throw e;
+        }
+    };
+    const updatePreferences = async (token, preferences) => {
+        try {
+            const response = await communityService.updatePreferences(token, preferences);
+            notify('email-send');
+            return response;
+        } catch (e) {
+            notify('error', e);
+            throw e;
+        }
+    };
+    const unsubscribeByToken = async (token) => {
+        try {
+            return await communityService.unsubscribeByToken(token);
+        } catch (e) {
+            notify('error', e);
+            throw e;
         }
     };
     useEffect(() => {
@@ -316,7 +349,11 @@ export const CommunityProvider = ({ children }) => {
         getAdById,
         subscribeNewUser,
         getSubscribeEmails,
-        subscribeEmails
+        subscribeEmails,
+        deleteSubscriber,
+        getPreferencesByToken,
+        updatePreferences,
+        unsubscribeByToken
     };
 
     return (

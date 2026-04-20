@@ -264,13 +264,30 @@
   },
   "news-subscribe": {
     "title": "Bleiben Sie auf dem Laufenden mit",
-    "desc": "Registrieren Sie sich für die neuesten Nachrichten, Updates und Tipps.",
-    "name-placeholder": "Name*",
-    "email-placeholder": "E-Mail-Adresse*",
-    "subscribe-btn": "Registrieren",
+    "desc": "Abonnieren Sie die neuesten Nachrichten, Seminare, Artikel und Plattform-Updates.",
+    "name-placeholder": "Ihr Name",
+    "email-placeholder": "Ihre E-Mail",
+    "subscribe-btn": "Abonnieren",
     "errors": {
       "required-field": "Das Feld ist erforderlich!",
-      "invalid-email": "Ungültige E-Mail-Adresse!"
+      "invalid-email": "Ungültige E-Mail-Adresse!",
+      "name-min": "Mindestens 3 Zeichen"
+    },
+    "preferences": {
+      "title": "Erfolgreich abonniert!",
+      "subtitle": "Wählen Sie, was Sie interessiert, um nur relevante Neuigkeiten zu erhalten.",
+      "save": "Einstellungen speichern",
+      "done-title": "Fertig!",
+      "done-text": "Ihre Einstellungen wurden gespeichert. Sie erhalten Newsletter nur für die ausgewählten Kategorien.",
+      "categories": {
+        "seminars": "Seminare",
+        "courses": "Kurse",
+        "articles": "Artikel",
+        "initiatives": "Initiativen",
+        "clubs": "Klubs",
+        "games": "Spiele",
+        "platform": "Updates"
+      }
     }
   },
   "clubsShowcase": {

@@ -2,7 +2,11 @@
   "profile": {
     "clubMembership": "Club Membership",
     "mentorApplications": "Student Applications",
+   
+    "avatar": "Avatar",
     "mentorProfile": "Profile",
+    "myReviews": "My Reviews",
+    "myForum": "My Forum",
     "clubs": {
       "title": "My Clubs",
       "subtitle": "Manage and view all clubs you have created",
