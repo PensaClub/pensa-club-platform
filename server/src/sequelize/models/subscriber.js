@@ -2,13 +2,11 @@
 const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class subscriber extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
     static associate(models) {
-      // define association here
+      subscriber.hasMany(models.subscriber_preference, {
+        foreignKey: 'subscriberId',
+        as: 'preferences',
+      });
     }
   }
   subscriber.init(
@@ -23,17 +21,8 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: false,
         validate: {
-          notEmpty: {
-            msg: 'Username is required.',
-          },
-          len: {
-            args: [2, 16],
-            msg: 'Username must be between 2 and 16 characters.',
-          },
-          is: {
-            args: /^[a-zA-Zа-яА-Я][a-zA-Zа-яА-Я0-9_]{2,16}$/,
-            msg: 'Username must start with a letter and can only contain letters, numbers, and underscores.',
-          },
+          notEmpty: { msg: 'Name is required.' },
+          len: { args: [2, 50], msg: 'Name must be between 2 and 50 characters.' },
         },
       },
       email: {
@@ -41,13 +30,35 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         unique: true,
         validate: {
-          isEmail: {
-            msg: 'Email format is incorrect.',
-          },
-          notEmpty: {
-            msg: 'Email is required.',
-          },
+          isEmail: { msg: 'Email format is incorrect.' },
+          notEmpty: { msg: 'Email is required.' },
         },
+      },
+      status: {
+        type: DataTypes.STRING(20),
+        allowNull: false,
+        defaultValue: 'active',
+      },
+      unsubscribeToken: {
+        type: DataTypes.UUID,
+        allowNull: true,
+        unique: true,
+        defaultValue: DataTypes.UUIDV4,
+        field: 'unsubscribe_token',
+      },
+      unsubscribedAt: {
+        type: DataTypes.DATE,
+        allowNull: true,
+        field: 'unsubscribed_at',
+      },
+      source: {
+        type: DataTypes.STRING(50),
+        allowNull: true,
+        defaultValue: 'website',
+      },
+      phone: {
+        type: DataTypes.STRING(20),
+        allowNull: true,
       },
       createdAt: {
         allowNull: false,
@@ -61,6 +72,7 @@ module.exports = (sequelize, DataTypes) => {
     {
       sequelize,
       modelName: 'subscriber',
+      underscored: false,
     }
   );
   return subscriber;

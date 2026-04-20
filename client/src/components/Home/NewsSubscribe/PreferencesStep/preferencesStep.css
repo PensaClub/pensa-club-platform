@@ -1,0 +1,186 @@
+/* Prefix: nsp- (NewsSubscribePreferences) */
+
+.nsp-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+    width: 100%;
+    max-width: 520px;
+}
+
+.nsp-header {
+    text-align: center;
+}
+
+.nsp-success-icon {
+    color: #22c55e;
+    margin-bottom: 8px;
+}
+
+.nsp-title {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #fff;
+    margin: 0 0 8px;
+}
+
+.nsp-title span {
+    font-size: inherit;
+}
+
+.nsp-subtitle {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.6);
+    margin: 0;
+    line-height: 1.5;
+}
+
+.nsp-subtitle span {
+    font-size: inherit;
+}
+
+/* Categories grid */
+
+.nsp-categories {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 10px;
+    width: 100%;
+}
+
+.nsp-cat {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 14px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.04);
+    color: rgba(255, 255, 255, 0.6);
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.nsp-cat:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+.nsp-cat-active {
+    background: rgba(226, 96, 32, 0.15);
+    border-color: rgba(226, 96, 32, 0.5);
+    color: #fff;
+}
+
+.nsp-cat-active:hover {
+    background: rgba(226, 96, 32, 0.2);
+}
+
+.nsp-cat-icon {
+    font-size: 1.1rem;
+    line-height: 1;
+}
+
+.nsp-cat-label {
+    font-size: inherit;
+    white-space: nowrap;
+}
+
+/* Save button */
+
+.nsp-save-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px 28px;
+    border: none;
+    border-radius: 8px;
+    background: #22c55e;
+    color: #fff;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.2s;
+}
+
+.nsp-save-btn span {
+    font-size: inherit;
+}
+
+.nsp-save-btn:hover:not(:disabled) {
+    background: #16a34a;
+    transform: translateY(-1px);
+}
+
+.nsp-save-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+@keyframes nsp-spin {
+    to { transform: rotate(360deg); }
+}
+
+.nsp-spin {
+    animation: nsp-spin 0.8s linear infinite;
+}
+
+/* Done state */
+
+.nsp-done {
+    text-align: center;
+    padding: 20px 0;
+}
+
+.nsp-done-icon {
+    color: #22c55e;
+    margin-bottom: 12px;
+}
+
+.nsp-done-title {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #fff;
+    margin: 0 0 8px;
+}
+
+.nsp-done-title span {
+    font-size: inherit;
+}
+
+.nsp-done-text {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.6);
+    margin: 0;
+    line-height: 1.5;
+}
+
+.nsp-done-text span {
+    font-size: inherit;
+}
+
+/* Responsive */
+
+@media (max-width: 480px) {
+    .nsp-categories {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .nsp-title {
+        font-size: 1.2rem;
+    }
+
+    .nsp-save-btn {
+        width: 100%;
+    }
+}

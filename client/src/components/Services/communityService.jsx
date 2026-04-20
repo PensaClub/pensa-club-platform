@@ -66,15 +66,27 @@ export const communityServiceFactory = (token) => {
         `${apiUrl}/listings/ads-search?status=approved&order=DESC&limit=${count}`
       );
     },
-    subscribeNewUser: async (username,email) => {
+    subscribeNewUser: async (username, email, source) => {
       return requester.post(
-        `${apiUrl}/subscribe/addSubscriber`, {username, email}
+        `${apiUrl}/subscribe/addSubscriber`, { username, email, source }
       );
     },
     getSubscribeEmails: async () => {
       return requester.get(
         `${apiUrl}/subscribe/getSubscribers`
       );
+    },
+    deleteSubscriber: async (id) => {
+      return requester.del(`${apiUrl}/subscribe/admin/${id}`);
+    },
+    getPreferencesByToken: async (token) => {
+      return requester.get(`${apiUrl}/subscribe/preferences/${token}`);
+    },
+    updatePreferences: async (token, preferences) => {
+      return requester.put(`${apiUrl}/subscribe/preferences/${token}`, { preferences });
+    },
+    unsubscribeByToken: async (token) => {
+      return requester.post(`${apiUrl}/subscribe/unsubscribe/${token}`);
     },
   }
 }

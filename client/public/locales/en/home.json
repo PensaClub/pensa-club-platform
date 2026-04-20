@@ -264,13 +264,30 @@
   },
   "news-subscribe": {
     "title": "Stay up to date with",
-    "desc": "Sign up for the latest news, updates and tips.",
-    "name-placeholder": "Name*",
-    "email-placeholder": "Email*",
-    "subscribe-btn": "Register",
+    "desc": "Subscribe for the latest news, seminars, articles and platform updates.",
+    "name-placeholder": "Your name",
+    "email-placeholder": "Your email",
+    "subscribe-btn": "Subscribe",
     "errors": {
       "required-field": "This field is required!",
-      "invalid-email": "Email is invalid!"
+      "invalid-email": "Email is invalid!",
+      "name-min": "At least 3 characters"
+    },
+    "preferences": {
+      "title": "Successfully subscribed!",
+      "subtitle": "Choose what interests you to receive only relevant news.",
+      "save": "Save preferences",
+      "done-title": "Done!",
+      "done-text": "Your preferences have been saved. You will only receive newsletters for the selected categories.",
+      "categories": {
+        "seminars": "Seminars",
+        "courses": "Courses",
+        "articles": "Articles",
+        "initiatives": "Initiatives",
+        "clubs": "Clubs",
+        "games": "Games",
+        "platform": "Updates"
+      }
     }
   },
   "clubsShowcase": {

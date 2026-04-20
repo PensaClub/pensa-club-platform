@@ -96,6 +96,9 @@ router.use('/shared-links', sharedLinksController);
 const pushController = require('./controllers/pushController');
 router.use('/push', pushController);
 
+const showcaseController = require('./controllers/showcaseController');
+router.use('/showcase', showcaseController);
+
 router.use((err, req, res, next) => {
     errorHandler(err, req, res, err.statusCode || 500);
 });
