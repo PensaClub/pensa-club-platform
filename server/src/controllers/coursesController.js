@@ -766,6 +766,20 @@ coursesController.post(
         publishedAt: new Date(),
       });
 
+      // Phase 4 — enqueue reactive publish event for subscriber notifications
+      try {
+        const { enqueuePublishEvent } = require('../utils/notificationQueue');
+        await enqueuePublishEvent({
+          type: 'course',
+          referenceId: courseData.id,
+          referenceTitle: courseData.name,
+          referenceSlug: courseData.slug,
+          thumbnail: courseData.thumbnailUrl || null,
+        });
+      } catch (e) {
+        console.error('[notification_queue] course publish enqueue:', e?.message || e);
+      }
+
       res.status(200).json({
         success: true,
         message: 'Course published successfully',

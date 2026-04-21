@@ -98,6 +98,24 @@ publicationController.post('/create', isAuth, checkPermission('publications', 'c
         });
 
         const transformedResponse = await transformPublication(result);
+
+        // Phase 4 — enqueue reactive publish event for subscriber notifications
+        if (result && !result.isDraft) {
+            try {
+                const { enqueuePublishEvent } = require('../utils/notificationQueue');
+                const thumb = result.image?.thumbnailUrl || null;
+                await enqueuePublishEvent({
+                    type: 'publication',
+                    referenceId: result.id,
+                    referenceTitle: result.title,
+                    referenceSlug: result.slug,
+                    thumbnail: thumb,
+                });
+            } catch (e) {
+                console.error('[notification_queue] publication publish enqueue:', e?.message || e);
+            }
+        }
+
         return res.status(201).json(transformedResponse);
     } catch (err) {
         next(err);

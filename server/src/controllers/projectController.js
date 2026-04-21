@@ -803,6 +803,24 @@ const createProject = async (projectData, req, res, next) => {
         });
 
         const transformedResponse = transformProject(result);
+
+        // Phase 4 — enqueue reactive publish event for subscriber notifications
+        if (result && !result.isDraft) {
+            try {
+                const { enqueuePublishEvent } = require('../utils/notificationQueue');
+                const thumb = result.mainImage?.thumbnailUrl || null;
+                await enqueuePublishEvent({
+                    type: 'project',
+                    referenceId: result.id,
+                    referenceTitle: result.title,
+                    referenceSlug: result.slug,
+                    thumbnail: thumb,
+                });
+            } catch (e) {
+                console.error('[notification_queue] project publish enqueue:', e?.message || e);
+            }
+        }
+
         return res.status(201).json(transformedResponse);
     } catch (err) {
         next(err);
