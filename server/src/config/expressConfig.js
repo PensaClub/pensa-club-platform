@@ -13,6 +13,7 @@ const { startForumDigestCron } = require('../cron/forumDigestCron');
 const { startStorageSyncCron } = require('../cron/storageSyncCron');
 const scheduleAuditLogCleanup = require('../cron/auditLogCleanup');
 const { startWeeklyDigestCron } = require('../cron/weeklyDigestCron');
+const { startScheduledNewsletterCron } = require('../cron/scheduledNewsletterCron');
 
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
@@ -66,5 +67,6 @@ module.exports = function expressConfig(app) {
         startStorageSyncCron();
         scheduleAuditLogCleanup();
         startWeeklyDigestCron();
+        startScheduledNewsletterCron();
     });
 };
