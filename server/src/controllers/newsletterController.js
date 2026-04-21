@@ -370,6 +370,60 @@ newsletterController.post(
 );
 
 // ═══════════════════════════════════════════════════════════════════════
+// POST /newsletter/admin/personal/:subscriberId — quick one-off email to a
+// single subscriber (no draft is created in DB). Body: { title, body }.
+// ═══════════════════════════════════════════════════════════════════════
+newsletterController.post(
+    '/admin/personal/:subscriberId',
+    isAuth,
+    rbac.checkPermission('newsletter', 'send'),
+    async (req, res, next) => {
+        try {
+            const subscriberId = parseInt(req.params.subscriberId, 10);
+            if (!Number.isInteger(subscriberId)) {
+                return res.status(400).json({ message: 'Invalid subscriber id.' });
+            }
+
+            const sub = await subscriber.findByPk(subscriberId);
+            if (!sub) return res.status(404).json({ message: 'Subscriber not found.' });
+            if (sub.status !== 'active') {
+                return res.status(400).json({
+                    message: 'Subscriber is not active and cannot receive emails.',
+                });
+            }
+
+            const title = String(req.body?.title || '').trim();
+            const body = String(req.body?.body || '').trim();
+            if (!title || !body) {
+                return res.status(400).json({ message: 'Title and body are required.' });
+            }
+
+            const html = renderNewsletterHtml({
+                title,
+                body,
+                platformUpdates: '',
+                subscriberName: sub.name || '',
+            });
+
+            try {
+                await sendNewsletterEmail({ to: sub.email, subject: title, html });
+                return res.status(200).json({
+                    message: 'Personal email sent.',
+                    to: sub.email,
+                });
+            } catch (sendErr) {
+                return res.status(502).json({
+                    message: 'Email provider rejected the message.',
+                    error: sendErr?.message || String(sendErr),
+                });
+            }
+        } catch (err) {
+            next(err);
+        }
+    },
+);
+
+// ═══════════════════════════════════════════════════════════════════════
 // POST /newsletter/admin/:id/send-test — send preview to requesting admin
 // Body: { to?: string } — optional override recipient (defaults to admin email)
 // ═══════════════════════════════════════════════════════════════════════

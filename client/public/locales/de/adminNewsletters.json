@@ -24,9 +24,121 @@
     "subscribers": "Abonnenten"
   },
   "placeholders": {
-    "subscribers": "Tab „Abonnenten“ — wird in Phase 3.7 umgesetzt",
-    "stats": "Tab „Statistik“ — wird in Phase 3.7 umgesetzt",
     "auto": "Tab „Automatisierungen“ — wird in Phase 7 umgesetzt"
+  },
+  "imageUploader": {
+    "addLabel": "Bild hinzufügen ({{left}})",
+    "add": "Bild hinzufügen",
+    "remove": "Entfernen",
+    "hint": "Bilder: {{used}} / {{max}}. Erlaubt: JPG, PNG, WebP. Wird in Firebase gespeichert.",
+    "invalidType": "Nur JPG/PNG/WebP-Dateien sind erlaubt.",
+    "uploadError": "Bild konnte nicht hochgeladen werden."
+  },
+  "subscribers": {
+    "searchPlaceholder": "Nach Name oder E-Mail suchen…",
+    "filters": "Filter",
+    "clearFilters": "Zurücksetzen",
+    "filterByStatus": "Status",
+    "filterByCategory": "Kategorie",
+    "filterByDateFrom": "Von",
+    "filterByDateTo": "Bis",
+    "allStatuses": "Alle Status",
+    "allCategories": "Alle Kategorien",
+    "exportCsv": "CSV exportieren",
+    "exportPdf": "PDF exportieren",
+    "columns": {
+      "name": "Name",
+      "email": "E-Mail",
+      "status": "Status",
+      "categories": "Kategorien",
+      "createdAt": "Datum",
+      "actions": "Aktionen"
+    },
+    "statuses": {
+      "active": "Aktiv",
+      "unsubscribed": "Abgemeldet",
+      "blocked": "Gesperrt"
+    },
+    "actions": {
+      "block": "Sperren",
+      "unblock": "Entsperren",
+      "delete": "Löschen",
+      "editPrefs": "Kategorien bearbeiten",
+      "sendPersonal": "Persönliche E-Mail senden"
+    },
+    "empty": {
+      "title": "Keine Abonnenten gefunden",
+      "description": "Versuchen Sie einen anderen Filter."
+    },
+    "loading": "Wird geladen…",
+    "pageInfo": "Seite {{current}} von {{total}} ({{count}} gesamt)",
+    "prev": "Zurück",
+    "next": "Weiter",
+    "noCategories": "Keine Kategorien",
+    "confirm": {
+      "deleteTitle": "Abonnent löschen",
+      "deleteBody": "Möchten Sie „{{name}}“ ({{email}}) wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden.",
+      "blockTitle": "Abonnent sperren",
+      "blockBody": "„{{name}}“ ({{email}}) erhält keine E-Mails mehr. Sie können die Sperre später aufheben.",
+      "confirm": "Bestätigen",
+      "cancel": "Abbrechen"
+    },
+    "messages": {
+      "deleted": "Abonnent gelöscht.",
+      "blocked": "Abonnent gesperrt.",
+      "unblocked": "Abonnent entsperrt.",
+      "loadError": "Abonnenten konnten nicht geladen werden.",
+      "prefsUpdated": "Kategorien aktualisiert.",
+      "prefsError": "Kategorien konnten nicht gespeichert werden.",
+      "personalSent": "Persönliche E-Mail an {{email}} gesendet.",
+      "personalError": "Persönliche E-Mail konnte nicht gesendet werden."
+    },
+    "editPrefs": {
+      "title": "Kategorien des Abonnenten",
+      "description": "Wählen Sie, welche Kategorien dieser Abonnent erhalten soll.",
+      "save": "Speichern",
+      "cancel": "Abbrechen"
+    },
+    "sendPersonal": {
+      "title": "Persönliche E-Mail an Abonnent",
+      "description": "Senden Sie eine direkte Nachricht an {{name}} ({{email}}). Die E-Mail verwendet das gleiche Newsletter-Design, wird aber nicht im Verlauf gespeichert.",
+      "subjectLabel": "Betreff",
+      "subjectPlaceholder": "z. B. „Persönliche Einladung zu einer Veranstaltung“",
+      "bodyLabel": "Inhalt",
+      "bodyPlaceholder": "Nachricht schreiben…",
+      "send": "Senden",
+      "cancel": "Abbrechen",
+      "imagesLabel": "Bilder (optional, bis zu 5)",
+      "subjectRequired": "Betreff ist erforderlich.",
+      "bodyRequired": "Inhalt ist erforderlich.",
+      "blockedNotice": "Dieser Abonnent ist gesperrt oder abgemeldet und erhält die E-Mail nicht."
+    }
+  },
+  "subStats": {
+    "title": "Abonnenten-Übersicht",
+    "subtitle": "Kurzer Überblick über die Abonnentenbasis.",
+    "cards": {
+      "total": "Gesamt",
+      "active": "Aktiv",
+      "unsubscribed": "Abgemeldet",
+      "blocked": "Gesperrt",
+      "newThisWeek": "Neu diese Woche",
+      "newThisMonth": "Neu diesen Monat"
+    },
+    "byCategoryTitle": "Aktive Abonnenten nach Kategorie",
+    "loading": "Statistiken werden geladen…",
+    "loadError": "Statistiken konnten nicht geladen werden."
+  },
+  "autoSettings": {
+    "title": "Automatisierte Newsletter",
+    "subtitle": "Cron-Job-Übersicht. Vollständige Verwaltung in Phase 7.",
+    "weeklyTitle": "Wöchentlicher Digest",
+    "weeklySchedule": "Jeden Montag, 10:00 (Europe/Sofia)",
+    "weeklyDesc": "Aggregiert neue Inhalte der letzten 7 Tage und bevorstehende Veranstaltungen. Wird nur gesendet, wenn Inhalt für den Abonnenten vorhanden ist.",
+    "scheduledTitle": "Geplante Newsletter",
+    "scheduledSchedule": "Alle 15 Minuten",
+    "scheduledDesc": "Prüft auf Newsletter mit Status „Geplant“ und sendet sie zur geplanten Zeit.",
+    "active": "Aktiv"
   },
   "editor": {
     "newTitle": "Neuer Newsletter",
@@ -147,6 +259,7 @@
       "link": "Link",
       "linkPrompt": "URL des Links eingeben:",
       "image": "Bild",
+      "imageUpload": "Bild vom Computer hochladen",
       "imagePrompt": "URL des Bildes eingeben:",
       "undo": "Rückgängig",
       "redo": "Wiederholen",

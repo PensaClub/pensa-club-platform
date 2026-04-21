@@ -18,6 +18,7 @@ import {
   Megaphone,
 } from 'lucide-react';
 import { useCommunityContext } from '../../../contexts/CommunityContext';
+import { NewsletterImageUploader } from '../../NewsletterImageUploader/NewsletterImageUploader';
 import './addContentModal.css';
 
 const TYPES = [
@@ -69,7 +70,7 @@ export const AddContentModal = ({ isOpen, onClose, onInsert }) => {
     title: '',
     description: '',
     url: '',
-    image: '',
+    images: [], // array of Firebase URLs (multi up to 5)
     buttonText: '',
   });
   const [updateError, setUpdateError] = useState('');
@@ -118,7 +119,7 @@ export const AddContentModal = ({ isOpen, onClose, onInsert }) => {
       setQuery('');
       setDebounced('');
       setSelectedMap({});
-      setUpdateForm({ title: '', description: '', url: '', image: '', buttonText: '' });
+      setUpdateForm({ title: '', description: '', url: '', images: [], buttonText: '' });
       setUpdateError('');
     }
   }, [isOpen]);
@@ -153,16 +154,21 @@ export const AddContentModal = ({ isOpen, onClose, onInsert }) => {
     if (activeType === 'update') {
       const title = updateForm.title.trim();
       if (title) {
+        const imgs = Array.isArray(updateForm.images) ? updateForm.images : [];
         blocks.push(
           buildHtmlBlock({
             categoryLabel: t('editor.addContent.categoryLabels.update'),
             title,
             description: updateForm.description.trim(),
-            thumbnail: updateForm.image.trim() || null,
+            thumbnail: imgs[0] || null,
             url: updateForm.url.trim() || '#',
             readMore: updateForm.buttonText.trim() || t('editor.addContent.readMore'),
           }),
         );
+        // Extra images (2..5) — append as standalone <img> after the block
+        for (let i = 1; i < imgs.length; i++) {
+          blocks.push(`<p><img src="${escapeAttr(imgs[i])}" alt="${escapeAttr(title)}" /></p>`);
+        }
       } else if (blocks.length === 0) {
         setUpdateError(t('editor.addContent.update.titleRequired'));
         return;
@@ -346,14 +352,11 @@ export const AddContentModal = ({ isOpen, onClose, onInsert }) => {
               <label className="anacm-update-label">
                 {t('editor.addContent.update.image')}
               </label>
-              <input
-                type="url"
-                className="anacm-update-input"
-                placeholder={t('editor.addContent.update.imagePlaceholder')}
-                value={updateForm.image}
-                onChange={(e) =>
-                  setUpdateForm((f) => ({ ...f, image: e.target.value }))
-                }
+              <NewsletterImageUploader
+                value={updateForm.images}
+                onChange={(images) => setUpdateForm((f) => ({ ...f, images }))}
+                max={5}
+                storagePath="newsletters/blocks"
               />
             </div>
           </div>

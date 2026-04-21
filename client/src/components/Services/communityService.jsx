@@ -154,6 +154,38 @@ export const communityServiceFactory = (token) => {
     getNewsletterStats: async (id) => {
       return requester.get(`${apiUrl}/newsletter/admin/${id}/stats`);
     },
+    getAdminSubscriberList: async (params = {}) => {
+      const qs = new URLSearchParams();
+      Object.entries(params).forEach(([k, v]) => {
+        if (v !== undefined && v !== null && v !== '') qs.append(k, v);
+      });
+      const suffix = qs.toString() ? `?${qs.toString()}` : '';
+      return requester.get(`${apiUrl}/subscribe/admin/list${suffix}`);
+    },
+    getAdminSubscriberStats: async () => {
+      return requester.get(`${apiUrl}/subscribe/admin/stats`);
+    },
+    blockSubscriber: async (id) => {
+      return requester.post(`${apiUrl}/subscribe/admin/${id}/block`, {});
+    },
+    unblockSubscriber: async (id) => {
+      return requester.post(`${apiUrl}/subscribe/admin/${id}/unblock`, {});
+    },
+    updateSubscriberPreferencesByAdmin: async (id, preferences) => {
+      return requester.put(`${apiUrl}/subscribe/admin/${id}/preferences`, { preferences });
+    },
+    exportSubscribersCsvUrl: () => `${apiUrl}/subscribe/admin/export.csv`,
+    exportSubscribersPdfUrl: (params = {}) => {
+      const qs = new URLSearchParams();
+      Object.entries(params).forEach(([k, v]) => {
+        if (v !== undefined && v !== null && v !== '') qs.append(k, v);
+      });
+      const suffix = qs.toString() ? `?${qs.toString()}` : '';
+      return `${apiUrl}/subscribe/admin/export.pdf${suffix}`;
+    },
+    sendPersonalNewsletter: async (subscriberId, { title, body }) => {
+      return requester.post(`${apiUrl}/newsletter/admin/personal/${subscriberId}`, { title, body });
+    },
   }
 }
 

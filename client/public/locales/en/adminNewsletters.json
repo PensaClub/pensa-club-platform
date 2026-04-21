@@ -24,9 +24,121 @@
     "subscribers": "Subscribers"
   },
   "placeholders": {
-    "subscribers": "“Subscribers” tab — to be implemented in Phase 3.7",
-    "stats": "“Statistics” tab — to be implemented in Phase 3.7",
     "auto": "“Automations” tab — to be implemented in Phase 7"
+  },
+  "imageUploader": {
+    "addLabel": "Add image ({{left}})",
+    "add": "Add image",
+    "remove": "Remove",
+    "hint": "Images: {{used}} / {{max}}. Allowed: JPG, PNG, WebP. Stored in Firebase.",
+    "invalidType": "Only JPG/PNG/WebP files are allowed.",
+    "uploadError": "Failed to upload the image."
+  },
+  "subscribers": {
+    "searchPlaceholder": "Search by name or email…",
+    "filters": "Filters",
+    "clearFilters": "Clear",
+    "filterByStatus": "Status",
+    "filterByCategory": "Category",
+    "filterByDateFrom": "From",
+    "filterByDateTo": "To",
+    "allStatuses": "All statuses",
+    "allCategories": "All categories",
+    "exportCsv": "Export CSV",
+    "exportPdf": "Export PDF",
+    "columns": {
+      "name": "Name",
+      "email": "Email",
+      "status": "Status",
+      "categories": "Categories",
+      "createdAt": "Date",
+      "actions": "Actions"
+    },
+    "statuses": {
+      "active": "Active",
+      "unsubscribed": "Unsubscribed",
+      "blocked": "Blocked"
+    },
+    "actions": {
+      "block": "Block",
+      "unblock": "Unblock",
+      "delete": "Delete",
+      "editPrefs": "Edit categories",
+      "sendPersonal": "Send personal email"
+    },
+    "empty": {
+      "title": "No subscribers found",
+      "description": "Try a different filter."
+    },
+    "loading": "Loading…",
+    "pageInfo": "Page {{current}} of {{total}} ({{count}} total)",
+    "prev": "Previous",
+    "next": "Next",
+    "noCategories": "No categories",
+    "confirm": {
+      "deleteTitle": "Delete subscriber",
+      "deleteBody": "Are you sure you want to delete “{{name}}” ({{email}})? This cannot be undone.",
+      "blockTitle": "Block subscriber",
+      "blockBody": "“{{name}}” ({{email}}) will no longer receive emails. You can unblock them later.",
+      "confirm": "Confirm",
+      "cancel": "Cancel"
+    },
+    "messages": {
+      "deleted": "Subscriber deleted.",
+      "blocked": "Subscriber blocked.",
+      "unblocked": "Subscriber unblocked.",
+      "loadError": "Failed to load subscribers.",
+      "prefsUpdated": "Categories updated.",
+      "prefsError": "Failed to save categories.",
+      "personalSent": "Personal email sent to {{email}}.",
+      "personalError": "Failed to send personal email."
+    },
+    "editPrefs": {
+      "title": "Subscriber categories",
+      "description": "Pick which categories this subscriber receives.",
+      "save": "Save",
+      "cancel": "Cancel"
+    },
+    "sendPersonal": {
+      "title": "Personal email to subscriber",
+      "description": "Send a direct message to {{name}} ({{email}}). The email uses the same newsletter design but is not stored in history.",
+      "subjectLabel": "Subject",
+      "subjectPlaceholder": "e.g. “Personal invitation to an event”",
+      "bodyLabel": "Content",
+      "bodyPlaceholder": "Write the message…",
+      "send": "Send",
+      "cancel": "Cancel",
+      "imagesLabel": "Images (optional, up to 5)",
+      "subjectRequired": "Subject is required.",
+      "bodyRequired": "Content is required.",
+      "blockedNotice": "This subscriber is blocked or unsubscribed and will not receive the email."
+    }
+  },
+  "subStats": {
+    "title": "Subscriber overview",
+    "subtitle": "Quick snapshot of the subscriber base.",
+    "cards": {
+      "total": "Total",
+      "active": "Active",
+      "unsubscribed": "Unsubscribed",
+      "blocked": "Blocked",
+      "newThisWeek": "New this week",
+      "newThisMonth": "New this month"
+    },
+    "byCategoryTitle": "Active subscribers by category",
+    "loading": "Loading stats…",
+    "loadError": "Failed to load stats."
+  },
+  "autoSettings": {
+    "title": "Automated newsletters",
+    "subtitle": "Cron job overview. Full management in Phase 7.",
+    "weeklyTitle": "Weekly digest",
+    "weeklySchedule": "Every Monday, 10:00 (Europe/Sofia)",
+    "weeklyDesc": "Aggregates new content from the last 7 days and upcoming events. Sent only when there is content for the subscriber.",
+    "scheduledTitle": "Scheduled newsletters",
+    "scheduledSchedule": "Every 15 minutes",
+    "scheduledDesc": "Checks for newsletters with status “Scheduled” and sends them when their scheduled time arrives.",
+    "active": "Active"
   },
   "editor": {
     "newTitle": "New newsletter",
@@ -147,6 +259,7 @@
       "link": "Link",
       "linkPrompt": "Enter the link URL:",
       "image": "Image",
+      "imageUpload": "Upload image from computer",
       "imagePrompt": "Enter the image URL:",
       "undo": "Undo",
       "redo": "Redo",

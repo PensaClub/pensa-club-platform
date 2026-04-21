@@ -102,6 +102,20 @@
   stroke-width: 2.1;
 }
 
+.anert-spin {
+  animation: anert-spin 1s linear infinite;
+}
+
+@keyframes anert-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.anert-file-input {
+  display: none;
+}
+
 /* =========================================================
    EDITOR CONTENT
    ========================================================= */

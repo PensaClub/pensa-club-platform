@@ -1,13 +1,19 @@
 // src/components/AdminNewsletters/NewsletterEditor/NewsletterEditorRichText/NewsletterEditorRichText.jsx
 // Prefix: anert- (AdminNewsletters → Editor → RichText)
 
-import { forwardRef, useEffect, useImperativeHandle } from 'react';
+import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useEditor, EditorContent } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import Image from '@tiptap/extension-image';
 import Link from '@tiptap/extension-link';
 import Placeholder from '@tiptap/extension-placeholder';
+import {
+  uploadFileWithProgress,
+  compressImage,
+  allowedImageTypes,
+} from '../../../Articles/articleUtils/file-utils';
+import { notify } from '../../../../utils/notify.jsx';
 
 // Extend Link to preserve the `class` attribute — so our nl-cta links survive
 // tiptap's round-trip and can be styled as buttons by server-side beautifier.
@@ -36,7 +42,8 @@ import {
   Quote,
   Minus,
   Link2,
-  Image as ImageIcon,
+  ImagePlus,
+  Loader2,
   Undo2,
   Redo2,
 } from 'lucide-react';
@@ -44,6 +51,8 @@ import './newsletterEditorRichText.css';
 
 export const NewsletterEditorRichText = forwardRef(({ value = '', onChange, placeholder = '' }, ref) => {
   const { t } = useTranslation('adminNewsletters');
+  const fileInputRef = useRef(null);
+  const [isUploadingImage, setIsUploadingImage] = useState(false);
 
   const editor = useEditor({
     extensions: [
@@ -94,10 +103,29 @@ export const NewsletterEditorRichText = forwardRef(({ value = '', onChange, plac
     editor.chain().focus().extendMarkRange('link').setLink({ href: url }).run();
   };
 
-  const addImage = () => {
-    // eslint-disable-next-line no-alert
-    const url = window.prompt(t('editor.toolbar.imagePrompt'));
-    if (url) editor.chain().focus().setImage({ src: url }).run();
+  const triggerImagePick = () => {
+    if (isUploadingImage) return;
+    fileInputRef.current?.click();
+  };
+
+  const handleImageFile = async (event) => {
+    const file = event.target.files?.[0];
+    if (event.target) event.target.value = '';
+    if (!file) return;
+    if (!allowedImageTypes.includes(file.type)) {
+      notify('error', null, t('imageUploader.invalidType'));
+      return;
+    }
+    setIsUploadingImage(true);
+    try {
+      const compressed = await compressImage(file);
+      const url = await uploadFileWithProgress(compressed, 'newsletters/inline');
+      if (url) editor.chain().focus().setImage({ src: url }).run();
+    } catch {
+      notify('error', null, t('imageUploader.uploadError'));
+    } finally {
+      setIsUploadingImage(false);
+    }
   };
 
   const Btn = ({ onClick, active, disabled, title, children }) => (
@@ -215,10 +243,22 @@ export const NewsletterEditorRichText = forwardRef(({ value = '', onChange, plac
           >
             <Link2 />
           </Btn>
-          <Btn onClick={addImage} title={t('editor.toolbar.image')}>
-            <ImageIcon />
+          <Btn
+            onClick={triggerImagePick}
+            disabled={isUploadingImage}
+            title={t('editor.toolbar.imageUpload')}
+          >
+            {isUploadingImage ? <Loader2 className="anert-spin" /> : <ImagePlus />}
           </Btn>
         </div>
+
+        <input
+          ref={fileInputRef}
+          type="file"
+          accept={allowedImageTypes.join(',')}
+          className="anert-file-input"
+          onChange={handleImageFile}
+        />
 
         <span className="anert-divider" />
 

@@ -1,0 +1,223 @@
+/* src/components/AdminNewsletters/NewsletterImageUploader/newsletterImageUploader.css */
+/* Prefix: aniu- */
+
+.aniu-root {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.aniu-root *,
+.aniu-root *::before,
+.aniu-root *::after {
+  box-sizing: border-box;
+}
+
+.aniu-file-input {
+  display: none;
+}
+
+/* =========================================================
+   GRID + THUMBS
+   ========================================================= */
+
+.aniu-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(96px, 1fr));
+  gap: 8px;
+}
+
+.aniu-thumb {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  background: rgba(13, 17, 23, 0.6);
+  border: 1px solid rgba(20, 184, 166, 0.18);
+  border-radius: 10px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.aniu-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.aniu-thumb-remove {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  width: 24px;
+  height: 24px;
+  padding: 4px;
+  background: rgba(0, 0, 0, 0.65);
+  color: #ffffff;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.18s;
+}
+
+.aniu-thumb-remove:hover {
+  background: rgba(239, 68, 68, 0.85);
+}
+
+.aniu-thumb-remove .aniu-icon {
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.aniu-thumb-remove .aniu-icon svg {
+  width: 100%;
+  height: 100%;
+  stroke-width: 2.5;
+}
+
+/* =========================================================
+   UPLOADING STATE
+   ========================================================= */
+
+.aniu-thumb--uploading {
+  flex-direction: column;
+  gap: 6px;
+  background: rgba(20, 184, 166, 0.1);
+  border-color: rgba(20, 184, 166, 0.4);
+}
+
+.aniu-uploading-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  padding: 2px;
+  color: #2dd4bf;
+}
+
+.aniu-uploading-icon svg {
+  width: 100%;
+  height: 100%;
+  stroke-width: 2.2;
+  animation: aniu-spin 1s linear infinite;
+}
+
+@keyframes aniu-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.aniu-progress {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #2dd4bf;
+  font-variant-numeric: tabular-nums;
+}
+
+/* =========================================================
+   ADD BUTTON
+   ========================================================= */
+
+.aniu-add {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  aspect-ratio: 4 / 3;
+  padding: 8px;
+  background: rgba(20, 25, 35, 0.55);
+  border: 2px dashed rgba(20, 184, 166, 0.32);
+  border-radius: 10px;
+  color: #2dd4bf;
+  cursor: pointer;
+  transition: all 0.18s ease;
+  font-family: 'Montserrat', sans-serif;
+  text-align: center;
+}
+
+.aniu-add:hover:not(:disabled) {
+  background: rgba(20, 184, 166, 0.1);
+  border-color: rgba(20, 184, 166, 0.55);
+}
+
+.aniu-add:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.aniu-add-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  padding: 4px;
+}
+
+.aniu-add-icon svg {
+  width: 100%;
+  height: 100%;
+  stroke-width: 1.8;
+}
+
+.aniu-add-label {
+  font-size: 0.7rem;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+/* =========================================================
+   HINT
+   ========================================================= */
+
+.aniu-hint {
+  margin: 0;
+  font-size: 0.74rem;
+  color: #64748b;
+}
+
+/* =========================================================
+   LIGHT THEME
+   ========================================================= */
+
+[data-theme="light"] .aniu-thumb {
+  background: #f8fafc;
+  border-color: rgba(148, 163, 184, 0.3);
+}
+
+[data-theme="light"] .aniu-thumb--uploading {
+  background: rgba(20, 184, 166, 0.06);
+  border-color: rgba(20, 184, 166, 0.4);
+}
+
+[data-theme="light"] .aniu-uploading-icon,
+[data-theme="light"] .aniu-progress {
+  color: #0d9488;
+}
+
+[data-theme="light"] .aniu-add {
+  background: #f8fafc;
+  color: #0d9488;
+  border-color: rgba(20, 184, 166, 0.4);
+}
+
+[data-theme="light"] .aniu-add:hover:not(:disabled) {
+  background: rgba(20, 184, 166, 0.06);
+  border-color: rgba(20, 184, 166, 0.55);
+}
+
+[data-theme="light"] .aniu-hint {
+  color: #94a3b8;
+}

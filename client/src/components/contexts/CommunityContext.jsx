@@ -441,6 +441,56 @@ export const CommunityProvider = ({ children }) => {
             throw e;
         }
     };
+    const getAdminSubscriberList = async (params) => {
+        try {
+            return await communityService.getAdminSubscriberList(params);
+        } catch (e) {
+            notify('error', e);
+            throw e;
+        }
+    };
+    const getAdminSubscriberStats = async () => {
+        try {
+            return await communityService.getAdminSubscriberStats();
+        } catch (e) {
+            notify('error', e);
+            throw e;
+        }
+    };
+    const blockSubscriber = async (id) => {
+        try {
+            return await communityService.blockSubscriber(id);
+        } catch (e) {
+            notify('error', e);
+            throw e;
+        }
+    };
+    const unblockSubscriber = async (id) => {
+        try {
+            return await communityService.unblockSubscriber(id);
+        } catch (e) {
+            notify('error', e);
+            throw e;
+        }
+    };
+    const updateSubscriberPreferencesByAdmin = async (id, preferences) => {
+        try {
+            return await communityService.updateSubscriberPreferencesByAdmin(id, preferences);
+        } catch (e) {
+            notify('error', e);
+            throw e;
+        }
+    };
+    const exportSubscribersCsvUrl = () => communityService.exportSubscribersCsvUrl();
+    const exportSubscribersPdfUrl = (params) => communityService.exportSubscribersPdfUrl(params);
+    const sendPersonalNewsletter = async (subscriberId, payload) => {
+        try {
+            return await communityService.sendPersonalNewsletter(subscriberId, payload);
+        } catch (e) {
+            notify('error', e);
+            throw e;
+        }
+    };
 
     useEffect(() => {
         fetchRegions();
@@ -492,6 +542,14 @@ export const CommunityProvider = ({ children }) => {
         sendTestNewsletter,
         sendNewsletterNow,
         getNewsletterStats,
+        getAdminSubscriberList,
+        getAdminSubscriberStats,
+        blockSubscriber,
+        unblockSubscriber,
+        updateSubscriberPreferencesByAdmin,
+        exportSubscribersCsvUrl,
+        exportSubscribersPdfUrl,
+        sendPersonalNewsletter,
     };
 
     return (
