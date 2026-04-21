@@ -622,6 +622,22 @@ const createClub = async (clubData, req, res, next) => {
 
         const feData = transformClub(completeClub);
 
+        // Phase 4 — enqueue reactive publish event for subscriber notifications
+        if (completeClub && !completeClub.isDraft) {
+            try {
+                const { enqueuePublishEvent } = require('../utils/notificationQueue');
+                await enqueuePublishEvent({
+                    type: 'club',
+                    referenceId: completeClub.id,
+                    referenceTitle: completeClub.name || completeClub.title,
+                    referenceSlug: completeClub.slug,
+                    thumbnail: null,
+                });
+            } catch (e) {
+                console.error('[notification_queue] club publish enqueue:', e?.message || e);
+            }
+        }
+
         return res.status(201).json({
             ...feData,
         });

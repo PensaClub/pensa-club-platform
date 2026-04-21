@@ -30,6 +30,21 @@ const absolutizeUrl = (url) => {
     return `${PUBLIC_BASE_URL}${s.startsWith('/') ? '' : '/'}${s}`;
 };
 
+// Fallback placeholder per type — used only when no thumbnail/image exists.
+const DEFAULT_THUMBNAILS = {
+    seminars: `${PUBLIC_BASE_URL}/images/homePage/logo-2.png`,
+    courses: `${PUBLIC_BASE_URL}/images/homePage/logo-2.png`,
+    articles: `${PUBLIC_BASE_URL}/images/homePage/logo-2.png`,
+    initiatives: `${PUBLIC_BASE_URL}/images/homePage/logo-2.png`,
+    projects: `${PUBLIC_BASE_URL}/images/homePage/logo-2.png`,
+    publications: `${PUBLIC_BASE_URL}/images/homePage/logo-2.png`,
+};
+const resolveThumb = (primary, type) => {
+    const abs = absolutizeUrl(primary);
+    if (abs) return abs;
+    return DEFAULT_THUMBNAILS[type] || null;
+};
+
 const ALLOWED_CATEGORIES = ['seminars', 'courses', 'articles', 'initiatives', 'clubs', 'games', 'platform'];
 
 const renderPlatformUpdatesHtml = (text) => {
@@ -370,6 +385,148 @@ newsletterController.post(
 );
 
 // ═══════════════════════════════════════════════════════════════════════
+// QUEUE MANAGEMENT — admins can remove auto-enqueued items or add manual ones.
+// `status` distinguishes the target batch:
+//   'pending'         → daily event batch (09:00 Sofia)
+//   'weekly_pending'  → weekly digest (Monday 10:00 Sofia)
+// ═══════════════════════════════════════════════════════════════════════
+const QUEUE_CATEGORIES = ['seminars', 'courses', 'articles', 'initiatives', 'clubs', 'games', 'platform'];
+
+// GET /newsletter/admin/queue?status=pending|weekly_pending
+newsletterController.get(
+    '/admin/queue',
+    isAuth,
+    rbac.checkPermission('newsletter', 'read'),
+    async (req, res, next) => {
+        try {
+            const { notification_queue } = require('../sequelize/models/index');
+            const status = req.query.status === 'weekly_pending' ? 'weekly_pending' : 'pending';
+            const rows = await notification_queue.findAll({
+                where: { status },
+                order: [['createdAt', 'ASC']],
+            });
+            res.status(200).json({ items: rows, status });
+        } catch (err) {
+            next(err);
+        }
+    },
+);
+
+// POST /newsletter/admin/queue — body: { status, category, type='custom', title, description?, url?, thumbnail? }
+newsletterController.post(
+    '/admin/queue',
+    isAuth,
+    rbac.checkPermission('newsletter', 'create'),
+    async (req, res, next) => {
+        try {
+            const { notification_queue } = require('../sequelize/models/index');
+            const status =
+                req.body?.status === 'weekly_pending' ? 'weekly_pending' : 'pending';
+            const category =
+                QUEUE_CATEGORIES.includes(req.body?.category) ? req.body.category : 'platform';
+            const title = String(req.body?.title || '').trim();
+            if (!title) {
+                return res.status(400).json({ message: 'Title is required.' });
+            }
+            const description = req.body?.description
+                ? String(req.body.description).trim()
+                : null;
+            const url = req.body?.url ? String(req.body.url).trim().slice(0, 500) : null;
+            const thumbnail = req.body?.thumbnail
+                ? String(req.body.thumbnail).trim().slice(0, 2048)
+                : null;
+
+            const row = await notification_queue.create({
+                type: 'custom',
+                referenceId: null,
+                referenceTitle: title.slice(0, 500),
+                referenceSlug: url,
+                description,
+                category,
+                thumbnail,
+                status,
+            });
+            res.status(201).json({ item: row });
+        } catch (err) {
+            next(err);
+        }
+    },
+);
+
+// DELETE /newsletter/admin/queue/:id
+newsletterController.delete(
+    '/admin/queue/:id',
+    isAuth,
+    rbac.checkPermission('newsletter', 'delete'),
+    async (req, res, next) => {
+        try {
+            const { notification_queue } = require('../sequelize/models/index');
+            const id = parseInt(req.params.id, 10);
+            if (!Number.isInteger(id)) {
+                return res.status(400).json({ message: 'Invalid id.' });
+            }
+            const row = await notification_queue.findByPk(id);
+            if (!row) return res.status(404).json({ message: 'Queue item not found.' });
+            if (row.status !== 'pending' && row.status !== 'weekly_pending') {
+                return res
+                    .status(400)
+                    .json({ message: 'Only pending items can be removed.' });
+            }
+            await row.destroy();
+            res.status(200).json({ message: 'Item removed.' });
+        } catch (err) {
+            next(err);
+        }
+    },
+);
+
+// ═══════════════════════════════════════════════════════════════════════
+// GET /newsletter/admin/event-preview — pending queue + preview HTML of
+// what the next reactive batch email would look like
+// ═══════════════════════════════════════════════════════════════════════
+newsletterController.get(
+    '/admin/event-preview',
+    isAuth,
+    rbac.checkPermission('newsletter', 'read'),
+    async (req, res, next) => {
+        try {
+            const { buildBatchPreview } = require('../utils/eventBatchSender');
+            const preview = await buildBatchPreview({ subscriberName: '' });
+            res.status(200).json(preview);
+        } catch (err) {
+            next(err);
+        }
+    },
+);
+
+// ═══════════════════════════════════════════════════════════════════════
+// POST /newsletter/admin/event-run-now — manually trigger the batch
+// (fire-and-forget, admin testing)
+// ═══════════════════════════════════════════════════════════════════════
+newsletterController.post(
+    '/admin/event-run-now',
+    isAuth,
+    rbac.checkPermission('newsletter', 'send'),
+    async (req, res, next) => {
+        try {
+            const { processEventBatch } = require('../utils/eventBatchSender');
+            processEventBatch()
+                .then((r) => {
+                    console.log(
+                        `[event-batch/manual] processed=${r.processed} sent=${r.sent} failed=${r.failed}`,
+                    );
+                })
+                .catch((err) => {
+                    console.error('[event-batch/manual] error:', err?.message || err);
+                });
+            res.status(202).json({ message: 'Batch triggered.' });
+        } catch (err) {
+            next(err);
+        }
+    },
+);
+
+// ═══════════════════════════════════════════════════════════════════════
 // POST /newsletter/admin/personal/:subscriberId — quick one-off email to a
 // single subscriber (no draft is created in DB). Body: { title, body }.
 // ═══════════════════════════════════════════════════════════════════════
@@ -527,7 +684,7 @@ newsletterController.get(
                     type: 'seminars',
                     title: r.title,
                     description: r.shortDescription || '',
-                    thumbnail: absolutizeUrl(r.thumbnailUrl),
+                    thumbnail: resolveThumb(r.thumbnailUrl, 'seminars'),
                     url: `/academy/seminars/${r.slug}`,
                     date: r.scheduledDate || r.createdAt,
                     published: !!r.isPublished,
@@ -547,7 +704,7 @@ newsletterController.get(
                     type: 'courses',
                     title: r.name,
                     description: r.shortDescription || '',
-                    thumbnail: absolutizeUrl(r.thumbnailUrl),
+                    thumbnail: resolveThumb(r.thumbnailUrl, 'courses'),
                     url: `/academy/courses/${r.slug}`,
                     date: r.publishedAt || r.createdAt,
                     published: r.status === 'published',
@@ -568,13 +725,16 @@ newsletterController.get(
                 });
                 items = rows.map((r) => {
                     const img = r.mainImage || {};
-                    const thumb = img.thumbnail || (Array.isArray(img.sources) ? img.sources[0] : null);
+                    const thumb =
+                        (Array.isArray(img.sources) ? img.sources[0] : null) ||
+                        img.thumbnail ||
+                        null;
                     return {
                         id: r.id,
                         type: 'articles',
                         title: r.title,
                         description: r.shortDescription || r.description?.substring(0, 180) || '',
-                        thumbnail: absolutizeUrl(thumb),
+                        thumbnail: resolveThumb(thumb, 'articles'),
                         url: `/articles/${r.slug}`,
                         date: r.publishedDate || r.createdAt,
                         published: true,
@@ -588,7 +748,7 @@ newsletterController.get(
                             model: image,
                             as: 'mainImage',
                             required: false,
-                            attributes: ['thumbnailUrl'],
+                            attributes: ['src', 'thumbnailUrl'],
                         },
                     ],
                     order: [['createdAt', 'DESC']],
@@ -599,7 +759,10 @@ newsletterController.get(
                     type: 'initiatives',
                     title: r.title,
                     description: r.shortDescription || '',
-                    thumbnail: absolutizeUrl(r.mainImage?.thumbnailUrl),
+                    thumbnail: resolveThumb(
+                        r.mainImage?.src || r.mainImage?.thumbnailUrl,
+                        'initiatives',
+                    ),
                     url: `/initiatives/${r.slug}`,
                     date: r.createdAt,
                     published: true,
@@ -612,7 +775,7 @@ newsletterController.get(
                             model: image,
                             as: 'mainImage',
                             required: false,
-                            attributes: ['thumbnailUrl'],
+                            attributes: ['src', 'thumbnailUrl'],
                         },
                     ],
                     order: [['createdAt', 'DESC']],
@@ -623,7 +786,10 @@ newsletterController.get(
                     type: 'projects',
                     title: r.title,
                     description: r.shortDescription || '',
-                    thumbnail: absolutizeUrl(r.mainImage?.thumbnailUrl),
+                    thumbnail: resolveThumb(
+                        r.mainImage?.src || r.mainImage?.thumbnailUrl,
+                        'projects',
+                    ),
                     url: `/projects/${r.slug}`,
                     date: r.createdAt,
                     published: true,
@@ -636,7 +802,7 @@ newsletterController.get(
                             model: image,
                             as: 'image',
                             required: false,
-                            attributes: ['thumbnailUrl'],
+                            attributes: ['src', 'thumbnailUrl'],
                         },
                     ],
                     order: [['createdAt', 'DESC']],
@@ -647,7 +813,10 @@ newsletterController.get(
                     type: 'publications',
                     title: r.title,
                     description: r.shortDescription || '',
-                    thumbnail: absolutizeUrl(r.image?.thumbnailUrl),
+                    thumbnail: resolveThumb(
+                        r.image?.src || r.image?.thumbnailUrl,
+                        'publications',
+                    ),
                     url: `/publications/${r.slug}`,
                     date: r.publishedAt || r.createdAt,
                     published: true,

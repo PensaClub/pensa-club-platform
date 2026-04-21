@@ -491,6 +491,46 @@ export const CommunityProvider = ({ children }) => {
             throw e;
         }
     };
+    const getEventBatchPreview = async () => {
+        try {
+            return await communityService.getEventBatchPreview();
+        } catch (e) {
+            notify('error', e);
+            throw e;
+        }
+    };
+    const runEventBatchNow = async () => {
+        try {
+            return await communityService.runEventBatchNow();
+        } catch (e) {
+            notify('error', e);
+            throw e;
+        }
+    };
+    const getNewsletterQueue = async (status) => {
+        try {
+            return await communityService.getNewsletterQueue(status);
+        } catch (e) {
+            notify('error', e);
+            throw e;
+        }
+    };
+    const addNewsletterQueueItem = async (payload) => {
+        try {
+            return await communityService.addNewsletterQueueItem(payload);
+        } catch (e) {
+            notify('error', e);
+            throw e;
+        }
+    };
+    const deleteNewsletterQueueItem = async (id) => {
+        try {
+            return await communityService.deleteNewsletterQueueItem(id);
+        } catch (e) {
+            notify('error', e);
+            throw e;
+        }
+    };
 
     useEffect(() => {
         fetchRegions();
@@ -550,6 +590,11 @@ export const CommunityProvider = ({ children }) => {
         exportSubscribersCsvUrl,
         exportSubscribersPdfUrl,
         sendPersonalNewsletter,
+        getEventBatchPreview,
+        runEventBatchNow,
+        getNewsletterQueue,
+        addNewsletterQueueItem,
+        deleteNewsletterQueueItem,
     };
 
     return (

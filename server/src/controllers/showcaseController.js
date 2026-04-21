@@ -13,19 +13,28 @@ const {
   Club,
 } = require('../sequelize/models/index');
 
+const SHOWCASE_BASE_URL = process.env.PUBLIC_BASE_URL || 'https://pensa.club';
+const SHOWCASE_DEFAULT_IMAGE = `${SHOWCASE_BASE_URL}/images/homePage/logo-2.png`;
+const showcasePickImage = (...candidates) => {
+  for (const c of candidates) {
+    if (c && String(c).trim()) return String(c).trim();
+  }
+  return SHOWCASE_DEFAULT_IMAGE;
+};
+
 // ===============================
 // Auto-generate slides from latest content
 // ===============================
 const autoGenerateSlides = async () => {
   const slides = [];
 
-  // Latest article with image
+  // Latest article
   try {
     const art = await article.findOne({
       order: [['createdAt', 'DESC']],
       include: [{ model: mainImage, as: 'mainImage' }],
     });
-    if (art?.mainImage?.sources?.length > 0) {
+    if (art) {
       slides.push({
         id: `auto-article-${art.id}`,
         type: 'article',
@@ -33,7 +42,10 @@ const autoGenerateSlides = async () => {
         title: art.title,
         description: art.shortDescription || '',
         categoryLabel: 'Статия',
-        imageUrl: art.mainImage.sources[0],
+        imageUrl: showcasePickImage(
+          art.mainImage?.sources?.[0],
+          art.mainImage?.thumbnail,
+        ),
         linkUrl: `/articles/${art.slug || art.id}`,
         buttonText: 'Прочети повече',
         durationSeconds: 6,
@@ -41,13 +53,13 @@ const autoGenerateSlides = async () => {
     }
   } catch (e) { console.error('Showcase auto: article error', e.message); }
 
-  // Latest seminar with thumbnail
+  // Latest seminar
   try {
     const sem = await seminar.findOne({
-      where: { isPublished: true, thumbnailUrl: { [Op.and]: [{ [Op.ne]: '' }, { [Op.ne]: null }] } },
+      where: { isPublished: true },
       order: [['createdAt', 'DESC']],
     });
-    if (sem?.thumbnailUrl) {
+    if (sem) {
       slides.push({
         id: `auto-seminar-${sem.id}`,
         type: 'seminar',
@@ -55,7 +67,7 @@ const autoGenerateSlides = async () => {
         title: sem.title,
         description: sem.shortDescription || '',
         categoryLabel: 'Семинар',
-        imageUrl: sem.thumbnailUrl,
+        imageUrl: showcasePickImage(sem.thumbnailUrl),
         linkUrl: `/academy/seminars/${sem.slug || sem.id}`,
         buttonText: 'Разгледай',
         durationSeconds: 6,
@@ -63,13 +75,13 @@ const autoGenerateSlides = async () => {
     }
   } catch (e) { console.error('Showcase auto: seminar error', e.message); }
 
-  // Latest course with thumbnail
+  // Latest course
   try {
     const crs = await course.findOne({
-      where: { status: 'active', thumbnailUrl: { [Op.and]: [{ [Op.ne]: '' }, { [Op.ne]: null }] } },
+      where: { status: 'active' },
       order: [['createdAt', 'DESC']],
     });
-    if (crs?.thumbnailUrl) {
+    if (crs) {
       slides.push({
         id: `auto-course-${crs.id}`,
         type: 'course',
@@ -77,7 +89,7 @@ const autoGenerateSlides = async () => {
         title: crs.title,
         description: crs.shortDescription || '',
         categoryLabel: 'Курс',
-        imageUrl: crs.thumbnailUrl,
+        imageUrl: showcasePickImage(crs.thumbnailUrl),
         linkUrl: `/academy/courses/${crs.slug || crs.id}`,
         buttonText: 'Разгледай',
         durationSeconds: 6,
@@ -85,13 +97,13 @@ const autoGenerateSlides = async () => {
     }
   } catch (e) { console.error('Showcase auto: course error', e.message); }
 
-  // Latest initiative with image
+  // Latest initiative
   try {
     const init = await initiative.findOne({
       order: [['createdAt', 'DESC']],
       include: [{ model: image, as: 'mainImage', required: false }],
     });
-    if (init?.mainImage?.src) {
+    if (init) {
       slides.push({
         id: `auto-initiative-${init.id}`,
         type: 'initiative',
@@ -99,7 +111,10 @@ const autoGenerateSlides = async () => {
         title: init.title,
         description: init.shortDescription || '',
         categoryLabel: 'Инициатива',
-        imageUrl: init.mainImage.src,
+        imageUrl: showcasePickImage(
+          init.mainImage?.src,
+          init.mainImage?.thumbnailUrl,
+        ),
         linkUrl: `/initiatives/${init.slug || init.id}`,
         buttonText: 'Разгледай',
         durationSeconds: 6,
@@ -107,13 +122,13 @@ const autoGenerateSlides = async () => {
     }
   } catch (e) { console.error('Showcase auto: initiative error', e.message); }
 
-  // Latest project with image
+  // Latest project
   try {
     const proj = await project.findOne({
       order: [['createdAt', 'DESC']],
       include: [{ model: image, as: 'mainImage', required: false }],
     });
-    if (proj?.mainImage?.src) {
+    if (proj) {
       slides.push({
         id: `auto-project-${proj.id}`,
         type: 'project',
@@ -121,7 +136,10 @@ const autoGenerateSlides = async () => {
         title: proj.title,
         description: proj.shortDescription || '',
         categoryLabel: 'Проект',
-        imageUrl: proj.mainImage.src,
+        imageUrl: showcasePickImage(
+          proj.mainImage?.src,
+          proj.mainImage?.thumbnailUrl,
+        ),
         linkUrl: `/projects/${proj.slug || proj.id}`,
         buttonText: 'Разгледай',
         durationSeconds: 6,
@@ -129,13 +147,13 @@ const autoGenerateSlides = async () => {
     }
   } catch (e) { console.error('Showcase auto: project error', e.message); }
 
-  // Latest publication with image
+  // Latest publication
   try {
     const pub = await publication.findOne({
       order: [['createdAt', 'DESC']],
       include: [{ model: image, as: 'image', required: false }],
     });
-    if (pub?.image?.src) {
+    if (pub) {
       slides.push({
         id: `auto-publication-${pub.id}`,
         type: 'publication',
@@ -143,7 +161,10 @@ const autoGenerateSlides = async () => {
         title: pub.title,
         description: '',
         categoryLabel: 'Публикация',
-        imageUrl: pub.image.src,
+        imageUrl: showcasePickImage(
+          pub.image?.src,
+          pub.image?.thumbnailUrl,
+        ),
         linkUrl: `/publications/${pub.slug || pub.id}`,
         buttonText: 'Разгледай',
         durationSeconds: 6,
@@ -151,13 +172,13 @@ const autoGenerateSlides = async () => {
     }
   } catch (e) { console.error('Showcase auto: publication error', e.message); }
 
-  // Latest club with image
+  // Latest club
   try {
     const clb = await Club.findOne({
       where: { status: 'active' },
       order: [['createdAt', 'DESC']],
     });
-    if (clb?.mainImage) {
+    if (clb) {
       slides.push({
         id: `auto-club-${clb.id}`,
         type: 'club',
@@ -165,7 +186,7 @@ const autoGenerateSlides = async () => {
         title: clb.name,
         description: '',
         categoryLabel: 'Клуб',
-        imageUrl: clb.mainImage,
+        imageUrl: showcasePickImage(clb.mainImage),
         linkUrl: `/clubs/${clb.slug || clb.id}`,
         buttonText: 'Разгледай',
         durationSeconds: 6,
@@ -188,7 +209,16 @@ showcaseController.get('/slides', async (req, res, next) => {
     });
 
     if (manualSlides.length > 0) {
-      return res.status(200).json({ slides: manualSlides, source: 'manual' });
+      // Ensure every slide has a usable imageUrl — older rows may have been
+      // saved without one, which left a black card on the Home slider.
+      const normalized = manualSlides.map((s) => {
+        const json = s.toJSON();
+        if (!json.imageUrl || !String(json.imageUrl).trim()) {
+          json.imageUrl = SHOWCASE_DEFAULT_IMAGE;
+        }
+        return json;
+      });
+      return res.status(200).json({ slides: normalized, source: 'manual' });
     }
 
     const autoSlides = await autoGenerateSlides();

@@ -3482,6 +3482,20 @@ seminarsController.post(
         publishedAt: new Date(),
       });
 
+      // Phase 4 — enqueue reactive publish event for subscriber notifications
+      try {
+        const { enqueuePublishEvent } = require('../utils/notificationQueue');
+        await enqueuePublishEvent({
+          type: 'seminar',
+          referenceId: seminarData.id,
+          referenceTitle: seminarData.title,
+          referenceSlug: seminarData.slug,
+          thumbnail: seminarData.thumbnailUrl || null,
+        });
+      } catch (e) {
+        console.error('[notification_queue] seminar publish enqueue:', e?.message || e);
+      }
+
       res.status(200).json({
         success: true,
         message: 'Seminar published successfully',

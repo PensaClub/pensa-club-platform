@@ -186,6 +186,21 @@ export const communityServiceFactory = (token) => {
     sendPersonalNewsletter: async (subscriberId, { title, body }) => {
       return requester.post(`${apiUrl}/newsletter/admin/personal/${subscriberId}`, { title, body });
     },
+    getEventBatchPreview: async () => {
+      return requester.get(`${apiUrl}/newsletter/admin/event-preview`);
+    },
+    runEventBatchNow: async () => {
+      return requester.post(`${apiUrl}/newsletter/admin/event-run-now`, {});
+    },
+    getNewsletterQueue: async (status = 'pending') => {
+      return requester.get(`${apiUrl}/newsletter/admin/queue?status=${encodeURIComponent(status)}`);
+    },
+    addNewsletterQueueItem: async (payload) => {
+      return requester.post(`${apiUrl}/newsletter/admin/queue`, payload);
+    },
+    deleteNewsletterQueueItem: async (id) => {
+      return requester.del(`${apiUrl}/newsletter/admin/queue/${id}`);
+    },
   }
 }
 
