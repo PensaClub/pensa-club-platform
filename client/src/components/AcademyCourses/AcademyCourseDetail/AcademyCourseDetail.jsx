@@ -12,6 +12,7 @@ import { CourseReviewModal } from '../CourseReviewModal/CourseReviewModal';
 import academyServiceFactory from '../../Services/academyServiceFactory';
 import './academyCourseDetail.css';
 import AcademyCourseDetailSkeleton from './AcademyCourseDetailSkeleton/AcademyCourseDetailSkeleton';
+import { useTrackContentView } from '../../hooks/useTrackContentView';
 import SEOHead from '../../SEO/SEOHead';
 import { TextZoom } from '../../TextZoom/TextZoom';
 
@@ -765,6 +766,7 @@ export const AcademyCourseDetail = () => {
   }, [currentCourse?.id, academyService]);
 
   const course = currentCourse;
+  useTrackContentView('course', course?.id);
 
   const handleEnroll = async () => {
     if (!isAuthentication) {

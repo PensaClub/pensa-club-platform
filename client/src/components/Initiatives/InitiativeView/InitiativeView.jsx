@@ -14,6 +14,7 @@ import { ContactSection } from './ContactSection/ContactSection';
 import { Comments } from './Comments/Comments';
 import { truncateText } from '../../../utils/truncateText';
 import { useAnalytics } from '../../contexts/AnalyticsContext';
+import { useTrackContentView } from '../../hooks/useTrackContentView';
 import ImageSlider from '../../Articles/ArticleView/ImageSlider/ImageSlider';
 import { getDescriptionParts, renderSlateContent } from '../../../utils/slateRenderer.jsx';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -37,6 +38,7 @@ export const InitiativeView = () => {
     const { sendPersonalEmail } = useClubContext();
 
     const [initiative, setInitiative] = useState(null);
+    useTrackContentView('initiative', initiative?.id);
     const [isLoading, setIsLoading] = useState(true);
     const [showMap, setShowMap] = useState(true);
     const { trackInitiative } = useAnalytics();

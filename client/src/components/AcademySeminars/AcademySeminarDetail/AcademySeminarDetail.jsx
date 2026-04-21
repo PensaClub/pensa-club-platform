@@ -17,6 +17,7 @@ import {
 import ScrollToTop from '../../ScrollToTop/ScrollToTop'; // НОВО
 import SEOHead from '../../SEO/SEOHead'; // НОВО
 import { TextZoom } from '../../TextZoom/TextZoom'; // НОВО
+import { useTrackContentView } from '../../hooks/useTrackContentView';
 import './academySeminarDetail.css'; // НОВО
 
 // =========================================================
@@ -152,6 +153,7 @@ const AcademySeminarDetail = () => { // НОВО
     } = useAcademyCourses();
 
     const [seminar, setSeminar] = useState(null);
+    useTrackContentView('seminar', seminar?.id);
     const [materials, setMaterials] = useState([]);
     const [sessions, setSessions] = useState([]);
     const [selectedSessionIds, setSelectedSessionIds] = useState([]);

@@ -58,6 +58,7 @@ import SportsTemplate from './templates/SportsTemplate';
 import ShareModal from './components/ShareModal/ShareModal';
 import { useAuthContext } from '../../contexts/UserContext';
 import SEOHead from '../../SEO/SEOHead';
+import { useTrackContentView } from '../../hooks/useTrackContentView';
 
 export const ClubView = () => {
     const { slug } = useParams();
@@ -71,6 +72,7 @@ export const ClubView = () => {
         isBookmarkedClub } = useClubContext();
     const { isAuthentication } = useAuthContext();
     const [club, setClub] = useState(null);
+    useTrackContentView('club', club?.id);
     const [notFound, setNotFound] = useState(false);
     const [isFavorited, setIsFavorited] = useState(false);
     const [showShareModal, setShowShareModal] = useState(false);

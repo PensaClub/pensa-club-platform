@@ -15,11 +15,13 @@ import { getDownloadsCountText, getLikesCountText, getViewCountText } from '../.
 import { ShareButton } from '../../../ShareButton/ShareButton';
 import SEOHead from '../../../SEO/SEOHead';
 import { TextZoom } from '../../../TextZoom/TextZoom.jsx';
+import { useTrackContentView } from '../../../hooks/useTrackContentView';
 
 export const StoryPubView = ({ type, previewMode = false, previewData = null }) => {
     const { slug } = useParams();
     const { t } = useTranslation('content');
     const [content, setContent] = useState(null);
+    useTrackContentView(type === 'publication' ? 'publication' : null, content?.id);
     const [isLoading, setIsLoading] = useState(true);
     const [relatedContent, setRelatedContent] = useState([]);
     const {
