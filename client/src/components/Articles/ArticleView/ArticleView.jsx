@@ -30,6 +30,7 @@ import { renderHtml } from '../articleUtils/article-utils.jsx';
 import { useArticleLimit } from '../../contexts/ArticleLimitContext';
 import Pagination from '../Pagination/Pagination';
 import { TextZoom } from '../../TextZoom/TextZoom.jsx';
+import { useTrackContentView } from '../../hooks/useTrackContentView';
 import SEOHead from '../../SEO/SEOHead'; // ✅ Импортирай SEOHead
 
 const ArticleView = () => {
@@ -45,6 +46,7 @@ const ArticleView = () => {
   const sectionsPerPage = 3;
   const { setIsLoading } = useLoading();
   const { trackArticle, getViewCount } = useAnalytics();
+  useTrackContentView('article', article?.id);
   const { t, i18n } = useTranslation('content');
   const navigate = useLocalizedNavigate();
   const location = useLocation();

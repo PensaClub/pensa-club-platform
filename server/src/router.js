@@ -43,6 +43,7 @@ const userSharedFilesController = require('./controllers/userSharedFilesControll
 const userManagementController = require('./controllers/userManagementController');
 const driveController = require('./controllers/driveController');
 const sitemapController = require('./controllers/sitemapController');
+const contentViewController = require('./controllers/contentViewController');
 
 // Sitemap routes — mounted on root (e.g., /sitemap.xml, /sitemap-articles.xml)
 router.use(sitemapController);
@@ -54,6 +55,7 @@ router.use('/listings', adsController);
 router.use('/suggest', suggestUserController);
 router.use('/admin', adminController);
 router.use('/subscribe', subscriberController);
+router.use('/track', contentViewController);
 router.use('/articles', articleController);
 router.use('/initiatives', initiativeController);
 router.use('/comments', commentController);

@@ -17,6 +17,7 @@ import { faImage } from '@fortawesome/free-solid-svg-icons';
 import { getLocationFromCoordinates } from '../../../../utils/getLocationFromCoordinates';
 import { ProjectBudget } from '../ProjectBudget/ProjectBudget';
 import { SponsorsPartners } from '../SponsorsPartners/SponsorsPartners';
+import { useTrackContentView } from '../../../hooks/useTrackContentView';
 import { Milestones } from '../Milestones/Milestones';
 import ScrollToTop from '../../../ScrollToTop/ScrollToTop';
 import ProjectGallery from '../ProjectGallery/ProjectGallery';
@@ -43,6 +44,7 @@ export const ProjectView = () => {
     const { sendPersonalEmail } = useClubContext();
 
     const [activeSection, setActiveSection] = useState('overview');
+    useTrackContentView('project', currentProject?.id);
     const commentsCount = (comments[`project-${currentProject?.id}`] || []).length;
     const applicationsLoadedRef = useRef(false);
     const [locationText, setLocationText] = useState('');

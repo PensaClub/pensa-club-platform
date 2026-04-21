@@ -102,6 +102,9 @@ const permissions = {
         delete: ROLES.STAFF,
         send: ROLES.STAFF,
     },
+    contentAnalytics: {
+        read: ROLES.STAFF,
+    },
     suggestion: {
         read: ROLES.STAFF,
         delete: ROLES.STAFF,
