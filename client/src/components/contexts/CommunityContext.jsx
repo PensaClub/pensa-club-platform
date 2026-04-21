@@ -319,6 +319,129 @@ export const CommunityProvider = ({ children }) => {
             throw e;
         }
     };
+
+    // ===== Newsletters (admin) =====
+    const getAdminNewsletters = async (params) => {
+        try {
+            return await communityService.getAdminNewsletters(params);
+        } catch (e) {
+            notify('error', e);
+            throw e;
+        }
+    };
+    const getAdminNewsletterStats = async () => {
+        try {
+            return await communityService.getAdminNewsletterStats();
+        } catch (e) {
+            notify('error', e);
+            throw e;
+        }
+    };
+    const getAdminNewsletterById = async (id) => {
+        try {
+            return await communityService.getAdminNewsletterById(id);
+        } catch (e) {
+            notify('error', e);
+            throw e;
+        }
+    };
+    const deleteNewsletter = async (id) => {
+        try {
+            return await communityService.deleteNewsletter(id);
+        } catch (e) {
+            notify('error', e);
+            throw e;
+        }
+    };
+    const duplicateNewsletter = async (id) => {
+        try {
+            return await communityService.duplicateNewsletter(id);
+        } catch (e) {
+            notify('error', e);
+            throw e;
+        }
+    };
+    const cancelScheduledNewsletter = async (id) => {
+        try {
+            return await communityService.cancelScheduledNewsletter(id);
+        } catch (e) {
+            notify('error', e);
+            throw e;
+        }
+    };
+    const createNewsletter = async (data) => {
+        try {
+            return await communityService.createNewsletter(data);
+        } catch (e) {
+            notify('error', e);
+            throw e;
+        }
+    };
+    const updateNewsletter = async (id, data) => {
+        try {
+            return await communityService.updateNewsletter(id, data);
+        } catch (e) {
+            notify('error', e);
+            throw e;
+        }
+    };
+    const scheduleNewsletter = async (id, scheduledAt) => {
+        try {
+            return await communityService.scheduleNewsletter(id, scheduledAt);
+        } catch (e) {
+            notify('error', e);
+            throw e;
+        }
+    };
+    const searchNewsletterContent = async (type, query, limit) => {
+        try {
+            return await communityService.searchNewsletterContent(type, query, limit);
+        } catch (e) {
+            notify('error', e);
+            throw e;
+        }
+    };
+    const previewNewsletter = async (data) => {
+        try {
+            return await communityService.previewNewsletter(data);
+        } catch (e) {
+            notify('error', e);
+            throw e;
+        }
+    };
+    const getNewsletterRecipientCount = async (categories) => {
+        try {
+            return await communityService.getNewsletterRecipientCount(categories);
+        } catch (e) {
+            notify('error', e);
+            throw e;
+        }
+    };
+    const sendTestNewsletter = async (id, to) => {
+        try {
+            return await communityService.sendTestNewsletter(id, to);
+        } catch (e) {
+            notify('error', e);
+            throw e;
+        }
+    };
+    const sendNewsletterNow = async (id) => {
+        try {
+            return await communityService.sendNewsletterNow(id);
+        } catch (e) {
+            notify('error', e);
+            throw e;
+        }
+    };
+    const getNewsletterStats = async (id) => {
+        try {
+            return await communityService.getNewsletterStats(id);
+        } catch (e) {
+            notify('error', e);
+            throw e;
+        }
+    };
+
     useEffect(() => {
         fetchRegions();
         fetchSearchCriteria();
@@ -353,7 +476,22 @@ export const CommunityProvider = ({ children }) => {
         deleteSubscriber,
         getPreferencesByToken,
         updatePreferences,
-        unsubscribeByToken
+        unsubscribeByToken,
+        getAdminNewsletters,
+        getAdminNewsletterStats,
+        getAdminNewsletterById,
+        deleteNewsletter,
+        duplicateNewsletter,
+        cancelScheduledNewsletter,
+        createNewsletter,
+        updateNewsletter,
+        scheduleNewsletter,
+        searchNewsletterContent,
+        previewNewsletter,
+        getNewsletterRecipientCount,
+        sendTestNewsletter,
+        sendNewsletterNow,
+        getNewsletterStats,
     };
 
     return (

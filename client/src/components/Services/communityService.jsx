@@ -88,6 +88,72 @@ export const communityServiceFactory = (token) => {
     unsubscribeByToken: async (token) => {
       return requester.post(`${apiUrl}/subscribe/unsubscribe/${token}`);
     },
+
+    // ===== Newsletters (admin) =====
+    getAdminNewsletters: async (params = {}) => {
+      const query = new URLSearchParams();
+      Object.entries(params).forEach(([key, value]) => {
+        if (value !== undefined && value !== null && value !== '') {
+          query.append(key, value);
+        }
+      });
+      const qs = query.toString();
+      return requester.get(`${apiUrl}/newsletter/admin${qs ? `?${qs}` : ''}`);
+    },
+    getAdminNewsletterStats: async () => {
+      return requester.get(`${apiUrl}/newsletter/admin/stats`);
+    },
+    getAdminNewsletterById: async (id) => {
+      return requester.get(`${apiUrl}/newsletter/admin/${id}`);
+    },
+    deleteNewsletter: async (id) => {
+      return requester.del(`${apiUrl}/newsletter/admin/${id}`);
+    },
+    duplicateNewsletter: async (id) => {
+      return requester.post(`${apiUrl}/newsletter/admin/${id}/duplicate`, {});
+    },
+    cancelScheduledNewsletter: async (id) => {
+      return requester.post(`${apiUrl}/newsletter/admin/${id}/cancel`, {});
+    },
+    createNewsletter: async (data) => {
+      return requester.post(`${apiUrl}/newsletter/admin`, data);
+    },
+    updateNewsletter: async (id, data) => {
+      return requester.put(`${apiUrl}/newsletter/admin/${id}`, data);
+    },
+    scheduleNewsletter: async (id, scheduledAt) => {
+      return requester.post(`${apiUrl}/newsletter/admin/${id}/schedule`, { scheduledAt });
+    },
+    searchNewsletterContent: async (type, query = '', limit = 10) => {
+      const qs = new URLSearchParams({ type });
+      if (query) qs.append('q', query);
+      if (limit) qs.append('limit', limit);
+      return requester.get(`${apiUrl}/newsletter/admin/search-content?${qs.toString()}`);
+    },
+    previewNewsletter: async ({ title, body, platformUpdates }) => {
+      return requester.post(`${apiUrl}/newsletter/admin/preview`, {
+        title: title || '',
+        body: body || '',
+        platformUpdates: platformUpdates || '',
+      });
+    },
+    getNewsletterRecipientCount: async (categories) => {
+      const qs = new URLSearchParams();
+      if (Array.isArray(categories) && categories.length > 0) {
+        qs.append('categories', categories.join(','));
+      }
+      const suffix = qs.toString() ? `?${qs.toString()}` : '';
+      return requester.get(`${apiUrl}/newsletter/admin/recipient-count${suffix}`);
+    },
+    sendTestNewsletter: async (id, to) => {
+      return requester.post(`${apiUrl}/newsletter/admin/${id}/send-test`, to ? { to } : {});
+    },
+    sendNewsletterNow: async (id) => {
+      return requester.post(`${apiUrl}/newsletter/admin/${id}/send-now`, {});
+    },
+    getNewsletterStats: async (id) => {
+      return requester.get(`${apiUrl}/newsletter/admin/${id}/stats`);
+    },
   }
 }
 

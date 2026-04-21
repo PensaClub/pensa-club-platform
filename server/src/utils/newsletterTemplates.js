@@ -6,7 +6,7 @@ const PENSA_LOGO = 'https://pensa.club/images/homePage/logo.png';
 const BASE_URL = 'https://pensa.club';
 const BRAND_COLOR = '#E26020';
 
-const wrapNewsletter = (title, bodyHtml, unsubscribeToken) => `
+const wrapNewsletter = (title, bodyHtml, unsubscribeToken, dateLabel = '') => `
 <!DOCTYPE html>
 <html lang="bg">
 <head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
@@ -19,7 +19,8 @@ const wrapNewsletter = (title, bodyHtml, unsubscribeToken) => `
           <td style="background:linear-gradient(135deg,#1a1a2e 0%,#16213e 50%,#1a1a2e 100%);padding:28px 32px 22px;text-align:center;">
             <img src="${PENSA_LOGO}" alt="Pensa Club" height="40" style="display:inline-block;height:40px;width:auto;margin-bottom:12px;" />
             <p style="color:rgba(255,255,255,0.5);font-size:10px;font-weight:600;letter-spacing:2px;text-transform:uppercase;margin:0 0 8px;">Бюлетин</p>
-            <p style="color:#ffffff;font-size:20px;font-weight:700;line-height:1.3;margin:0;">${title}</p>
+            <p style="color:#ffffff;font-size:20px;font-weight:700;line-height:1.3;margin:0 0 ${dateLabel ? '8' : '0'}px;">${title}</p>
+            ${dateLabel ? `<p style="color:rgba(255,255,255,0.45);font-size:11px;font-weight:600;letter-spacing:1px;text-transform:uppercase;margin:0;">${dateLabel}</p>` : ''}
           </td>
         </tr>
 
@@ -106,10 +107,164 @@ const weeklyDigest = ({ subscriberName, weekLabel, sections, upcoming, unsubscri
   return { subject, html };
 };
 
+/**
+ * Detects the flat "content block" structure emitted by the AddContentModal
+ * on the client (optional <p><img></p>, <p><strong>CAT</strong></p>, <h3>title</h3>,
+ * <p>desc</p>, <p><a class="nl-cta">button</a></p>) and replaces each
+ * occurrence with a weekly-digest-style table (orange left accent,
+ * thumbnail on the right). Run BEFORE per-element style injection.
+ *
+ * Uses callback-based replacement and tolerates any attribute order (tiptap
+ * may output `<a class="..." href="...">` or `<a href="..." class="...">`).
+ */
+// Description paragraph is optional — tiptap drops empty <p></p>. The desc
+// match cannot contain <a> or <p> tags so it can never consume the CTA link.
+const NL_BLOCK_RE =
+    /(?:<p[^>]*>\s*(<img\s[^>]*\/?>)\s*<\/p>\s*)?<p[^>]*>\s*<strong[^>]*>([\s\S]*?)<\/strong>\s*<\/p>\s*<h3[^>]*>([\s\S]*?)<\/h3>\s*(?:<p[^>]*>((?:(?!<\/?p\b|<a\b)[\s\S])*?)<\/p>\s*)?<p[^>]*>\s*(<a\s[^>]*>)([\s\S]*?)<\/a>\s*<\/p>/gi;
+
+const extractAttr = (tag, name) => {
+    if (!tag) return null;
+    const re = new RegExp(`\\b${name}\\s*=\\s*"([^"]*)"`, 'i');
+    const m = tag.match(re);
+    return m ? m[1] : null;
+};
+
+/**
+ * Renders one content item in the weekly-digest visual style — orange left
+ * accent, bold title acting as the link, optional description and an optional
+ * small thumbnail aligned to the right of the title.
+ * `category` and `button` are intentionally ignored (digest items show neither).
+ */
+// eslint-disable-next-line no-unused-vars
+const renderDigestBlock = (thumb, _category, title, desc, url, _button) => {
+    const cleanDesc = (desc || '').replace(/^(?:<br\s*\/?>|\s)+$/, '').trim();
+    const descRow = cleanDesc
+        ? `<span style="display:block;margin-top:4px;color:#6b7280;font-size:13px;line-height:1.55;">${cleanDesc}</span>`
+        : '';
+    const imgCol = thumb
+        ? `<td valign="top" style="width:84px;padding-left:12px;">
+              <a href="${url}" style="display:block;text-decoration:none;">
+                <img src="${thumb}" alt="" style="width:84px;height:60px;object-fit:cover;border-radius:6px;display:block;border:0;outline:none;text-decoration:none;" />
+              </a>
+           </td>`
+        : '';
+
+    return `
+<table width="100%" cellpadding="0" cellspacing="0" style="margin:10px 0;border-collapse:collapse;">
+  <tr>
+    <td valign="top" style="border-left:3px solid #E26020;padding:8px 0 8px 14px;">
+      <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
+        <tr>
+          <td valign="top">
+            <a href="${url}" style="color:#1f2937;font-size:14px;font-weight:600;text-decoration:none;line-height:1.4;display:block;">${title}</a>
+            ${descRow}
+          </td>
+          ${imgCol}
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>`;
+};
+
+/**
+ * Wraps body HTML with the weekly-digest greeting + intro + signature pattern.
+ * Used by manual/scheduled newsletters so they render in the same voice as the
+ * automated weekly digest.
+ */
+const wrapDigestBody = ({ subscriberName, intro, bodyHtml }) => {
+    const namePart = subscriberName
+        ? ` <strong style="color:#1f2937;font-weight:700;">${subscriberName}</strong>`
+        : '';
+    const greeting = `<p style="margin:0 0 10px;color:#1f2937;font-size:15px;line-height:1.6;">Здравейте,${namePart},</p>`;
+    const introText =
+        intro && String(intro).trim()
+            ? intro
+            : 'Това е персонализиран бюлетин от Pensa Club с подбрана информация специално за вас. Долу ще намерите акценти от платформата, които ви препоръчваме да разгледате.';
+    const introHtml = `<p style="margin:0 0 14px;color:#374151;font-size:14.5px;line-height:1.65;">${introText}</p>`;
+    const divider = `<table width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 18px;border-collapse:collapse;"><tr><td style="height:2px;background:#E26020;line-height:2px;font-size:0;">&nbsp;</td></tr></table>`;
+    const sig = `
+        <table width="100%" cellpadding="0" cellspacing="0" style="margin:26px 0 0;border-collapse:collapse;"><tr><td style="height:1px;background:#e5e7eb;line-height:1px;font-size:0;">&nbsp;</td></tr></table>
+        <p style="margin:18px 0 4px;color:#374151;font-size:14px;">С уважение,</p>
+        <p style="margin:0;color:#E26020;font-size:14px;font-weight:700;">Екипът на Pensa Club</p>`;
+    return `${greeting}${introHtml}${divider}${bodyHtml}${sig}`;
+};
+
+/**
+ * Applies inline styles to body HTML coming from tiptap (which strips inline styles).
+ * Called in the preview endpoint and right before sending to Zoho.
+ */
+const beautifyBodyHtml = (rawHtml) => {
+  if (!rawHtml) return '';
+  let html = String(rawHtml);
+
+  // Step 1 — replace flat content-blocks with table-based digest-style blocks.
+  html = html.replace(
+    NL_BLOCK_RE,
+    (match, imgTag, category, title, desc, linkTag, buttonText) => {
+      const href = extractAttr(linkTag, 'href');
+      const linkClass = extractAttr(linkTag, 'class') || '';
+      // Only transform if the link actually carries the nl-cta marker class.
+      if (!href || !/\bnl-cta\b/.test(linkClass)) return match;
+      const thumb = imgTag ? extractAttr(imgTag, 'src') : null;
+      return renderDigestBlock(thumb, category, title, desc, href, buttonText);
+    },
+  );
+
+  // Step 2 — apply default inline styles only to elements WITHOUT a style attr
+  // (negative lookahead prevents double-styling elements inside the digest blocks above).
+  html = html.replace(/<h2(?!\s[^>]*\bstyle=)(\s[^>]*)?>/gi,
+    '<h2$1 style="margin:26px 0 12px;color:#111827;font-size:20px;font-weight:700;line-height:1.3;">');
+
+  html = html.replace(/<h3(?!\s[^>]*\bstyle=)(\s[^>]*)?>/gi,
+    '<h3$1 style="margin:22px 0 10px;color:#1f2937;font-size:17px;font-weight:700;line-height:1.35;">');
+
+  html = html.replace(/<p(?!\s[^>]*\bstyle=)(\s[^>]*)?>/gi,
+    '<p$1 style="margin:0 0 12px;color:#374151;font-size:14.5px;line-height:1.65;">');
+
+  html = html.replace(/<img(?!\s[^>]*\bstyle=)(\s[^>]*)\/?>/gi,
+    '<img$1 style="max-width:110px;width:auto;height:auto;border-radius:6px;margin:6px 0 8px;display:block;">');
+
+  html = html.replace(/<blockquote(?!\s[^>]*\bstyle=)(\s[^>]*)?>/gi,
+    '<blockquote$1 style="margin:18px 0;padding:10px 18px;border-left:3px solid #E26020;background:#fef6f0;color:#374151;border-radius:0 8px 8px 0;">');
+
+  html = html.replace(/<ul(?!\s[^>]*\bstyle=)(\s[^>]*)?>/gi,
+    '<ul$1 style="margin:0 0 14px;padding-left:22px;color:#374151;font-size:14.5px;line-height:1.7;">');
+  html = html.replace(/<ol(?!\s[^>]*\bstyle=)(\s[^>]*)?>/gi,
+    '<ol$1 style="margin:0 0 14px;padding-left:22px;color:#374151;font-size:14.5px;line-height:1.7;">');
+
+  html = html.replace(/<hr(?!\s[^>]*\bstyle=)(\s[^>]*)?\/?>/gi,
+    '<hr$1 style="border:none;border-top:1px solid #e5e7eb;margin:22px 0;">');
+
+  // Any leftover nl-cta links that WEREN'T part of a detected block — style as button
+  html = html.replace(
+    /<a\b(?![^>]*\bstyle=)([^>]*?)class="([^"]*\bnl-cta\b[^"]*)"([^>]*)>/gi,
+    '<a$1class="$2"$3 style="display:inline-block;padding:11px 22px;background:#14b8a6;color:#ffffff;text-decoration:none;border-radius:8px;font-weight:600;font-size:14px;margin:4px 0 12px;">',
+  );
+
+  // Plain links (no class, no style)
+  html = html.replace(
+    /<a\b(?![^>]*\bclass=)(?![^>]*\bstyle=)([^>]*)>/gi,
+    '<a$1 style="color:#E26020;text-decoration:underline;">',
+  );
+  // Links with class but not nl-cta and no style — plain link
+  html = html.replace(
+    /<a\b(?![^>]*\bstyle=)([^>]*?)class="((?:(?!nl-cta)[^"])*)"([^>]*)>/gi,
+    '<a$1class="$2"$3 style="color:#E26020;text-decoration:underline;">',
+  );
+
+  html = html.replace(/<strong(?!\s[^>]*\bstyle=)(\s[^>]*)?>/gi,
+    '<strong$1 style="color:#1f2937;font-weight:700;">');
+
+  return html;
+};
+
 module.exports = {
   weeklyDigest,
   wrapNewsletter,
   sectionTitle,
   contentItem,
   upcomingItem,
+  beautifyBodyHtml,
+  wrapDigestBody,
 };

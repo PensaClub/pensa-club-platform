@@ -1,0 +1,273 @@
+{
+  "page": {
+    "title": "Newsletter",
+    "subtitle": "Verwaltung von Newslettern, Abonnenten und automatischen Benachrichtigungen",
+    "breadcrumbRoot": "Administration",
+    "breadcrumbCurrent": "Newsletter"
+  },
+  "header": {
+    "newNewsletter": "Neuer Newsletter",
+    "refresh": "Aktualisieren"
+  },
+  "tabs": {
+    "list": "Alle Newsletter",
+    "editor": "Neuer Newsletter",
+    "subscribers": "Abonnenten",
+    "stats": "Statistik",
+    "auto": "Automatisierungen"
+  },
+  "stats": {
+    "total": "Gesamt",
+    "sent": "Versendet",
+    "scheduled": "Geplant",
+    "drafts": "Entwürfe",
+    "subscribers": "Abonnenten"
+  },
+  "placeholders": {
+    "subscribers": "Tab „Abonnenten“ — wird in Phase 3.7 umgesetzt",
+    "stats": "Tab „Statistik“ — wird in Phase 3.7 umgesetzt",
+    "auto": "Tab „Automatisierungen“ — wird in Phase 7 umgesetzt"
+  },
+  "editor": {
+    "newTitle": "Neuer Newsletter",
+    "editTitle": "Newsletter bearbeiten",
+    "subtitle": "Erstellen, planen und senden Sie einen Newsletter an eine ausgewählte Abonnentengruppe.",
+    "fields": {
+      "title": "Titel",
+      "titlePlaceholder": "z. B. „Wöchentlich von Pensa Club — 21.–27. April“",
+      "titleHint": "Interner Titel zur Organisation. Er wird nicht im E-Mail angezeigt.",
+      "subject": "E-Mail-Betreff (Preheader)",
+      "subjectPlaceholder": "Kurze Zusammenfassung, die im Posteingang neben dem Betreff erscheint",
+      "subjectHint": "Bis zu 500 Zeichen.",
+      "body": "Inhalt",
+      "bodyPlaceholder": "Beginnen Sie den Inhalt des Newsletters zu schreiben…",
+      "platformUpdates": "Geplante Plattform-Updates",
+      "platformUpdatesPlaceholder": "Optional. Ein Abschnitt im Newsletter für bevorstehende Änderungen.",
+      "platformUpdatesHint": "Dieser Text erscheint als SEPARATER Abschnitt am Ende des Newsletters (Liste bevorstehender Plattform-Änderungen). Für einen einzelnen Block mit Bild und Link verwenden Sie die Schaltfläche „Inhalt hinzufügen“ → „Update“.",
+      "scheduledAt": "Planen für",
+      "scheduledAtHint": "Zeitzone: Europe/Sofia. Leer lassen, um als Entwurf zu speichern.",
+      "targetAudience": "Zielgruppe"
+    },
+    "audience": {
+      "allTitle": "Alle Abonnenten",
+      "allDescription": "Der Newsletter wird unabhängig von deren Präferenzen an alle aktiven Abonnenten gesendet.",
+      "segmentTitle": "Nach Kategorien",
+      "segmentDescription": "Der Newsletter erreicht nur Abonnenten, die mindestens eine der ausgewählten Kategorien aktiviert haben.",
+      "selectAll": "Alle auswählen",
+      "clearAll": "Zurücksetzen",
+      "selected": "{{count}} ausgewählt"
+    },
+    "categories": {
+      "seminars": "Seminare",
+      "courses": "Kurse",
+      "articles": "Artikel",
+      "initiatives": "Initiativen & Projekte",
+      "clubs": "Klubs",
+      "games": "Spiele",
+      "platform": "Plattform-Updates"
+    },
+    "actions": {
+      "saveDraft": "Als Entwurf speichern",
+      "schedule": "Planen",
+      "sendNow": "Jetzt senden",
+      "sendNowDisabled": "Speichern Sie den Entwurf vor dem Senden.",
+      "sendNowNeedSave": "Speichern Sie den Entwurf vor dem Senden.",
+      "preview": "Vorschau",
+      "back": "Zurück zur Liste",
+      "new": "Neuer Newsletter"
+    },
+    "status": {
+      "idle": "Neuer Entwurf",
+      "saving": "Wird gespeichert…",
+      "saved": "Vor {{value}} {{unit}} gespeichert",
+      "savedJustNow": "Gerade gespeichert",
+      "autosave": "Auto-Speichern",
+      "dirty": "Ungespeicherte Änderungen",
+      "dirtyHint": "Ihre Änderungen werden vor dem Senden automatisch gespeichert. Sie können auch auf „Als Entwurf speichern“ klicken, um sicherzugehen.",
+      "unitSec": "Sek.",
+      "unitMin": "Min.",
+      "unitHour": "Std.",
+      "unitDay": "T."
+    },
+    "validation": {
+      "titleRequired": "Bitte geben Sie einen Titel ein.",
+      "bodyRequired": "Der Inhalt darf nicht leer sein.",
+      "scheduleRequired": "Bitte wählen Sie Datum und Uhrzeit.",
+      "scheduleFuture": "Datum und Uhrzeit müssen in der Zukunft liegen."
+    },
+    "preview": {
+      "heading": "Newsletter-Vorschau",
+      "description": "So wird der Newsletter im Posteingang des Abonnenten aussehen.",
+      "desktop": "Desktop",
+      "mobile": "Mobil",
+      "recipients": "Beim echten Versand werden {{count}} Abonnenten erreicht",
+      "recipientsAll": "(alle aktiven)",
+      "recipientsFilter": "(mit Kategorien: {{categories}})",
+      "testNote": "Dies sind die Empfänger beim echten Versand. Die Testkopie geht NUR an die E-Mail unten.",
+      "sendTest": "Testkopie senden",
+      "sendTestTo": "Sie erhalten eine Kopie an {{email}}",
+      "close": "Schließen",
+      "loading": "Vorschau wird generiert…",
+      "empty": "Kein Inhalt für die Vorschau.",
+      "customEmailLabel": "E-Mail für den Testversand",
+      "customEmailPlaceholder": "leer lassen, um Ihre Admin-E-Mail zu verwenden",
+      "invalidEmail": "Ungültige E-Mail."
+    },
+    "messages": {
+      "created": "Entwurf erstellt.",
+      "updated": "Entwurf aktualisiert.",
+      "scheduled": "Newsletter erfolgreich geplant.",
+      "loadError": "Newsletter konnte nicht geladen werden.",
+      "saveError": "Beim Speichern ist ein Fehler aufgetreten.",
+      "previewError": "Vorschau konnte nicht erstellt werden.",
+      "testSent": "Test-E-Mail an {{email}} gesendet.",
+      "testSendError": "Test-E-Mail konnte nicht gesendet werden.",
+      "needSaveFirst": "Bitte speichern Sie den Entwurf, bevor Sie einen Test senden.",
+      "sendStarted": "Versand gestartet. Die Statistik aktualisiert sich in wenigen Minuten.",
+      "sendError": "Versand konnte nicht gestartet werden."
+    },
+    "sendNowConfirm": {
+      "title": "Newsletter jetzt senden",
+      "body": "Der Newsletter wird an {{count}} Abonnenten gesendet. Diese Aktion ist unwiderruflich. Bestätigen?",
+      "confirm": "Jetzt senden",
+      "cancel": "Abbrechen"
+    },
+    "toolbar": {
+      "bold": "Fett",
+      "italic": "Kursiv",
+      "strike": "Durchgestrichen",
+      "code": "Code",
+      "heading2": "Überschrift H2",
+      "heading3": "Überschrift H3",
+      "paragraph": "Absatz",
+      "bulletList": "Aufzählung",
+      "orderedList": "Nummerierte Liste",
+      "blockquote": "Zitat",
+      "hr": "Trennlinie",
+      "link": "Link",
+      "linkPrompt": "URL des Links eingeben:",
+      "image": "Bild",
+      "imagePrompt": "URL des Bildes eingeben:",
+      "undo": "Rückgängig",
+      "redo": "Wiederholen",
+      "insertContent": "Inhalt aus der Plattform einfügen"
+    },
+    "addContent": {
+      "title": "Inhalt aus der Plattform einfügen",
+      "description": "Wählen Sie Inhalte aus, die als formatierter Block (Bild, Titel, Beschreibung, Link) in den Newsletter eingefügt werden.",
+      "searchPlaceholder": "Nach Titel suchen…",
+      "tabs": {
+        "seminars": "Seminare",
+        "articles": "Artikel",
+        "courses": "Kurse",
+        "initiatives": "Initiativen",
+        "projects": "Projekte",
+        "publications": "Publikationen",
+        "update": "Update"
+      },
+      "empty": "Keine Ergebnisse gefunden.",
+      "loading": "Wird geladen…",
+      "insert": "Einfügen",
+      "close": "Schließen",
+      "noThumbnail": "Kein Bild",
+      "selectedCount": "{{count}} ausgewählt",
+      "readMore": "Mehr erfahren →",
+      "inserted": "Block zum Inhalt hinzugefügt.",
+      "categoryLabels": {
+        "seminars": "Seminar",
+        "articles": "Artikel",
+        "courses": "Kurs",
+        "initiatives": "Initiative",
+        "projects": "Projekt",
+        "publications": "Publikation",
+        "update": "Update"
+      },
+      "update": {
+        "heading": "Manueller Update-Block",
+        "description": "Dieser Block wird IN den Newsletter-Text eingefügt (zwischen Absätzen) — als Karte mit Bild, Titel, Beschreibung und Button. Für einen allgemeinen Abschnitt mit bevorstehenden Änderungen verwenden Sie das Feld „Geplante Plattform-Updates“ im Hauptrahmen.",
+        "title": "Titel",
+        "titlePlaceholder": "z. B. „Neue Funktion: Suche auf Pensa Club“",
+        "description2": "Beschreibung",
+        "descriptionPlaceholder": "Kurze Erläuterung, was das Update ist und warum es wichtig ist.",
+        "url": "Link (optional)",
+        "urlPlaceholder": "https://pensa.club/…",
+        "image": "Bild-URL (optional)",
+        "imagePlaceholder": "https://…",
+        "buttonText": "Button-Beschriftung",
+        "buttonTextPlaceholder": "Mehr erfahren →",
+        "titleRequired": "Titel ist erforderlich."
+      }
+    }
+  },
+  "wrapper": {
+    "title": "Newsletter-Verwaltung",
+    "description": "Die Verwaltung von Newslettern und Abonnenten wurde in ein eigenes Admin-Panel verschoben.",
+    "cta": "Newsletter-Panel öffnen",
+    "subscribersCount": "Abonnenten gesamt: {{count}}"
+  },
+  "list": {
+    "searchPlaceholder": "Nach Titel suchen…",
+    "filters": "Filter",
+    "clearFilters": "Zurücksetzen",
+    "filterByStatus": "Status",
+    "filterByType": "Typ",
+    "filterByDateFrom": "Von",
+    "filterByDateTo": "Bis",
+    "allStatuses": "Alle Status",
+    "allTypes": "Alle Typen",
+    "columns": {
+      "title": "Titel",
+      "type": "Typ",
+      "status": "Status",
+      "date": "Datum",
+      "recipients": "Empfänger",
+      "opens": "Geöffnet",
+      "actions": "Aktionen"
+    },
+    "empty": {
+      "title": "Keine Newsletter gefunden",
+      "description": "Erstellen Sie Ihren ersten Newsletter oder ändern Sie die Filter."
+    },
+    "loading": "Wird geladen…",
+    "pageInfo": "Seite {{current}} von {{total}}",
+    "prev": "Zurück",
+    "next": "Weiter",
+    "dateCreated": "Erstellt",
+    "dateScheduled": "Geplant",
+    "dateSent": "Versendet"
+  },
+  "types": {
+    "manual": "Manuell",
+    "weekly": "Wöchentlich",
+    "monthly": "Monatlich",
+    "event": "Ereignis"
+  },
+  "statuses": {
+    "draft": "Entwurf",
+    "scheduled": "Geplant",
+    "sending": "Wird gesendet",
+    "sent": "Versendet",
+    "failed": "Fehler"
+  },
+  "actions": {
+    "view": "Ansehen",
+    "edit": "Bearbeiten",
+    "duplicate": "Duplizieren",
+    "cancel": "Planung abbrechen",
+    "delete": "Löschen"
+  },
+  "confirm": {
+    "deleteTitle": "Newsletter löschen",
+    "deleteBody": "Möchten Sie „{{title}}“ wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden.",
+    "cancelTitle": "Planung abbrechen",
+    "cancelBody": "Möchten Sie die Planung von „{{title}}“ wirklich abbrechen? Der Newsletter wird zu einem Entwurf.",
+    "confirm": "Bestätigen",
+    "back": "Zurück"
+  },
+  "messages": {
+    "deleted": "Newsletter gelöscht.",
+    "duplicated": "Newsletter als Entwurf dupliziert.",
+    "cancelled": "Planung abgebrochen.",
+    "fetchError": "Newsletter konnten nicht geladen werden."
+  }
+}

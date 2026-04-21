@@ -154,6 +154,9 @@ const MentorReAction = lazyWithRetry(() => import('./components/MentorReAction/M
 const ReActionMy = lazyWithRetry(() => import('./components/ReActionMy/ReActionMy.jsx'));
 import { IpManagementProvider } from './components/contexts/IpManagementContext';
 
+// ✅ LAZY LOADING - ADMIN NEWSLETTERS
+const AdminNewsletters = lazyWithRetry(() => import('./components/AdminNewsletters/AdminNewsletters.jsx'));
+
 // ✅ LAZY LOADING - USEFUL LINKS КОМПОНЕНТИ
 const UsefulLinks = lazyWithRetry(() => import('./components/UsefulLinks/UsefulLinks.jsx'));
 const AdminUsefulLinksList = lazyWithRetry(() => import('./components/AdminUsefulLinksList/AdminUsefulLinksList.jsx'));
@@ -244,6 +247,7 @@ function AppRoutes() {
         <Route path="/academy/lectures/:slug/test" element={<Suspense fallback={<LazyLoadingFallback type="academy" />}><AcademyTestPlayer /></Suspense>} />
         <Route path="/academy/courses/:courseSlug/test" element={<Suspense fallback={<LazyLoadingFallback type="academy" />}><AcademyTestPlayer /></Suspense>} />
         <Route path="/admin/site-settings" element={<AdminGuard><SiteSettingsAdmin /></AdminGuard>} />
+        <Route path="/admin/newsletters" element={<ManagementGuard><Suspense fallback={<LazyLoadingFallback />}><AdminNewsletters /></Suspense></ManagementGuard>} />
         <Route path="/admin/fact-check" element={<ManagementGuard><IpManagementProvider><Suspense fallback={<LazyLoadingFallback />}><AdminFactCheck /></Suspense></IpManagementProvider></ManagementGuard>} />
         <Route path="/reaction/my" element={<Suspense fallback={<LazyLoadingFallback />}><ReActionMy /></Suspense>} />
         <Route path="/admin/reaction" element={<ManagementGuard><Suspense fallback={<LazyLoadingFallback />}><AdminReAction /></Suspense></ManagementGuard>} />

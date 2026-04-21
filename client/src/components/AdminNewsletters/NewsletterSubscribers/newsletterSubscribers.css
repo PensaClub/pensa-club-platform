@@ -1,0 +1,78 @@
+/* src/components/AdminNewsletters/NewsletterSubscribers/newsletterSubscribers.css */
+/* Prefix: ans- */
+
+.ans-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  padding: 80px 24px;
+  background: rgba(20, 25, 35, 0.55);
+  border: 1px dashed rgba(20, 184, 166, 0.22);
+  border-radius: 16px;
+  text-align: center;
+  backdrop-filter: blur(6px);
+}
+
+.ans-placeholder {
+  font-family: 'Montserrat', sans-serif;
+}
+
+.ans-placeholder-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 62px;
+  height: 62px;
+  padding: 14px;
+  border-radius: 18px;
+  background: linear-gradient(135deg, rgba(20, 184, 166, 0.14), rgba(245, 158, 11, 0.1));
+  border: 1px solid rgba(20, 184, 166, 0.28);
+  flex-shrink: 0;
+}
+
+.ans-placeholder-icon svg {
+  width: 100%;
+  height: 100%;
+  color: #2dd4bf;
+  stroke-width: 1.8;
+}
+
+.ans-placeholder-text {
+  margin: 0;
+  font-size: 0.95rem;
+  color: #8a95aa;
+  max-width: 480px;
+  line-height: 1.5;
+}
+
+[data-theme="light"] .ans-placeholder {
+  background: #ffffff;
+  border-color: rgba(20, 184, 166, 0.3);
+  box-shadow: 0 2px 12px rgba(15, 23, 42, 0.04);
+}
+
+[data-theme="light"] .ans-placeholder-icon svg {
+  color: #0d9488;
+}
+
+[data-theme="light"] .ans-placeholder-text {
+  color: #475569;
+}
+
+@media (max-width: 640px) {
+  .ans-placeholder {
+    padding: 56px 16px;
+  }
+
+  .ans-placeholder-icon {
+    width: 52px;
+    height: 52px;
+    padding: 12px;
+  }
+
+  .ans-placeholder-text {
+    font-size: 0.86rem;
+  }
+}

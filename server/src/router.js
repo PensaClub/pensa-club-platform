@@ -99,6 +99,9 @@ router.use('/push', pushController);
 const showcaseController = require('./controllers/showcaseController');
 router.use('/showcase', showcaseController);
 
+const newsletterController = require('./controllers/newsletterController');
+router.use('/newsletter', newsletterController);
+
 router.use((err, req, res, next) => {
     errorHandler(err, req, res, err.statusCode || 500);
 });

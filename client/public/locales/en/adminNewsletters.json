@@ -1,0 +1,273 @@
+{
+  "page": {
+    "title": "Newsletters",
+    "subtitle": "Manage newsletters, subscribers and automated notifications",
+    "breadcrumbRoot": "Administration",
+    "breadcrumbCurrent": "Newsletters"
+  },
+  "header": {
+    "newNewsletter": "New newsletter",
+    "refresh": "Refresh"
+  },
+  "tabs": {
+    "list": "All newsletters",
+    "editor": "New newsletter",
+    "subscribers": "Subscribers",
+    "stats": "Statistics",
+    "auto": "Automations"
+  },
+  "stats": {
+    "total": "Total newsletters",
+    "sent": "Sent",
+    "scheduled": "Scheduled",
+    "drafts": "Drafts",
+    "subscribers": "Subscribers"
+  },
+  "placeholders": {
+    "subscribers": "“Subscribers” tab — to be implemented in Phase 3.7",
+    "stats": "“Statistics” tab — to be implemented in Phase 3.7",
+    "auto": "“Automations” tab — to be implemented in Phase 7"
+  },
+  "editor": {
+    "newTitle": "New newsletter",
+    "editTitle": "Edit newsletter",
+    "subtitle": "Create, schedule and send a newsletter to a selected group of subscribers.",
+    "fields": {
+      "title": "Title",
+      "titlePlaceholder": "e.g. “Weekly from Pensa Club — April 21–27”",
+      "titleHint": "Internal title for organisation. It is not shown in the email.",
+      "subject": "Email subject (preheader)",
+      "subjectPlaceholder": "Short summary shown next to the subject in the inbox",
+      "subjectHint": "Up to 500 characters.",
+      "body": "Content",
+      "bodyPlaceholder": "Start writing the newsletter content…",
+      "platformUpdates": "Planned platform updates",
+      "platformUpdatesPlaceholder": "Optional. A section in the newsletter for upcoming changes.",
+      "platformUpdatesHint": "This text appears as a SEPARATE section at the bottom of the newsletter (a list of upcoming platform changes). For a single announcement block with image and link, use the “Add content” button → “Update”.",
+      "scheduledAt": "Schedule for",
+      "scheduledAtHint": "Timezone: Europe/Sofia. Leave empty to save as a draft.",
+      "targetAudience": "Target audience"
+    },
+    "audience": {
+      "allTitle": "All subscribers",
+      "allDescription": "The newsletter will be sent to all active subscribers regardless of their preferences.",
+      "segmentTitle": "By categories",
+      "segmentDescription": "The newsletter will only reach subscribers who have at least one of the selected categories enabled.",
+      "selectAll": "Select all",
+      "clearAll": "Clear",
+      "selected": "{{count}} selected"
+    },
+    "categories": {
+      "seminars": "Seminars",
+      "courses": "Courses",
+      "articles": "Articles",
+      "initiatives": "Initiatives & projects",
+      "clubs": "Clubs",
+      "games": "Games",
+      "platform": "Platform updates"
+    },
+    "actions": {
+      "saveDraft": "Save as draft",
+      "schedule": "Schedule",
+      "sendNow": "Send now",
+      "sendNowDisabled": "Save the draft before sending.",
+      "sendNowNeedSave": "Save the draft before sending.",
+      "preview": "Preview",
+      "back": "Back to list",
+      "new": "New newsletter"
+    },
+    "status": {
+      "idle": "New draft",
+      "saving": "Saving…",
+      "saved": "Saved {{value}} {{unit}} ago",
+      "savedJustNow": "Saved just now",
+      "autosave": "Auto-save",
+      "dirty": "Unsaved changes",
+      "dirtyHint": "Your changes will be saved automatically before sending. You can also click “Save as draft” to be sure.",
+      "unitSec": "sec",
+      "unitMin": "min",
+      "unitHour": "h",
+      "unitDay": "d"
+    },
+    "validation": {
+      "titleRequired": "Please enter a title.",
+      "bodyRequired": "Content cannot be empty.",
+      "scheduleRequired": "Please choose a date and time.",
+      "scheduleFuture": "The date and time must be in the future."
+    },
+    "preview": {
+      "heading": "Newsletter preview",
+      "description": "How the newsletter will look in a subscriber's inbox.",
+      "desktop": "Desktop",
+      "mobile": "Mobile",
+      "recipients": "Real send will reach {{count}} subscribers",
+      "recipientsAll": "(all active)",
+      "recipientsFilter": "(with categories: {{categories}})",
+      "testNote": "These recipients apply to a real send. The test copy goes ONLY to the email below.",
+      "sendTest": "Send test copy",
+      "sendTestTo": "You will receive a copy at {{email}}",
+      "close": "Close",
+      "loading": "Generating preview…",
+      "empty": "No content to preview.",
+      "customEmailLabel": "Email to send the test to",
+      "customEmailPlaceholder": "leave empty to use your admin email",
+      "invalidEmail": "Invalid email."
+    },
+    "messages": {
+      "created": "Draft created.",
+      "updated": "Draft updated.",
+      "scheduled": "Newsletter scheduled successfully.",
+      "loadError": "Could not load the newsletter.",
+      "saveError": "An error occurred while saving.",
+      "previewError": "Could not generate preview.",
+      "testSent": "Test email sent to {{email}}.",
+      "testSendError": "Failed to send test email.",
+      "needSaveFirst": "Please save the draft before sending a test.",
+      "sendStarted": "Sending has started. Stats will update in a few minutes.",
+      "sendError": "Failed to start sending."
+    },
+    "sendNowConfirm": {
+      "title": "Send newsletter now",
+      "body": "The newsletter will be sent to {{count}} subscribers. This action cannot be undone. Confirm?",
+      "confirm": "Send now",
+      "cancel": "Cancel"
+    },
+    "toolbar": {
+      "bold": "Bold",
+      "italic": "Italic",
+      "strike": "Strikethrough",
+      "code": "Code",
+      "heading2": "Heading H2",
+      "heading3": "Heading H3",
+      "paragraph": "Paragraph",
+      "bulletList": "Bullet list",
+      "orderedList": "Ordered list",
+      "blockquote": "Quote",
+      "hr": "Divider",
+      "link": "Link",
+      "linkPrompt": "Enter the link URL:",
+      "image": "Image",
+      "imagePrompt": "Enter the image URL:",
+      "undo": "Undo",
+      "redo": "Redo",
+      "insertContent": "Insert content from the platform"
+    },
+    "addContent": {
+      "title": "Insert content from the platform",
+      "description": "Pick content to be inserted into the newsletter as a formatted block (image, title, description, link).",
+      "searchPlaceholder": "Search by title…",
+      "tabs": {
+        "seminars": "Seminars",
+        "articles": "Articles",
+        "courses": "Courses",
+        "initiatives": "Initiatives",
+        "projects": "Projects",
+        "publications": "Publications",
+        "update": "Update"
+      },
+      "empty": "No results found.",
+      "loading": "Loading…",
+      "insert": "Insert",
+      "close": "Close",
+      "noThumbnail": "No image",
+      "selectedCount": "{{count}} selected",
+      "readMore": "Read more →",
+      "inserted": "Block added to content.",
+      "categoryLabels": {
+        "seminars": "Seminar",
+        "articles": "Article",
+        "courses": "Course",
+        "initiatives": "Initiative",
+        "projects": "Project",
+        "publications": "Publication",
+        "update": "Update"
+      },
+      "update": {
+        "heading": "Manual update block",
+        "description": "This block is inserted INTO the newsletter body (between paragraphs) as a card with image, title, description and button. For a general section listing upcoming changes, use the “Planned platform updates” field in the main editor.",
+        "title": "Title",
+        "titlePlaceholder": "e.g. “New feature: search on Pensa Club”",
+        "description2": "Description",
+        "descriptionPlaceholder": "Short explanation of what the update is and why it matters.",
+        "url": "Link (optional)",
+        "urlPlaceholder": "https://pensa.club/…",
+        "image": "Image URL (optional)",
+        "imagePlaceholder": "https://…",
+        "buttonText": "Button label",
+        "buttonTextPlaceholder": "Read more →",
+        "titleRequired": "Title is required."
+      }
+    }
+  },
+  "wrapper": {
+    "title": "Newsletter administration",
+    "description": "Newsletter and subscriber management has moved to a dedicated admin panel.",
+    "cta": "Open newsletter panel",
+    "subscribersCount": "Total subscribers: {{count}}"
+  },
+  "list": {
+    "searchPlaceholder": "Search by title…",
+    "filters": "Filters",
+    "clearFilters": "Clear",
+    "filterByStatus": "Status",
+    "filterByType": "Type",
+    "filterByDateFrom": "From",
+    "filterByDateTo": "To",
+    "allStatuses": "All statuses",
+    "allTypes": "All types",
+    "columns": {
+      "title": "Title",
+      "type": "Type",
+      "status": "Status",
+      "date": "Date",
+      "recipients": "Recipients",
+      "opens": "Opens",
+      "actions": "Actions"
+    },
+    "empty": {
+      "title": "No newsletters found",
+      "description": "Create your first newsletter or adjust the filters."
+    },
+    "loading": "Loading…",
+    "pageInfo": "Page {{current}} of {{total}}",
+    "prev": "Previous",
+    "next": "Next",
+    "dateCreated": "Created",
+    "dateScheduled": "Scheduled",
+    "dateSent": "Sent"
+  },
+  "types": {
+    "manual": "Manual",
+    "weekly": "Weekly",
+    "monthly": "Monthly",
+    "event": "Event"
+  },
+  "statuses": {
+    "draft": "Draft",
+    "scheduled": "Scheduled",
+    "sending": "Sending",
+    "sent": "Sent",
+    "failed": "Failed"
+  },
+  "actions": {
+    "view": "View",
+    "edit": "Edit",
+    "duplicate": "Duplicate",
+    "cancel": "Cancel schedule",
+    "delete": "Delete"
+  },
+  "confirm": {
+    "deleteTitle": "Delete newsletter",
+    "deleteBody": "Are you sure you want to delete “{{title}}”? This action cannot be undone.",
+    "cancelTitle": "Cancel schedule",
+    "cancelBody": "Are you sure you want to cancel the schedule of “{{title}}”? It will revert to a draft.",
+    "confirm": "Confirm",
+    "back": "Back"
+  },
+  "messages": {
+    "deleted": "Newsletter deleted.",
+    "duplicated": "Newsletter duplicated as draft.",
+    "cancelled": "Schedule cancelled.",
+    "fetchError": "Failed to load newsletters."
+  }
+}

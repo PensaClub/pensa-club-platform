@@ -688,10 +688,23 @@ async function sendAdminInitiatedResetEmail({ email, firstName, lastName, resetT
     return sendZohoEmailRaw(data);
 }
 
+async function sendNewsletterEmail({ to, subject, html }) {
+    if (!to || !subject || !html) {
+        throw new Error('sendNewsletterEmail requires to, subject and html');
+    }
+    return sendZohoEmailRaw({
+        fromAddress: 'info@pensa.club',
+        toAddress: Array.isArray(to) ? to.join(',') : to,
+        subject,
+        content: html,
+    });
+}
+
 module.exports = {
     sendResetEmail,
     forwardEmailsViaZoho,
     sendProjectEmail,
     sendGuestInvitationEmail,
     sendAdminInitiatedResetEmail,
+    sendNewsletterEmail,
 };
