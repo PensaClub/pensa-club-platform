@@ -206,6 +206,25 @@ articleController.post('/create', isAuth, checkPermission('article', 'create'), 
             attributes: articleAttributes,
         });
 
+        // Phase 4 — enqueue reactive publish event for subscriber notifications
+        try {
+            const { enqueuePublishEvent } = require('../utils/notificationQueue');
+            const thumb =
+                createdArticle?.mainImage?.thumbnail ||
+                (Array.isArray(createdArticle?.mainImage?.sources)
+                    ? createdArticle.mainImage.sources[0]
+                    : null);
+            await enqueuePublishEvent({
+                type: 'article',
+                referenceId: createdArticle.id,
+                referenceTitle: createdArticle.title,
+                referenceSlug: createdArticle.slug,
+                thumbnail: thumb || null,
+            });
+        } catch (e) {
+            console.error('[notification_queue] article publish enqueue:', e?.message || e);
+        }
+
         return res.status(201).json(transformArticle(createdArticle));
     } catch (err) {
         next(err);

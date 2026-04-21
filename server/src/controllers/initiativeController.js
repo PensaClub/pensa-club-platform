@@ -668,6 +668,25 @@ const createInitiative = async (initiativeData, req, res, next) => {
         });
 
         const transformedResponse = await transformInitiative(result);
+
+        // Phase 4 — enqueue reactive publish event for subscriber notifications
+        // (only for published initiatives, not drafts)
+        if (result && !result.isDraft) {
+            try {
+                const { enqueuePublishEvent } = require('../utils/notificationQueue');
+                const thumb = result.mainImage?.thumbnailUrl || null;
+                await enqueuePublishEvent({
+                    type: 'initiative',
+                    referenceId: result.id,
+                    referenceTitle: result.title,
+                    referenceSlug: result.slug,
+                    thumbnail: thumb,
+                });
+            } catch (e) {
+                console.error('[notification_queue] initiative publish enqueue:', e?.message || e);
+            }
+        }
+
         return res.status(201).json(transformedResponse);
     } catch (err) {
         next(err);

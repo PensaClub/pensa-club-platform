@@ -11,6 +11,7 @@ const CATEGORY_CONFIG = [
   { key: 'articles', emoji: '📰', title: 'Нови статии' },
   { key: 'initiatives', emoji: '🚀', title: 'Нови инициативи' },
   { key: 'clubs', emoji: '🏠', title: 'Нови клубове' },
+  { key: 'platform', emoji: '📢', title: 'Ъпдейти от екипа' },
 ];
 
 const startWeeklyDigestCron = () => {
@@ -114,6 +115,39 @@ const startWeeklyDigestCron = () => {
           url: `https://pensa.club/clubs/${c.slug || c.id}`,
         }));
       } catch (e) { console.error('[Weekly Digest] clubs error:', e.message); allSections.clubs = []; }
+
+      // Manual queue items flagged for weekly — admins added these directly
+      // through the Automations tab before the Monday run.
+      const weeklyQueueItemsByCategory = {};
+      let weeklyQueueIds = [];
+      try {
+        const { notification_queue } = require('../sequelize/models/index');
+        const queuedRows = await notification_queue.findAll({
+          where: { status: 'weekly_pending' },
+          order: [['createdAt', 'ASC']],
+        });
+        weeklyQueueIds = queuedRows.map(r => r.id);
+        queuedRows.forEach(r => {
+          const cat = r.category || 'platform';
+          if (!weeklyQueueItemsByCategory[cat]) weeklyQueueItemsByCategory[cat] = [];
+          const slug = r.referenceSlug || '';
+          const url = /^https?:\/\//i.test(slug) ? slug : slug ? `https://pensa.club${slug.startsWith('/') ? '' : '/'}${slug}` : 'https://pensa.club';
+          weeklyQueueItemsByCategory[cat].push({
+            title: r.referenceTitle || '',
+            meta: r.description || '',
+            url,
+          });
+        });
+
+        // Merge manual items into their respective sections so they render
+        // inside the existing digest layout.
+        Object.keys(weeklyQueueItemsByCategory).forEach(cat => {
+          if (!allSections[cat]) allSections[cat] = [];
+          allSections[cat] = [...allSections[cat], ...weeklyQueueItemsByCategory[cat]];
+        });
+      } catch (e) {
+        console.error('[Weekly Digest] manual queue items error:', e.message);
+      }
 
       // ── Upcoming events (next 7 days) ──
 
@@ -226,6 +260,19 @@ const startWeeklyDigestCron = () => {
 
       if (newsletterRecord) {
         await newsletterRecord.update({ status: 'sent', sentCount: sent });
+      }
+
+      // Mark manual weekly queue items as sent so they're not reused next week
+      if (weeklyQueueIds.length > 0) {
+        try {
+          const { notification_queue } = require('../sequelize/models/index');
+          await notification_queue.update(
+            { status: 'sent', processedAt: new Date() },
+            { where: { id: weeklyQueueIds } },
+          );
+        } catch (e) {
+          console.error('[Weekly Digest] mark queue sent error:', e.message);
+        }
       }
 
       console.log(`[Weekly Digest] Done. Sent ${sent}/${subscribers.length} emails.`);

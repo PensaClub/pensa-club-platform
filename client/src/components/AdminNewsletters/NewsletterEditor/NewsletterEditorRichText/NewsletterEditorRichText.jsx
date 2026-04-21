@@ -13,6 +13,7 @@ import {
   compressImage,
   allowedImageTypes,
 } from '../../../Articles/articleUtils/file-utils';
+import { deleteFileFromStorage } from '../../../Articles/articleUtils/file-delete-utils';
 import { notify } from '../../../../utils/notify.jsx';
 
 // Extend Link to preserve the `class` attribute — so our nl-cta links survive
@@ -43,16 +44,32 @@ import {
   Minus,
   Link2,
   ImagePlus,
+  ImageOff,
   Loader2,
   Undo2,
   Redo2,
 } from 'lucide-react';
 import './newsletterEditorRichText.css';
 
+const FIREBASE_HOST_MARK = 'firebasestorage.googleapis.com';
+
+const collectImageUrls = (editor) => {
+  const urls = new Set();
+  if (!editor) return urls;
+  editor.state.doc.descendants((node) => {
+    if (node.type.name === 'image' && node.attrs?.src) {
+      urls.add(node.attrs.src);
+    }
+  });
+  return urls;
+};
+
 export const NewsletterEditorRichText = forwardRef(({ value = '', onChange, placeholder = '' }, ref) => {
   const { t } = useTranslation('adminNewsletters');
   const fileInputRef = useRef(null);
   const [isUploadingImage, setIsUploadingImage] = useState(false);
+  const [, setTick] = useState(0);
+  const prevImageUrlsRef = useRef(new Set());
 
   const editor = useEditor({
     extensions: [
@@ -65,9 +82,18 @@ export const NewsletterEditorRichText = forwardRef(({ value = '', onChange, plac
     ],
     content: value || '',
     onUpdate: ({ editor: ed }) => {
+      const current = collectImageUrls(ed);
+      const prev = prevImageUrlsRef.current;
+      prev.forEach((url) => {
+        if (!current.has(url) && typeof url === 'string' && url.includes(FIREBASE_HOST_MARK)) {
+          deleteFileFromStorage(url).catch(() => {});
+        }
+      });
+      prevImageUrlsRef.current = current;
       const html = ed.getHTML();
       onChange?.(html === '<p></p>' ? '' : html);
     },
+    onSelectionUpdate: () => setTick((n) => n + 1),
   });
 
   // Sync external changes (e.g. loading an existing draft)
@@ -77,9 +103,17 @@ export const NewsletterEditorRichText = forwardRef(({ value = '', onChange, plac
     const incoming = value || '';
     if (current !== incoming && !(current === '<p></p>' && !incoming)) {
       editor.commands.setContent(incoming, false);
+      prevImageUrlsRef.current = collectImageUrls(editor);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [value, editor]);
+
+  // Seed the image-url ref once the editor is ready, so uploads followed by
+  // a later Backspace correctly detect the removal.
+  useEffect(() => {
+    if (!editor) return;
+    prevImageUrlsRef.current = collectImageUrls(editor);
+  }, [editor]);
 
   useImperativeHandle(ref, () => ({
     insertContent: (html) => {
@@ -106,6 +140,11 @@ export const NewsletterEditorRichText = forwardRef(({ value = '', onChange, plac
   const triggerImagePick = () => {
     if (isUploadingImage) return;
     fileInputRef.current?.click();
+  };
+
+  const removeSelectedImage = () => {
+    if (!editor || !editor.isActive('image')) return;
+    editor.chain().focus().deleteSelection().run();
   };
 
   const handleImageFile = async (event) => {
@@ -249,6 +288,13 @@ export const NewsletterEditorRichText = forwardRef(({ value = '', onChange, plac
             title={t('editor.toolbar.imageUpload')}
           >
             {isUploadingImage ? <Loader2 className="anert-spin" /> : <ImagePlus />}
+          </Btn>
+          <Btn
+            onClick={removeSelectedImage}
+            disabled={!editor.isActive('image')}
+            title={t('editor.toolbar.imageRemove')}
+          >
+            <ImageOff />
           </Btn>
         </div>
 

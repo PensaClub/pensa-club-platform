@@ -33,6 +33,18 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: true,
         field: 'reference_slug',
       },
+      description: {
+        type: DataTypes.TEXT,
+        allowNull: true,
+      },
+      category: {
+        type: DataTypes.STRING(50),
+        allowNull: true,
+      },
+      thumbnail: {
+        type: DataTypes.STRING(2048),
+        allowNull: true,
+      },
       status: {
         type: DataTypes.STRING(20),
         allowNull: false,
