@@ -95,6 +95,13 @@ const permissions = {
     subscription: {
         read: ROLES.STAFF,
     },
+    newsletter: {
+        read: ROLES.STAFF,
+        create: ROLES.STAFF,
+        update: ROLES.STAFF,
+        delete: ROLES.STAFF,
+        send: ROLES.STAFF,
+    },
     suggestion: {
         read: ROLES.STAFF,
         delete: ROLES.STAFF,

@@ -1,0 +1,363 @@
+/* src/components/AdminNewsletters/NewsletterEditor/NewsletterTargetAudience/newsletterTargetAudience.css */
+/* Prefix: anta- */
+
+.anta-root {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.anta-root {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.86rem;
+}
+
+/* =========================================================
+   MODE TOGGLES (all vs segmented)
+   ========================================================= */
+
+.anta-mode-row {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.anta-mode {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 44px 12px 14px;
+  background: rgba(13, 17, 23, 0.55);
+  color: #cbd5e1;
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  border-radius: 10px;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  width: 100%;
+}
+
+.anta-mode:hover {
+  border-color: rgba(20, 184, 166, 0.35);
+  background: rgba(20, 184, 166, 0.05);
+}
+
+.anta-mode--active {
+  border-color: rgba(20, 184, 166, 0.55);
+  background: rgba(20, 184, 166, 0.1);
+  box-shadow: 0 6px 20px rgba(20, 184, 166, 0.14);
+}
+
+.anta-mode-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 7px;
+  border-radius: 9px;
+  background: rgba(20, 184, 166, 0.14);
+  color: #2dd4bf;
+  flex-shrink: 0;
+}
+
+.anta-mode-icon svg {
+  width: 100%;
+  height: 100%;
+  stroke-width: 2;
+}
+
+.anta-mode-text {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.anta-mode-title {
+  font-weight: 700;
+  color: #f0f4f8;
+  font-size: 0.86rem;
+  line-height: 1.25;
+}
+
+.anta-mode-desc {
+  font-size: 0.74rem;
+  color: #94a3b8;
+  line-height: 1.4;
+}
+
+.anta-mode-check {
+  position: absolute;
+  top: 50%;
+  right: 12px;
+  transform: translateY(-50%);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  padding: 4px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #14b8a6, #2dd4bf);
+  color: #0d1117;
+  flex-shrink: 0;
+}
+
+.anta-mode-check svg {
+  width: 100%;
+  height: 100%;
+  stroke-width: 3;
+}
+
+/* =========================================================
+   SEGMENT (categories)
+   ========================================================= */
+
+.anta-segment {
+  padding: 14px 16px;
+  background: rgba(13, 17, 23, 0.55);
+  border: 1px solid rgba(20, 184, 166, 0.16);
+  border-radius: 12px;
+  backdrop-filter: blur(8px);
+}
+
+.anta-segment-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.anta-segment-count {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #2dd4bf;
+}
+
+.anta-segment-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.anta-segment-link {
+  padding: 0;
+  background: none;
+  border: none;
+  color: #94a3b8;
+  cursor: pointer;
+  font-size: 0.82rem;
+  font-weight: 600;
+  transition: color 0.15s;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.anta-segment-link:hover {
+  color: #2dd4bf;
+}
+
+.anta-segment-sep {
+  font-size: 0.82rem;
+  color: #475569;
+}
+
+.anta-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 6px;
+}
+
+.anta-chip {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  background: rgba(20, 25, 35, 0.55);
+  border: 1px solid rgba(148, 163, 184, 0.16);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.18s ease;
+  user-select: none;
+}
+
+.anta-chip:hover {
+  border-color: rgba(20, 184, 166, 0.35);
+  background: rgba(20, 184, 166, 0.05);
+}
+
+.anta-chip--checked {
+  border-color: rgba(20, 184, 166, 0.55);
+  background: rgba(20, 184, 166, 0.12);
+}
+
+.anta-chip-input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.anta-chip-box {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  padding: 2px;
+  border: 1.5px solid rgba(148, 163, 184, 0.4);
+  border-radius: 5px;
+  background: rgba(13, 17, 23, 0.6);
+  transition: all 0.18s ease;
+  flex-shrink: 0;
+}
+
+.anta-chip--checked .anta-chip-box {
+  background: linear-gradient(135deg, #14b8a6, #2dd4bf);
+  border-color: #2dd4bf;
+}
+
+.anta-chip-check {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  color: #0d1117;
+}
+
+.anta-chip-check svg {
+  width: 100%;
+  height: 100%;
+  stroke-width: 3;
+}
+
+.anta-chip-label {
+  font-size: 0.85rem;
+  color: #cbd5e1;
+  font-weight: 500;
+}
+
+.anta-chip--checked .anta-chip-label {
+  color: #f0f4f8;
+  font-weight: 600;
+}
+
+/* =========================================================
+   LIGHT THEME
+   ========================================================= */
+
+[data-theme="light"] .anta-mode {
+  background: #ffffff;
+  color: #334155;
+  border-color: rgba(148, 163, 184, 0.3);
+}
+
+[data-theme="light"] .anta-mode:hover {
+  background: rgba(20, 184, 166, 0.05);
+  border-color: rgba(20, 184, 166, 0.4);
+}
+
+[data-theme="light"] .anta-mode--active {
+  background: rgba(20, 184, 166, 0.08);
+  border-color: rgba(20, 184, 166, 0.55);
+}
+
+[data-theme="light"] .anta-mode-icon {
+  background: rgba(20, 184, 166, 0.12);
+  color: #0d9488;
+}
+
+[data-theme="light"] .anta-mode-title {
+  color: #0f172a;
+}
+
+[data-theme="light"] .anta-mode-desc {
+  color: #475569;
+}
+
+[data-theme="light"] .anta-mode-check {
+  color: #ffffff;
+  background: linear-gradient(135deg, #0d9488, #14b8a6);
+}
+
+[data-theme="light"] .anta-segment {
+  background: #ffffff;
+  border-color: rgba(20, 184, 166, 0.2);
+  box-shadow: 0 2px 10px rgba(15, 23, 42, 0.04);
+}
+
+[data-theme="light"] .anta-segment-count {
+  color: #0d9488;
+}
+
+[data-theme="light"] .anta-segment-link {
+  color: #64748b;
+}
+
+[data-theme="light"] .anta-segment-link:hover {
+  color: #0d9488;
+}
+
+[data-theme="light"] .anta-chip {
+  background: #f8fafc;
+  border-color: rgba(148, 163, 184, 0.3);
+}
+
+[data-theme="light"] .anta-chip:hover {
+  background: rgba(20, 184, 166, 0.05);
+  border-color: rgba(20, 184, 166, 0.4);
+}
+
+[data-theme="light"] .anta-chip--checked {
+  background: rgba(20, 184, 166, 0.08);
+  border-color: rgba(20, 184, 166, 0.55);
+}
+
+[data-theme="light"] .anta-chip-box {
+  background: #ffffff;
+  border-color: rgba(148, 163, 184, 0.5);
+}
+
+[data-theme="light"] .anta-chip--checked .anta-chip-box {
+  background: linear-gradient(135deg, #0d9488, #14b8a6);
+}
+
+[data-theme="light"] .anta-chip-check {
+  color: #ffffff;
+}
+
+[data-theme="light"] .anta-chip-label {
+  color: #334155;
+}
+
+[data-theme="light"] .anta-chip--checked .anta-chip-label {
+  color: #0f172a;
+}
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+/* Wide viewport — when sidebar collapses into main flow we have plenty of room */
+@media (min-width: 1025px) {
+  /* sidebar is narrow (320px) — keep stacked layout, no override needed */
+}
+
+@media (max-width: 1024px) and (min-width: 481px) {
+  /* Sidebar moves above main content full-width — show in 2 columns for breathing room */
+  .anta-mode-row {
+    flex-direction: row;
+  }
+
+  .anta-mode {
+    flex: 1 1 0;
+  }
+
+  .anta-grid {
+    grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+    gap: 8px;
+  }
+}
