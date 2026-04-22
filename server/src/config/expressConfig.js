@@ -15,6 +15,7 @@ const scheduleAuditLogCleanup = require('../cron/auditLogCleanup');
 const { startWeeklyDigestCron } = require('../cron/weeklyDigestCron');
 const { startScheduledNewsletterCron } = require('../cron/scheduledNewsletterCron');
 const { startEventBatchCron } = require('../cron/eventBatchCron');
+const { startMonthlyReportCron } = require('../cron/monthlyReportCron');
 
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
@@ -70,5 +71,6 @@ module.exports = function expressConfig(app) {
         startWeeklyDigestCron();
         startScheduledNewsletterCron();
         startEventBatchCron();
+        startMonthlyReportCron();
     });
 };

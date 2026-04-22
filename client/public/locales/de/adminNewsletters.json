@@ -129,6 +129,18 @@
     "loading": "Statistiken werden geladen…",
     "loadError": "Statistiken konnten nicht geladen werden."
   },
+  "perf": {
+    "title": "Newsletter-Performance",
+    "subtitle": "Open- und Click-Rate für den gewählten Zeitraum.",
+    "rangeDays": "{{count}} Tage",
+    "openRate": "Öffnungsrate",
+    "clickRate": "Click-Rate",
+    "openedOf": "{{opened}} von {{sent}} gesendet",
+    "clickedOf": "{{clicked}} von {{sent}} gesendet",
+    "byTypeTitle": "Open / Click Rate nach Newsletter-Typ",
+    "timeSeriesTitle": "Wöchentliche Open / Click Rate",
+    "noData": "Keine Daten für den gewählten Zeitraum."
+  },
   "autoSettings": {
     "title": "Automatisierte Newsletter",
     "subtitle": "Cron-Job-Übersicht. Vollständige Verwaltung in Phase 7.",
@@ -141,6 +153,34 @@
     "eventTitle": "Reaktive Veröffentlichungsbenachrichtigungen",
     "eventSchedule": "Täglich um 09:00 (Europe/Sofia)",
     "eventDesc": "Beim Veröffentlichen eines Seminars, Artikels, Kurses, einer Initiative, eines Projekts, einer Publikation oder eines Klubs wird ein Ereignis in die Warteschlange gestellt. Täglich um 09:00 wird eine aggregierte E-Mail „Neu in Pensa Club“ an die Abonnenten gesendet — gefiltert nach ihren Präferenzen.",
+    "monthlyTitle": "Monatsbericht",
+    "monthlySchedule": "Am 1. jedes Monats um 09:00 (Europe/Sofia)",
+    "monthlyDesc": "Zu Monatsbeginn wird eine Zusammenfassung gesendet: Anzahl neuer Seminare, Artikel, Kurse, Initiativen, neue Nutzer, Top-N-Seminare nach Teilnahme und Top-N-Artikel/Kurse nach Aufrufen. Wird nur an Abonnenten mit aktivierter Kategorie Plattform-Updates gesendet.",
+    "monthlyMonthLabel": "Monat",
+    "monthlyLimitLabel": "Anzahl Top-Einträge",
+    "monthlyLimitOption": "Top {{count}}",
+    "monthlyPreview": "Vorschau",
+    "monthlyPreviewTitle": "Monatsbericht-Vorschau — {{month}}",
+    "monthlyPreviewError": "Vorschau konnte nicht geladen werden.",
+    "monthlyRunNow": "Jetzt senden",
+    "monthlyRunStarted": "Versand des Monatsberichts gestartet.",
+    "monthlyRunError": "Monatsbericht konnte nicht gesendet werden.",
+    "monthlyRunConfirmTitle": "Monatsbericht senden",
+    "monthlyRunConfirmBody": "Der Monatsbericht wird an {{count}} Abonnenten mit aktivierter Kategorie Plattform-Updates gesendet. Diese Aktion ist unwiderruflich.",
+    "monthNames": {
+      "0": "Januar",
+      "1": "Februar",
+      "2": "März",
+      "3": "April",
+      "4": "Mai",
+      "5": "Juni",
+      "6": "Juli",
+      "7": "August",
+      "8": "September",
+      "9": "Oktober",
+      "10": "November",
+      "11": "Dezember"
+    },
     "active": "Aktiv",
     "pendingLabel": "Wartet auf Versand:",
     "pendingEmpty": "Keine ausstehenden Veröffentlichungen für den nächsten Batch.",
@@ -435,6 +475,19 @@
     "deleted": "Newsletter gelöscht.",
     "duplicated": "Newsletter als Entwurf dupliziert.",
     "cancelled": "Planung abgebrochen.",
-    "fetchError": "Newsletter konnten nicht geladen werden."
+    "fetchError": "Newsletter konnten nicht geladen werden.",
+    "statsError": "Newsletter-Statistiken konnten nicht geladen werden."
+  },
+  "statsModal": {
+    "title": "Newsletter-Statistiken",
+    "loading": "Wird geladen…",
+    "sent": "Versendet",
+    "opened": "Geöffnet",
+    "clicked": "Geklickt",
+    "uniqueClickers": "Eindeutige Klicker",
+    "failed": "Fehlgeschlagen",
+    "topLinksTitle": "Top 5 geklickte Links",
+    "clicksCount": "{{count}} Klicks",
+    "noClicks": "Noch keine Klicks in diesem Newsletter."
   }
 }
