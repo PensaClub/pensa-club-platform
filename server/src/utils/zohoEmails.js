@@ -83,6 +83,20 @@ async function forwardEmailsViaZoho({ userEmail, subject, body, toAddresses, for
 async function sendZohoEmailRaw(data) {
     const url = `https://mail.zoho.eu/api/accounts/${process.env.ZOHO_ACCOUNT_ID}/messages`;
 
+    // Last-mile guard: absolutize any relative href in the email body.
+    // Email clients have no document base, so `/foo` becomes `http:///foo`.
+    // Done here so EVERY caller (manual newsletters, weekly digest, monthly
+    // report, event batch, password reset, club mailing, forum digest, ...)
+    // is covered without each having to remember.
+    try {
+        const { absolutizeBodyLinks } = require('./newsletterClickTracking');
+        if (data && typeof data.content === 'string' && data.content.length > 0) {
+            data = { ...data, content: absolutizeBodyLinks(data.content) };
+        }
+    } catch {
+        // Never break sending if the helper fails to load.
+    }
+
     if (!process.env.ZOHO_ACCESS_TOKEN) {
         process.env.ZOHO_ACCESS_TOKEN = await getZohoAccessToken();
     }

@@ -29,6 +29,7 @@ const startWeeklyDigestCron = () => {
       } = require('../sequelize/models/index');
       const { weeklyDigest } = require('../utils/newsletterTemplates');
       const { forwardEmailsViaZoho } = require('../utils/zohoEmails');
+      const { absolutizeBodyLinks } = require('../utils/newsletterClickTracking');
 
       const weekAgo = new Date();
       weekAgo.setDate(weekAgo.getDate() - 7);
@@ -244,7 +245,7 @@ const startWeeklyDigestCron = () => {
             subject: template.subject,
             body: '',
             toAddresses: sub.email,
-            formattedBody: template.html,
+            formattedBody: absolutizeBodyLinks(template.html),
           });
 
           sent++;
