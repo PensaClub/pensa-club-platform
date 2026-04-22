@@ -465,6 +465,14 @@ export const CommunityProvider = ({ children }) => {
             throw e;
         }
     };
+    const getAdminSubscriberGrowth = async (opts = {}) => {
+        try {
+            return await communityService.getAdminSubscriberGrowth(opts);
+        } catch (e) {
+            notify('error', e);
+            throw e;
+        }
+    };
     const blockSubscriber = async (id) => {
         try {
             return await communityService.blockSubscriber(id);
@@ -489,6 +497,29 @@ export const CommunityProvider = ({ children }) => {
             throw e;
         }
     };
+    // Token-based public access (used by /subscribe/preferences/:token + /subscribe/unsubscribe/:token pages)
+    const getSubscriberPreferences = async (token) => {
+        try {
+            return await communityService.getSubscriberPreferences(token);
+        } catch (e) {
+            throw e; // Don't notify — page handles its own error UI
+        }
+    };
+    const updateSubscriberPreferences = async (token, preferences) => {
+        try {
+            return await communityService.updateSubscriberPreferences(token, preferences);
+        } catch (e) {
+            throw e;
+        }
+    };
+    const unsubscribeWithToken = async (token) => {
+        try {
+            return await communityService.unsubscribeWithToken(token);
+        } catch (e) {
+            throw e;
+        }
+    };
+
     const exportSubscribersCsvUrl = () => communityService.exportSubscribersCsvUrl();
     const exportSubscribersPdfUrl = (params) => communityService.exportSubscribersPdfUrl(params);
     const sendPersonalNewsletter = async (subscriberId, payload) => {
@@ -609,11 +640,15 @@ export const CommunityProvider = ({ children }) => {
         getNewsletterStats,
         getAdminSubscriberList,
         getAdminSubscriberStats,
+        getAdminSubscriberGrowth,
         blockSubscriber,
         unblockSubscriber,
         updateSubscriberPreferencesByAdmin,
         exportSubscribersCsvUrl,
         exportSubscribersPdfUrl,
+        getSubscriberPreferences,
+        updateSubscriberPreferences,
+        unsubscribeWithToken,
         sendPersonalNewsletter,
         getEventBatchPreview,
         runEventBatchNow,

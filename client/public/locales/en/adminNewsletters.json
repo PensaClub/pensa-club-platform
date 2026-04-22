@@ -129,6 +129,13 @@
     "loading": "Loading stats…",
     "loadError": "Failed to load stats."
   },
+  "growth": {
+    "title": "Subscriber growth",
+    "subtitle": "New signups vs unsubscribes over the selected period.",
+    "weeklyTitle": "Weekly new signups and unsubscribes",
+    "newSubs": "New subscribers",
+    "unsubs": "Unsubscribes"
+  },
   "perf": {
     "title": "Newsletter performance",
     "subtitle": "Open and click rate for the selected period.",

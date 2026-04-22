@@ -289,6 +289,73 @@ subscriberController.get(
 );
 
 // ═══════════════════════════════════════════════════════════════════════
+// GET /subscribe/admin/stats/growth?days=90
+// Returns weekly buckets with: new subscribers + unsubscribes per week.
+// Used for the "growth trend" chart in admin Stats tab.
+// ═══════════════════════════════════════════════════════════════════════
+subscriberController.get(
+    '/admin/stats/growth',
+    isAuth,
+    rbac.checkPermission('subscription', 'read'),
+    async (req, res, next) => {
+        try {
+            const { fn, col, literal } = require('sequelize');
+
+            const days = Math.max(7, Math.min(parseInt(req.query.days, 10) || 90, 730));
+            const from = new Date();
+            from.setDate(from.getDate() - days);
+            from.setHours(0, 0, 0, 0);
+
+            // New subscribers per week
+            const newRows = await subscriber.findAll({
+                where: { createdAt: { [Op.gte]: from } },
+                attributes: [
+                    [fn('DATE_TRUNC', 'week', col('created_at')), 'week'],
+                    [fn('COUNT', col('id')), 'cnt'],
+                ],
+                group: ['week'],
+                order: [[literal('week'), 'ASC']],
+                raw: true,
+            });
+
+            // Unsubscribes per week (only those who actually unsubscribed in range)
+            const unsubRows = await subscriber.findAll({
+                where: {
+                    status: 'unsubscribed',
+                    unsubscribedAt: { [Op.gte]: from, [Op.ne]: null },
+                },
+                attributes: [
+                    [fn('DATE_TRUNC', 'week', col('unsubscribed_at')), 'week'],
+                    [fn('COUNT', col('id')), 'cnt'],
+                ],
+                group: ['week'],
+                order: [[literal('week'), 'ASC']],
+                raw: true,
+            });
+
+            // Merge into a single timeseries
+            const seriesMap = new Map();
+            const addRow = (row, key) => {
+                const week = new Date(row.week).toISOString().substring(0, 10);
+                const prev = seriesMap.get(week) || { week, newSubs: 0, unsubs: 0 };
+                prev[key] = Number(row.cnt) || 0;
+                seriesMap.set(week, prev);
+            };
+            newRows.forEach((r) => addRow(r, 'newSubs'));
+            unsubRows.forEach((r) => addRow(r, 'unsubs'));
+
+            const timeSeries = [...seriesMap.values()].sort((a, b) =>
+                a.week < b.week ? -1 : 1,
+            );
+
+            res.status(200).json({ from, days, timeSeries });
+        } catch (err) {
+            next(err);
+        }
+    },
+);
+
+// ═══════════════════════════════════════════════════════════════════════
 // POST /subscribe/admin/:id/block — block a subscriber
 // ═══════════════════════════════════════════════════════════════════════
 subscriberController.post(

@@ -1,0 +1,46 @@
+{
+  "categories": {
+    "seminars": "Seminare & Schulungen",
+    "courses": "Kurse",
+    "articles": "Artikel & Publikationen",
+    "initiatives": "Initiativen & Projekte",
+    "clubs": "Klubs",
+    "games": "Spiele & Unterhaltung",
+    "platform": "Plattform-Updates"
+  },
+  "categoriesDesc": {
+    "seminars": "Neue Seminare, anstehende Termine, Aufzeichnungen vergangener",
+    "courses": "Neue Kurse, Module und Vorlesungen",
+    "articles": "Empfohlene Artikel und Publikationen",
+    "initiatives": "Neue Initiativen, Projekte, Teilnahmeaufrufe",
+    "clubs": "Neue Klubs, bevorstehende Besuche",
+    "games": "Neue Spiele, Bestenlisten",
+    "platform": "Geplante Änderungen, neue Funktionen, Monatsberichte"
+  },
+  "preferences": {
+    "title": "Einstellungen verwalten",
+    "subtitle": "Wählen Sie, was Sie an {{email}} erhalten möchten.",
+    "loading": "Einstellungen werden geladen…",
+    "errorLoad": "Einstellungen konnten nicht geladen werden. Der Link ist möglicherweise abgelaufen.",
+    "errorSave": "Änderungen konnten nicht gespeichert werden. Bitte erneut versuchen.",
+    "save": "Speichern",
+    "saving": "Wird gespeichert…",
+    "saved": "Gespeichert!",
+    "unsubscribeHint": "Möchten Sie gar nichts mehr erhalten?",
+    "unsubscribeLink": "Komplett abmelden"
+  },
+  "unsubscribe": {
+    "title": "Newsletter abbestellen",
+    "body": "Sind Sie sicher, dass Sie sich komplett abmelden möchten? Sie erhalten keine E-Mails mehr von Pensa Club.",
+    "bodyWithEmail": "Sind Sie sicher, dass Sie {{email}} komplett abmelden möchten? Sie erhalten keine E-Mails mehr von Pensa Club.",
+    "adjustPrefs": "Stattdessen Kategorien anpassen",
+    "confirm": "Ja, abmelden",
+    "submittingTitle": "Wird abgemeldet…",
+    "doneTitle": "Erfolgreich abgemeldet",
+    "doneBody": "Schade, dass Sie gehen. Sie können sich jederzeit auf der Startseite erneut anmelden.",
+    "backHome": "Zur Startseite",
+    "errorTitle": "Etwas ist schiefgelaufen",
+    "errorGeneric": "Anfrage konnte nicht verarbeitet werden. Bitte erneut versuchen oder uns kontaktieren.",
+    "retry": "Erneut versuchen"
+  }
+}

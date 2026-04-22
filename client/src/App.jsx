@@ -157,6 +157,10 @@ import { IpManagementProvider } from './components/contexts/IpManagementContext'
 // ✅ LAZY LOADING - ADMIN NEWSLETTERS
 const AdminNewsletters = lazyWithRetry(() => import('./components/AdminNewsletters/AdminNewsletters.jsx'));
 
+// ✅ LAZY LOADING - PUBLIC SUBSCRIBE PAGES (token-protected)
+const SubscribePreferences = lazyWithRetry(() => import('./components/Subscribe/SubscribePreferences/SubscribePreferences.jsx').then(m => ({ default: m.SubscribePreferences })));
+const Unsubscribe = lazyWithRetry(() => import('./components/Subscribe/Unsubscribe/Unsubscribe.jsx').then(m => ({ default: m.Unsubscribe })));
+
 // ✅ LAZY LOADING - USEFUL LINKS КОМПОНЕНТИ
 const UsefulLinks = lazyWithRetry(() => import('./components/UsefulLinks/UsefulLinks.jsx'));
 const AdminUsefulLinksList = lazyWithRetry(() => import('./components/AdminUsefulLinksList/AdminUsefulLinksList.jsx'));
@@ -201,6 +205,8 @@ function AppRoutes() {
       <Route path="/about" element={<AboutPage />} />
       <Route path="/server-error" element={<ServerError />} />
       <Route path="/forget-password" element={<ForgetPassword />} />
+      <Route path="/subscribe/preferences/:token" element={<Suspense fallback={<LazyLoadingFallback />}><SubscribePreferences /></Suspense>} />
+      <Route path="/subscribe/unsubscribe/:token" element={<Suspense fallback={<LazyLoadingFallback />}><Unsubscribe /></Suspense>} />
       <Route path="/resend-email" element={<ReSendEmail />} />
       <Route path="/reset-password" element={<ResetPasswordPage />} />
       <Route path="/accept-invitation" element={<AcceptInvitation />} />
