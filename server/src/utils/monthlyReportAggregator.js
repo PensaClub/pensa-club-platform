@@ -7,6 +7,7 @@
 // All queries are independent so Promise.all is safe.
 
 const { Op, fn, col } = require('sequelize');
+const models = require('../sequelize/models');
 const {
   seminar,
   article,
@@ -18,8 +19,12 @@ const {
   user_account,
   student_seminar,
   seminar_guest_attendance,
-} = require('../sequelize/models');
+} = models;
 const contentViewController = require('../controllers/contentViewController');
+const {
+  includeForContentImage,
+  resolveContentImage,
+} = require('./contentImageResolver');
 
 const createdBetween = (from, to) => ({
   createdAt: { [Op.gte]: from, [Op.lt]: to },
@@ -112,7 +117,7 @@ const getTopSeminarsByAttendance = async (from, to, limit = 3) => {
         id: s.id,
         title: s.title,
         slug: s.slug,
-        thumbnailUrl: s.thumbnailUrl,
+        thumbnailUrl: resolveContentImage(s, 'seminar'),
         scheduledDate: s.scheduledDate,
         attendanceCount,
       };
@@ -123,14 +128,19 @@ const getTopSeminarsByAttendance = async (from, to, limit = 3) => {
 // Placeholders — will be backed by the content_views tracker (Phase 5.2).
 // Current behaviour: return latest items in the range so the report never
 // comes back empty. Once the tracker ships, these read real view counts.
-const latestFallback = async (model, from, to, limit, mapFn) => {
+//
+// `contentType` lets us include the right image association so thumbnails
+// resolve cleanly through `resolveContentImage` (which has its own fallback
+// chain ending at the Pensa Club logo placeholder).
+const latestFallback = async (model, contentType, from, to, limit, mapFn) => {
+  const include = includeForContentImage(contentType, models);
   const rows = await model.findAll({
     where: createdBetween(from, to),
     order: [['createdAt', 'DESC']],
+    include,
     limit,
-    raw: true,
   });
-  return rows.map(mapFn);
+  return rows.map((row) => mapFn(row, resolveContentImage(row, contentType)));
 };
 
 const getTopFromTracker = async (contentType, from, to, limit) => {
@@ -163,11 +173,11 @@ const getTopFromTracker = async (contentType, from, to, limit) => {
 const getTopArticlesByViews = async (from, to, limit = 3) => {
   const tracked = await getTopFromTracker('article', from, to, limit);
   if (tracked.length > 0) return tracked;
-  return latestFallback(article, from, to, limit, (r) => ({
+  return latestFallback(article, 'article', from, to, limit, (r, thumb) => ({
     id: r.id,
     title: r.title,
     slug: r.slug,
-    thumbnailUrl: null,
+    thumbnailUrl: thumb,
     views: null,
     isFallback: true,
   }));
@@ -176,11 +186,11 @@ const getTopArticlesByViews = async (from, to, limit = 3) => {
 const getTopCoursesByViews = async (from, to, limit = 3) => {
   const tracked = await getTopFromTracker('course', from, to, limit);
   if (tracked.length > 0) return tracked;
-  return latestFallback(course, from, to, limit, (r) => ({
+  return latestFallback(course, 'course', from, to, limit, (r, thumb) => ({
     id: r.id,
     title: r.name,
     slug: r.slug,
-    thumbnailUrl: r.thumbnailUrl || null,
+    thumbnailUrl: thumb,
     views: null,
     isFallback: true,
   }));
