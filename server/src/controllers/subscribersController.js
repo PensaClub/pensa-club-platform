@@ -306,30 +306,33 @@ subscriberController.get(
             from.setDate(from.getDate() - days);
             from.setHours(0, 0, 0, 0);
 
-            // New subscribers per week
+            // New subscribers per week — `subscribers` table is camelCase
+            // (`underscored: false`), so the column is "createdAt" (quoted).
+            const newWeekExpr = fn('DATE_TRUNC', 'week', col('createdAt'));
             const newRows = await subscriber.findAll({
                 where: { createdAt: { [Op.gte]: from } },
                 attributes: [
-                    [fn('DATE_TRUNC', 'week', col('created_at')), 'week'],
+                    [newWeekExpr, 'week'],
                     [fn('COUNT', col('id')), 'cnt'],
                 ],
-                group: ['week'],
-                order: [[literal('week'), 'ASC']],
+                group: [newWeekExpr],
+                order: [[newWeekExpr, 'ASC']],
                 raw: true,
             });
 
             // Unsubscribes per week (only those who actually unsubscribed in range)
+            const unsubWeekExpr = fn('DATE_TRUNC', 'week', col('unsubscribed_at'));
             const unsubRows = await subscriber.findAll({
                 where: {
                     status: 'unsubscribed',
                     unsubscribedAt: { [Op.gte]: from, [Op.ne]: null },
                 },
                 attributes: [
-                    [fn('DATE_TRUNC', 'week', col('unsubscribed_at')), 'week'],
+                    [unsubWeekExpr, 'week'],
                     [fn('COUNT', col('id')), 'cnt'],
                 ],
-                group: ['week'],
-                order: [[literal('week'), 'ASC']],
+                group: [unsubWeekExpr],
+                order: [[unsubWeekExpr, 'ASC']],
                 raw: true,
             });
 
@@ -413,20 +416,28 @@ subscriberController.get(
                 order: [['createdAt', 'DESC']],
             });
 
+            // Use ';' as field delimiter — that is the default Excel locale
+            // expects in BG/DE/FR/RU. Quote every field to be defensive.
+            // The leading "sep=;" directive forces Excel to honor it on
+            // any locale, even US/EN which would otherwise default to comma.
+            const SEP = ';';
             const csvEscape = (v) => {
-                if (v === null || v === undefined) return '';
+                if (v === null || v === undefined) return '""';
                 const s = String(v).replace(/"/g, '""');
-                return /[",\n]/.test(s) ? `"${s}"` : s;
+                return `"${s}"`;
             };
 
             const header = ['id', 'name', 'email', 'status', 'source', 'phone', 'createdAt', 'unsubscribedAt', 'enabledCategories'];
-            const lines = [header.join(',')];
+            const lines = [
+                `sep=${SEP}`, // Excel directive — must be the very first line
+                header.map(csvEscape).join(SEP),
+            ];
 
             subscribers.forEach((s) => {
                 const enabledCats = (s.preferences || [])
                     .filter((p) => p.enabled)
                     .map((p) => p.category)
-                    .join(';');
+                    .join(','); // inside the quoted field — comma is safe
                 lines.push(
                     [
                         s.id,
@@ -435,14 +446,15 @@ subscriberController.get(
                         csvEscape(s.status),
                         csvEscape(s.source),
                         csvEscape(s.phone),
-                        s.createdAt ? new Date(s.createdAt).toISOString() : '',
-                        s.unsubscribedAt ? new Date(s.unsubscribedAt).toISOString() : '',
+                        s.createdAt ? `"${new Date(s.createdAt).toISOString()}"` : '""',
+                        s.unsubscribedAt ? `"${new Date(s.unsubscribedAt).toISOString()}"` : '""',
                         csvEscape(enabledCats),
-                    ].join(','),
+                    ].join(SEP),
                 );
             });
 
-            const csv = '\uFEFF' + lines.join('\n'); // BOM for Excel UTF-8
+            // BOM for Excel UTF-8 + CRLF line endings (Excel-friendly).
+            const csv = '\uFEFF' + lines.join('\r\n');
             const filename = `subscribers_${new Date().toISOString().slice(0, 10)}.csv`;
 
             res.setHeader('Content-Type', 'text/csv; charset=utf-8');
