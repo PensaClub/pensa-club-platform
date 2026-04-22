@@ -1067,3 +1067,216 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* ========= PER-NEWSLETTER STATS MODAL ========= */
+.anl-stats-modal {
+  max-width: 640px;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.anl-stats-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 4px;
+}
+
+.anl-stats-close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 7px;
+  background: rgba(148, 163, 184, 0.1);
+  color: #94a3b8;
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  border-radius: 8px;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.anl-stats-close:hover {
+  color: #fca5a5;
+  background: rgba(239, 68, 68, 0.1);
+  border-color: rgba(239, 68, 68, 0.35);
+}
+
+.anl-stats-subject {
+  margin: 0 0 18px;
+  font-size: 0.88rem;
+  color: #94a3b8;
+  font-style: italic;
+  font-family: 'Montserrat', sans-serif;
+}
+
+[data-theme="light"] .anl-stats-subject {
+  color: #475569;
+}
+
+.anl-stats-loading {
+  margin: 14px 0;
+  text-align: center;
+  color: #8a95aa;
+  font-size: 0.88rem;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.anl-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 10px;
+  margin-bottom: 18px;
+}
+
+.anl-stat-card {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 14px 12px;
+  background: rgba(13, 17, 23, 0.5);
+  border: 1px solid rgba(148, 163, 184, 0.14);
+  border-top: 3px solid var(--anl-stat-accent, #14b8a6);
+  border-radius: 10px;
+  text-align: center;
+}
+
+.anl-stat-card--teal { --anl-stat-accent: #14b8a6; }
+.anl-stat-card--green { --anl-stat-accent: #22c55e; }
+.anl-stat-card--amber { --anl-stat-accent: #f59e0b; }
+.anl-stat-card--violet { --anl-stat-accent: #8b5cf6; }
+.anl-stat-card--red { --anl-stat-accent: #ef4444; }
+
+.anl-stat-label {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #8a95aa;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.anl-stat-value {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: #f0f4f8;
+  line-height: 1.1;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.anl-stat-meta {
+  font-size: 0.78rem;
+  color: var(--anl-stat-accent, #14b8a6);
+  font-weight: 700;
+  font-family: 'Montserrat', sans-serif;
+}
+
+[data-theme="light"] .anl-stat-card {
+  background: #ffffff;
+  border-color: rgba(148, 163, 184, 0.25);
+  box-shadow: 0 1px 4px rgba(15, 23, 42, 0.04);
+}
+
+[data-theme="light"] .anl-stat-label {
+  color: #64748b;
+}
+
+[data-theme="light"] .anl-stat-value {
+  color: #0f172a;
+}
+
+.anl-stats-section-title {
+  margin: 0 0 8px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #f0f4f8;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-family: 'Montserrat', sans-serif;
+}
+
+[data-theme="light"] .anl-stats-section-title {
+  color: #0f172a;
+}
+
+.anl-stats-toplinks {
+  margin: 0 0 18px;
+}
+
+.anl-stats-link-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.anl-stats-link-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  background: rgba(13, 17, 23, 0.5);
+  border: 1px solid rgba(148, 163, 184, 0.12);
+  border-radius: 8px;
+  font-size: 0.84rem;
+  font-family: 'Montserrat', sans-serif;
+}
+
+[data-theme="light"] .anl-stats-link-row {
+  background: #f8fafc;
+  border-color: rgba(148, 163, 184, 0.25);
+}
+
+.anl-stats-link-url {
+  flex: 1;
+  min-width: 0;
+  color: #2dd4bf;
+  text-decoration: none;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 0.84rem;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.anl-stats-link-url:hover {
+  text-decoration: underline;
+}
+
+[data-theme="light"] .anl-stats-link-url {
+  color: #0d9488;
+}
+
+.anl-stats-link-count {
+  flex-shrink: 0;
+  padding: 2px 10px;
+  background: rgba(245, 158, 11, 0.15);
+  color: #fbbf24;
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  border-radius: 999px;
+  font-size: 0.74rem;
+  font-weight: 700;
+  font-family: 'Montserrat', sans-serif;
+}
+
+[data-theme="light"] .anl-stats-link-count {
+  color: #b45309;
+  background: rgba(245, 158, 11, 0.12);
+  border-color: rgba(245, 158, 11, 0.4);
+}
+
+.anl-stats-empty {
+  margin: 0 0 18px;
+  padding: 14px;
+  text-align: center;
+  color: #64748b;
+  font-size: 0.84rem;
+  font-style: italic;
+  background: rgba(13, 17, 23, 0.4);
+  border: 1px dashed rgba(148, 163, 184, 0.2);
+  border-radius: 8px;
+  font-family: 'Montserrat', sans-serif;
+}

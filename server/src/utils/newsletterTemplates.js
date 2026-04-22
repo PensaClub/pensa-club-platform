@@ -259,6 +259,168 @@ const beautifyBodyHtml = (rawHtml) => {
   return html;
 };
 
+/**
+ * Monthly Report — sent on the 1st of every month.
+ * Inputs:
+ *   subscriberName?, monthLabel (e.g. "март 2026"),
+ *   stats: { newSeminars, newArticles, newCourses, newInitiatives, newProjects, newPublications, newClubs, newUsers },
+ *   topSeminars: [{ id, title, slug, thumbnailUrl, attendanceCount }],
+ *   topArticles: [{ id, title, slug, thumbnailUrl, views, isFallback }],
+ *   topCourses: [{ id, title, slug, thumbnailUrl, views, isFallback }],
+ *   upcoming: { seminars: [...], initiatives: [...] },
+ *   platformUpdatesHtml?: admin-curated HTML block,
+ *   unsubscribeToken
+ */
+const MONTH_NAMES_BG = [
+  'януари', 'февруари', 'март', 'април', 'май', 'юни',
+  'юли', 'август', 'септември', 'октомври', 'ноември', 'декември',
+];
+
+const formatMonthLabel = (date) => {
+  const d = date instanceof Date ? date : new Date(date);
+  return `${MONTH_NAMES_BG[d.getMonth()]} ${d.getFullYear()}`;
+};
+
+const statCard = (value, label, accent = BRAND_COLOR) => `
+  <td style="padding:0 6px;vertical-align:top;width:25%;">
+    <table width="100%" cellpadding="0" cellspacing="0" style="background:#ffffff;border:1px solid #e5e7eb;border-radius:10px;border-top:3px solid ${accent};">
+      <tr>
+        <td style="padding:14px 10px;text-align:center;">
+          <p style="margin:0;color:${accent};font-size:26px;font-weight:800;line-height:1;font-family:'Segoe UI',Arial,sans-serif;">${value}</p>
+          <p style="margin:6px 0 0;color:#6b7280;font-size:11px;font-weight:600;line-height:1.3;text-transform:uppercase;letter-spacing:0.04em;">${label}</p>
+        </td>
+      </tr>
+    </table>
+  </td>
+`;
+
+const topItemRow = (item, metaText, fallbackImg) => {
+  const href = `${BASE_URL}/${item.slug || item.id || ''}`;
+  const thumb = item.thumbnailUrl || fallbackImg;
+  const metaHtml = metaText
+    ? `<p style="margin:4px 0 0;color:#6b7280;font-size:12px;font-weight:600;">${metaText}</p>`
+    : '';
+  const imgCol = thumb
+    ? `<td width="84" valign="top" style="width:84px;padding-left:12px;">
+         <img src="${thumb}" alt="" width="84" height="60" style="width:84px;height:60px;border-radius:6px;display:block;object-fit:cover;" />
+       </td>`
+    : '';
+  return `
+  <table width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 10px;border-collapse:collapse;background:#ffffff;border:1px solid #e5e7eb;border-radius:10px;">
+    <tr>
+      <td style="padding:12px 14px;border-left:3px solid ${BRAND_COLOR};border-radius:10px 0 0 10px;">
+        <table width="100%" cellpadding="0" cellspacing="0">
+          <tr>
+            <td valign="top">
+              <a href="${href}" style="color:#1f2937;font-size:14px;font-weight:700;text-decoration:none;line-height:1.35;">${item.title || '—'}</a>
+              ${metaHtml}
+            </td>
+            ${imgCol}
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>`;
+};
+
+const monthlyReport = ({
+  subscriberName,
+  monthLabel,
+  stats,
+  topSeminars = [],
+  topArticles = [],
+  topCourses = [],
+  upcoming,
+  platformUpdatesHtml = '',
+  unsubscribeToken,
+}) => {
+  const safeStats = stats || {};
+  const namePart = subscriberName
+    ? ` <strong style="color:#1f2937;font-weight:700;">${subscriberName}</strong>`
+    : '';
+  const greeting = `<p style="margin:0 0 10px;color:#1f2937;font-size:15px;line-height:1.6;">Здравейте,${namePart},</p>`;
+  const intro = `<p style="margin:0 0 14px;color:#374151;font-size:14.5px;line-height:1.65;">Представяме Ви обобщение на отминалия месец в Pensa Club — новото съдържание, най-популярните материали и какво предстои.</p>`;
+  const divider = `<table width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 18px;border-collapse:collapse;"><tr><td style="height:2px;background:${BRAND_COLOR};line-height:2px;font-size:0;">&nbsp;</td></tr></table>`;
+
+  const statsBlock = `
+    ${sectionTitle('📊', `Числата за ${monthLabel}`)}
+    <table width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 8px;border-collapse:separate;border-spacing:0;">
+      <tr>
+        ${statCard(safeStats.newSeminars || 0, 'Нови семинари')}
+        ${statCard(safeStats.newArticles || 0, 'Нови статии', '#14b8a6')}
+        ${statCard(safeStats.newCourses || 0, 'Нови курсове')}
+        ${statCard(safeStats.newUsers || 0, 'Нови потребители', '#14b8a6')}
+      </tr>
+    </table>
+    <table width="100%" cellpadding="0" cellspacing="0" style="margin:8px 0 18px;border-collapse:separate;border-spacing:0;">
+      <tr>
+        ${statCard(safeStats.newInitiatives || 0, 'Инициативи')}
+        ${statCard(safeStats.newProjects || 0, 'Проекти', '#14b8a6')}
+        ${statCard(safeStats.newPublications || 0, 'Публикации')}
+        ${statCard(safeStats.newClubs || 0, 'Нови клубове', '#14b8a6')}
+      </tr>
+    </table>
+  `;
+
+  const topSeminarsBlock = topSeminars.length
+    ? `${sectionTitle('🎓', 'Най-посещавани семинари')}
+       ${topSeminars.map((s) => topItemRow(
+         { ...s, slug: s.slug ? `academy/seminars/${s.slug}` : null },
+         `${s.attendanceCount || 0} присъствали`,
+         null,
+       )).join('')}`
+    : '';
+
+  const topArticlesBlock = topArticles.length
+    ? `${sectionTitle('📰', 'Най-четени статии')}
+       ${topArticles.map((a) => topItemRow(
+         { ...a, slug: a.slug ? `articles/${a.slug}` : null },
+         a.views ? `${a.views} прочитания` : (a.isFallback ? 'ново за месеца' : ''),
+         null,
+       )).join('')}`
+    : '';
+
+  const topCoursesBlock = topCourses.length
+    ? `${sectionTitle('📚', 'Популярни курсове')}
+       ${topCourses.map((c) => topItemRow(
+         { ...c, slug: c.slug ? `academy/courses/${c.slug}` : null },
+         c.views ? `${c.views} прочитания` : (c.isFallback ? 'ново за месеца' : ''),
+         null,
+       )).join('')}`
+    : '';
+
+  const upcomingSeminars = upcoming?.seminars || [];
+  const upcomingInitiatives = upcoming?.initiatives || [];
+  const upcomingBlock = upcomingSeminars.length || upcomingInitiatives.length
+    ? `${sectionTitle('📅', 'Какво предстои следващия месец')}
+       ${upcomingSeminars.slice(0, 5).map((s) => upcomingItem(
+         s.title,
+         s.scheduledDate ? new Date(s.scheduledDate).toLocaleDateString('bg-BG', { day: 'numeric', month: 'long' }) : '',
+         `${BASE_URL}/academy/seminars/${s.slug}`,
+       )).join('')}
+       ${upcomingInitiatives.slice(0, 3).map((i) => upcomingItem(
+         i.title,
+         'Инициатива',
+         `${BASE_URL}/initiatives/${i.slug}`,
+       )).join('')}`
+    : '';
+
+  const platformBlock = platformUpdatesHtml && String(platformUpdatesHtml).trim()
+    ? `${sectionTitle('🛠️', 'Планирани ъпдейти на платформата')}
+       <div style="color:#374151;font-size:14px;line-height:1.65;margin:0 0 8px;">${platformUpdatesHtml}</div>`
+    : '';
+
+  const signature = `
+    <table width="100%" cellpadding="0" cellspacing="0" style="margin:26px 0 0;border-collapse:collapse;"><tr><td style="height:1px;background:#e5e7eb;line-height:1px;font-size:0;">&nbsp;</td></tr></table>
+    <p style="margin:18px 0 4px;color:#374151;font-size:14px;">С уважение,</p>
+    <p style="margin:0;color:${BRAND_COLOR};font-size:14px;font-weight:700;">Екипът на Pensa Club</p>`;
+
+  const body = `${greeting}${intro}${divider}${statsBlock}${topSeminarsBlock}${topArticlesBlock}${topCoursesBlock}${upcomingBlock}${platformBlock}${signature}`;
+
+  const title = `📊 Месечно от Pensa Club — ${monthLabel}`;
+  return wrapNewsletter(title, body, unsubscribeToken, monthLabel);
+};
+
 module.exports = {
   weeklyDigest,
   wrapNewsletter,
@@ -267,4 +429,6 @@ module.exports = {
   upcomingItem,
   beautifyBodyHtml,
   wrapDigestBody,
+  monthlyReport,
+  formatMonthLabel,
 };

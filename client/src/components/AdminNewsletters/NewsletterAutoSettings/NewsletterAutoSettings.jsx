@@ -16,6 +16,7 @@ import {
   Plus,
   Trash2,
   Sparkles,
+  BarChart3,
 } from 'lucide-react';
 import { useCommunityContext } from '../../contexts/CommunityContext';
 import { notify } from '../../../utils/notify.jsx';
@@ -28,7 +29,21 @@ const ITEMS = [
   { key: 'weekly', icon: CalendarClock },
   { key: 'scheduled', icon: Repeat },
   { key: 'event', icon: Zap },
+  { key: 'monthly', icon: BarChart3 },
 ];
+
+const MONTHLY_LIMIT_OPTIONS = [3, 5, 10];
+
+const buildMonthOptions = (count = 6) => {
+  const now = new Date();
+  const out = [];
+  for (let i = 1; i <= count; i++) {
+    const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
+    const value = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
+    out.push({ value, year: d.getFullYear(), month: d.getMonth() });
+  }
+  return out;
+};
 
 const CATEGORY_OPTIONS = [
   'seminars',
@@ -48,6 +63,8 @@ export const NewsletterAutoSettings = () => {
     getNewsletterQueue,
     addNewsletterQueueItem,
     deleteNewsletterQueueItem,
+    getMonthlyReportPreview,
+    runMonthlyReportNow,
   } = useCommunityContext();
   const [preview, setPreview] = useState(null);
   const [weeklyPending, setWeeklyPending] = useState([]);
@@ -61,6 +78,18 @@ export const NewsletterAutoSettings = () => {
   const [addForm, setAddForm] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [pickerOpen, setPickerOpen] = useState(false);
+
+  // Monthly report state
+  const monthOptions = buildMonthOptions(6);
+  const [monthlySelectedMonth, setMonthlySelectedMonth] = useState(
+    monthOptions[0]?.value || '',
+  );
+  const [monthlyLimit, setMonthlyLimit] = useState(3);
+  const [monthlyPreview, setMonthlyPreview] = useState(null);
+  const [isMonthlyLoading, setIsMonthlyLoading] = useState(false);
+  const [showMonthlyPreview, setShowMonthlyPreview] = useState(false);
+  const [showMonthlyConfirm, setShowMonthlyConfirm] = useState(false);
+  const [isMonthlySending, setIsMonthlySending] = useState(false);
 
   const refreshAll = useCallback(async () => {
     setIsLoading(true);
@@ -92,6 +121,38 @@ export const NewsletterAutoSettings = () => {
       notify('error', null, t('autoSettings.runNowError'));
     } finally {
       setIsSending(false);
+    }
+  };
+
+  const handleLoadMonthlyPreview = async () => {
+    setIsMonthlyLoading(true);
+    try {
+      const data = await getMonthlyReportPreview({
+        month: monthlySelectedMonth,
+        limit: monthlyLimit,
+      });
+      setMonthlyPreview(data);
+      setShowMonthlyPreview(true);
+    } catch {
+      notify('error', null, t('autoSettings.monthlyPreviewError'));
+    } finally {
+      setIsMonthlyLoading(false);
+    }
+  };
+
+  const handleRunMonthlyNow = async () => {
+    setIsMonthlySending(true);
+    try {
+      await runMonthlyReportNow({
+        month: monthlySelectedMonth,
+        limit: monthlyLimit,
+      });
+      notify('success', null, t('autoSettings.monthlyRunStarted'));
+      setShowMonthlyConfirm(false);
+    } catch {
+      notify('error', null, t('autoSettings.monthlyRunError'));
+    } finally {
+      setIsMonthlySending(false);
     }
   };
 
@@ -174,6 +235,7 @@ export const NewsletterAutoSettings = () => {
         {ITEMS.map(({ key, icon: Icon }) => {
           const isEvent = key === 'event';
           const isWeekly = key === 'weekly';
+          const isMonthly = key === 'monthly';
 
           return (
             <div key={key} className="ana-card">
@@ -363,6 +425,79 @@ export const NewsletterAutoSettings = () => {
                       </span>
                       <span className="ana-event-btn-label">
                         {t('autoSettings.addManual')}
+                      </span>
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              {/* MONTHLY REPORT PANEL */}
+              {isMonthly && (
+                <div className="ana-event-panel">
+                  <div className="ana-monthly-controls">
+                    <label className="ana-monthly-label">
+                      <span className="ana-monthly-label-text">
+                        {t('autoSettings.monthlyMonthLabel')}
+                      </span>
+                      <select
+                        className="ana-form-select"
+                        value={monthlySelectedMonth}
+                        onChange={(e) => setMonthlySelectedMonth(e.target.value)}
+                      >
+                        {monthOptions.map((opt) => (
+                          <option key={opt.value} value={opt.value}>
+                            {t(`autoSettings.monthNames.${opt.month}`, {
+                              defaultValue: opt.value,
+                            })}{' '}
+                            {opt.year}
+                          </option>
+                        ))}
+                      </select>
+                    </label>
+                    <label className="ana-monthly-label">
+                      <span className="ana-monthly-label-text">
+                        {t('autoSettings.monthlyLimitLabel')}
+                      </span>
+                      <select
+                        className="ana-form-select"
+                        value={monthlyLimit}
+                        onChange={(e) =>
+                          setMonthlyLimit(Number(e.target.value) || 3)
+                        }
+                      >
+                        {MONTHLY_LIMIT_OPTIONS.map((n) => (
+                          <option key={n} value={n}>
+                            {t('autoSettings.monthlyLimitOption', { count: n })}
+                          </option>
+                        ))}
+                      </select>
+                    </label>
+                  </div>
+                  <div className="ana-event-actions">
+                    <button
+                      type="button"
+                      className="ana-event-btn ana-event-btn--ghost"
+                      onClick={handleLoadMonthlyPreview}
+                      disabled={isMonthlyLoading}
+                    >
+                      <span className="ana-event-btn-icon">
+                        {isMonthlyLoading ? <Loader2 /> : <Eye />}
+                      </span>
+                      <span className="ana-event-btn-label">
+                        {t('autoSettings.monthlyPreview')}
+                      </span>
+                    </button>
+                    <button
+                      type="button"
+                      className="ana-event-btn ana-event-btn--primary"
+                      onClick={() => setShowMonthlyConfirm(true)}
+                      disabled={isMonthlySending}
+                    >
+                      <span className="ana-event-btn-icon">
+                        <Send />
+                      </span>
+                      <span className="ana-event-btn-label">
+                        {t('autoSettings.monthlyRunNow')}
                       </span>
                     </button>
                   </div>
@@ -635,6 +770,103 @@ export const NewsletterAutoSettings = () => {
                 >
                   <span className="ana-event-btn-label">
                     {t('autoSettings.saveManual')}
+                  </span>
+                </button>
+              </div>
+            </div>
+          </div>,
+          document.body,
+        )}
+
+      {/* MONTHLY PREVIEW MODAL */}
+      {showMonthlyPreview && monthlyPreview?.html &&
+        createPortal(
+          <div
+            className="ana-modal-overlay"
+            role="dialog"
+            aria-modal="true"
+            onClick={() => setShowMonthlyPreview(false)}
+          >
+            <div className="ana-modal" onClick={(e) => e.stopPropagation()}>
+              <div className="ana-modal-head">
+                <h3 className="ana-modal-title">
+                  {t('autoSettings.monthlyPreviewTitle', {
+                    month: monthlyPreview.monthLabel || '',
+                  })}
+                </h3>
+                <button
+                  type="button"
+                  className="ana-modal-close"
+                  onClick={() => setShowMonthlyPreview(false)}
+                  aria-label={t('autoSettings.previewClose')}
+                >
+                  <span className="ana-event-btn-icon">
+                    <X />
+                  </span>
+                </button>
+              </div>
+              <iframe
+                title="Monthly report preview"
+                className="ana-modal-iframe"
+                srcDoc={monthlyPreview.html}
+                sandbox="allow-same-origin"
+              />
+              <div className="ana-modal-foot">
+                <button
+                  type="button"
+                  className="ana-event-btn ana-event-btn--ghost"
+                  onClick={() => setShowMonthlyPreview(false)}
+                >
+                  <span className="ana-event-btn-label">
+                    {t('autoSettings.previewClose')}
+                  </span>
+                </button>
+              </div>
+            </div>
+          </div>,
+          document.body,
+        )}
+
+      {/* MONTHLY CONFIRM MODAL */}
+      {showMonthlyConfirm &&
+        createPortal(
+          <div
+            className="ana-modal-overlay"
+            role="dialog"
+            aria-modal="true"
+            onClick={() => !isMonthlySending && setShowMonthlyConfirm(false)}
+          >
+            <div
+              className="ana-modal ana-modal--narrow"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <h3 className="ana-modal-title">
+                {t('autoSettings.monthlyRunConfirmTitle')}
+              </h3>
+              <p className="ana-modal-body">
+                {t('autoSettings.monthlyRunConfirmBody', {
+                  count: monthlyPreview?.recipientCount || 0,
+                })}
+              </p>
+              <div className="ana-modal-actions">
+                <button
+                  type="button"
+                  className="ana-event-btn ana-event-btn--ghost"
+                  onClick={() => setShowMonthlyConfirm(false)}
+                  disabled={isMonthlySending}
+                >
+                  <span className="ana-event-btn-label">
+                    {t('autoSettings.runNowConfirmCancel')}
+                  </span>
+                </button>
+                <button
+                  type="button"
+                  className="ana-event-btn ana-event-btn--danger"
+                  onClick={handleRunMonthlyNow}
+                  disabled={isMonthlySending}
+                >
+                  <span className="ana-event-btn-label">
+                    {t('autoSettings.runNowConfirmOk')}
                   </span>
                 </button>
               </div>

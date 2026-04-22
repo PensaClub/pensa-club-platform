@@ -17,7 +17,14 @@ const {
     subscriber,
     subscriber_preference,
 } = require('../sequelize/models/index');
-const { wrapNewsletter, beautifyBodyHtml, wrapDigestBody } = require('../utils/newsletterTemplates');
+const {
+    wrapNewsletter,
+    beautifyBodyHtml,
+    wrapDigestBody,
+    monthlyReport,
+    formatMonthLabel,
+} = require('../utils/newsletterTemplates');
+const monthlyAggregator = require('../utils/monthlyReportAggregator');
 const { sendNewsletterEmail } = require('../utils/zohoEmails');
 const { sendNewsletterToAll } = require('../utils/newsletterSender');
 
@@ -293,6 +300,63 @@ newsletterController.get('/track/:newsletterId/:subscriberId', async (req, res) 
 });
 
 // ═══════════════════════════════════════════════════════════════════════
+// GET /newsletter/click/:newsletterId/:subscriberId?to=<encoded-url>
+// Logs a click + 302-redirects. Host-whitelisted to pensa.club (+ locals).
+// ═══════════════════════════════════════════════════════════════════════
+const PUBLIC_HOST = (() => {
+    try {
+        return new URL(PUBLIC_BASE_URL).host;
+    } catch {
+        return 'pensa.club';
+    }
+})();
+const ALLOWED_REDIRECT_HOSTS = new Set([
+    PUBLIC_HOST,
+    'pensa.club',
+    'www.pensa.club',
+    'localhost:3000',
+    'localhost:8080',
+]);
+
+const isAllowedRedirect = (rawUrl) => {
+    if (!rawUrl) return false;
+    try {
+        const parsed = new URL(rawUrl);
+        if (parsed.protocol !== 'http:' && parsed.protocol !== 'https:') return false;
+        return ALLOWED_REDIRECT_HOSTS.has(parsed.host);
+    } catch {
+        return false;
+    }
+};
+
+newsletterController.get('/click/:newsletterId/:subscriberId', async (req, res) => {
+    const newsletterId = parseInt(req.params.newsletterId, 10);
+    const subscriberId = parseInt(req.params.subscriberId, 10);
+    const to = String(req.query.to || '');
+
+    if (!isAllowedRedirect(to)) {
+        return res.status(400).send('Invalid redirect target.');
+    }
+
+    if (Number.isInteger(newsletterId) && Number.isInteger(subscriberId)) {
+        try {
+            await newsletter_log.create({
+                newsletterId,
+                subscriberId,
+                channel: 'email',
+                status: 'clicked',
+                targetUrl: to.substring(0, 2000),
+                sentAt: new Date(),
+            });
+        } catch {
+            // Never block the redirect — tracking is best-effort.
+        }
+    }
+
+    return res.redirect(302, to);
+});
+
+// ═══════════════════════════════════════════════════════════════════════
 // GET /newsletter/admin/:id/stats — send / open / fail breakdown
 // ═══════════════════════════════════════════════════════════════════════
 newsletterController.get(
@@ -309,14 +373,45 @@ newsletterController.get(
             const item = await newsletter.findByPk(id);
             if (!item) return res.status(404).json({ message: 'Newsletter not found.' });
 
-            const [sentLogs, openedLogs, failedLogs] = await Promise.all([
-                newsletter_log.count({ where: { newsletterId: id, status: 'sent' } }),
-                newsletter_log.count({ where: { newsletterId: id, status: 'opened' } }),
-                newsletter_log.count({ where: { newsletterId: id, status: 'failed' } }),
-            ]);
+            const { fn, col, literal } = require('sequelize');
+
+            const [sentLogs, openedLogs, failedLogs, clickedLogs, uniqueClickerRows, topLinkRows] =
+                await Promise.all([
+                    newsletter_log.count({ where: { newsletterId: id, status: 'sent' } }),
+                    newsletter_log.count({ where: { newsletterId: id, status: 'opened' } }),
+                    newsletter_log.count({ where: { newsletterId: id, status: 'failed' } }),
+                    newsletter_log.count({ where: { newsletterId: id, status: 'clicked' } }),
+                    newsletter_log.findAll({
+                        where: { newsletterId: id, status: 'clicked' },
+                        attributes: [
+                            [fn('COUNT', literal('DISTINCT subscriber_id')), 'uniqueClickers'],
+                        ],
+                        raw: true,
+                    }),
+                    newsletter_log.findAll({
+                        where: { newsletterId: id, status: 'clicked' },
+                        attributes: [
+                            'targetUrl',
+                            [fn('COUNT', col('id')), 'clicks'],
+                        ],
+                        group: ['target_url'],
+                        order: [[literal('clicks'), 'DESC']],
+                        limit: 5,
+                        raw: true,
+                    }),
+                ]);
 
             const sentCount = item.sentCount || sentLogs;
             const openRate = sentCount > 0 ? Math.round((openedLogs / sentCount) * 100) : 0;
+            const clickRate = sentCount > 0 ? Math.round((clickedLogs / sentCount) * 100) : 0;
+            const uniqueClickers = Number(uniqueClickerRows?.[0]?.uniqueClickers) || 0;
+
+            const topLinks = (topLinkRows || [])
+                .map((r) => ({
+                    targetUrl: r.targetUrl || '',
+                    clicks: Number(r.clicks) || 0,
+                }))
+                .filter((r) => r.targetUrl);
 
             res.status(200).json({
                 newsletterId: id,
@@ -325,6 +420,10 @@ newsletterController.get(
                 failedCount: item.failedCount || failedLogs,
                 openedCount: openedLogs,
                 openRate,
+                clickedCount: clickedLogs,
+                clickRate,
+                uniqueClickers,
+                topLinks,
             });
         } catch (err) {
             next(err);
@@ -474,6 +573,173 @@ newsletterController.delete(
             }
             await row.destroy();
             res.status(200).json({ message: 'Item removed.' });
+        } catch (err) {
+            next(err);
+        }
+    },
+);
+
+// ═══════════════════════════════════════════════════════════════════════
+// GET /newsletter/admin/monthly-preview?month=YYYY-MM&limit=N
+// Returns aggregated stats + rendered HTML for the monthly report.
+// Defaults: previous month, limit 3.
+// ═══════════════════════════════════════════════════════════════════════
+const parseMonthParam = (raw) => {
+    if (!raw) return null;
+    const match = /^(\d{4})-(\d{1,2})$/.exec(String(raw).trim());
+    if (!match) return null;
+    const y = Number(match[1]);
+    const m = Number(match[2]);
+    if (m < 1 || m > 12) return null;
+    return new Date(y, m - 1, 1, 0, 0, 0, 0);
+};
+
+const buildMonthlyReportData = async ({ monthDate, limit }) => {
+    const from = monthDate;
+    const to = new Date(monthDate.getFullYear(), monthDate.getMonth() + 1, 1);
+    const nextRange = {
+        from: to,
+        to: new Date(monthDate.getFullYear(), monthDate.getMonth() + 2, 1),
+    };
+    const topLimit = Math.max(1, Math.min(Number(limit) || 3, 10));
+
+    const [stats, topSeminars, topArticles, topCourses, upcoming] = await Promise.all([
+        monthlyAggregator.getMonthlyStats(from, to),
+        monthlyAggregator.getTopSeminarsByAttendance(from, to, topLimit),
+        monthlyAggregator.getTopArticlesByViews(from, to, topLimit),
+        monthlyAggregator.getTopCoursesByViews(from, to, topLimit),
+        monthlyAggregator.getUpcomingNextMonth(nextRange.from, nextRange.to),
+    ]);
+
+    return {
+        from,
+        to,
+        monthLabel: formatMonthLabel(from),
+        stats,
+        topSeminars,
+        topArticles,
+        topCourses,
+        upcoming,
+    };
+};
+
+newsletterController.get(
+    '/admin/monthly-preview',
+    isAuth,
+    rbac.checkPermission('newsletter', 'read'),
+    async (req, res, next) => {
+        try {
+            const monthDate =
+                parseMonthParam(req.query.month) ||
+                monthlyAggregator.getPreviousMonthRange().from;
+            const limit = Number(req.query.limit) || 3;
+
+            const data = await buildMonthlyReportData({ monthDate, limit });
+            const recipientCount = await countRecipients(['platform']);
+
+            const html = monthlyReport({
+                subscriberName: '',
+                monthLabel: data.monthLabel,
+                stats: data.stats,
+                topSeminars: data.topSeminars,
+                topArticles: data.topArticles,
+                topCourses: data.topCourses,
+                upcoming: data.upcoming,
+                platformUpdatesHtml: '',
+                unsubscribeToken: null,
+            });
+
+            res.status(200).json({
+                monthLabel: data.monthLabel,
+                from: data.from,
+                to: data.to,
+                stats: data.stats,
+                topSeminars: data.topSeminars,
+                topArticles: data.topArticles,
+                topCourses: data.topCourses,
+                upcoming: data.upcoming,
+                recipientCount,
+                html,
+            });
+        } catch (err) {
+            next(err);
+        }
+    },
+);
+
+// ═══════════════════════════════════════════════════════════════════════
+// POST /newsletter/admin/monthly-run-now  Body: { month?: "YYYY-MM", limit?, platformUpdatesHtml? }
+// Persists a newsletter row (type=monthly) and fires sendNewsletterToAll
+// to subscribers with the 'platform' category enabled. Fire-and-forget.
+// ═══════════════════════════════════════════════════════════════════════
+newsletterController.post(
+    '/admin/monthly-run-now',
+    isAuth,
+    rbac.checkPermission('newsletter', 'send'),
+    async (req, res, next) => {
+        try {
+            const monthDate =
+                parseMonthParam(req.body?.month) ||
+                monthlyAggregator.getPreviousMonthRange().from;
+            const limit = Number(req.body?.limit) || 3;
+            const platformUpdatesHtml = String(req.body?.platformUpdatesHtml || '').trim();
+
+            const data = await buildMonthlyReportData({ monthDate, limit });
+
+            const title = `📊 Месечно от Pensa Club — ${data.monthLabel}`;
+            const renderedBody = monthlyReport({
+                subscriberName: '',
+                monthLabel: data.monthLabel,
+                stats: data.stats,
+                topSeminars: data.topSeminars,
+                topArticles: data.topArticles,
+                topCourses: data.topCourses,
+                upcoming: data.upcoming,
+                platformUpdatesHtml,
+                unsubscribeToken: null,
+            });
+
+            const record = await newsletter.create({
+                title,
+                subject: title,
+                body: renderedBody,
+                type: 'monthly',
+                status: 'sending',
+                targetCategories: ['platform'],
+                createdBy: req.user?.userId || null,
+                platformUpdates: platformUpdatesHtml || null,
+            });
+
+            sendNewsletterToAll({
+                models: require('../sequelize/models/index'),
+                item: record,
+                renderPerSubscriber: ({ subscriberName, unsubscribeToken }) =>
+                    monthlyReport({
+                        subscriberName,
+                        monthLabel: data.monthLabel,
+                        stats: data.stats,
+                        topSeminars: data.topSeminars,
+                        topArticles: data.topArticles,
+                        topCourses: data.topCourses,
+                        upcoming: data.upcoming,
+                        platformUpdatesHtml,
+                        unsubscribeToken,
+                    }),
+            })
+                .then((r) => {
+                    console.log(
+                        `[monthly/manual] newsletter=${record.id} sent=${r.sent} failed=${r.failed}`,
+                    );
+                })
+                .catch((err) => {
+                    console.error('[monthly/manual] error:', err?.message || err);
+                });
+
+            res.status(202).json({
+                message: 'Monthly report dispatch started.',
+                newsletterId: record.id,
+                monthLabel: data.monthLabel,
+            });
         } catch (err) {
             next(err);
         }
@@ -917,6 +1183,122 @@ newsletterController.get(
             next(err);
         }
     }
+);
+
+// ═══════════════════════════════════════════════════════════════════════
+// GET /newsletter/admin/stats/overview?from=&to=
+// Returns aggregated open/click rates per newsletter type + open-rate
+// time series (per-week buckets) across the requested range.
+// ═══════════════════════════════════════════════════════════════════════
+newsletterController.get(
+    '/admin/stats/overview',
+    isAuth,
+    rbac.checkPermission('newsletter', 'read'),
+    async (req, res, next) => {
+        try {
+            const { fn, col, literal } = require('sequelize');
+
+            const fromRaw = req.query.from;
+            const toRaw = req.query.to;
+            const from = fromRaw ? new Date(fromRaw) : (() => {
+                const d = new Date();
+                d.setDate(d.getDate() - 90);
+                return d;
+            })();
+            const to = toRaw ? new Date(toRaw) : new Date();
+
+            // Per-type breakdown
+            const typeRows = await newsletter.findAll({
+                where: { sentAt: { [Op.between]: [from, to] }, status: 'sent' },
+                attributes: [
+                    'type',
+                    [fn('SUM', col('sent_count')), 'sentCount'],
+                    [fn('COUNT', col('id')), 'newsletters'],
+                ],
+                group: ['type'],
+                raw: true,
+            });
+
+            const sentNewsletterIds = await newsletter.findAll({
+                where: { sentAt: { [Op.between]: [from, to] }, status: 'sent' },
+                attributes: ['id', 'type'],
+                raw: true,
+            });
+
+            const idsByType = sentNewsletterIds.reduce((acc, n) => {
+                (acc[n.type] = acc[n.type] || []).push(n.id);
+                return acc;
+            }, {});
+
+            const breakdown = await Promise.all(
+                Object.entries(idsByType).map(async ([type, ids]) => {
+                    const [opened, clicked] = await Promise.all([
+                        newsletter_log.count({
+                            where: { newsletterId: { [Op.in]: ids }, status: 'opened' },
+                        }),
+                        newsletter_log.count({
+                            where: { newsletterId: { [Op.in]: ids }, status: 'clicked' },
+                        }),
+                    ]);
+                    const row = typeRows.find((r) => r.type === type);
+                    const sent = Number(row?.sentCount) || 0;
+                    return {
+                        type,
+                        newsletters: Number(row?.newsletters) || ids.length,
+                        sent,
+                        opened,
+                        clicked,
+                        openRate: sent > 0 ? Math.round((opened / sent) * 100) : 0,
+                        clickRate: sent > 0 ? Math.round((clicked / sent) * 100) : 0,
+                    };
+                }),
+            );
+
+            // Time series — open rate per week across the range
+            const allSentIds = sentNewsletterIds.map((n) => n.id);
+            const weeklyRows = allSentIds.length
+                ? await newsletter_log.findAll({
+                      where: {
+                          newsletterId: { [Op.in]: allSentIds },
+                          status: { [Op.in]: ['sent', 'opened', 'clicked'] },
+                          createdAt: { [Op.between]: [from, to] },
+                      },
+                      attributes: [
+                          [fn('DATE_TRUNC', 'week', col('created_at')), 'week'],
+                          'status',
+                          [fn('COUNT', col('id')), 'cnt'],
+                      ],
+                      group: ['week', 'status'],
+                      order: [[literal('week'), 'ASC']],
+                      raw: true,
+                  })
+                : [];
+
+            const seriesMap = new Map();
+            weeklyRows.forEach((r) => {
+                const key = new Date(r.week).toISOString().substring(0, 10);
+                const prev = seriesMap.get(key) || { week: key, sent: 0, opened: 0, clicked: 0 };
+                prev[r.status] = Number(r.cnt) || 0;
+                seriesMap.set(key, prev);
+            });
+            const timeSeries = [...seriesMap.values()]
+                .map((row) => ({
+                    ...row,
+                    openRate: row.sent > 0 ? Math.round((row.opened / row.sent) * 100) : 0,
+                    clickRate: row.sent > 0 ? Math.round((row.clicked / row.sent) * 100) : 0,
+                }))
+                .sort((a, b) => (a.week < b.week ? -1 : 1));
+
+            res.status(200).json({
+                from,
+                to,
+                breakdown,
+                timeSeries,
+            });
+        } catch (err) {
+            next(err);
+        }
+    },
 );
 
 // ═══════════════════════════════════════════════════════════════════════

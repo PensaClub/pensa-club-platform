@@ -7,6 +7,7 @@
 const { Op } = require('sequelize');
 const { wrapNewsletter, wrapDigestBody } = require('./newsletterTemplates');
 const { sendNewsletterEmail } = require('./zohoEmails');
+const { wrapLinksWithTracking } = require('./newsletterClickTracking');
 
 const RATE_LIMIT_MS = 1500;
 const BASE_URL = process.env.PUBLIC_BASE_URL || 'https://pensa.club';
@@ -238,7 +239,8 @@ async function processEventBatch() {
             bodyHtml: sectionsHtml,
         }) + trackingPixel(record.id, sub.id);
 
-        const html = wrapNewsletter(subject, wrappedBody, sub.unsubscribeToken, subLabel);
+        const rawHtml = wrapNewsletter(subject, wrappedBody, sub.unsubscribeToken, subLabel);
+        const html = wrapLinksWithTracking(rawHtml, record.id, sub.id);
 
         try {
             await sendNewsletterEmail({ to: sub.email, subject, html });

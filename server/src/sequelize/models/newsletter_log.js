@@ -53,6 +53,11 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: true,
         field: 'sent_at',
       },
+      targetUrl: {
+        type: DataTypes.STRING(2048),
+        allowNull: true,
+        field: 'target_url',
+      },
     },
     {
       sequelize,

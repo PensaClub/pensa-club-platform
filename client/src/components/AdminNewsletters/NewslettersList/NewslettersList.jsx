@@ -50,6 +50,7 @@ export const NewslettersList = ({ refreshKey = 0, onEdit }) => {
     deleteNewsletter,
     duplicateNewsletter,
     cancelScheduledNewsletter,
+    getNewsletterStats,
   } = useCommunityContext();
 
   const [items, setItems] = useState([]);
@@ -65,6 +66,7 @@ export const NewslettersList = ({ refreshKey = 0, onEdit }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [actionId, setActionId] = useState(null);
   const [confirm, setConfirm] = useState(null); // { kind: 'delete'|'cancel', item }
+  const [statsModal, setStatsModal] = useState(null); // { item, data, loading }
 
   const localeCode = useMemo(() => {
     const map = { bg: 'bg-BG', en: 'en-US', de: 'de-DE' };
@@ -117,6 +119,17 @@ export const NewslettersList = ({ refreshKey = 0, onEdit }) => {
 
   const hasActiveFilters =
     Boolean(search) || Boolean(status) || Boolean(type) || Boolean(dateFrom) || Boolean(dateTo);
+
+  const handleShowStats = async (item) => {
+    setStatsModal({ item, data: null, loading: true });
+    try {
+      const data = await getNewsletterStats(item.id);
+      setStatsModal({ item, data, loading: false });
+    } catch {
+      notify('error', null, t('messages.statsError'));
+      setStatsModal(null);
+    }
+  };
 
   const handleDuplicate = async (item) => {
     setActionId(item.id);
@@ -344,6 +357,7 @@ export const NewslettersList = ({ refreshKey = 0, onEdit }) => {
                           item={item}
                           t={t}
                           busy={actionId === item.id}
+                          onShowStats={() => handleShowStats(item)}
                           onEdit={() => onEdit?.(item.id)}
                           onDuplicate={() => handleDuplicate(item)}
                           onCancel={() => setConfirm({ kind: 'cancel', item })}
@@ -407,6 +421,8 @@ export const NewslettersList = ({ refreshKey = 0, onEdit }) => {
                       item={item}
                       t={t}
                       busy={actionId === item.id}
+                      onShowStats={() => handleShowStats(item)}
+                      onEdit={() => onEdit?.(item.id)}
                       onDuplicate={() => handleDuplicate(item)}
                       onCancel={() => setConfirm({ kind: 'cancel', item })}
                       onDelete={() => setConfirm({ kind: 'delete', item })}
@@ -495,6 +511,118 @@ export const NewslettersList = ({ refreshKey = 0, onEdit }) => {
           </div>,
           document.body,
         )}
+
+      {/* PER-NEWSLETTER STATS MODAL */}
+      {statsModal &&
+        createPortal(
+          <div
+            className="anl-modal-overlay"
+            role="dialog"
+            aria-modal="true"
+            onClick={() => setStatsModal(null)}
+          >
+            <div
+              className="anl-modal anl-stats-modal"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="anl-stats-head">
+                <h3 className="anl-modal-title">
+                  {t('statsModal.title')}
+                </h3>
+                <button
+                  type="button"
+                  className="anl-stats-close"
+                  onClick={() => setStatsModal(null)}
+                  aria-label={t('confirm.back')}
+                >
+                  <span className="anl-icon">
+                    <X />
+                  </span>
+                </button>
+              </div>
+
+              <p className="anl-stats-subject">{statsModal.item.title}</p>
+
+              {statsModal.loading && (
+                <p className="anl-stats-loading">{t('statsModal.loading')}</p>
+              )}
+
+              {!statsModal.loading && statsModal.data && (
+                <>
+                  <div className="anl-stats-grid">
+                    <div className="anl-stat-card anl-stat-card--teal">
+                      <span className="anl-stat-label">{t('statsModal.sent')}</span>
+                      <span className="anl-stat-value">{statsModal.data.sentCount || 0}</span>
+                    </div>
+                    <div className="anl-stat-card anl-stat-card--green">
+                      <span className="anl-stat-label">{t('statsModal.opened')}</span>
+                      <span className="anl-stat-value">{statsModal.data.openedCount || 0}</span>
+                      <span className="anl-stat-meta">
+                        {statsModal.data.openRate || 0}%
+                      </span>
+                    </div>
+                    <div className="anl-stat-card anl-stat-card--amber">
+                      <span className="anl-stat-label">{t('statsModal.clicked')}</span>
+                      <span className="anl-stat-value">{statsModal.data.clickedCount || 0}</span>
+                      <span className="anl-stat-meta">
+                        {statsModal.data.clickRate || 0}%
+                      </span>
+                    </div>
+                    <div className="anl-stat-card anl-stat-card--violet">
+                      <span className="anl-stat-label">{t('statsModal.uniqueClickers')}</span>
+                      <span className="anl-stat-value">{statsModal.data.uniqueClickers || 0}</span>
+                    </div>
+                    <div className="anl-stat-card anl-stat-card--red">
+                      <span className="anl-stat-label">{t('statsModal.failed')}</span>
+                      <span className="anl-stat-value">{statsModal.data.failedCount || 0}</span>
+                    </div>
+                  </div>
+
+                  {statsModal.data.topLinks?.length > 0 ? (
+                    <div className="anl-stats-toplinks">
+                      <h4 className="anl-stats-section-title">
+                        {t('statsModal.topLinksTitle')}
+                      </h4>
+                      <ul className="anl-stats-link-list">
+                        {statsModal.data.topLinks.map((link) => (
+                          <li key={link.targetUrl} className="anl-stats-link-row">
+                            <a
+                              href={link.targetUrl}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="anl-stats-link-url"
+                              title={link.targetUrl}
+                            >
+                              {link.targetUrl}
+                            </a>
+                            <span className="anl-stats-link-count">
+                              {t('statsModal.clicksCount', { count: link.clicks })}
+                            </span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  ) : (
+                    <p className="anl-stats-empty">
+                      {t('statsModal.noClicks')}
+                    </p>
+                  )}
+                </>
+              )}
+
+              <div className="anl-modal-actions">
+                <button
+                  type="button"
+                  className="anl-btn-secondary"
+                  onClick={() => setStatsModal(null)}
+                >
+                  {t('confirm.back')}
+                </button>
+              </div>
+            </div>
+          </div>,
+          document.body,
+        )}
     </div>
   );
 };
@@ -506,6 +634,7 @@ const ActionButtons = ({
   item,
   t,
   busy,
+  onShowStats,
   onEdit,
   onDuplicate,
   onCancel,
@@ -519,6 +648,7 @@ const ActionButtons = ({
       className="anl-action-btn anl-action-btn--view"
       title={t('actions.view')}
       aria-label={t('actions.view')}
+      onClick={onShowStats}
       disabled={busy}
     >
       <span className="anl-icon">
