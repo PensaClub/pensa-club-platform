@@ -1256,6 +1256,7 @@ newsletterController.get(
 
             // Time series — open rate per week across the range
             const allSentIds = sentNewsletterIds.map((n) => n.id);
+            const weekExpr = fn('DATE_TRUNC', 'week', col('created_at'));
             const weeklyRows = allSentIds.length
                 ? await newsletter_log.findAll({
                       where: {
@@ -1264,12 +1265,12 @@ newsletterController.get(
                           createdAt: { [Op.between]: [from, to] },
                       },
                       attributes: [
-                          [fn('DATE_TRUNC', 'week', col('created_at')), 'week'],
+                          [weekExpr, 'week'],
                           'status',
                           [fn('COUNT', col('id')), 'cnt'],
                       ],
-                      group: ['week', 'status'],
-                      order: [[literal('week'), 'ASC']],
+                      group: [weekExpr, 'status'],
+                      order: [[weekExpr, 'ASC']],
                       raw: true,
                   })
                 : [];

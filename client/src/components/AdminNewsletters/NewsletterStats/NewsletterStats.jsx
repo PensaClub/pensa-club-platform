@@ -53,13 +53,18 @@ const buildRange = (days) => {
 
 export const NewsletterStats = () => {
   const { t } = useTranslation('adminNewsletters');
-  const { getAdminSubscriberStats, getNewsletterStatsOverview } =
-    useCommunityContext();
+  const {
+    getAdminSubscriberStats,
+    getNewsletterStatsOverview,
+    getAdminSubscriberGrowth,
+  } = useCommunityContext();
   const [stats, setStats] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [overview, setOverview] = useState(null);
   const [overviewDays, setOverviewDays] = useState(90);
   const [isOverviewLoading, setIsOverviewLoading] = useState(false);
+  const [growth, setGrowth] = useState(null);
+  const [isGrowthLoading, setIsGrowthLoading] = useState(false);
 
   const fetchStats = useCallback(async () => {
     setIsLoading(true);
@@ -88,6 +93,19 @@ export const NewsletterStats = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const fetchGrowth = useCallback(async (days) => {
+    setIsGrowthLoading(true);
+    try {
+      const data = await getAdminSubscriberGrowth({ days });
+      setGrowth(data || null);
+    } catch {
+      notify('error', null, t('subStats.loadError'));
+    } finally {
+      setIsGrowthLoading(false);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   useEffect(() => {
     fetchStats();
   }, [fetchStats]);
@@ -95,6 +113,18 @@ export const NewsletterStats = () => {
   useEffect(() => {
     fetchOverview(overviewDays);
   }, [fetchOverview, overviewDays]);
+
+  useEffect(() => {
+    fetchGrowth(overviewDays);
+  }, [fetchGrowth, overviewDays]);
+
+  const growthChartData = useMemo(() => {
+    return (growth?.timeSeries || []).map((row) => ({
+      week: row.week,
+      newSubs: row.newSubs || 0,
+      unsubs: row.unsubs || 0,
+    }));
+  }, [growth]);
 
   const totals = useMemo(() => {
     const b = overview?.breakdown || [];
@@ -324,6 +354,62 @@ export const NewsletterStats = () => {
               </div>
             </div>
           </>
+        )}
+      </section>
+
+      <section className="anst-perf">
+        <header className="anst-perf-head">
+          <div>
+            <h3 className="anst-section-title">{t('growth.title')}</h3>
+            <p className="anst-perf-subtitle">{t('growth.subtitle')}</p>
+          </div>
+        </header>
+
+        {isGrowthLoading && (
+          <div className="anst-perf-loading">
+            <span className="anst-loading-icon">
+              <Loader2 />
+            </span>
+            <span>{t('subStats.loading')}</span>
+          </div>
+        )}
+
+        {!isGrowthLoading && growth && (
+          <div className="anst-chart">
+            <h4 className="anst-chart-title">{t('growth.weeklyTitle')}</h4>
+            {growthChartData.length > 0 ? (
+              <ResponsiveContainer width="100%" height={280}>
+                <LineChart data={growthChartData}>
+                  <CartesianGrid
+                    strokeDasharray="3 3"
+                    stroke="rgba(148,163,184,0.2)"
+                  />
+                  <XAxis dataKey="week" tick={{ fontSize: 11 }} />
+                  <YAxis tick={{ fontSize: 12 }} allowDecimals={false} />
+                  <Tooltip />
+                  <Legend />
+                  <Line
+                    type="monotone"
+                    dataKey="newSubs"
+                    name={t('growth.newSubs')}
+                    stroke="#22c55e"
+                    strokeWidth={2}
+                    dot={{ r: 3 }}
+                  />
+                  <Line
+                    type="monotone"
+                    dataKey="unsubs"
+                    name={t('growth.unsubs')}
+                    stroke="#ef4444"
+                    strokeWidth={2}
+                    dot={{ r: 3 }}
+                  />
+                </LineChart>
+              </ResponsiveContainer>
+            ) : (
+              <p className="anst-chart-empty">{t('perf.noData')}</p>
+            )}
+          </div>
         )}
       </section>
     </div>

@@ -50,6 +50,7 @@ export const NewsletterSubscribers = () => {
     unblockSubscriber,
     deleteSubscriber,
     exportSubscribersPdfUrl,
+    exportSubscribersCsvUrl,
     updateSubscriberPreferencesByAdmin,
     sendPersonalNewsletter,
   } = useCommunityContext();
@@ -176,6 +177,41 @@ export const NewsletterSubscribers = () => {
       const objectUrl = URL.createObjectURL(blob);
       link.href = objectUrl;
       link.download = `subscribers_${new Date().toISOString().slice(0, 10)}.pdf`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(objectUrl);
+    } catch {
+      notify('error', null, t('subscribers.messages.loadError'));
+    }
+  };
+
+  const downloadCsv = async () => {
+    const params = {};
+    if (status) params.status = status;
+    if (debouncedSearch) params.search = debouncedSearch;
+    if (dateFrom) params.dateFrom = dateFrom;
+    if (dateTo) params.dateTo = dateTo;
+    const url = exportSubscribersCsvUrl?.(params);
+    if (!url) return;
+    try {
+      const headers = {};
+      const auth = localStorage.getItem('auth');
+      if (auth) {
+        try {
+          const parsed = JSON.parse(auth);
+          if (parsed?.token) headers.Authorization = `Bearer ${parsed.token}`;
+        } catch {
+          /* ignore */
+        }
+      }
+      const res = await fetch(url, { headers, credentials: 'include' });
+      if (!res.ok) throw new Error('csv-fetch-failed');
+      const blob = await res.blob();
+      const link = document.createElement('a');
+      const objectUrl = URL.createObjectURL(blob);
+      link.href = objectUrl;
+      link.download = `subscribers_${new Date().toISOString().slice(0, 10)}.csv`;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
@@ -332,6 +368,13 @@ export const NewsletterSubscribers = () => {
               <span className="ans-btn-label">{t('subscribers.clearFilters')}</span>
             </button>
           )}
+
+          <button type="button" className="ans-export-btn" onClick={downloadCsv}>
+            <span className="ans-icon">
+              <Download />
+            </span>
+            <span className="ans-btn-label">{t('subscribers.exportCsv')}</span>
+          </button>
 
           <button type="button" className="ans-export-btn" onClick={downloadPdf}>
             <span className="ans-icon">
