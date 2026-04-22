@@ -7,7 +7,7 @@
 const { Op } = require('sequelize');
 const { wrapNewsletter, beautifyBodyHtml, wrapDigestBody } = require('./newsletterTemplates');
 const { sendNewsletterEmail } = require('./zohoEmails');
-const { wrapLinksWithTracking } = require('./newsletterClickTracking');
+const { wrapLinksWithTracking, absolutizeBodyLinks } = require('./newsletterClickTracking');
 
 const formatDateLabel = (date) => {
     try {
@@ -23,11 +23,15 @@ const formatDateLabel = (date) => {
 
 const RATE_LIMIT_MS = 1500; // pause between emails (Zoho-friendly)
 const BASE_URL = process.env.PUBLIC_BASE_URL || 'https://pensa.club';
+// Prod NPM proxies only `/api/*` to backend, so the tracking pixel + click
+// redirect must use the API base. Dev override: PUBLIC_API_BASE_URL.
+const API_BASE_URL =
+    process.env.PUBLIC_API_BASE_URL || `${BASE_URL.replace(/\/$/, '')}/api`;
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
 const trackingPixel = (newsletterId, subscriberId) =>
-    `<img src="${BASE_URL}/newsletter/track/${newsletterId}/${subscriberId}" width="1" height="1" style="display:none;width:1px;height:1px;" alt="" />`;
+    `<img src="${API_BASE_URL}/newsletter/track/${newsletterId}/${subscriberId}" width="1" height="1" style="display:none;width:1px;height:1px;" alt="" />`;
 
 const renderUpdatesSection = (text) => {
     if (!text || !String(text).trim()) return '';
@@ -138,7 +142,9 @@ async function sendNewsletterToAll({ models, item, renderPerSubscriber = null })
                 subLabel,
             );
         }
-        // Rewrite outbound links with per-subscriber click tracking.
+        // Email clients have no document base — absolutize relative hrefs first,
+        // then wrap with per-subscriber click tracking.
+        html = absolutizeBodyLinks(html);
         html = wrapLinksWithTracking(html, item.id, sub.id);
 
         const subject = item.subject || item.title || 'Pensa Club';

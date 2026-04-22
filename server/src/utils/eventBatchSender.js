@@ -7,10 +7,13 @@
 const { Op } = require('sequelize');
 const { wrapNewsletter, wrapDigestBody } = require('./newsletterTemplates');
 const { sendNewsletterEmail } = require('./zohoEmails');
-const { wrapLinksWithTracking } = require('./newsletterClickTracking');
+const { wrapLinksWithTracking, absolutizeBodyLinks } = require('./newsletterClickTracking');
 
 const RATE_LIMIT_MS = 1500;
 const BASE_URL = process.env.PUBLIC_BASE_URL || 'https://pensa.club';
+// Prod NPM only proxies `/api/*` to backend; tracking pixel must hit API.
+const API_BASE_URL =
+    process.env.PUBLIC_API_BASE_URL || `${BASE_URL.replace(/\/$/, '')}/api`;
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
@@ -69,7 +72,7 @@ const TYPE_META = {
 const TYPE_ORDER = ['seminar', 'article', 'course', 'initiative', 'project', 'publication', 'club', 'custom'];
 
 const trackingPixel = (newsletterId, subscriberId) =>
-    `<img src="${BASE_URL}/newsletter/track/${newsletterId}/${subscriberId}" width="1" height="1" style="display:none;width:1px;height:1px;" alt="" />`;
+    `<img src="${API_BASE_URL}/newsletter/track/${newsletterId}/${subscriberId}" width="1" height="1" style="display:none;width:1px;height:1px;" alt="" />`;
 
 const renderEventItem = (row) => {
     const meta = TYPE_META[row.type];
@@ -240,7 +243,8 @@ async function processEventBatch() {
         }) + trackingPixel(record.id, sub.id);
 
         const rawHtml = wrapNewsletter(subject, wrappedBody, sub.unsubscribeToken, subLabel);
-        const html = wrapLinksWithTracking(rawHtml, record.id, sub.id);
+        // Absolutize first → then click-tracking wrapping.
+        const html = wrapLinksWithTracking(absolutizeBodyLinks(rawHtml), record.id, sub.id);
 
         try {
             await sendNewsletterEmail({ to: sub.email, subject, html });
