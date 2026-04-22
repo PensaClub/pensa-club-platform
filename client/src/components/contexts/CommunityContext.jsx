@@ -337,6 +337,14 @@ export const CommunityProvider = ({ children }) => {
             throw e;
         }
     };
+    const getNewsletterStatsOverview = async (opts = {}) => {
+        try {
+            return await communityService.getNewsletterStatsOverview(opts);
+        } catch (e) {
+            notify('error', e);
+            throw e;
+        }
+    };
     const getAdminNewsletterById = async (id) => {
         try {
             return await communityService.getAdminNewsletterById(id);
@@ -507,6 +515,22 @@ export const CommunityProvider = ({ children }) => {
             throw e;
         }
     };
+    const getMonthlyReportPreview = async (opts = {}) => {
+        try {
+            return await communityService.getMonthlyReportPreview(opts);
+        } catch (e) {
+            notify('error', e);
+            throw e;
+        }
+    };
+    const runMonthlyReportNow = async (opts = {}) => {
+        try {
+            return await communityService.runMonthlyReportNow(opts);
+        } catch (e) {
+            notify('error', e);
+            throw e;
+        }
+    };
     const getNewsletterQueue = async (status) => {
         try {
             return await communityService.getNewsletterQueue(status);
@@ -569,6 +593,7 @@ export const CommunityProvider = ({ children }) => {
         unsubscribeByToken,
         getAdminNewsletters,
         getAdminNewsletterStats,
+        getNewsletterStatsOverview,
         getAdminNewsletterById,
         deleteNewsletter,
         duplicateNewsletter,
@@ -592,6 +617,8 @@ export const CommunityProvider = ({ children }) => {
         sendPersonalNewsletter,
         getEventBatchPreview,
         runEventBatchNow,
+        getMonthlyReportPreview,
+        runMonthlyReportNow,
         getNewsletterQueue,
         addNewsletterQueueItem,
         deleteNewsletterQueueItem,

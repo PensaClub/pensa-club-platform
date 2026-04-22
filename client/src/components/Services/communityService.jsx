@@ -103,6 +103,15 @@ export const communityServiceFactory = (token) => {
     getAdminNewsletterStats: async () => {
       return requester.get(`${apiUrl}/newsletter/admin/stats`);
     },
+    getNewsletterStatsOverview: async ({ from, to } = {}) => {
+      const params = new URLSearchParams();
+      if (from) params.set('from', from);
+      if (to) params.set('to', to);
+      const qs = params.toString();
+      return requester.get(
+        `${apiUrl}/newsletter/admin/stats/overview${qs ? `?${qs}` : ''}`,
+      );
+    },
     getAdminNewsletterById: async (id) => {
       return requester.get(`${apiUrl}/newsletter/admin/${id}`);
     },
@@ -191,6 +200,22 @@ export const communityServiceFactory = (token) => {
     },
     runEventBatchNow: async () => {
       return requester.post(`${apiUrl}/newsletter/admin/event-run-now`, {});
+    },
+    getMonthlyReportPreview: async ({ month, limit } = {}) => {
+      const params = new URLSearchParams();
+      if (month) params.set('month', month);
+      if (limit) params.set('limit', String(limit));
+      const qs = params.toString();
+      return requester.get(
+        `${apiUrl}/newsletter/admin/monthly-preview${qs ? `?${qs}` : ''}`,
+      );
+    },
+    runMonthlyReportNow: async ({ month, limit, platformUpdatesHtml } = {}) => {
+      return requester.post(`${apiUrl}/newsletter/admin/monthly-run-now`, {
+        month,
+        limit,
+        platformUpdatesHtml,
+      });
     },
     getNewsletterQueue: async (status = 'pending') => {
       return requester.get(`${apiUrl}/newsletter/admin/queue?status=${encodeURIComponent(status)}`);

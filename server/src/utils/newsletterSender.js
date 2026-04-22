@@ -7,6 +7,7 @@
 const { Op } = require('sequelize');
 const { wrapNewsletter, beautifyBodyHtml, wrapDigestBody } = require('./newsletterTemplates');
 const { sendNewsletterEmail } = require('./zohoEmails');
+const { wrapLinksWithTracking } = require('./newsletterClickTracking');
 
 const formatDateLabel = (date) => {
     try {
@@ -59,7 +60,7 @@ const renderUpdatesSection = (text) => {
  * @param {object} opts.item — newsletter instance (already loaded)
  * @returns {Promise<{ sent: number, failed: number, skipped: number, total: number }>}
  */
-async function sendNewsletterToAll({ models, item }) {
+async function sendNewsletterToAll({ models, item, renderPerSubscriber = null }) {
     const { newsletter, newsletter_log, subscriber, subscriber_preference } = models;
 
     const categories = Array.isArray(item.targetCategories) ? item.targetCategories : null;
@@ -110,23 +111,36 @@ async function sendNewsletterToAll({ models, item }) {
     for (let i = 0; i < subscribers.length; i++) {
         const sub = subscribers[i];
 
-        const beautified =
-            beautifyBodyHtml(item.body || '') +
-            renderUpdatesSection(item.platformUpdates);
-        const wrappedBody =
-            wrapDigestBody({
+        let html;
+        if (typeof renderPerSubscriber === 'function') {
+            const rendered = renderPerSubscriber({
                 subscriberName: sub.name || '',
-                intro: '',
-                bodyHtml: beautified,
-            }) + trackingPixel(item.id, sub.id);
+                unsubscribeToken: sub.unsubscribeToken,
+                subscriber: sub,
+            });
+            html = String(rendered || '') + trackingPixel(item.id, sub.id);
+        } else {
+            const beautified =
+                beautifyBodyHtml(item.body || '') +
+                renderUpdatesSection(item.platformUpdates);
+            const wrappedBody =
+                wrapDigestBody({
+                    subscriberName: sub.name || '',
+                    intro: '',
+                    bodyHtml: beautified,
+                }) + trackingPixel(item.id, sub.id);
 
-        const subLabel = formatDateLabel(new Date());
-        const html = wrapNewsletter(
-            item.title || 'Pensa Club',
-            wrappedBody,
-            sub.unsubscribeToken,
-            subLabel,
-        );
+            const subLabel = formatDateLabel(new Date());
+            html = wrapNewsletter(
+                item.title || 'Pensa Club',
+                wrappedBody,
+                sub.unsubscribeToken,
+                subLabel,
+            );
+        }
+        // Rewrite outbound links with per-subscriber click tracking.
+        html = wrapLinksWithTracking(html, item.id, sub.id);
+
         const subject = item.subject || item.title || 'Pensa Club';
 
         try {
