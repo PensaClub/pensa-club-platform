@@ -542,6 +542,14 @@
       "sortMost": "Най-много",
       "sortLeast": "Най-малко"
     },
+    "newsletterAutomation": {
+      "title": "Бюлетини — Автоматични задачи",
+      "description": "Включи/изключи cron задачите за бюлетини и виж последно изпълнение."
+    },
+    "newsletterTemplates": {
+      "title": "Бюлетини — Шаблон на имейл",
+      "description": "Лого, цветове, подпис, header/footer HTML за всички изходящи бюлетини."
+    },
     "errorLogs": {
       "title": "Лог на грешки",
       "description": "Преглед на клиентски грешки от production",

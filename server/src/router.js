@@ -44,6 +44,7 @@ const userManagementController = require('./controllers/userManagementController
 const driveController = require('./controllers/driveController');
 const sitemapController = require('./controllers/sitemapController');
 const contentViewController = require('./controllers/contentViewController');
+const cronSettingsController = require('./controllers/cronSettingsController');
 
 // Sitemap routes — mounted on root (e.g., /sitemap.xml, /sitemap-articles.xml)
 router.use(sitemapController);
@@ -56,6 +57,10 @@ router.use('/suggest', suggestUserController);
 router.use('/admin', adminController);
 router.use('/subscribe', subscriberController);
 router.use('/track', contentViewController);
+router.use('/admin/cron', cronSettingsController);
+
+const emailTemplateController = require('./controllers/emailTemplateController');
+router.use('/admin/email-template', emailTemplateController);
 router.use('/articles', articleController);
 router.use('/initiatives', initiativeController);
 router.use('/comments', commentController);

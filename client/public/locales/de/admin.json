@@ -542,6 +542,14 @@
       "sortMost": "Meiste",
       "sortLeast": "Wenigste"
     },
+    "newsletterAutomation": {
+      "title": "Newsletter — Automatisierung",
+      "description": "Cron-Jobs für Newsletter ein-/ausschalten und letzten Lauf einsehen."
+    },
+    "newsletterTemplates": {
+      "title": "Newsletter — E-Mail-Vorlage",
+      "description": "Logo, Farben, Signatur, Header-/Footer-HTML für alle ausgehenden Newsletter."
+    },
     "errorLogs": {
       "title": "Fehlerprotokolle",
       "description": "Client-seitige Fehler aus der Produktion anzeigen",

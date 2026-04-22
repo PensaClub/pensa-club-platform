@@ -1,0 +1,43 @@
+{
+  "fields": {
+    "logoUrl": "Logo (URL)",
+    "logoUrlHint": "Public URL for the logo. Leave empty to use the default Pensa Club logo.",
+    "primaryColor": "Primary color",
+    "secondaryColor": "Secondary color",
+    "signature": "Signature",
+    "signatureHint": "Multi-line signature. The first line is plain, following lines use the primary color as accent.",
+    "headerHtml": "Header HTML",
+    "headerHtmlPlaceholder": "<p>Extra content under the logo…</p>",
+    "headerHtmlHint": "Optional — HTML block under the logo, before the email body.",
+    "footerHtml": "Footer HTML",
+    "footerHtmlPlaceholder": "<p>Extra info above the unsubscribe link…</p>",
+    "footerHtmlHint": "Optional — HTML block above the unsubscribe link."
+  },
+  "actions": {
+    "save": "Save",
+    "saving": "Saving…",
+    "revert": "Discard changes",
+    "resetField": "Reset to default",
+    "resetAll": "Restore defaults",
+    "resetAllHint": "Clears all saved overrides and restores the original Pensa Club template",
+    "resetConfirmBody": "This will delete ALL stored overrides (logo, colors, signature, header/footer HTML) and restore the original Pensa Club template. This cannot be undone.",
+    "resetConfirm": "Yes, restore defaults",
+    "resetting": "Restoring…",
+    "cancel": "Cancel"
+  },
+  "preview": {
+    "title": "Preview",
+    "kicker": "Newsletter",
+    "sampleTitle": "Email subject line",
+    "sampleBody": "This is sample text. Links and accents use the primary color.",
+    "sampleLink": "Example link",
+    "unsubscribe": "Unsubscribe"
+  },
+  "messages": {
+    "loading": "Loading template…",
+    "saved": "Template saved. Future emails will use the new settings.",
+    "saveError": "Save failed.",
+    "invalidColor": "Invalid color for \"{{field}}\" — must be hex (e.g. #E26020).",
+    "resetDone": "Original template restored."
+  }
+}

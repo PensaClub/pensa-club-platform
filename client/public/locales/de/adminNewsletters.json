@@ -14,7 +14,8 @@
     "editor": "Neuer Newsletter",
     "subscribers": "Abonnenten",
     "stats": "Statistik",
-    "auto": "Automatisierungen"
+    "auto": "Automatisierungen",
+    "templates": "Vorlagen"
   },
   "stats": {
     "total": "Gesamt",
@@ -150,7 +151,8 @@
   },
   "autoSettings": {
     "title": "Automatisierte Newsletter",
-    "subtitle": "Cron-Job-Übersicht. Vollständige Verwaltung in Phase 7.",
+    "subtitle": "Cron-Job-Übersicht und Verwaltung.",
+    "cronSettingsTitle": "Cron-Job-Verwaltung",
     "weeklyTitle": "Wöchentlicher Digest",
     "weeklySchedule": "Jeden Montag, 10:00 (Europe/Sofia)",
     "weeklyDesc": "Aggregiert neue Inhalte der letzten 7 Tage und bevorstehende Veranstaltungen. Wird nur gesendet, wenn Inhalt für den Abonnenten vorhanden ist.",

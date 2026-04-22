@@ -543,6 +543,14 @@
       "sortMost": "Most",
       "sortLeast": "Least"
     },
+    "newsletterAutomation": {
+      "title": "Newsletter — Automation",
+      "description": "Toggle cron jobs for newsletters and view last run status."
+    },
+    "newsletterTemplates": {
+      "title": "Newsletter — Email template",
+      "description": "Logo, colors, signature, header/footer HTML for all outbound newsletters."
+    },
     "errorLogs": {
       "title": "Error Logs",
       "description": "View client-side errors from production",

@@ -13,14 +13,17 @@ import {
   Plus,
   RefreshCw,
   ChevronRight,
+  Palette,
 } from 'lucide-react';
 import SEOHead from '../SEO/SEOHead';
+import ScrollToTop from '../ScrollToTop/ScrollToTop';
 import { useTheme } from '../contexts/ThemeContext';
 import { NewslettersList } from './NewslettersList/NewslettersList';
 import { NewsletterEditor } from './NewsletterEditor/NewsletterEditor';
 import { NewsletterSubscribers } from './NewsletterSubscribers/NewsletterSubscribers';
 import { NewsletterStats } from './NewsletterStats/NewsletterStats';
 import { NewsletterAutoSettings } from './NewsletterAutoSettings/NewsletterAutoSettings';
+import { NewsletterTemplateConfig } from '../SiteSettingsAdmin/NewsletterTemplateConfig/NewsletterTemplateConfig';
 import './adminNewsletters.css';
 
 const TABS = [
@@ -29,6 +32,7 @@ const TABS = [
   { key: 'subscribers', icon: Users },
   { key: 'stats', icon: BarChart3 },
   { key: 'auto', icon: Settings2 },
+  { key: 'templates', icon: Palette },
 ];
 
 const TAB_KEYS = TABS.map((tab) => tab.key);
@@ -91,6 +95,12 @@ const AdminNewsletters = () => {
     return () => window.removeEventListener('hashchange', handleHashChange);
   }, []);
 
+  // Scroll to top on initial mount + every tab change so the user always
+  // sees the start of the new tab content, not where the previous one was.
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, [activeTab]);
+
   const goToTab = (key, opts = {}) => {
     if (key === 'editor' && opts.draftId === undefined && !opts.keepDraft) {
       setEditorDraftId(null);
@@ -127,6 +137,8 @@ const AdminNewsletters = () => {
         return <NewsletterStats />;
       case 'auto':
         return <NewsletterAutoSettings />;
+      case 'templates':
+        return <NewsletterTemplateConfig />;
       default:
         return null;
     }
@@ -139,6 +151,7 @@ const AdminNewsletters = () => {
         description={t('page.subtitle')}
         noindex={true}
       />
+      <ScrollToTop />
 
       <div className="an-page-bg" aria-hidden="true">
         <div className="an-glow-orb an-glow-orb--primary" />

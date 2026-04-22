@@ -1,7 +1,7 @@
 import { useState, lazy, Suspense } from 'react';
 import { useTranslation } from 'react-i18next';
 import { LocalizedLink as Link } from '../LocalizedLink/LocalizedLink';
-import { ArrowLeft, Settings, Snowflake, BookOpen, Gift, Shield, Bug, MessageSquare, HardDrive, Cloud, UserCog, ScrollText } from 'lucide-react';
+import { ArrowLeft, Settings, Snowflake, BookOpen, Gift, Shield, Bug, MessageSquare, HardDrive, Cloud, UserCog, ScrollText, Mail, Palette } from 'lucide-react';
 import { toast } from 'react-toastify';
 import { useSiteSettingsAdminContext } from '../contexts/SiteSettingsAdminContext';
 import SettingsAdminSection from './SettingsAdminSection/SettingsAdminSection';
@@ -20,6 +20,8 @@ const CloudStorageManager = lazy(() => import('./CloudStorageManager/CloudStorag
 const GoogleDriveManager = lazy(() => import('./GoogleDriveManager/GoogleDriveManager'));
 const UserManagement = lazy(() => import('./UserManagement/UserManagement'));
 const AdminUserActionLogs = lazy(() => import('./AdminUserActionLogs/AdminUserActionLogs'));
+const NewsletterAutomationConfig = lazy(() => import('./NewsletterAutomationConfig/NewsletterAutomationConfig').then(m => ({ default: m.NewsletterAutomationConfig })));
+const NewsletterTemplateConfig = lazy(() => import('./NewsletterTemplateConfig/NewsletterTemplateConfig').then(m => ({ default: m.NewsletterTemplateConfig })));
 
 const SiteSettingsAdmin = () => {
     const { t } = useTranslation('admin');
@@ -244,6 +246,36 @@ const SiteSettingsAdmin = () => {
                         onToggle={() => toggleCard('errorLogs')}
                     >
                         <ErrorLogsConfig />
+                    </SettingsAdminSection>
+
+                    {/* Newsletter — Automation (cron jobs) */}
+                    <SettingsAdminSection
+                        id="newsletterAutomation"
+                        title={t('siteSettingsAdmin.newsletterAutomation.title')}
+                        description={t('siteSettingsAdmin.newsletterAutomation.description')}
+                        icon={<Mail size={24} />}
+                        color="#14b8a6"
+                        isOpen={openCard === 'newsletterAutomation'}
+                        onToggle={() => toggleCard('newsletterAutomation')}
+                    >
+                        <Suspense fallback={<div className="ssa-loading"><div className="ssa-loading-spinner" /></div>}>
+                            <NewsletterAutomationConfig />
+                        </Suspense>
+                    </SettingsAdminSection>
+
+                    {/* Newsletter — Templates (header / footer / colors / signature) */}
+                    <SettingsAdminSection
+                        id="newsletterTemplates"
+                        title={t('siteSettingsAdmin.newsletterTemplates.title')}
+                        description={t('siteSettingsAdmin.newsletterTemplates.description')}
+                        icon={<Palette size={24} />}
+                        color="#E26020"
+                        isOpen={openCard === 'newsletterTemplates'}
+                        onToggle={() => toggleCard('newsletterTemplates')}
+                    >
+                        <Suspense fallback={<div className="ssa-loading"><div className="ssa-loading-spinner" /></div>}>
+                            <NewsletterTemplateConfig />
+                        </Suspense>
                     </SettingsAdminSection>
                 </div>
             </div>

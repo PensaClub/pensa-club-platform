@@ -1,9 +1,20 @@
 /**
- * Weekly Newsletter Digest — sends to subscribers every Monday at 10:00
- * Collects new content from the last 7 days + upcoming events for next 7 days.
- * Filters per subscriber preferences.
+ * Weekly Newsletter Digest — sends to subscribers every Monday at 10:00.
+ * Schedule + enabled flag are read from `cron_settings` (key: weeklyDigest)
+ * — admin can edit them at runtime. lastRunAt/Status/Subscribers are
+ * recorded after every tick.
  */
 const cron = require('node-cron');
+const {
+  getCronConfig,
+  isCronEnabled,
+  recordCronRun,
+} = require('../utils/cronHelpers');
+
+const CRON_KEY = 'weeklyDigest';
+const DEFAULT_SCHEDULE = '0 10 * * 1';
+const DEFAULT_TIMEZONE = 'Europe/Sofia';
+const DEFAULT_DESCRIPTION = 'Седмичен digest — всеки понеделник 10:00 Sofia';
 
 const CATEGORY_CONFIG = [
   { key: 'seminars', emoji: '🎓', title: 'Нови семинари' },
@@ -14,9 +25,25 @@ const CATEGORY_CONFIG = [
   { key: 'platform', emoji: '📢', title: 'Ъпдейти от екипа' },
 ];
 
-const startWeeklyDigestCron = () => {
-  cron.schedule('0 10 * * 1', async () => {
+const startWeeklyDigestCron = async () => {
+  const config = await getCronConfig(CRON_KEY, {
+    schedule: DEFAULT_SCHEDULE,
+    timezone: DEFAULT_TIMEZONE,
+    description: DEFAULT_DESCRIPTION,
+  }).catch((e) => {
+    console.error('[Weekly Digest] Failed to load config — using defaults:', e.message);
+    return { schedule: DEFAULT_SCHEDULE, timezone: DEFAULT_TIMEZONE };
+  });
+
+  cron.schedule(config.schedule, async () => {
+    if (!(await isCronEnabled(CRON_KEY))) {
+      console.log('[Weekly Digest] Skipped (disabled in admin).');
+      await recordCronRun(CRON_KEY, { status: 'skipped' });
+      return;
+    }
     console.log('[Weekly Digest] Running...');
+    const startedAt = Date.now();
+    let sentCount = 0;
     try {
       const { Op } = require('sequelize');
       const {
@@ -276,15 +303,27 @@ const startWeeklyDigestCron = () => {
         }
       }
 
+      sentCount = sent;
       console.log(`[Weekly Digest] Done. Sent ${sent}/${subscribers.length} emails.`);
+      await recordCronRun(CRON_KEY, {
+        status: 'success',
+        subscribers: sentCount,
+        durationMs: Date.now() - startedAt,
+      });
     } catch (err) {
       console.error('[Weekly Digest] Error:', err);
+      await recordCronRun(CRON_KEY, {
+        status: 'failed',
+        subscribers: sentCount,
+        durationMs: Date.now() - startedAt,
+        error: err?.message || String(err),
+      });
     }
   }, {
-    timezone: 'Europe/Sofia',
+    timezone: config.timezone,
   });
 
-  console.log('[Weekly Digest] Cron scheduled (Monday 10:00 Sofia)');
+  console.log(`[Weekly Digest] Cron scheduled (${config.schedule} ${config.timezone})`);
 };
 
 module.exports = { startWeeklyDigestCron };
