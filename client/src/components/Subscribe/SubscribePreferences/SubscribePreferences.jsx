@@ -63,6 +63,10 @@ export const SubscribePreferences = () => {
     if (token) fetchPrefs();
   }, [fetchPrefs, token]);
 
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, [token]);
+
   const toggle = (cat) => {
     setEnabled((prev) => ({ ...prev, [cat]: !prev[cat] }));
     setSaved(false);

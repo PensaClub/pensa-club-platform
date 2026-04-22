@@ -177,6 +177,22 @@ export const communityServiceFactory = (token) => {
     getAdminSubscriberGrowth: async ({ days = 90 } = {}) => {
       return requester.get(`${apiUrl}/subscribe/admin/stats/growth?days=${days}`);
     },
+
+    // ── Cron settings (Phase 7) ─────────────────────────────────────────
+    getAdminCrons: async () => {
+      return requester.get(`${apiUrl}/admin/cron`);
+    },
+    updateAdminCron: async (key, payload) => {
+      return requester.put(`${apiUrl}/admin/cron/${encodeURIComponent(key)}`, payload);
+    },
+
+    // ── Email template (Phase 7) ────────────────────────────────────────
+    getAdminEmailTemplate: async () => {
+      return requester.get(`${apiUrl}/admin/email-template`);
+    },
+    updateAdminEmailTemplate: async (payload) => {
+      return requester.put(`${apiUrl}/admin/email-template`, payload);
+    },
     blockSubscriber: async (id) => {
       return requester.post(`${apiUrl}/subscribe/admin/${id}/block`, {});
     },

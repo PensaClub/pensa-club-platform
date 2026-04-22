@@ -14,7 +14,8 @@
     "editor": "New newsletter",
     "subscribers": "Subscribers",
     "stats": "Statistics",
-    "auto": "Automations"
+    "auto": "Automations",
+    "templates": "Templates"
   },
   "stats": {
     "total": "Total newsletters",
@@ -150,7 +151,8 @@
   },
   "autoSettings": {
     "title": "Automated newsletters",
-    "subtitle": "Cron job overview. Full management in Phase 7.",
+    "subtitle": "Cron job overview and management.",
+    "cronSettingsTitle": "Cron job management",
     "weeklyTitle": "Weekly digest",
     "weeklySchedule": "Every Monday, 10:00 (Europe/Sofia)",
     "weeklyDesc": "Aggregates new content from the last 7 days and upcoming events. Sent only when there is content for the subscriber.",

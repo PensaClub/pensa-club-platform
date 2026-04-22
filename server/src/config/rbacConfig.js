@@ -105,6 +105,14 @@ const permissions = {
     contentAnalytics: {
         read: ROLES.STAFF,
     },
+    cron: {
+        read: ROLES.STAFF,
+        update: ['admin'],
+    },
+    emailTemplate: {
+        read: ROLES.STAFF,
+        update: ['admin'],
+    },
     suggestion: {
         read: ROLES.STAFF,
         delete: ROLES.STAFF,

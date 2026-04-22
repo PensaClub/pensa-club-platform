@@ -379,7 +379,7 @@ export const NewslettersList = ({ refreshKey = 0, onEdit }) => {
               const d = dateFor(item);
               return (
                 <article key={item.id} className="anl-card">
-                  <header className="anl-card-header">
+                  <div className="anl-card-header">
                     <div className="anl-card-title-wrap">
                       <h4 className="anl-card-title">{item.title}</h4>
                       {item.subject && (
@@ -389,7 +389,7 @@ export const NewslettersList = ({ refreshKey = 0, onEdit }) => {
                     <span className={`anl-badge anl-badge--status-${item.status}`}>
                       {t(`statuses.${item.status}`)}
                     </span>
-                  </header>
+                  </div>
 
                   <div className="anl-card-meta">
                     <div className="anl-card-meta-item">
@@ -416,7 +416,7 @@ export const NewslettersList = ({ refreshKey = 0, onEdit }) => {
                     </div>
                   </div>
 
-                  <footer className="anl-card-footer">
+                  <div className="anl-card-footer">
                     <ActionButtons
                       item={item}
                       t={t}
@@ -429,7 +429,7 @@ export const NewslettersList = ({ refreshKey = 0, onEdit }) => {
                       canEdit={canEdit(item)}
                       canCancel={canCancel(item)}
                     />
-                  </footer>
+                  </div>
                 </article>
               );
             })}

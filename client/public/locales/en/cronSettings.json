@@ -1,0 +1,60 @@
+{
+  "toggle": {
+    "on": "Enabled",
+    "off": "Disabled"
+  },
+  "schedule": {
+    "preset": "Preset",
+    "expression": "Cron expression",
+    "presets": {
+      "every15Min": "Every 15 minutes",
+      "everyHour": "Every hour",
+      "daily9am": "Daily at 09:00",
+      "daily10am": "Daily at 10:00",
+      "monday10am": "Monday 10:00",
+      "monthly1st9am": "1st of month 09:00",
+      "custom": "Custom"
+    }
+  },
+  "status": {
+    "success": "Success",
+    "failed": "Failed",
+    "skipped": "Skipped",
+    "partial": "Partial",
+    "unknown": "Unknown"
+  },
+  "lastRun": {
+    "never": "Never run",
+    "recipients": "{{count}} recipients"
+  },
+  "actions": {
+    "save": "Save",
+    "saving": "Saving…",
+    "saved": "Saved"
+  },
+  "messages": {
+    "loading": "Loading cron jobs…",
+    "empty": "No cron jobs registered.",
+    "saved": "Changes saved.",
+    "saveError": "Save failed.",
+    "scheduleHint": "Schedule changes require a server restart to take effect. Enabling/disabling works immediately."
+  },
+  "crons": {
+    "weeklyDigest": {
+      "title": "Weekly digest",
+      "desc": "Collects new content from the last 7 days plus upcoming events. Only sent if there is content for the subscriber."
+    },
+    "scheduledNewsletter": {
+      "title": "Scheduled newsletters",
+      "desc": "Checks for newsletters with \"Scheduled\" status and sends them at their planned time."
+    },
+    "eventBatch": {
+      "title": "Reactive notifications",
+      "desc": "When new content is published, an event is queued. Once per day a single \"What's new in Pensa Club\" email is sent."
+    },
+    "monthlyReport": {
+      "title": "Monthly report",
+      "desc": "At the start of each month, a summary email is sent with stats, top N seminars/articles/courses and upcoming items."
+    }
+  }
+}

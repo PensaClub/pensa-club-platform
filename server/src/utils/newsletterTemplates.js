@@ -1,12 +1,51 @@
 /**
  * Newsletter email templates — Pensa Club branded
+ *
+ * Visual bits (logo, colors, signature, extra header/footer HTML) come
+ * from the `email_templates` DB row via `emailTemplateCache.getTemplate()`.
+ * If the DB is unavailable or the row is empty, these baked-in defaults
+ * are used instead.
  */
 
-const PENSA_LOGO = 'https://pensa.club/images/homePage/logo.png';
+const { getTemplate } = require('./emailTemplateCache');
+
 const BASE_URL = 'https://pensa.club';
+
+// Back-compat named exports — still reference the DEFAULT values so
+// callers that read them outside a render still get something sensible.
+const PENSA_LOGO = 'https://pensa.club/images/homePage/logo.png';
 const BRAND_COLOR = '#E26020';
 
-const wrapNewsletter = (title, bodyHtml, unsubscribeToken, dateLabel = '') => `
+// Renders a plain-text signature (with newlines) into stacked <p> lines.
+// `signature` may be multiline. First line = normal; following lines =
+// bold brand color (e.g. "Екипът на Pensa Club").
+const renderSignature = (signature, primary) => {
+    if (!signature) return '';
+    const lines = String(signature)
+        .split(/\r?\n/)
+        .map((l) => l.trim())
+        .filter(Boolean);
+    if (lines.length === 0) return '';
+    const [first, ...rest] = lines;
+    const firstHtml = `<p style="margin:18px 0 4px;color:#374151;font-size:14px;">${first}</p>`;
+    const restHtml = rest
+        .map(
+            (line) =>
+                `<p style="margin:0;color:${primary};font-size:14px;font-weight:700;">${line}</p>`,
+        )
+        .join('');
+    return `
+        <table width="100%" cellpadding="0" cellspacing="0" style="margin:26px 0 0;border-collapse:collapse;"><tr><td style="height:1px;background:#e5e7eb;line-height:1px;font-size:0;">&nbsp;</td></tr></table>
+        ${firstHtml}${restHtml}`;
+};
+
+const wrapNewsletter = (title, bodyHtml, unsubscribeToken, dateLabel = '') => {
+  const tpl = getTemplate();
+  const logo = tpl.logoUrl || PENSA_LOGO;
+  const primary = tpl.primaryColor || BRAND_COLOR;
+  const headerExtra = tpl.headerHtml || '';
+  const footerExtra = tpl.footerHtml || '';
+  return `
 <!DOCTYPE html>
 <html lang="bg">
 <head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
@@ -17,12 +56,14 @@ const wrapNewsletter = (title, bodyHtml, unsubscribeToken, dateLabel = '') => `
 
         <tr>
           <td style="background:linear-gradient(135deg,#1a1a2e 0%,#16213e 50%,#1a1a2e 100%);padding:28px 32px 22px;text-align:center;">
-            <img src="${PENSA_LOGO}" alt="Pensa Club" height="40" style="display:inline-block;height:40px;width:auto;margin-bottom:12px;" />
+            <img src="${logo}" alt="Pensa Club" height="40" style="display:inline-block;height:40px;width:auto;margin-bottom:12px;" />
             <p style="color:rgba(255,255,255,0.5);font-size:10px;font-weight:600;letter-spacing:2px;text-transform:uppercase;margin:0 0 8px;">Бюлетин</p>
             <p style="color:#ffffff;font-size:20px;font-weight:700;line-height:1.3;margin:0 0 ${dateLabel ? '8' : '0'}px;">${title}</p>
             ${dateLabel ? `<p style="color:rgba(255,255,255,0.45);font-size:11px;font-weight:600;letter-spacing:1px;text-transform:uppercase;margin:0;">${dateLabel}</p>` : ''}
           </td>
         </tr>
+
+        ${headerExtra ? `<tr><td style="padding:16px 32px 0;">${headerExtra}</td></tr>` : ''}
 
         <tr>
           <td style="padding:28px 32px 16px;">
@@ -35,9 +76,10 @@ const wrapNewsletter = (title, bodyHtml, unsubscribeToken, dateLabel = '') => `
             <table width="100%" cellpadding="0" cellspacing="0" style="border-top:1px solid #e5e7eb;padding-top:16px;">
               <tr>
                 <td style="color:#9ca3af;font-size:12px;line-height:1.6;text-align:center;">
+                  ${footerExtra ? `<div style="margin:0 0 12px;color:#6b7280;font-size:13px;line-height:1.5;text-align:center;">${footerExtra}</div>` : ''}
                   Получавате този имейл, защото сте абониран/а за бюлетина на <strong>Pensa Club</strong>.<br>
-                  ${unsubscribeToken ? `<a href="${BASE_URL}/subscribe/preferences/${unsubscribeToken}" style="color:${BRAND_COLOR};text-decoration:none;">Управлявай предпочитанията</a> · <a href="${BASE_URL}/subscribe/unsubscribe/${unsubscribeToken}" style="color:${BRAND_COLOR};text-decoration:none;">Отпиши се</a><br>` : ''}
-                  <br>© ${new Date().getFullYear()} Pensa Club · <a href="${BASE_URL}" style="color:${BRAND_COLOR};text-decoration:none;">pensa.club</a>
+                  ${unsubscribeToken ? `<a href="${BASE_URL}/subscribe/preferences/${unsubscribeToken}" style="color:${primary};text-decoration:none;">Управлявай предпочитанията</a> · <a href="${BASE_URL}/subscribe/unsubscribe/${unsubscribeToken}" style="color:${primary};text-decoration:none;">Отпиши се</a><br>` : ''}
+                  <br>© ${new Date().getFullYear()} Pensa Club · <a href="${BASE_URL}" style="color:${primary};text-decoration:none;">pensa.club</a>
                 </td>
               </tr>
             </table>
@@ -49,6 +91,7 @@ const wrapNewsletter = (title, bodyHtml, unsubscribeToken, dateLabel = '') => `
   </table>
 </body>
 </html>`;
+};
 
 const sectionTitle = (emoji, title) =>
   `<p style="color:#1f2937;font-size:16px;font-weight:700;margin:24px 0 12px;padding-bottom:8px;border-bottom:2px solid ${BRAND_COLOR};">${emoji} ${title}</p>`;
@@ -182,11 +225,10 @@ const wrapDigestBody = ({ subscriberName, intro, bodyHtml }) => {
             ? intro
             : 'Това е персонализиран бюлетин от Pensa Club с подбрана информация специално за вас. Долу ще намерите акценти от платформата, които ви препоръчваме да разгледате.';
     const introHtml = `<p style="margin:0 0 14px;color:#374151;font-size:14.5px;line-height:1.65;">${introText}</p>`;
-    const divider = `<table width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 18px;border-collapse:collapse;"><tr><td style="height:2px;background:#E26020;line-height:2px;font-size:0;">&nbsp;</td></tr></table>`;
-    const sig = `
-        <table width="100%" cellpadding="0" cellspacing="0" style="margin:26px 0 0;border-collapse:collapse;"><tr><td style="height:1px;background:#e5e7eb;line-height:1px;font-size:0;">&nbsp;</td></tr></table>
-        <p style="margin:18px 0 4px;color:#374151;font-size:14px;">С уважение,</p>
-        <p style="margin:0;color:#E26020;font-size:14px;font-weight:700;">Екипът на Pensa Club</p>`;
+    const tpl = getTemplate();
+    const primary = tpl.primaryColor || BRAND_COLOR;
+    const divider = `<table width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 18px;border-collapse:collapse;"><tr><td style="height:2px;background:${primary};line-height:2px;font-size:0;">&nbsp;</td></tr></table>`;
+    const sig = renderSignature(tpl.signature, primary);
     return `${greeting}${introHtml}${divider}${bodyHtml}${sig}`;
 };
 
@@ -410,10 +452,9 @@ const monthlyReport = ({
        <div style="color:#374151;font-size:14px;line-height:1.65;margin:0 0 8px;">${platformUpdatesHtml}</div>`
     : '';
 
-  const signature = `
-    <table width="100%" cellpadding="0" cellspacing="0" style="margin:26px 0 0;border-collapse:collapse;"><tr><td style="height:1px;background:#e5e7eb;line-height:1px;font-size:0;">&nbsp;</td></tr></table>
-    <p style="margin:18px 0 4px;color:#374151;font-size:14px;">С уважение,</p>
-    <p style="margin:0;color:${BRAND_COLOR};font-size:14px;font-weight:700;">Екипът на Pensa Club</p>`;
+  const mTpl = getTemplate();
+  const mPrimary = mTpl.primaryColor || BRAND_COLOR;
+  const signature = renderSignature(mTpl.signature, mPrimary);
 
   const body = `${greeting}${intro}${divider}${statsBlock}${topSeminarsBlock}${topArticlesBlock}${topCoursesBlock}${upcomingBlock}${platformBlock}${signature}`;
 

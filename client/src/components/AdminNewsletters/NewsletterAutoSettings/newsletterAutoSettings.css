@@ -36,6 +36,28 @@
 }
 
 /* =========================================================
+   CRON SETTINGS SECTION (above the per-cron cards)
+   ========================================================= */
+
+.ana-cron-settings {
+  margin-bottom: 28px;
+}
+
+.ana-section-title {
+  margin: 0 0 14px;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #f0f4f8;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-family: 'Montserrat', sans-serif;
+}
+
+[data-theme="light"] .ana-section-title {
+  color: #0f172a;
+}
+
+/* =========================================================
    CARDS
    ========================================================= */
 
