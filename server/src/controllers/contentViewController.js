@@ -13,9 +13,14 @@ const {
   publication,
   Club,
 } = require('../sequelize/models');
+const allModels = require('../sequelize/models');
 const { isBotUserAgent } = require('../utils/botUserAgent');
 const isAuth = require('../middlewares/isAuth');
 const rbac = require('../middlewares/rbac');
+const {
+    includeForContentImage,
+    resolveContentImage,
+} = require('../utils/contentImageResolver');
 
 const ALLOWED_TYPES = new Set([
   'article',
@@ -78,6 +83,7 @@ const resolveContentForType = async (contentType, ids) => {
   const model = TYPE_TO_MODEL[contentType];
   if (!model || ids.length === 0) return new Map();
 
+  // Always select base columns + the columns we need to resolve a thumbnail.
   const attrsByType = {
     article: ['id', 'slug', 'title'],
     seminar: ['id', 'slug', 'title', 'thumbnailUrl', 'scheduledDate'],
@@ -85,22 +91,25 @@ const resolveContentForType = async (contentType, ids) => {
     initiative: ['id', 'slug', 'title'],
     project: ['id', 'slug', 'title'],
     publication: ['id', 'slug', 'title'],
-    club: ['id', 'slug', 'name'],
+    club: ['id', 'slug', 'name', 'mainImage'],
   };
 
   const rows = await model.findAll({
     where: { id: { [Op.in]: ids } },
     attributes: attrsByType[contentType] || ['id', 'slug'],
-    raw: true,
+    include: includeForContentImage(contentType, allModels),
   });
 
-  const normalized = rows.map((r) => ({
-    id: r.id,
-    slug: r.slug,
-    title: r.title || r.name || null,
-    thumbnailUrl: r.thumbnailUrl || null,
-    scheduledDate: r.scheduledDate || null,
-  }));
+  const normalized = rows.map((row) => {
+    const r = row.toJSON();
+    return {
+      id: r.id,
+      slug: r.slug,
+      title: r.title || r.name || null,
+      thumbnailUrl: resolveContentImage(row, contentType),
+      scheduledDate: r.scheduledDate || null,
+    };
+  });
 
   return new Map(normalized.map((r) => [r.id, r]));
 };
