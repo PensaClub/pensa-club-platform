@@ -23,6 +23,7 @@ import { notify } from '../../../utils/notify.jsx';
 import { NewsletterEditorRichText } from '../NewsletterEditor/NewsletterEditorRichText/NewsletterEditorRichText';
 import { NewsletterImageUploader } from '../NewsletterImageUploader/NewsletterImageUploader';
 import { NewsletterContentPicker } from '../NewsletterContentPicker/NewsletterContentPicker';
+import { NewsletterAutomationConfig } from '../../SiteSettingsAdmin/NewsletterAutomationConfig/NewsletterAutomationConfig';
 import './newsletterAutoSettings.css';
 
 const ITEMS = [
@@ -230,6 +231,13 @@ export const NewsletterAutoSettings = () => {
         <h2 className="ana-title">{t('autoSettings.title')}</h2>
         <p className="ana-subtitle">{t('autoSettings.subtitle')}</p>
       </header>
+
+      <section className="ana-cron-settings">
+        <h3 className="ana-section-title">
+          {t('autoSettings.cronSettingsTitle', { defaultValue: 'Управление на cron задачите' })}
+        </h3>
+        <NewsletterAutomationConfig />
+      </section>
 
       <div className="ana-list">
         {ITEMS.map(({ key, icon: Icon }) => {

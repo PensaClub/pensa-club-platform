@@ -1,0 +1,43 @@
+{
+  "fields": {
+    "logoUrl": "Logo (URL)",
+    "logoUrlHint": "Öffentliche URL für das Logo. Leer lassen, um das Standard-Logo von Pensa Club zu verwenden.",
+    "primaryColor": "Primärfarbe",
+    "secondaryColor": "Sekundärfarbe",
+    "signature": "Signatur",
+    "signatureHint": "Mehrzeilige Signatur. Erste Zeile ist normal, weitere Zeilen verwenden die Primärfarbe als Akzent.",
+    "headerHtml": "Kopfbereich HTML",
+    "headerHtmlPlaceholder": "<p>Zusätzlicher Inhalt unter dem Logo…</p>",
+    "headerHtmlHint": "Optional — HTML-Block unter dem Logo, vor dem E-Mail-Inhalt.",
+    "footerHtml": "Fußbereich HTML",
+    "footerHtmlPlaceholder": "<p>Zusätzliche Informationen vor dem Abmeldelink…</p>",
+    "footerHtmlHint": "Optional — HTML-Block über dem Abmeldelink."
+  },
+  "actions": {
+    "save": "Speichern",
+    "saving": "Wird gespeichert…",
+    "revert": "Änderungen verwerfen",
+    "resetField": "Auf Standard zurücksetzen",
+    "resetAll": "Standard wiederherstellen",
+    "resetAllHint": "Löscht alle gespeicherten Überschreibungen und stellt die originale Pensa Club-Vorlage wieder her",
+    "resetConfirmBody": "Dies löscht ALLE gespeicherten Überschreibungen (Logo, Farben, Signatur, Header-/Footer-HTML) und stellt die originale Pensa Club-Vorlage wieder her. Unwiderruflich.",
+    "resetConfirm": "Ja, Standard wiederherstellen",
+    "resetting": "Wird wiederhergestellt…",
+    "cancel": "Abbrechen"
+  },
+  "preview": {
+    "title": "Vorschau",
+    "kicker": "Newsletter",
+    "sampleTitle": "Beispiel-Betreffzeile",
+    "sampleBody": "Dies ist Beispieltext. Links und Akzente verwenden die Primärfarbe.",
+    "sampleLink": "Beispiel-Link",
+    "unsubscribe": "Abmelden"
+  },
+  "messages": {
+    "loading": "Vorlage wird geladen…",
+    "saved": "Vorlage gespeichert. Künftige E-Mails verwenden die neuen Einstellungen.",
+    "saveError": "Speichern fehlgeschlagen.",
+    "invalidColor": "Ungültige Farbe für „{{field}}\" — muss Hex sein (z. B. #E26020).",
+    "resetDone": "Original-Vorlage wiederhergestellt."
+  }
+}

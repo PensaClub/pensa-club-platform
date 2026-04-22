@@ -473,6 +473,42 @@ export const CommunityProvider = ({ children }) => {
             throw e;
         }
     };
+
+    // Cron settings
+    const getAdminCrons = async () => {
+        try {
+            return await communityService.getAdminCrons();
+        } catch (e) {
+            notify('error', e);
+            throw e;
+        }
+    };
+    const updateAdminCron = async (key, payload) => {
+        try {
+            return await communityService.updateAdminCron(key, payload);
+        } catch (e) {
+            notify('error', e);
+            throw e;
+        }
+    };
+
+    // Email template
+    const getAdminEmailTemplate = async () => {
+        try {
+            return await communityService.getAdminEmailTemplate();
+        } catch (e) {
+            notify('error', e);
+            throw e;
+        }
+    };
+    const updateAdminEmailTemplate = async (payload) => {
+        try {
+            return await communityService.updateAdminEmailTemplate(payload);
+        } catch (e) {
+            notify('error', e);
+            throw e;
+        }
+    };
     const blockSubscriber = async (id) => {
         try {
             return await communityService.blockSubscriber(id);
@@ -641,6 +677,10 @@ export const CommunityProvider = ({ children }) => {
         getAdminSubscriberList,
         getAdminSubscriberStats,
         getAdminSubscriberGrowth,
+        getAdminCrons,
+        updateAdminCron,
+        getAdminEmailTemplate,
+        updateAdminEmailTemplate,
         blockSubscriber,
         unblockSubscriber,
         updateSubscriberPreferencesByAdmin,

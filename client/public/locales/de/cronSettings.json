@@ -1,0 +1,60 @@
+{
+  "toggle": {
+    "on": "Aktiv",
+    "off": "Inaktiv"
+  },
+  "schedule": {
+    "preset": "Voreinstellung",
+    "expression": "Cron-Ausdruck",
+    "presets": {
+      "every15Min": "Alle 15 Minuten",
+      "everyHour": "Stündlich",
+      "daily9am": "Täglich um 09:00",
+      "daily10am": "Täglich um 10:00",
+      "monday10am": "Montag 10:00",
+      "monthly1st9am": "Am 1. des Monats 09:00",
+      "custom": "Benutzerdefiniert"
+    }
+  },
+  "status": {
+    "success": "Erfolgreich",
+    "failed": "Fehlgeschlagen",
+    "skipped": "Übersprungen",
+    "partial": "Teilweise",
+    "unknown": "Unbekannt"
+  },
+  "lastRun": {
+    "never": "Noch nicht ausgeführt",
+    "recipients": "{{count}} Empfänger"
+  },
+  "actions": {
+    "save": "Speichern",
+    "saving": "Wird gespeichert…",
+    "saved": "Gespeichert"
+  },
+  "messages": {
+    "loading": "Cron-Jobs werden geladen…",
+    "empty": "Keine Cron-Jobs registriert.",
+    "saved": "Änderungen gespeichert.",
+    "saveError": "Speichern fehlgeschlagen.",
+    "scheduleHint": "Zeitplan-Änderungen erfordern einen Server-Neustart. Aktivieren/Deaktivieren wirkt sofort."
+  },
+  "crons": {
+    "weeklyDigest": {
+      "title": "Wöchentlicher Digest",
+      "desc": "Sammelt neue Inhalte der letzten 7 Tage plus bevorstehende Veranstaltungen. Wird nur gesendet, wenn Inhalt vorhanden ist."
+    },
+    "scheduledNewsletter": {
+      "title": "Geplante Newsletter",
+      "desc": "Prüft auf Newsletter mit Status „Geplant" und sendet sie zum geplanten Zeitpunkt."
+    },
+    "eventBatch": {
+      "title": "Reaktive Benachrichtigungen",
+      "desc": "Bei neuer Veröffentlichung wird ein Ereignis in die Warteschlange gestellt. Einmal täglich wird eine zusammengefasste „Neu in Pensa Club"-E-Mail gesendet."
+    },
+    "monthlyReport": {
+      "title": "Monatsbericht",
+      "desc": "Zu Monatsbeginn wird eine Zusammenfassung gesendet mit Statistiken, Top-N-Seminare/Artikel/Kurse und bevorstehenden Themen."
+    }
+  }
+}

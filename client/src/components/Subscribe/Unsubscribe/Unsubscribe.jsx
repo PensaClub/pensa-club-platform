@@ -19,6 +19,10 @@ export const Unsubscribe = () => {
   const [errorMsg, setErrorMsg] = useState(null);
   const [subscriber, setSubscriber] = useState(null);
 
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, [token]);
+
   // Load subscriber data so we can show their email in the confirm prompt
   useEffect(() => {
     if (!token) return;

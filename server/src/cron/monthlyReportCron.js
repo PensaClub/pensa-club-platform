@@ -5,12 +5,37 @@
  * subscribers who have the `platform` preference enabled.
  */
 const cron = require('node-cron');
+const {
+    getCronConfig,
+    isCronEnabled,
+    recordCronRun,
+} = require('../utils/cronHelpers');
 
-const startMonthlyReportCron = () => {
+const CRON_KEY = 'monthlyReport';
+const DEFAULT_SCHEDULE = '0 9 1 * *';
+const DEFAULT_TIMEZONE = 'Europe/Sofia';
+const DEFAULT_DESCRIPTION = 'Месечен доклад — 1-во число на месеца, 09:00 Sofia';
+
+const startMonthlyReportCron = async () => {
+    const config = await getCronConfig(CRON_KEY, {
+        schedule: DEFAULT_SCHEDULE,
+        timezone: DEFAULT_TIMEZONE,
+        description: DEFAULT_DESCRIPTION,
+    }).catch((e) => {
+        console.error('[Monthly Report] Failed to load config — using defaults:', e.message);
+        return { schedule: DEFAULT_SCHEDULE, timezone: DEFAULT_TIMEZONE };
+    });
+
     cron.schedule(
-        '0 9 1 * *',
+        config.schedule,
         async () => {
+            if (!(await isCronEnabled(CRON_KEY))) {
+                console.log('[Monthly Report] Skipped (disabled in admin).');
+                await recordCronRun(CRON_KEY, { status: 'skipped' });
+                return;
+            }
             console.log('[Monthly Report] Running...');
+            const startedAt = Date.now();
             try {
                 const { Op } = require('sequelize');
                 const models = require('../sequelize/models/index');
@@ -119,14 +144,24 @@ const startMonthlyReportCron = () => {
                 console.log(
                     `[Monthly Report] Done. sent=${result.sent} failed=${result.failed} of ${result.total}. Platform items processed: ${platformItems.length}`,
                 );
+                await recordCronRun(CRON_KEY, {
+                    status: result.failed > 0 && result.sent === 0 ? 'failed' : 'success',
+                    subscribers: result.sent || 0,
+                    durationMs: Date.now() - startedAt,
+                });
             } catch (err) {
                 console.error('[Monthly Report] Error:', err);
+                await recordCronRun(CRON_KEY, {
+                    status: 'failed',
+                    durationMs: Date.now() - startedAt,
+                    error: err?.message || String(err),
+                });
             }
         },
-        { timezone: 'Europe/Sofia' },
+        { timezone: config.timezone },
     );
 
-    console.log('[Monthly Report] Cron scheduled (1st of month, 09:00 Sofia)');
+    console.log(`[Monthly Report] Cron scheduled (${config.schedule} ${config.timezone})`);
 };
 
 module.exports = { startMonthlyReportCron };

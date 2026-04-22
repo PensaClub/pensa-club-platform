@@ -61,6 +61,14 @@ module.exports = function expressConfig(app) {
     server.listen(port, async () => {
         await testDatabaseConnection();
         console.log(`Server is listening on port: ${port} (with Socket.IO)`);
+        // Preload the email template into in-memory cache so the first
+        // outbound email already has the admin overrides applied.
+        try {
+            const { loadTemplate } = require('../utils/emailTemplateCache');
+            await loadTemplate();
+        } catch (e) {
+            console.error('[boot] emailTemplate preload failed:', e?.message);
+        }
         scheduleArticleCleanup();
         startMentorActivityCron();
         startVisitReminderCron();
@@ -68,9 +76,9 @@ module.exports = function expressConfig(app) {
         startForumDigestCron();
         startStorageSyncCron();
         scheduleAuditLogCleanup();
-        startWeeklyDigestCron();
-        startScheduledNewsletterCron();
-        startEventBatchCron();
-        startMonthlyReportCron();
+        await startWeeklyDigestCron();
+        await startScheduledNewsletterCron();
+        await startEventBatchCron();
+        await startMonthlyReportCron();
     });
 };
