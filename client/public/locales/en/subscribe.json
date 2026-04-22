@@ -1,0 +1,46 @@
+{
+  "categories": {
+    "seminars": "Seminars & training",
+    "courses": "Courses",
+    "articles": "Articles & publications",
+    "initiatives": "Initiatives & projects",
+    "clubs": "Clubs",
+    "games": "Games & fun",
+    "platform": "Platform updates"
+  },
+  "categoriesDesc": {
+    "seminars": "New seminars, upcoming dates, recordings of past ones",
+    "courses": "New courses, modules and lectures",
+    "articles": "Recommended articles and publications",
+    "initiatives": "New initiatives, projects, calls for participation",
+    "clubs": "New clubs, upcoming visits",
+    "games": "New games, leaderboards",
+    "platform": "Planned changes, new features, monthly reports"
+  },
+  "preferences": {
+    "title": "Manage your preferences",
+    "subtitle": "Choose what you want to receive at {{email}}.",
+    "loading": "Loading your preferences…",
+    "errorLoad": "Failed to load your preferences. The link may have expired.",
+    "errorSave": "Failed to save changes. Please try again.",
+    "save": "Save",
+    "saving": "Saving…",
+    "saved": "Saved!",
+    "unsubscribeHint": "Don't want anything at all?",
+    "unsubscribeLink": "Unsubscribe completely"
+  },
+  "unsubscribe": {
+    "title": "Unsubscribe from newsletter",
+    "body": "Are you sure you want to unsubscribe completely? You will no longer receive emails from Pensa Club.",
+    "bodyWithEmail": "Are you sure you want to unsubscribe {{email}} completely? You will no longer receive emails from Pensa Club.",
+    "adjustPrefs": "Adjust categories instead",
+    "confirm": "Yes, unsubscribe me",
+    "submittingTitle": "Unsubscribing…",
+    "doneTitle": "Successfully unsubscribed",
+    "doneBody": "Sorry to see you go. You can subscribe again any time from the home page.",
+    "backHome": "Back home",
+    "errorTitle": "Something went wrong",
+    "errorGeneric": "We couldn't process the request. Please try again or contact us.",
+    "retry": "Try again"
+  }
+}

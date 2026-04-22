@@ -129,6 +129,13 @@
     "loading": "Statistiken werden geladen…",
     "loadError": "Statistiken konnten nicht geladen werden."
   },
+  "growth": {
+    "title": "Abonnenten-Wachstum",
+    "subtitle": "Neue Anmeldungen vs. Abmeldungen für den gewählten Zeitraum.",
+    "weeklyTitle": "Wöchentliche Neuanmeldungen und Abmeldungen",
+    "newSubs": "Neue Abonnenten",
+    "unsubs": "Abmeldungen"
+  },
   "perf": {
     "title": "Newsletter-Performance",
     "subtitle": "Open- und Click-Rate für den gewählten Zeitraum.",

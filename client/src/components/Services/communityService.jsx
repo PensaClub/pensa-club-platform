@@ -174,6 +174,9 @@ export const communityServiceFactory = (token) => {
     getAdminSubscriberStats: async () => {
       return requester.get(`${apiUrl}/subscribe/admin/stats`);
     },
+    getAdminSubscriberGrowth: async ({ days = 90 } = {}) => {
+      return requester.get(`${apiUrl}/subscribe/admin/stats/growth?days=${days}`);
+    },
     blockSubscriber: async (id) => {
       return requester.post(`${apiUrl}/subscribe/admin/${id}/block`, {});
     },
@@ -183,7 +186,14 @@ export const communityServiceFactory = (token) => {
     updateSubscriberPreferencesByAdmin: async (id, preferences) => {
       return requester.put(`${apiUrl}/subscribe/admin/${id}/preferences`, { preferences });
     },
-    exportSubscribersCsvUrl: () => `${apiUrl}/subscribe/admin/export.csv`,
+    exportSubscribersCsvUrl: (params = {}) => {
+      const qs = new URLSearchParams();
+      Object.entries(params).forEach(([k, v]) => {
+        if (v !== undefined && v !== null && v !== '') qs.append(k, v);
+      });
+      const suffix = qs.toString() ? `?${qs.toString()}` : '';
+      return `${apiUrl}/subscribe/admin/export.csv${suffix}`;
+    },
     exportSubscribersPdfUrl: (params = {}) => {
       const qs = new URLSearchParams();
       Object.entries(params).forEach(([k, v]) => {
