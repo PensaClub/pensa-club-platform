@@ -147,6 +147,10 @@ const resetTextSize = () => {
                   className="vertical-slider"
                   orient="vertical"
                   onClick={(e) => e.stopPropagation()}
+                  aria-label="Размер на текста"
+                  aria-valuemin={70}
+                  aria-valuemax={150}
+                  aria-valuenow={fontSize}
                   style={{
                     accentColor: accentColor
                   }}
