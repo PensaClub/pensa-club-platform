@@ -1,15 +1,20 @@
 // src/components/DigiBridge/UserChatsPage/UserChatsPage.jsx
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAuthContext } from '../../contexts/UserContext';
 import { listenToUserConversations } from '../../firebase/firebaseChat';
 import { useAcademy } from '../../contexts/AcademyProvider';
 import './userChatsPage.css';
-import { DigiBridgeChatWindow } from '../DigiBridgeChatWindow/DigiBridgeChatWindow';
+import lazyWithRetry from '../../../utils/lazyWithRetry.js';
 import { UserChatCard } from './UserChatCard';
 import { MentorReviewModal } from '../MentorReviewModal/MentorReviewModal';
 import { TextZoom } from '../../TextZoom/TextZoom';
+
+// Lazy-load ChatWindow so its deps don't land in the main bundle.
+const DigiBridgeChatWindow = lazyWithRetry(() =>
+  import('../DigiBridgeChatWindow/DigiBridgeChatWindow').then(m => ({ default: m.DigiBridgeChatWindow }))
+);
 
 export const UserChatsPage = () => {
   const { t } = useTranslation('digibridge');
@@ -170,10 +175,12 @@ export const UserChatsPage = () => {
         </div>
 
         {isChatOpen && selectedConversation && (
-          <DigiBridgeChatWindow 
-            existingConversation={selectedConversation}
-            onClose={handleCloseChat}
-          />
+          <Suspense fallback={null}>
+            <DigiBridgeChatWindow
+              existingConversation={selectedConversation}
+              onClose={handleCloseChat}
+            />
+          </Suspense>
         )}
       </div>
 
