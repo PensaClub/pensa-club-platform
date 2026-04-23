@@ -15,6 +15,7 @@ import {
   ClipboardList,
   ImageOff,
   Check,
+  Users2,
 } from 'lucide-react';
 import { useCommunityContext } from '../../contexts/CommunityContext';
 import './newsletterContentPicker.css';
@@ -26,6 +27,7 @@ const TYPES = [
   { key: 'initiatives', icon: Lightbulb },
   { key: 'projects', icon: ClipboardList },
   { key: 'publications', icon: FileText },
+  { key: 'clubs', icon: Users2 },
 ];
 
 export const NewsletterContentPicker = ({ isOpen, onClose, onPick }) => {

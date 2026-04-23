@@ -379,6 +379,7 @@
         "initiatives": "Инициативи",
         "projects": "Проекти",
         "publications": "Публикации",
+        "clubs": "Клубове",
         "update": "Ъпдейт"
       },
       "empty": "Няма намерени резултати.",
@@ -396,6 +397,7 @@
         "initiatives": "Инициатива",
         "projects": "Проект",
         "publications": "Публикация",
+        "clubs": "Клуб",
         "update": "Ъпдейт"
       },
       "update": {

@@ -379,6 +379,7 @@
         "initiatives": "Initiatives",
         "projects": "Projects",
         "publications": "Publications",
+        "clubs": "Clubs",
         "update": "Update"
       },
       "empty": "No results found.",
@@ -396,6 +397,7 @@
         "initiatives": "Initiative",
         "projects": "Project",
         "publications": "Publication",
+        "clubs": "Club",
         "update": "Update"
       },
       "update": {
