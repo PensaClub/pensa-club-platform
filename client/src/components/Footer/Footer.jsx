@@ -27,7 +27,7 @@ export const Footer = ({ additionalClasses }) => {
 
       <div className="pft-main">
         <div className="pft-watermark">
-          <img src="/images/homePage/logo-2.png" alt="" aria-hidden="true" width="380" height="258" loading="lazy" decoding="async" />
+          <img src="/images/homePage/logo-2.png" alt="" aria-hidden="true" />
         </div>
 
         <div className="pft-container">
@@ -35,7 +35,7 @@ export const Footer = ({ additionalClasses }) => {
           {/* Brand */}
           <div className="pft-brand">
             <Link to="/" className="pft-logo-link" onClick={scrollToTop}>
-              <img src="/images/homePage/logo-2.png" alt="Pensa Club" className="pft-logo" width="380" height="258" loading="lazy" decoding="async" />
+              <img src="/images/homePage/logo-2.png" alt="Pensa Club" className="pft-logo" />
               <span className="pft-logo-text">Pensa Club</span>
             </Link>
             <p className="pft-tagline">
@@ -70,9 +70,9 @@ export const Footer = ({ additionalClasses }) => {
 
           {/* Sitemap */}
           <div className="pft-column">
-            <h4 className="pft-column-title">
+            <h3 className="pft-column-title">
               {t('footer.site-map', { defaultValue: 'Карта на сайта' })}
-            </h4>
+            </h3>
             <nav className="pft-nav">
               <Link to="/articles" className="pft-nav-link">{t('header.articles', { defaultValue: 'Статии' })}</Link>
               <Link to="/clubs" className="pft-nav-link">{t('header.clubs', { defaultValue: 'Клубове' })}</Link>
@@ -89,9 +89,9 @@ export const Footer = ({ additionalClasses }) => {
 
           {/* Partners */}
           <div className="pft-column pft-column-partners">
-            <h4 className="pft-column-title">
+            <h3 className="pft-column-title">
               {t('footer.partners', { defaultValue: 'Партньори' })}
-            </h4>
+            </h3>
             <div className="pft-partners-list">
               {orderedPartners.map(partner => (
                 <a

@@ -1,21 +1,27 @@
 // src/components/DigiBridge/DigiBridgeChatButton/DigiBridgeChatButton.jsx
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
 import { useTranslation } from 'react-i18next';
 import './digiBridgeChatButton.css';
 import { useAuthContext } from '../../contexts/UserContext';
 import { useAcademy } from '../../contexts/AcademyProvider';
-import { 
-  listenToUnreadCounts, 
+import {
+  listenToUnreadCounts,
   listenToUserConversations,
   listenToPendingRequests,
   listenToMentorConversations,
   listenToMessages
 } from '../../firebase/firebaseChat';
-import { DigiBridgeChatWindow } from '../DigiBridgeChatWindow/DigiBridgeChatWindow';
+import lazyWithRetry from '../../../utils/lazyWithRetry.js';
 import { ChatWindowManager } from '../ChatWindowManager/ChatWindowManager';
 import { MentorChatHub } from '../MentorChatHub/MentorChatHub';
 import { MentorReviewModal } from '../MentorReviewModal/MentorReviewModal';
+
+// Lazy-load ChatWindow so its Firebase chat / Slate editor / emoji-picker
+// dependencies land in a separate chunk instead of bloating the main bundle.
+const DigiBridgeChatWindow = lazyWithRetry(() =>
+  import('../DigiBridgeChatWindow/DigiBridgeChatWindow').then(m => ({ default: m.DigiBridgeChatWindow }))
+);
 
 export const DigiBridgeChatButton = ({ onClick }) => {
   const { t } = useTranslation();
@@ -226,12 +232,14 @@ export const DigiBridgeChatButton = ({ onClick }) => {
       )}
 
       {!isMentor && isOpen && (
-        <DigiBridgeChatWindow 
-          onClose={handleCloseChatButton}
-          existingConversation={activeConversation}
-          pendingRequest={pendingRequest}
-          onRequestCreated={handleRequestCreated}
-        />
+        <Suspense fallback={null}>
+          <DigiBridgeChatWindow
+            onClose={handleCloseChatButton}
+            existingConversation={activeConversation}
+            pendingRequest={pendingRequest}
+            onRequestCreated={handleRequestCreated}
+          />
+        </Suspense>
       )}
 
       {isMentor && (
