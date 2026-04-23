@@ -124,7 +124,18 @@ export const SocketProvider = ({ children }) => {
       }
     };
 
-    setupPush();
+    // Defer push setup — it was blocking the critical path for 5+ seconds
+    // on home (/push/vapid-key → /push/subscribe chain). Push notifications
+    // are non-critical; running during browser idle frees the main thread
+    // for hero render and initial content.
+    const runIdle = window.requestIdleCallback
+      ? (cb) => window.requestIdleCallback(cb, { timeout: 5000 })
+      : (cb) => setTimeout(cb, 2500);
+    const cancelIdle = window.cancelIdleCallback
+      ? (id) => window.cancelIdleCallback(id)
+      : (id) => clearTimeout(id);
+    const idleId = runIdle(() => setupPush());
+    return () => cancelIdle(idleId);
   }, [isAuthentication, token]);
 
   return (

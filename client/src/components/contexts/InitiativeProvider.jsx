@@ -883,8 +883,19 @@ export const InitiativeProvider = ({ children }) => {
   // Добавете в useEffect за зареждане при login:
   useEffect(() => {
     if (isAuthentication && userEmail) {
-      loadUserBookmarks(); // за инициативи
-      loadProjectBookmarks(); // за проекти
+      // Defer bookmarks prefetch — not needed for home rendering.
+      // Was blocking the critical path on initial page load.
+      const runIdle = window.requestIdleCallback
+        ? (cb) => window.requestIdleCallback(cb, { timeout: 5000 })
+        : (cb) => setTimeout(cb, 2500);
+      const cancelIdle = window.cancelIdleCallback
+        ? (id) => window.cancelIdleCallback(id)
+        : (id) => clearTimeout(id);
+      const idleId = runIdle(() => {
+        loadUserBookmarks(); // за инициативи
+        loadProjectBookmarks(); // за проекти
+      });
+      return () => cancelIdle(idleId);
     } else {
       clearBookmarks();
       setBookmarkedProjects([]); // изчистваме и проектите
