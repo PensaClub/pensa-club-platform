@@ -202,6 +202,14 @@ export const communityServiceFactory = (token) => {
     updateSubscriberPreferencesByAdmin: async (id, preferences) => {
       return requester.put(`${apiUrl}/subscribe/admin/${id}/preferences`, { preferences });
     },
+    // Lightweight counts for the home-page PlatformStats cards.
+    // Replaces 5 separate full-list fetches (~700 KiB) with one ~200B response.
+    getPlatformCounts: async () => {
+      const res = await fetch(`${apiUrl}/platform-stats/counts`);
+      if (!res.ok) throw new Error('platform-stats failed');
+      return res.json();
+    },
+
     exportSubscribersCsvUrl: (params = {}) => {
       const qs = new URLSearchParams();
       Object.entries(params).forEach(([k, v]) => {

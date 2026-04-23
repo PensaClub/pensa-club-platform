@@ -84,6 +84,7 @@ export const PartnersShowcase = () => {
                     alt={partner.alt}
                     className="pshw-spotlight-logo"
                     loading="lazy"
+                    decoding="async"
                   />
                 </div>
 
@@ -128,6 +129,7 @@ export const PartnersShowcase = () => {
                   alt={partner.alt}
                   className="pshw-marquee-logo"
                   loading="lazy"
+                  decoding="async"
                 />
               </a>
             ))}
