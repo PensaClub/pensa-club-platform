@@ -24,25 +24,44 @@ export const TextZoom = () => {
     }
   }, []);
 
+// Persist settings to localStorage whenever they change.
+// Kept separate from DOM mutations so non-fontSize changes (position, colors)
+// don't trigger a reflow of the entire page.
+useEffect(() => {
+  const settings = { fontSize, position, backgroundColor, accentColor, transparency };
+  localStorage.setItem('textZoomSettings', JSON.stringify(settings));
+}, [fontSize, position, backgroundColor, accentColor, transparency]);
+
+// Apply font-size scaling to the whole page — only when user deviates from
+// the default (100%). Previously ran on every mount regardless of scale,
+// which mutated every text element with inline `font-size ... !important`
+// and caused a large CLS hit on page load (0.15+ in Lighthouse).
 useEffect(() => {
   const scale = fontSize / 100;
-  
+  if (scale === 1) {
+    // Default size — clear any previously applied inline font-sizes so the
+    // page reverts to its CSS-declared sizes and no layout shift is needed.
+    const previouslyMutated = document.querySelectorAll('[data-original-font-size]');
+    previouslyMutated.forEach((element) => {
+      if (element.closest('.text-zoom-widget')) return;
+      if (element.closest('[data-no-text-zoom]')) return;
+      element.style.removeProperty('font-size');
+    });
+    return;
+  }
+
   const textElements = document.querySelectorAll(`
     body, p, div, a, li, td, th, h1, h2, h3, h4, h5, h6,
     strong, b, em, i, u, blockquote, cite, code, pre,
-    input, textarea, button, label, 
+    input, textarea, button, label,
     .club-card-title, .club-card-description, .club-card-stat-label,
     .clubs-search-input, .clubs-filter-select,
     .project-view-section-description, .project-view-section-description *,
     .slate-content, .slate-content *,
     .project-view-description, .project-view-description *
   `);
-  
+
   textElements.forEach(element => {
-    // Skip text-zoom widget itself AND any element / subtree that opts out
-    // via data-no-text-zoom. Used e.g. by DigiBridgeHeader's ".dbh-back"
-    // (Pensa Club link) where the inline !important font-size was clobbering
-    // the component's own CSS.
     if (element.closest('.text-zoom-widget')) return;
     if (element.closest('[data-no-text-zoom]')) return;
 
@@ -53,13 +72,9 @@ useEffect(() => {
     }
 
     const originalSize = parseFloat(element.getAttribute('data-original-font-size'));
-    // Използваме setProperty с !important
     element.style.setProperty('font-size', `${originalSize * scale}px`, 'important');
   });
-  
-  const settings = { fontSize, position, backgroundColor, accentColor, transparency };
-  localStorage.setItem('textZoomSettings', JSON.stringify(settings));
-}, [fontSize, position, backgroundColor, accentColor, transparency]);
+}, [fontSize]);
 
   const increaseFontSize = () => {
     if (fontSize < 150) setFontSize(prev => prev + 10);

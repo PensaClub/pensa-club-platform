@@ -27,7 +27,7 @@ export const Footer = ({ additionalClasses }) => {
 
       <div className="pft-main">
         <div className="pft-watermark">
-          <img src="/images/homePage/logo-2.png" alt="" aria-hidden="true" />
+          <img src="/images/homePage/logo-2.png" alt="" aria-hidden="true" width="380" height="258" loading="lazy" decoding="async" />
         </div>
 
         <div className="pft-container">
@@ -35,7 +35,7 @@ export const Footer = ({ additionalClasses }) => {
           {/* Brand */}
           <div className="pft-brand">
             <Link to="/" className="pft-logo-link" onClick={scrollToTop}>
-              <img src="/images/homePage/logo-2.png" alt="Pensa Club" className="pft-logo" />
+              <img src="/images/homePage/logo-2.png" alt="Pensa Club" className="pft-logo" width="380" height="258" loading="lazy" decoding="async" />
               <span className="pft-logo-text">Pensa Club</span>
             </Link>
             <p className="pft-tagline">
