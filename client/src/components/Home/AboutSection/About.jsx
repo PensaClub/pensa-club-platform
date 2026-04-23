@@ -43,7 +43,7 @@ export const AboutSection = () => {
           <div className="pens-about-shape pens-about-shape-primary"></div>
           <div className="pens-about-shape pens-about-shape-secondary"></div>
           <div className="pens-about-logo-bg">
-            <img src="/images/homePage/logo-2.png" alt={t("about.logo_alt")} />
+            <img src="/images/homePage/logo-2.png" alt={t("about.logo_alt")} width="380" height="258" loading="lazy" decoding="async" />
           </div>
         </div>
 
@@ -82,7 +82,7 @@ export const AboutSection = () => {
           <div className="pens-about-shape pens-about-shape-primary"></div>
           <div className="pens-about-shape pens-about-shape-secondary"></div>
           <div className="pens-about-logo-bg">
-            <img src="/images/homePage/logo-2.png" alt={t("about.logo_alt")} />
+            <img src="/images/homePage/logo-2.png" alt={t("about.logo_alt")} width="380" height="258" loading="lazy" decoding="async" />
           </div>
         </div>
 
