@@ -45,6 +45,7 @@ const DEFAULT_THUMBNAILS = {
     initiatives: `${PUBLIC_BASE_URL}/images/homePage/logo-2.png`,
     projects: `${PUBLIC_BASE_URL}/images/homePage/logo-2.png`,
     publications: `${PUBLIC_BASE_URL}/images/homePage/logo-2.png`,
+    clubs: `${PUBLIC_BASE_URL}/images/homePage/logo-2.png`,
 };
 const resolveThumb = (primary, type) => {
     const abs = absolutizeUrl(primary);
@@ -1086,6 +1087,27 @@ newsletterController.get(
                     url: `/publications/${r.slug}`,
                     date: r.publishedAt || r.createdAt,
                     published: true,
+                }));
+            } else if (type === 'clubs') {
+                const { Club } = require('../sequelize/models');
+                const rows = await Club.findAll({
+                    where: { ...ilikeFor('name') },
+                    attributes: [
+                        'id', 'name', 'slug', 'description', 'mainImage',
+                        'category', 'isDraft', 'createdAt',
+                    ],
+                    order: [['createdAt', 'DESC']],
+                    limit,
+                });
+                items = rows.map((r) => ({
+                    id: r.id,
+                    type: 'clubs',
+                    title: r.name,
+                    description: r.description?.substring(0, 180) || '',
+                    thumbnail: resolveThumb(r.mainImage, 'clubs'),
+                    url: `/clubs/${r.slug}`,
+                    date: r.createdAt,
+                    published: !r.isDraft,
                 }));
             } else {
                 return res.status(400).json({ message: 'Unknown content type.' });

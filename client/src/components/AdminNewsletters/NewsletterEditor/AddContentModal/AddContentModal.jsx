@@ -16,6 +16,7 @@ import {
   ImageOff,
   Check,
   Megaphone,
+  Users2,
 } from 'lucide-react';
 import { useCommunityContext } from '../../../contexts/CommunityContext';
 import { NewsletterImageUploader } from '../../NewsletterImageUploader/NewsletterImageUploader';
@@ -28,6 +29,7 @@ const TYPES = [
   { key: 'initiatives', icon: Lightbulb },
   { key: 'projects', icon: ClipboardList },
   { key: 'publications', icon: FileText },
+  { key: 'clubs', icon: Users2 },
   { key: 'update', icon: Megaphone },
 ];
 
