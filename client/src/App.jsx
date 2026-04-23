@@ -6,62 +6,37 @@ import { HelmetProvider } from 'react-helmet-async';
 import { Routes, Route, useLocation, useNavigate } from 'react-router-dom';
 import { NotFound } from './components/ErrorPages/NotFound/NotFound.jsx';
 import { ServerError } from './components/ErrorPages/ServerError/ServerError.jsx';
-import { LoginRegister } from './components/LoginRegister/LoginRegister.jsx';
 import { UserProvider } from './components/contexts/UserContext.jsx';
 import { Logout } from './components/Logout/Logout.jsx';
 import ErrorBoundary from './tools/errorBoundary.jsx';
 import ErrorPageBoundary from './components/ErrorPages/ErrorPageBoundary.jsx';
-import { UserSuggestion } from './components/UserSuggestion/UserSuggestion.jsx';
 import { PublicGuard } from './components/Guards/PublicGuard.jsx';
 import { AuthGuard } from './components/Guards/AuthGuard.jsx';
 import 'react-toastify/dist/ReactToastify.css';
 import { MapProvider } from './components/contexts/MapContext.jsx';
-import { CommunityPage } from './components/Community/CommunityPage.jsx';
 import { CommunityProvider } from './components/contexts/CommunityContext.jsx';
-import { AdsCard } from './components/Community/AdsCard/AdsCard.jsx';
 import { ToastContainer } from 'react-toastify';
-import { AdPage } from './components/Community/AdPage/AdPage.jsx';
-import { CreateAd } from './components/Community/AdPage/CreateAd/CreateAd.jsx';
-import { ForgetPassword } from './components/ForgetPassword/ForgetPassword.jsx';
-import { ReSendEmail } from './components/ForgetPassword/ReSendEmail.jsx';
-import { ResetPasswordPage } from './components/ForgetPassword/ResetPasswordPage.jsx';
-import AcceptInvitation from './components/AcceptInvitation/AcceptInvitation.jsx';
 import { MenuCommunity } from './components/Community/MenuCommunity/MenuCommunity.jsx';
 import { HeaderCommunity } from './components/Community/HeaderCommunity/HeaderCommunity.jsx';
 import { SuggestUserProvider } from './components/contexts/SuggestUserContext.jsx';
-import { AdDetails } from './components/Community/AdPage/AdDetails/AdDetails.jsx';
-import { EditAd } from './components/Community/AdPage/EditAd/EditAd.jsx';
 import { AdminProvider } from './components/contexts/AdminContext.jsx';
 import { CookieConsent } from './components/CookieConsent/CookieConsent.jsx';
 import { useCookies } from 'react-cookie';
-import { PrivacyPolicy } from './components/PrivacyPolicy/PrivacyPolicy.jsx';
 import { setNavigator } from './utils/handle401Error.jsx';
 import { useEffect, Suspense, useState } from 'react';
 import lazyWithRetry from './utils/lazyWithRetry.js';
-import ArticleView from './components/Articles/ArticleView/ArticleView.jsx';
 import FooterWithLoading from './FooterWithLoading/FooterWithLoading.jsx';
 import { LoadingProvider } from './components/contexts/LoadingContext.jsx';
 import { ArticleProvider } from './components/contexts/ArticleContext.jsx';
 import { ArticleLimitProvider } from './components/contexts/ArticleLimitContext.jsx';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import { GoogleAuthProvider } from './components/contexts/GoogleAuthContext.jsx';
-import ContactForm from './components/ContactForm/ContactForm.jsx';
 import { InitiativeProvider } from './components/contexts/InitiativeProvider.jsx';
 import { ThemeProvider } from './components/contexts/ThemeContext.jsx';
-import { InitiativeView } from './components/Initiatives/InitiativeView/InitiativeView.jsx';
-import { ProjectView } from './components/Initiatives/InitiativeView/ProjectView/ProjectView.jsx';
-import { StoryView } from './components/Initiatives/InitiativeView/StoryPubView/StoryView.jsx';
-import { PublicationView } from './components/Initiatives/InitiativeView/StoryPubView/PublicationView.jsx';
-import { InitiativePreviewPage } from './components/Initiatives/CreateIniciative/InitiativePreviewPage/InitiativePreviewPage.jsx';
 import { initGA } from './components/Services/analyticsService.js';
 import { AnalyticsProvider } from './components/contexts/AnalyticsContext.jsx';
-import EliteMembershipPage from './components/EliteMembershipPage/EliteMembershipPage.jsx';
 import { useTranslation } from 'react-i18next';
-import GamesPage from './components/GamesPage/GamesPage.jsx';
-import { AllClubs } from './components/Clubs/AllClubs/AllClubs.jsx';
 import { ClubProvider } from './components/contexts/ClubContext.jsx';
-import ClubView from './components/Clubs/ClubView/ClubView.jsx';
-import AboutPage from './components/AboutPage/AboutPage.jsx';
 import { AcademyProvider } from './components/contexts/AcademyProvider.jsx';
 import { FactCheckProvider } from './components/contexts/FactCheckProvider.jsx';
 import { ReActionProvider } from './components/contexts/ReActionProvider.jsx';
@@ -169,6 +144,37 @@ const FiltersMap = lazyWithRetry(() => import('./components/MapPage/FitlersMap/F
 const MapPage = lazyWithRetry(() => import('./components/MapPage/MapPage.jsx').then(m => ({ default: m.MapPage })));
 const DigiBridgeChatWindow = lazyWithRetry(() => import('./components/DigiBridge/DigiBridgeChatWindow/DigiBridgeChatWindow.jsx').then(m => ({ default: m.DigiBridgeChatWindow })));
 
+// ✅ LAZY LOADING - PHASE 2 GROUP A (content views + clubs — frees leaflet + rich text editor)
+const ArticleView = lazyWithRetry(() => import('./components/Articles/ArticleView/ArticleView.jsx'));
+const InitiativeView = lazyWithRetry(() => import('./components/Initiatives/InitiativeView/InitiativeView.jsx').then(m => ({ default: m.InitiativeView })));
+const ProjectView = lazyWithRetry(() => import('./components/Initiatives/InitiativeView/ProjectView/ProjectView.jsx').then(m => ({ default: m.ProjectView })));
+const StoryView = lazyWithRetry(() => import('./components/Initiatives/InitiativeView/StoryPubView/StoryView.jsx').then(m => ({ default: m.StoryView })));
+const PublicationView = lazyWithRetry(() => import('./components/Initiatives/InitiativeView/StoryPubView/PublicationView.jsx').then(m => ({ default: m.PublicationView })));
+const InitiativePreviewPage = lazyWithRetry(() => import('./components/Initiatives/CreateIniciative/InitiativePreviewPage/InitiativePreviewPage.jsx').then(m => ({ default: m.InitiativePreviewPage })));
+const AllClubs = lazyWithRetry(() => import('./components/Clubs/AllClubs/AllClubs.jsx').then(m => ({ default: m.AllClubs })));
+const ClubView = lazyWithRetry(() => import('./components/Clubs/ClubView/ClubView.jsx'));
+
+// ✅ LAZY LOADING - PHASE 2 GROUP B (community + ads)
+const CommunityPage = lazyWithRetry(() => import('./components/Community/CommunityPage.jsx').then(m => ({ default: m.CommunityPage })));
+const AdsCard = lazyWithRetry(() => import('./components/Community/AdsCard/AdsCard.jsx').then(m => ({ default: m.AdsCard })));
+const AdPage = lazyWithRetry(() => import('./components/Community/AdPage/AdPage.jsx').then(m => ({ default: m.AdPage })));
+const CreateAd = lazyWithRetry(() => import('./components/Community/AdPage/CreateAd/CreateAd.jsx').then(m => ({ default: m.CreateAd })));
+const AdDetails = lazyWithRetry(() => import('./components/Community/AdPage/AdDetails/AdDetails.jsx').then(m => ({ default: m.AdDetails })));
+const EditAd = lazyWithRetry(() => import('./components/Community/AdPage/EditAd/EditAd.jsx').then(m => ({ default: m.EditAd })));
+
+// ✅ LAZY LOADING - PHASE 2 GROUP C (auth + misc single-page routes)
+const LoginRegister = lazyWithRetry(() => import('./components/LoginRegister/LoginRegister.jsx').then(m => ({ default: m.LoginRegister })));
+const ForgetPassword = lazyWithRetry(() => import('./components/ForgetPassword/ForgetPassword.jsx').then(m => ({ default: m.ForgetPassword })));
+const ReSendEmail = lazyWithRetry(() => import('./components/ForgetPassword/ReSendEmail.jsx').then(m => ({ default: m.ReSendEmail })));
+const ResetPasswordPage = lazyWithRetry(() => import('./components/ForgetPassword/ResetPasswordPage.jsx').then(m => ({ default: m.ResetPasswordPage })));
+const AcceptInvitation = lazyWithRetry(() => import('./components/AcceptInvitation/AcceptInvitation.jsx'));
+const UserSuggestion = lazyWithRetry(() => import('./components/UserSuggestion/UserSuggestion.jsx').then(m => ({ default: m.UserSuggestion })));
+const ContactForm = lazyWithRetry(() => import('./components/ContactForm/ContactForm.jsx'));
+const PrivacyPolicy = lazyWithRetry(() => import('./components/PrivacyPolicy/PrivacyPolicy.jsx').then(m => ({ default: m.PrivacyPolicy })));
+const AboutPage = lazyWithRetry(() => import('./components/AboutPage/AboutPage.jsx'));
+const EliteMembershipPage = lazyWithRetry(() => import('./components/EliteMembershipPage/EliteMembershipPage.jsx'));
+const GamesPage = lazyWithRetry(() => import('./components/GamesPage/GamesPage.jsx'));
+
 // ✅ LOADING FALLBACK КОМПОНЕНТ
 const LazyLoadingFallback = ({ type = 'page' }) => {
   const { t } = useTranslation();
@@ -204,15 +210,15 @@ function AppRoutes() {
       <Route path="/academy/community/post/:slug" element={<Suspense fallback={<LazyLoadingFallback type="academy" />}><ForumProvider><ForumPostDetailPage /></ForumProvider></Suspense>} />
       <Route path="/academy/community/my" element={<Suspense fallback={<LazyLoadingFallback type="academy" />}><ForumProvider><ForumMyPanel /></ForumProvider></Suspense>} />
       <Route path="/academy/about" element={<Suspense fallback={<LazyLoadingFallback type="academy" />}><ComingSoon pageKey="about" /></Suspense>} />
-      <Route path="/contact" element={<ContactForm />} />
-      <Route path="/about" element={<AboutPage />} />
+      <Route path="/contact" element={<Suspense fallback={<LazyLoadingFallback />}><ContactForm /></Suspense>} />
+      <Route path="/about" element={<Suspense fallback={<LazyLoadingFallback />}><AboutPage /></Suspense>} />
       <Route path="/server-error" element={<ServerError />} />
-      <Route path="/forget-password" element={<ForgetPassword />} />
+      <Route path="/forget-password" element={<Suspense fallback={<LazyLoadingFallback />}><ForgetPassword /></Suspense>} />
       <Route path="/subscribe/preferences/:token" element={<Suspense fallback={<LazyLoadingFallback />}><SubscribePreferences /></Suspense>} />
       <Route path="/subscribe/unsubscribe/:token" element={<Suspense fallback={<LazyLoadingFallback />}><Unsubscribe /></Suspense>} />
-      <Route path="/resend-email" element={<ReSendEmail />} />
-      <Route path="/reset-password" element={<ResetPasswordPage />} />
-      <Route path="/accept-invitation" element={<AcceptInvitation />} />
+      <Route path="/resend-email" element={<Suspense fallback={<LazyLoadingFallback />}><ReSendEmail /></Suspense>} />
+      <Route path="/reset-password" element={<Suspense fallback={<LazyLoadingFallback />}><ResetPasswordPage /></Suspense>} />
+      <Route path="/accept-invitation" element={<Suspense fallback={<LazyLoadingFallback />}><AcceptInvitation /></Suspense>} />
 
       <Route path="/fact-check" element={<Suspense fallback={<LazyLoadingFallback />}><FactCheck /></Suspense>} />
       <Route path="/fact-check/:slug" element={<Suspense fallback={<LazyLoadingFallback />}><FactCheckDetail /></Suspense>} />
@@ -225,13 +231,13 @@ function AppRoutes() {
       <Route path="/initiatives" element={<Suspense fallback={<LazyLoadingFallback type="initiatives" />}><InitiativesList /></Suspense>} />
       <Route path="/projects" element={<Suspense fallback={<LazyLoadingFallback type="projects" />}><ProjectsList /></Suspense>} />
       <Route path="/publications" element={<Suspense fallback={<LazyLoadingFallback type="publications" />}><PublicationsList /></Suspense>} />
-      <Route path="/publications/:slug" element={<PublicationView />} />
+      <Route path="/publications/:slug" element={<Suspense fallback={<LazyLoadingFallback type="publications" />}><PublicationView /></Suspense>} />
       <Route path="/publications/edit/:slug" element={<PublicationForm isEditMode={true} />} />
-      <Route path="/initiatives/:slug" element={<InitiativeView />} />
-      <Route path="/stories/:slug" element={<StoryView />} />
-      <Route path="/projects/:slug" element={<ProjectView />} />
-      <Route path="/articles/:slug" element={<ArticleView />} />
-      <Route path="/elite-membership" element={<EliteMembershipPage />} />
+      <Route path="/initiatives/:slug" element={<Suspense fallback={<LazyLoadingFallback type="initiatives" />}><InitiativeView /></Suspense>} />
+      <Route path="/stories/:slug" element={<Suspense fallback={<LazyLoadingFallback type="stories" />}><StoryView /></Suspense>} />
+      <Route path="/projects/:slug" element={<Suspense fallback={<LazyLoadingFallback type="projects" />}><ProjectView /></Suspense>} />
+      <Route path="/articles/:slug" element={<Suspense fallback={<LazyLoadingFallback type="articles" />}><ArticleView /></Suspense>} />
+      <Route path="/elite-membership" element={<Suspense fallback={<LazyLoadingFallback />}><EliteMembershipPage /></Suspense>} />
       <Route path="/stories" element={<Suspense fallback={<LazyLoadingFallback type="stories" />}><StoriesList /></Suspense>} />
       <Route path="/stories/edit/:slug" element={<StoryForm isEditMode={true} />} />
 
@@ -245,7 +251,7 @@ function AppRoutes() {
       <Route element={<AuthGuard />}>
         <Route path="/academy/become-mentor" element={<Suspense fallback={<LazyLoadingFallback type="academy" />}><DigiBridgeBecomeMentor /></Suspense>} />
         <Route path="/academy/my" element={<Suspense fallback={<LazyLoadingFallback type="academy" />}><StudentDashboard /></Suspense>} />
-        <Route path="/initiative-preview" element={<InitiativePreviewPage />} />
+        <Route path="/initiative-preview" element={<Suspense fallback={<LazyLoadingFallback />}><InitiativePreviewPage /></Suspense>} />
         <Route path="/projects-create" element={<ManagementGuard><Suspense fallback={<LazyLoadingFallback />}><ProjectCreateForm /></Suspense></ManagementGuard>} />
         <Route path="/project-preview" element={<ManagementGuard><Suspense fallback={<LazyLoadingFallback />}><ProjectPreview /></Suspense></ManagementGuard>} />
         <Route path="/academy/courses/:courseSlug/lessons/:lessonSlug" element={<Suspense fallback={<LazyLoadingFallback type="academy" />}><AcademyLessonPlayer /></Suspense>} />
@@ -278,11 +284,11 @@ function AppRoutes() {
         <Route path="/academy/admin/edit-seminar/:slug" element={<AdminGuard><Suspense fallback={<LazyLoadingFallback type="academy" />}><EditSeminar /></Suspense></AdminGuard>} />
         <Route path="/academy/admin/course/:slug/content" element={<AdminGuard><Suspense fallback={<LazyLoadingFallback type="academy" />}><CourseContentManager /></Suspense></AdminGuard>} />
         <Route path="/academy/admin/forum" element={<AdminGuard><Suspense fallback={<LazyLoadingFallback type="academy" />}><AdminForumDashboard /></Suspense></AdminGuard>} />
-        <Route path="/ad/details/:adId" element={<AdDetails />} />
-        <Route path="/ad/edit/:adId" element={<EditAd />} />
-        <Route path="/ad" element={<AdPage />} />
-        <Route path="/games" element={<GamesPage />} />
-        <Route path="/ad/create" element={<CreateAd />} />
+        <Route path="/ad/details/:adId" element={<Suspense fallback={<LazyLoadingFallback />}><AdDetails /></Suspense>} />
+        <Route path="/ad/edit/:adId" element={<Suspense fallback={<LazyLoadingFallback />}><EditAd /></Suspense>} />
+        <Route path="/ad" element={<Suspense fallback={<LazyLoadingFallback />}><AdPage /></Suspense>} />
+        <Route path="/games" element={<Suspense fallback={<LazyLoadingFallback />}><GamesPage /></Suspense>} />
+        <Route path="/ad/create" element={<Suspense fallback={<LazyLoadingFallback />}><CreateAd /></Suspense>} />
         <Route path="/logout" element={<Logout />} />
         <Route path="/profile/*" element={<Suspense fallback={<LazyLoadingFallback />}><Profile /></Suspense>} />
         <Route path="/my-chats" element={<UserChatsPage />} />
@@ -299,19 +305,19 @@ function AppRoutes() {
       </Route>
 
       <Route element={<PublicGuard />}>
-        <Route path="/sign-up" element={<LoginRegister />} />
+        <Route path="/sign-up" element={<Suspense fallback={<LazyLoadingFallback />}><LoginRegister /></Suspense>} />
       </Route>
 
       <Route path="/telk-rkme-rzi" element={<Suspense fallback={<LazyLoadingFallback />}><TelkRkmeRzi /></Suspense>} />
-      <Route path="/community" element={<CommunityPage />} />
+      <Route path="/community" element={<Suspense fallback={<LazyLoadingFallback />}><CommunityPage /></Suspense>} />
       <Route path="/useful-links" element={<Suspense fallback={<LazyLoadingFallback />}><UsefulLinks /></Suspense>} />
-      <Route path="/clubs" element={<AllClubs />} />
-      <Route path="/clubs/:slug" element={<ClubView />} />
-      <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-      <Route path="/ads" element={<AdsCard />} />
+      <Route path="/clubs" element={<Suspense fallback={<LazyLoadingFallback />}><AllClubs /></Suspense>} />
+      <Route path="/clubs/:slug" element={<Suspense fallback={<LazyLoadingFallback />}><ClubView /></Suspense>} />
+      <Route path="/privacy-policy" element={<Suspense fallback={<LazyLoadingFallback />}><PrivacyPolicy /></Suspense>} />
+      <Route path="/ads" element={<Suspense fallback={<LazyLoadingFallback />}><AdsCard /></Suspense>} />
       <Route path="/filter" element={<Suspense fallback={<LazyLoadingFallback />}><FiltersMap /></Suspense>} />
       <Route path="/map" element={<Suspense fallback={<LazyLoadingFallback />}><MapPage /></Suspense>} />
-      <Route path="/suggest-user" element={<UserSuggestion />} />
+      <Route path="/suggest-user" element={<Suspense fallback={<LazyLoadingFallback />}><UserSuggestion /></Suspense>} />
       <Route path="/errors/*" element={<ErrorPageBoundary />} />
       <Route path="404/*" element={<NotFound />} />
       <Route path="*" element={<NotFound />} />
