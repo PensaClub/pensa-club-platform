@@ -136,7 +136,7 @@ export const Header = ({ additionalClasses }) => {
     <>
       <header className={`${scrolled ? "scrolled" : ""} ${additionalClasses || ""}`}>
         <Link to="/">
-          <img src="/images/homePage/logo-2.png" alt="logo" className="logo" />
+          <img src="/images/homePage/logo-2.png" alt="logo" className="logo" width="380" height="258" />
           Pensa Club
         </Link>
 
@@ -453,6 +453,10 @@ export const Header = ({ additionalClasses }) => {
                 }
                 alt="Profile"
                 className="profile-image-header"
+                width="46"
+                height="46"
+                loading="lazy"
+                decoding="async"
               />
             </div>
 
@@ -532,7 +536,7 @@ export const Header = ({ additionalClasses }) => {
       <div className={`mobile-menu-container ${mobileMenuOpen ? 'active' : ''}`} ref={mobileMenuRef}>
         <div className="mobile-menu-content">
           <div className="mobile-menu-header">
-            <img src="/images/homePage/logo-2.png" alt="Pensa" className="mobile-logo" />
+            <img src="/images/homePage/logo-2.png" alt="Pensa" className="mobile-logo" width="380" height="258" />
             <h3>Pensa Club</h3>
             <button className="mobile-close-btn" onClick={toggleMobileMenu} aria-label="Затвори менюто">
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
