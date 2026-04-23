@@ -119,6 +119,18 @@ p, a {
   font-style: italic;
   font-display: swap;
 }
+
+/* FontAwesome 4 override — CDN CSS doesn't set font-display, causing invisible
+   text flashes (FOIT). Declaring our own @font-face with font-display: swap
+   makes the fallback text visible immediately while the icon font loads. */
+@font-face {
+  font-family: 'FontAwesome';
+  src: url('https://netdna.bootstrapcdn.com/font-awesome/4.1.0/fonts/fontawesome-webfont.woff?v=4.1.0') format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
 * {
   box-sizing: border-box;
   margin: 0;
