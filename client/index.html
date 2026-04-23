@@ -298,10 +298,33 @@
 
   <!-- Google Sign-In -->
   <script src="https://accounts.google.com/gsi/client" async defer></script>
+
+  <!-- Critical CSS for LCP hero placeholder.
+       Inlined so the hero background can paint without waiting for the
+       437 KB CSS bundle. The static placeholder below is removed by
+       Hero.jsx after React mounts (invisible swap, identical visuals). -->
+  <style>
+    #lcp-hero-bg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 120vh;
+      background-image: url("/images/homePage/hero-img.jpg");
+      background-size: cover;
+      background-position: center;
+      filter: brightness(0.9);
+      z-index: 0;
+      pointer-events: none;
+    }
+  </style>
 </head>
 
 <body>
   <noscript>За да използвате Pensa Club, моля активирайте JavaScript във вашия браузър.</noscript>
+  <!-- LCP placeholder: paints the hero background before React mounts.
+       Removed by Hero.jsx useEffect once the real .hero-bg-image is rendered. -->
+  <div id="lcp-hero-bg" aria-hidden="true"></div>
   <div id="root"></div>
   <script type="module" src="/src/index.jsx"></script>
 </body>
