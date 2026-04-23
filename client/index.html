@@ -11,6 +11,23 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta http-equiv="content-language" content="bg" />
 
+  <!-- LCP optimization: preload the hero background image (used on home).
+       Without this preload the browser only discovers the image after
+       parsing the 437 KB CSS bundle, pushing LCP to 19.8s. -->
+  <link
+    rel="preload"
+    as="image"
+    href="/images/homePage/hero-img.jpg"
+    fetchpriority="high"
+  />
+
+  <!-- Establish early TCP+TLS connections to the most-used third parties so
+       Firebase image fetches and Google Font CSS don't pay the round-trip
+       cost on top of resource download. -->
+  <link rel="preconnect" href="https://firebasestorage.googleapis.com" crossorigin />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+
   <!-- Primary Meta Tags -->
   <title>Pensa Club - Платформа за пенсионери в дигиталния свят | DigiBridge Academy</title>
   <meta name="title" content="Pensa Club - Платформа за пенсионери в дигиталния свят | DigiBridge Academy" />
