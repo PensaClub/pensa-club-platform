@@ -70,9 +70,9 @@ export const Footer = ({ additionalClasses }) => {
 
           {/* Sitemap */}
           <div className="pft-column">
-            <h4 className="pft-column-title">
+            <h3 className="pft-column-title">
               {t('footer.site-map', { defaultValue: 'Карта на сайта' })}
-            </h4>
+            </h3>
             <nav className="pft-nav">
               <Link to="/articles" className="pft-nav-link">{t('header.articles', { defaultValue: 'Статии' })}</Link>
               <Link to="/clubs" className="pft-nav-link">{t('header.clubs', { defaultValue: 'Клубове' })}</Link>
@@ -89,9 +89,9 @@ export const Footer = ({ additionalClasses }) => {
 
           {/* Partners */}
           <div className="pft-column pft-column-partners">
-            <h4 className="pft-column-title">
+            <h3 className="pft-column-title">
               {t('footer.partners', { defaultValue: 'Партньори' })}
-            </h4>
+            </h3>
             <div className="pft-partners-list">
               {orderedPartners.map(partner => (
                 <a
