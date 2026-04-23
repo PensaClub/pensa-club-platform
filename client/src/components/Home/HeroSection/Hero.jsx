@@ -10,6 +10,12 @@ export const Hero = () => {
   const videoUrl = 'https://www.youtube.com/embed/_Q-TeezmAkw';
 
   useEffect(() => {
+    // Remove the static LCP placeholder once React's own hero-bg-image is mounted.
+    // The placeholder is rendered in index.html so LCP can paint without waiting
+    // for the JS bundle. After mount, the React-rendered .hero-bg-image takes over.
+    const placeholder = document.getElementById('lcp-hero-bg');
+    if (placeholder) placeholder.remove();
+
     // Проверка дали URL-а на видеото съдържа youtube
     setIsYouTubeVideo(videoUrl.includes('youtube') || videoUrl.includes('youtu.be'));
 
