@@ -87,10 +87,25 @@ export const SocketProvider = ({ children }) => {
           });
         }
 
+        // Refresh access token before sending — push subscribe sits outside
+        // the normal requester flow, so an expired token would 401 here.
+        let freshToken = token;
+        try {
+          const { refreshToken } = await import('../../utils/refreshToken');
+          const rawAuth = localStorage.getItem('auth');
+          if (rawAuth) {
+            const auth = JSON.parse(rawAuth);
+            const nt = await refreshToken(auth);
+            if (nt) freshToken = nt;
+          }
+        } catch {
+          /* fall back to existing token */
+        }
+
         // Send subscription to server
-        await fetch(`${SOCKET_URL}/push/subscribe`, {
+        const subRes = await fetch(`${SOCKET_URL}/push/subscribe`, {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+          headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${freshToken}` },
           body: JSON.stringify({
             endpoint: subscription.endpoint,
             keys: {
@@ -99,6 +114,11 @@ export const SocketProvider = ({ children }) => {
             },
           }),
         });
+        if (!subRes.ok && subRes.status !== 401) {
+          console.warn('[Push] subscribe returned', subRes.status);
+        }
+        // 401 is swallowed silently — push notifications are non-critical;
+        // the user will re-try on next page load when the session is valid.
       } catch (err) {
         console.error('Push setup error:', err);
       }

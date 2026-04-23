@@ -56,7 +56,12 @@ const ShowcaseSlider = ({ slides }) => {
             onMouseEnter={() => setIsPaused(true)}
             onMouseLeave={() => setIsPaused(false)}
         >
-            {slides.map((slide, i) => (
+            {slides.map((slide, i) => {
+                // Escape any double quotes inside the URL and wrap in quotes —
+                // raw `url(${x})` breaks when filenames contain `()`, spaces,
+                // or other special chars (CSS parser stops at the first `)`).
+                const safeUrl = String(slide.imageUrl || '').replace(/"/g, '\\"');
+                return (
                 <div
                     key={slide.id || i}
                     className={`shs-slide ${i === current ? 'shs-slide-active' : ''}`}
@@ -64,7 +69,7 @@ const ShowcaseSlider = ({ slides }) => {
                     <div
                         className={`shs-image ${i === current ? 'shs-zoom-out' : ''}`}
                         style={{
-                            backgroundImage: `url(${slide.imageUrl})`,
+                            backgroundImage: `url("${safeUrl}")`,
                             animationDuration: `${slide.durationSeconds || 6}s`,
                         }}
                     />
@@ -87,7 +92,8 @@ const ShowcaseSlider = ({ slides }) => {
                         )}
                     </div>
                 </div>
-            ))}
+                );
+            })}
 
             {count > 1 && (
                 <>
