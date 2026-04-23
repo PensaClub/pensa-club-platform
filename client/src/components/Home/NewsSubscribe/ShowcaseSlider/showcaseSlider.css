@@ -154,6 +154,7 @@
 
 .shs-container:hover .shs-arrow {
     opacity: 1;
+    padding: 4px;
 }
 
 .shs-arrow:hover {
