@@ -556,6 +556,16 @@ export const CommunityProvider = ({ children }) => {
         }
     };
 
+    // Lightweight home-page stats — see platformStatsController on the server.
+    const getPlatformCounts = async () => {
+        try {
+            return await communityService.getPlatformCounts();
+        } catch (e) {
+            // Stats are decorative on home — never fail the whole page render.
+            return null;
+        }
+    };
+
     const exportSubscribersCsvUrl = () => communityService.exportSubscribersCsvUrl();
     const exportSubscribersPdfUrl = (params) => communityService.exportSubscribersPdfUrl(params);
     const sendPersonalNewsletter = async (subscriberId, payload) => {
@@ -685,6 +695,7 @@ export const CommunityProvider = ({ children }) => {
         unblockSubscriber,
         updateSubscriberPreferencesByAdmin,
         exportSubscribersCsvUrl,
+        getPlatformCounts,
         exportSubscribersPdfUrl,
         getSubscriberPreferences,
         updateSubscriberPreferences,

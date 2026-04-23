@@ -1,9 +1,7 @@
 import { useEffect, useState, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocalizedNavigate } from '../../../hooks/useLocalizedNavigate';
-import { useClubContext } from '../../contexts/ClubContext';
-import { useArticleContext } from '../../contexts/ArticleContext';
-import { useInitiativeContext } from '../../contexts/InitiativeProvider';
+import { useCommunityContext } from '../../contexts/CommunityContext';
 import './platformStats.css';
 
 const easeOutExpo = (t) => (t === 1 ? 1 : 1 - Math.pow(2, -10 * t));
@@ -36,59 +34,33 @@ const AnimatedCounter = ({ target, delay = 0 }) => {
 export const PlatformStats = () => {
   const { t } = useTranslation('home');
   const navigate = useLocalizedNavigate();
-  const { getAllClubs } = useClubContext();
-  const { getAllArticles } = useArticleContext();
-  const {
-    initiatives,
-    projects,
-    publications,
-    getAllInitiatives,
-    getAllProjects,
-    getAllPublications,
-  } = useInitiativeContext();
+  const { getPlatformCounts } = useCommunityContext();
 
   const [stats, setStats] = useState({ clubs: 0, articles: 0, initiatives: 0, publications: 0, projects: 0 });
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const fetchAllStats = async () => {
+    let cancelled = false;
+    (async () => {
       try {
-        const [clubsResponse, articlesData] = await Promise.all([
-          getAllClubs(false, 1, 500),
-          getAllArticles(false),
-          getAllInitiatives(1),
-          getAllProjects(1, false),
-          getAllPublications(1, false, false),
-        ]);
-
-        const clubsData = clubsResponse.clubs || clubsResponse || [];
-
-        setStats({
-          clubs: Array.isArray(clubsData) ? clubsData.length : 0,
-          articles: Array.isArray(articlesData) ? articlesData.length : 0,
-          initiatives: Array.isArray(initiatives) ? initiatives.length : 0,
-          publications: Array.isArray(publications) ? publications.length : 0,
-          projects: Array.isArray(projects) ? projects.length : 0,
-        });
-      } catch (error) {
-        console.error('Error fetching platform statistics:', error);
+        const counts = await getPlatformCounts();
+        if (cancelled) return;
+        if (counts && typeof counts === 'object') {
+          setStats({
+            clubs: counts.clubs || 0,
+            articles: counts.articles || 0,
+            initiatives: counts.initiatives || 0,
+            publications: counts.publications || 0,
+            projects: counts.projects || 0,
+          });
+        }
       } finally {
-        setIsLoading(false);
+        if (!cancelled) setIsLoading(false);
       }
-    };
-    fetchAllStats();
+    })();
+    return () => { cancelled = true; };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  useEffect(() => {
-    if (!isLoading) {
-      setStats(prev => ({
-        ...prev,
-        initiatives: Array.isArray(initiatives) ? initiatives.length : 0,
-        publications: Array.isArray(publications) ? publications.length : 0,
-        projects: Array.isArray(projects) ? projects.length : 0,
-      }));
-    }
-  }, [initiatives, publications, projects, isLoading]);
 
   const getLabel = (key, count) => {
     return count === 1

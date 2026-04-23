@@ -1,6 +1,6 @@
 // src/components/Home/ClubsShowcase/ClubsShowcase.jsx
 
-import { useMemo, useEffect, useRef, useCallback } from 'react';
+import { useMemo, useEffect, useRef, useCallback, useState } from 'react';
 import { useLocalizedNavigate } from '../../../hooks/useLocalizedNavigate';
 import { useTranslation } from 'react-i18next';
 import { useClubContext } from '../../contexts/ClubContext';
@@ -17,22 +17,40 @@ const CATEGORY_COLORS = {
 export const ClubsShowcase = () => {
   const { t } = useTranslation('home');
   const navigate = useLocalizedNavigate();
-  const { clubs: contextClubs, clubsLoaded } = useClubContext();
+  const { getAllClubs } = useClubContext();
 
-  // Use clubs from context (PlatformStats already loads them)
+  // Self-contained fetch — only 12 clubs (enough to find 5 with images).
+  // Previously this leaned on PlatformStats loading all 500 clubs into
+  // ClubContext, which was a 700 KB request just to count them.
+  const [showcaseClubs, setShowcaseClubs] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      try {
+        const res = await getAllClubs(false, 1, 12);
+        if (cancelled) return;
+        const list = res?.clubs || res || [];
+        setShowcaseClubs(Array.isArray(list) ? list : []);
+      } finally {
+        if (!cancelled) setIsLoading(false);
+      }
+    })();
+    return () => { cancelled = true; };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const displayClubs = useMemo(() => {
-    if (!contextClubs || contextClubs.length === 0) return [];
-    // Prefer clubs with images, take up to 5
-    return [...contextClubs]
+    if (!showcaseClubs || showcaseClubs.length === 0) return [];
+    return [...showcaseClubs]
       .sort((a, b) => {
         const aImg = a.mainImage || a.logo ? 1 : 0;
         const bImg = b.mainImage || b.logo ? 1 : 0;
         return bImg - aImg;
       })
       .slice(0, 5);
-  }, [contextClubs]);
-
-  const isLoading = !clubsLoaded;
+  }, [showcaseClubs]);
   const sectionRef = useRef(null);
   const cardsRef = useRef([]);
 

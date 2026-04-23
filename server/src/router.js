@@ -59,6 +59,9 @@ router.use('/subscribe', subscriberController);
 router.use('/track', contentViewController);
 router.use('/admin/cron', cronSettingsController);
 
+const platformStatsController = require('./controllers/platformStatsController');
+router.use('/platform-stats', platformStatsController);
+
 const emailTemplateController = require('./controllers/emailTemplateController');
 router.use('/admin/email-template', emailTemplateController);
 router.use('/articles', articleController);
