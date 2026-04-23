@@ -9,11 +9,8 @@ import { ServerError } from './components/ErrorPages/ServerError/ServerError.jsx
 import { LoginRegister } from './components/LoginRegister/LoginRegister.jsx';
 import { UserProvider } from './components/contexts/UserContext.jsx';
 import { Logout } from './components/Logout/Logout.jsx';
-import { Profile } from './components/Profile/Profile.jsx';
 import ErrorBoundary from './tools/errorBoundary.jsx';
 import ErrorPageBoundary from './components/ErrorPages/ErrorPageBoundary.jsx';
-import { FiltersMap } from './components/MapPage/FitlersMap/FiltersMap.jsx';
-import { MapPage } from './components/MapPage/MapPage.jsx';
 import { UserSuggestion } from './components/UserSuggestion/UserSuggestion.jsx';
 import { PublicGuard } from './components/Guards/PublicGuard.jsx';
 import { AuthGuard } from './components/Guards/AuthGuard.jsx';
@@ -73,7 +70,6 @@ import { DriveProvider } from './components/contexts/DriveProvider.jsx';
 import { ForumProvider } from './components/contexts/ForumProvider.jsx';
 import { SocketProvider } from './components/contexts/SocketProvider.jsx';
 import { DigiBridgeChatButton } from './components/DigiBridge/DigiBridgeChatButton/DigiBridgeChatButton.jsx';
-import { DigiBridgeChatWindow } from './components/DigiBridge/DigiBridgeChatWindow/DigiBridgeChatWindow.jsx';
 import { MentorGuard } from './components/Guards/MentorGuard.jsx';
 import { AcademyStaffGuard } from './components/Guards/AcademyStaffGuard.jsx';
 import { DigiBridgeMentorDashboard } from './components/DigiBridge/DigiBridgeMentorDashboard/DigiBridgeMentorDashboard.jsx';
@@ -165,6 +161,13 @@ const Unsubscribe = lazyWithRetry(() => import('./components/Subscribe/Unsubscri
 const UsefulLinks = lazyWithRetry(() => import('./components/UsefulLinks/UsefulLinks.jsx'));
 const AdminUsefulLinksList = lazyWithRetry(() => import('./components/AdminUsefulLinksList/AdminUsefulLinksList.jsx'));
 const UsefulLinksCreateForm = lazyWithRetry(() => import('./components/UsefulLinksCreateForm/UsefulLinksCreateForm.jsx'));
+
+// ✅ LAZY LOADING - PHASE 1 (off-home heavy pages)
+// Profile (+ subroutes), Map/FiltersMap (leaflet), DigiBridgeChatWindow (on-demand popup)
+const Profile = lazyWithRetry(() => import('./components/Profile/Profile.jsx').then(m => ({ default: m.Profile })));
+const FiltersMap = lazyWithRetry(() => import('./components/MapPage/FitlersMap/FiltersMap.jsx').then(m => ({ default: m.FiltersMap })));
+const MapPage = lazyWithRetry(() => import('./components/MapPage/MapPage.jsx').then(m => ({ default: m.MapPage })));
+const DigiBridgeChatWindow = lazyWithRetry(() => import('./components/DigiBridge/DigiBridgeChatWindow/DigiBridgeChatWindow.jsx').then(m => ({ default: m.DigiBridgeChatWindow })));
 
 // ✅ LOADING FALLBACK КОМПОНЕНТ
 const LazyLoadingFallback = ({ type = 'page' }) => {
@@ -281,7 +284,7 @@ function AppRoutes() {
         <Route path="/games" element={<GamesPage />} />
         <Route path="/ad/create" element={<CreateAd />} />
         <Route path="/logout" element={<Logout />} />
-        <Route path="/profile/*" element={<Profile />} />
+        <Route path="/profile/*" element={<Suspense fallback={<LazyLoadingFallback />}><Profile /></Suspense>} />
         <Route path="/my-chats" element={<UserChatsPage />} />
       </Route>
 
@@ -306,8 +309,8 @@ function AppRoutes() {
       <Route path="/clubs/:slug" element={<ClubView />} />
       <Route path="/privacy-policy" element={<PrivacyPolicy />} />
       <Route path="/ads" element={<AdsCard />} />
-      <Route path="/filter" element={<FiltersMap />} />
-      <Route path="/map" element={<MapPage />} />
+      <Route path="/filter" element={<Suspense fallback={<LazyLoadingFallback />}><FiltersMap /></Suspense>} />
+      <Route path="/map" element={<Suspense fallback={<LazyLoadingFallback />}><MapPage /></Suspense>} />
       <Route path="/suggest-user" element={<UserSuggestion />} />
       <Route path="/errors/*" element={<ErrorPageBoundary />} />
       <Route path="404/*" element={<NotFound />} />
@@ -381,7 +384,7 @@ function App() {
                                                   />
                                                   <DigiBridgeChatButton onClick={() => setIsChatOpen(true)} />
                                                   {/* ✅ Chat Window */}
-                                                  {isChatOpen && <DigiBridgeChatWindow onClose={() => setIsChatOpen(false)} />}
+                                                  {isChatOpen && <Suspense fallback={null}><DigiBridgeChatWindow onClose={() => setIsChatOpen(false)} /></Suspense>}
                                                   {/* {isChatOpen && <DigiBridgeChatWindow onClose={() => setIsChatOpen(false)} />} */}
                                                   <Routes>
                                                     <Route path="/en/*" element={<LanguageWrapper lang="en"><AppRoutes /></LanguageWrapper>} />
