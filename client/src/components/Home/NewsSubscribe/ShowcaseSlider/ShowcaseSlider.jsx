@@ -4,7 +4,42 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useLocalizedNavigate } from '../../../../hooks/useLocalizedNavigate';
+import { resolveResizedOrFallback } from '../../../../utils/firebaseImageResize';
 import './showcaseSlider.css';
+
+// Per-slide image resolver — probes the 1200x1200 WebP variant in the
+// background and only paints the CSS background-image once we know which
+// URL will load (resized WebP or the original fallback). Starting with an
+// empty state avoids a double fetch: setting the original URL as initial
+// state would make CSS background-image fetch the full-size PNG before
+// the useEffect swaps it out.
+const SlideImage = ({ slide, isActive }) => {
+    const [bgUrl, setBgUrl] = useState('');
+
+    useEffect(() => {
+        if (!slide.imageUrl) return undefined;
+        let cancelled = false;
+        resolveResizedOrFallback(slide.imageUrl, 1200).then((url) => {
+            if (!cancelled) setBgUrl(url);
+        });
+        return () => { cancelled = true; };
+    }, [slide.imageUrl]);
+
+    // Escape any double quotes inside the URL and wrap in quotes —
+    // raw `url(${x})` breaks when filenames contain `()`, spaces,
+    // or other special chars (CSS parser stops at the first `)`).
+    const safeUrl = String(bgUrl || '').replace(/"/g, '\\"');
+
+    return (
+        <div
+            className={`shs-image ${isActive ? 'shs-zoom-out' : ''}`}
+            style={{
+                backgroundImage: bgUrl ? `url("${safeUrl}")` : 'none',
+                animationDuration: `${slide.durationSeconds || 6}s`,
+            }}
+        />
+    );
+};
 
 const ShowcaseSlider = ({ slides }) => {
     const { t } = useTranslation('home');
@@ -56,23 +91,12 @@ const ShowcaseSlider = ({ slides }) => {
             onMouseEnter={() => setIsPaused(true)}
             onMouseLeave={() => setIsPaused(false)}
         >
-            {slides.map((slide, i) => {
-                // Escape any double quotes inside the URL and wrap in quotes —
-                // raw `url(${x})` breaks when filenames contain `()`, spaces,
-                // or other special chars (CSS parser stops at the first `)`).
-                const safeUrl = String(slide.imageUrl || '').replace(/"/g, '\\"');
-                return (
+            {slides.map((slide, i) => (
                 <div
                     key={slide.id || i}
                     className={`shs-slide ${i === current ? 'shs-slide-active' : ''}`}
                 >
-                    <div
-                        className={`shs-image ${i === current ? 'shs-zoom-out' : ''}`}
-                        style={{
-                            backgroundImage: `url("${safeUrl}")`,
-                            animationDuration: `${slide.durationSeconds || 6}s`,
-                        }}
-                    />
+                    <SlideImage slide={slide} isActive={i === current} />
                     <div className="shs-overlay" />
                     <div className="shs-content">
                         {slide.categoryLabel && (
@@ -92,8 +116,7 @@ const ShowcaseSlider = ({ slides }) => {
                         )}
                     </div>
                 </div>
-                );
-            })}
+            ))}
 
             {count > 1 && (
                 <>
