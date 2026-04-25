@@ -1,5 +1,6 @@
 import { LocalizedLink as Link } from '../../../LocalizedLink/LocalizedLink';
 import { useTranslation } from 'react-i18next';
+import { getResizedUrl } from '../../../../utils/firebaseImageResize';
 import './showcaseCard.css';
 
 export const ShowcaseCard = ({ item, type, index, isVisible }) => {
@@ -28,11 +29,21 @@ export const ShowcaseCard = ({ item, type, index, isVisible }) => {
         {/* Card Header */}
         <div className="showcase-card-header">
           {item.mainImage?.src || item.image ? (
-            <img 
-              src={item.mainImage?.src || item.image} 
-              alt={item.title}
-              className="showcase-card-image"
-            />
+            (() => {
+              const original = item.mainImage?.src || item.image;
+              return (
+                <img
+                  src={getResizedUrl(original, 600)}
+                  alt={item.title}
+                  className="showcase-card-image"
+                  loading="lazy"
+                  decoding="async"
+                  onError={(e) => {
+                    if (e.target.src !== original) e.target.src = original;
+                  }}
+                />
+              );
+            })()
           ) : (
             <div className="showcase-card-placeholder">
               <div className={`placeholder-icon ${type}`}>
