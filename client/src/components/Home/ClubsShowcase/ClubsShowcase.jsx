@@ -4,6 +4,7 @@ import { useMemo, useEffect, useRef, useCallback, useState } from 'react';
 import { useLocalizedNavigate } from '../../../hooks/useLocalizedNavigate';
 import { useTranslation } from 'react-i18next';
 import { useClubContext } from '../../contexts/ClubContext';
+import { getResizedUrl } from '../../../utils/firebaseImageResize';
 import './clubsShowcase.css';
 
 const CATEGORY_COLORS = {
@@ -185,11 +186,21 @@ export const ClubsShowcase = () => {
 
                 {/* Image */}
                 <div className="cshw-card-image">
-                  <img
-                    src={club.mainImage || club.logo || 'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=800&h=400&fit=crop'}
-                    alt={club.name}
-                    loading="lazy"
-                  />
+                  {(() => {
+                    const clubImage = club.mainImage || club.logo ||
+                      'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=800&h=400&fit=crop';
+                    return (
+                      <img
+                        src={getResizedUrl(clubImage, isHero ? 1200 : 600)}
+                        alt={club.name}
+                        loading="lazy"
+                        decoding="async"
+                        onError={(e) => {
+                          if (e.target.src !== clubImage) e.target.src = clubImage;
+                        }}
+                      />
+                    );
+                  })()}
                   <div className="cshw-card-image-overlay" />
                 </div>
 

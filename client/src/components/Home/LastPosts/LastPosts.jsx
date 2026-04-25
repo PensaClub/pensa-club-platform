@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { useCommunityContext } from "../../contexts/CommunityContext";
 import { useTranslation } from "react-i18next";
 import { useAuthContext } from "../../contexts/UserContext";
+import { getResizedUrl } from "../../../utils/firebaseImageResize";
 
 export const LastPosts = () => {
   const { getLatestAds, fetchTowns } = useCommunityContext();
@@ -84,7 +85,16 @@ export const LastPosts = () => {
             {latestAds.length > 0 && (
               <div className="second-row-section-first">
                 <div className="single-card card-1" key={latestAds[0]?.adId} onClick={() => handleAdClick(latestAds[0])}>
-                  <img src={latestAds[0]?.images[0]?.imageURL} alt="card-1" />
+                  <img
+                    src={getResizedUrl(latestAds[0]?.images[0]?.imageURL, 1200)}
+                    alt="card-1"
+                    loading="lazy"
+                    decoding="async"
+                    onError={(e) => {
+                      const fallback = latestAds[0]?.images[0]?.imageURL;
+                      if (fallback && e.target.src !== fallback) e.target.src = fallback;
+                    }}
+                  />
                   <div className="card-info">
                     <h3 className="post-summary">{latestAds[0]?.summary}</h3>
                     <p className="post-author" style={{ fontStyle: 'italic' }}>
@@ -107,7 +117,16 @@ export const LastPosts = () => {
               <div className="second-row-section-second">
                 {latestAds.slice(1).map((ad, index) => (
                   <div className="single-card card-2" key={ad.adId} onClick={() => handleAdClick(ad)}>
-                    <img src={ad?.images[0]?.imageURL} alt={`card-${index + 2}`} />
+                    <img
+                      src={getResizedUrl(ad?.images[0]?.imageURL, 600)}
+                      alt={`card-${index + 2}`}
+                      loading="lazy"
+                      decoding="async"
+                      onError={(e) => {
+                        const fallback = ad?.images[0]?.imageURL;
+                        if (fallback && e.target.src !== fallback) e.target.src = fallback;
+                      }}
+                    />
                     <div className="card-info">
                       <h3 className="post-summary">{ad.summary}</h3>
                       <p className="post-author" style={{ fontStyle: 'italic' }}>
