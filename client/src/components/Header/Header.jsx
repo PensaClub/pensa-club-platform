@@ -11,6 +11,7 @@ import { BookmarkIcon, BookmarkIconHeader } from "../Initiatives/Icons/Initiativ
 import { LanguageSwitcher } from "../LanguageSwitcher/LanguageSwitcher";
 import { useActiveChatCount } from "../hooks/useActiveChatCount";
 import { localePath, stripLangFromPath } from "../../utils/languageUtils";
+import { getResizedUrl } from "../../utils/firebaseImageResize";
 export const Header = ({ additionalClasses }) => {
   const { t, i18n } = useTranslation();
   const [scrolled, setScrolled] = useState(false);
@@ -447,12 +448,20 @@ export const Header = ({ additionalClasses }) => {
 
             <div className="profile-toggle" onClick={toggleProfileMenu}>
               <img
-                src={
+                src={getResizedUrl(
                   profileData?.details?.imageURL ||
-                  getProfileImage(profileData?.details?.gender)
-                }
+                  getProfileImage(profileData?.details?.gender),
+                  200
+                )}
                 alt="Profile"
                 className="profile-image-header"
+                loading="lazy"
+                decoding="async"
+                onError={(e) => {
+                  const fallback = profileData?.details?.imageURL ||
+                    getProfileImage(profileData?.details?.gender);
+                  if (e.target.src !== fallback) e.target.src = fallback;
+                }}
               />
             </div>
 

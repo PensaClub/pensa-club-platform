@@ -4,6 +4,7 @@ import { LocalizedLink as Link } from '../../LocalizedLink/LocalizedLink';
 import "./featuredArticles.css";
 import { useArticleContext } from "../../contexts/ArticleContext";
 import { useTranslation } from "react-i18next";
+import { getResizedUrl } from "../../../utils/firebaseImageResize";
 
 export const FeaturedArticles = () => {
   const { t } = useTranslation('home');
@@ -85,12 +86,21 @@ export const FeaturedArticles = () => {
 
                 <Link to={`/articles/${article.slug}`} className="stream-image-container">
                   <div className="stream-image-wrap">
-                    <img
-                      src={getImageUrl(article)}
-                      alt={article.title}
-                      className="stream-image"
-                      loading="lazy"
-                    />
+                    {(() => {
+                      const imageUrl = getImageUrl(article);
+                      return (
+                        <img
+                          src={getResizedUrl(imageUrl, 600)}
+                          alt={article.title}
+                          className="stream-image"
+                          loading="lazy"
+                          decoding="async"
+                          onError={(e) => {
+                            if (e.target.src !== imageUrl) e.target.src = imageUrl;
+                          }}
+                        />
+                      );
+                    })()}
                     <div className="stream-image-accent"></div>
                   </div>
                 </Link>
