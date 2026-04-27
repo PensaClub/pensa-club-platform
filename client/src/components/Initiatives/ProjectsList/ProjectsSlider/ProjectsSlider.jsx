@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { LocalizedLink as Link } from '../../../LocalizedLink/LocalizedLink';
 import './projectsSlider.css';
 import { truncateText } from '../../../../utils/truncateText';
+import { getResizedUrl } from '../../../../utils/firebaseImageResize';
 
 const ProjectsSlider = ({ projects, onSlideClick }) => {
     const { t } = useTranslation('content');
@@ -180,9 +181,13 @@ const ProjectsSlider = ({ projects, onSlideClick }) => {
                                         >
                                             {project.mainImage?.src ? (
                                                 <img
-                                                    src={project.mainImage.src}
+                                                    src={getResizedUrl(project.mainImage.src, 600)}
                                                     alt={project.mainImage.alt || project.title}
                                                     loading="lazy"
+                                                    decoding="async"
+                                                    onError={(e) => {
+                                                        if (e.target.src !== project.mainImage.src) e.target.src = project.mainImage.src;
+                                                    }}
                                                 />
                                             ) : (
                                                 <div className="proj-slider-image-placeholder">

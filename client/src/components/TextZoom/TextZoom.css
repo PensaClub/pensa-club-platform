@@ -107,6 +107,11 @@ font-size: 0.75rem;
 }
 
 .vertical-slider {
+  /* `bt-lr` (bottom-to-top, left-to-right) keeps the natural slider direction:
+     dragging up increases the value. Modern `writing-mode: vertical-lr` reverses
+     this (drag down to increase), which is unintuitive — so we keep the legacy
+     value despite the Lighthouse deprecation warning until W3C ships a proper
+     replacement that preserves bottom-to-top semantics. */
   writing-mode: bt-lr;
   -webkit-appearance: slider-vertical;
   width: 4px;

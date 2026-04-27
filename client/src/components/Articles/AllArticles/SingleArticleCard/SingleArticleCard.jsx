@@ -16,6 +16,7 @@ import './singleArticleCard.css';
 import { useAnalytics } from '../../../contexts/AnalyticsContext';
 import { useArticleContext } from '../../../contexts/ArticleContext';
 import { useTranslation } from 'react-i18next';
+import { getResizedUrl } from '../../../../utils/firebaseImageResize';
 
 export const SingleArticleCard = ({ article }) => {
   const { t } = useTranslation('content');
@@ -70,11 +71,21 @@ export const SingleArticleCard = ({ article }) => {
       onClick={toggleActive}
     >
       <div className="article-image-container">
-        <img
-          src={getImageSource() || '/default-article-image.jpg'}
-          alt={article.title}
-          className="article-thumbnail"
-        />
+        {(() => {
+          const original = getImageSource() || '/default-article-image.jpg';
+          return (
+            <img
+              src={getResizedUrl(original, 600)}
+              alt={article.title}
+              className="article-thumbnail"
+              loading="lazy"
+              decoding="async"
+              onError={(e) => {
+                if (e.target.src !== original) e.target.src = original;
+              }}
+            />
+          );
+        })()}
 
         <div className="article-badges">
           {article.mainImage.type === 'slider' && article.mainImage.sources.length > 1 && (

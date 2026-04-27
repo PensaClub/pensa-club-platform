@@ -11,6 +11,7 @@ import { StoryPubView } from '../../InitiativeView/StoryPubView/StoryPubView';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 import { transformPublicationForDisplay } from '../utils/dataTransformationUtils';
+import { getResizedUrl } from '../../../../utils/firebaseImageResize';
 
 export const AllPublications = () => {
     const { t } = useTranslation('content');
@@ -346,14 +347,26 @@ export const AllPublications = () => {
                         {filteredItems.map((item) => (
                             <div key={`${viewMode}-${item.id}`} className="all-publications-card">
                                 <div className="all-publications-card-header">
-                                    <img
-                                        src={item.image?.src || item.logo || getDefaultImage()}
-                                        alt={item.image?.alt || item.title}
-                                        className="all-publications-card-image"
-                                        onError={(e) => {
-                                            e.target.src = getDefaultImage();
-                                        }}
-                                    />
+                                    {(() => {
+                                        const original = item.image?.src || item.logo || getDefaultImage();
+                                        return (
+                                            <img
+                                                src={getResizedUrl(original, 600)}
+                                                alt={item.image?.alt || item.title}
+                                                className="all-publications-card-image"
+                                                loading="lazy"
+                                                decoding="async"
+                                                onError={(e) => {
+                                                    if (e.target.dataset.retried !== 'true' && e.target.src !== original) {
+                                                        e.target.dataset.retried = 'true';
+                                                        e.target.src = original;
+                                                    } else {
+                                                        e.target.src = getDefaultImage();
+                                                    }
+                                                }}
+                                            />
+                                        );
+                                    })()}
                                     <div className="all-publications-status-overlay">
                                         {getStatusBadge(item)}
                                     </div>

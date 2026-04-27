@@ -266,26 +266,26 @@ const resetTextSize = () => {
             <div className="settings-section">
               <h4>TEXT ZOOM</h4>
               <div className="zoom-controls">
-                <button 
-                  className="zoom-btn" 
-                  onClick={increaseFontSize}
-                  style={{ 
-                    '--hover-color': accentColor,
-                    '--hover-border': accentColor 
-                  }}
-                >
-                  A+
-                </button>
-                <div className="zoom-display">{fontSize}%</div>
-                <button 
-                  className="zoom-btn" 
+                <button
+                  className="zoom-btn"
                   onClick={decreaseFontSize}
-                  style={{ 
+                  style={{
                     '--hover-color': accentColor,
-                    '--hover-border': accentColor 
+                    '--hover-border': accentColor
                   }}
                 >
                   A-
+                </button>
+                <div className="zoom-display">{fontSize}%</div>
+                <button
+                  className="zoom-btn"
+                  onClick={increaseFontSize}
+                  style={{
+                    '--hover-color': accentColor,
+                    '--hover-border': accentColor
+                  }}
+                >
+                  A+
                 </button>
               </div>
               <input

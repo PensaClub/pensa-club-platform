@@ -1,6 +1,7 @@
 // ArticlesSlider.jsx
 import React, { useState, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
+import { getResizedUrl } from '../../../../utils/firebaseImageResize';
 import './articlesSlider.css';
 
 export const ArticlesSlider = ({ articles, onSlideClick }) => {
@@ -50,11 +51,23 @@ export const ArticlesSlider = ({ articles, onSlideClick }) => {
               onClick={() => handleSlideClick(article)}
             >
               <div className="slide-image-container">
-                <img
-                  src={article.mainImage.type === 'video' ? article.mainImage.thumbnail : article.mainImage.sources[0]}
-                  alt={article.title}
-                  className="slide-image"
-                />
+                {(() => {
+                  const original = article.mainImage.type === 'video'
+                    ? article.mainImage.thumbnail
+                    : article.mainImage.sources[0];
+                  return (
+                    <img
+                      src={getResizedUrl(original, 600)}
+                      alt={article.title}
+                      className="slide-image"
+                      loading="lazy"
+                      decoding="async"
+                      onError={(e) => {
+                        if (original && e.target.src !== original) e.target.src = original;
+                      }}
+                    />
+                  );
+                })()}
               </div>
               <h3 className="slide-title">{article.title}</h3>
             </div>

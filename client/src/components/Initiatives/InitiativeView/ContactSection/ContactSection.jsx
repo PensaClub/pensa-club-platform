@@ -1,6 +1,7 @@
 import React from 'react';
 import './contactSection.css';
 import { useTranslation } from 'react-i18next';
+import { getResizedUrl } from '../../../../utils/firebaseImageResize';
 
 export const ContactSection = ({ contact, additionalContacts, openEmailModal }) => {
   const { t } = useTranslation('content');
@@ -33,10 +34,15 @@ export const ContactSection = ({ contact, additionalContacts, openEmailModal }) 
       <div className="main-contact-card-initiatives">
         <div className="contact-image-section-initiatives">
           {contact.image ? (
-            <img 
-              src={contact.image} 
+            <img
+              src={getResizedUrl(contact.image, 200)}
               alt={contact.name || 'Contact'}
               className="contact-photo-initiatives"
+              loading="lazy"
+              decoding="async"
+              onError={(e) => {
+                if (e.target.src !== contact.image) e.target.src = contact.image;
+              }}
             />
           ) : (
             <div className="contact-avatar-initiatives">
@@ -136,10 +142,15 @@ export const ContactSection = ({ contact, additionalContacts, openEmailModal }) 
                 {/* Image or Avatar */}
                 <div className="additional-contact-image-section">
                   {additionalContact.image ? (
-                    <img 
-                      src={additionalContact.image} 
+                    <img
+                      src={getResizedUrl(additionalContact.image, 200)}
                       alt={additionalContact.name || 'Contact'}
                       className="additional-contact-photo-initiatives"
+                      loading="lazy"
+                      decoding="async"
+                      onError={(e) => {
+                        if (e.target.src !== additionalContact.image) e.target.src = additionalContact.image;
+                      }}
                     />
                   ) : (
                     <div className="additional-contact-avatar-initiatives">

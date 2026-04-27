@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { useLocalizedNavigate } from '../../../hooks/useLocalizedNavigate';
 import { useInitiativeContext } from '../../contexts/InitiativeProvider';
 import { notify } from '../../../utils/notify.jsx';
+import { getResizedUrl } from '../../../utils/firebaseImageResize';
 
 export const AllInitiatives = () => {
   const { t } = useTranslation('content');
@@ -232,14 +233,26 @@ export const AllInitiatives = () => {
         {filteredItems.map((item) => (
           <div key={`${viewMode}-${item.id}`} className="initiative-card-admin">
             <div className="card-header-admin">
+              {(() => {
+                const original = item.mainImage?.src || item.logo || getDefaultImage();
+                return (
               <img
-                src={item.mainImage?.src || item.logo || getDefaultImage()}
+                src={getResizedUrl(original, 600)}
                 alt={item.title}
                 className="card-image-admin"
+                loading="lazy"
+                decoding="async"
                 onError={(e) => {
+                  if (e.target.dataset.retried !== 'true' && e.target.src !== original) {
+                    e.target.dataset.retried = 'true';
+                    e.target.src = original;
+                    return;
+                  }
                   e.target.src = getDefaultImage();
                 }}
               />
+                );
+              })()}
               <div className="card-status-overlay">
                 {getStatusBadge(item)}
               </div>

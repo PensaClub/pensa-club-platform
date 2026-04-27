@@ -1,5 +1,6 @@
 import React from 'react';
 import ImageSlider from '../../../Articles/ArticleView/ImageSlider/ImageSlider';
+import { getResizedUrl } from '../../../../utils/firebaseImageResize';
 
 export const SectionImageSlider = ({ images = [], className = '', onImageClick }) => {
     if (!images || images.length === 0) {
@@ -11,14 +12,20 @@ export const SectionImageSlider = ({ images = [], className = '', onImageClick }
 
     // За една снимка
     if (images.length === 1) {
+        const original = images[0].src || images[0];
         return (
             <div className={`single-image-container ${className}`}>
                 <img
-                    src={images[0].src || images[0]}
+                    src={getResizedUrl(original, 1200)}
                     alt={images[0].alt || ''}
                     onClick={() => onImageClick && onImageClick(sliderImages)}
                     style={{ cursor: 'pointer' }}
                     className="single-section-image"
+                    loading="lazy"
+                    decoding="async"
+                    onError={(e) => {
+                        if (original && e.target.src !== original) e.target.src = original;
+                    }}
                 />
                 {images[0].caption && (
                     <div className="image-caption">{images[0].caption}</div>

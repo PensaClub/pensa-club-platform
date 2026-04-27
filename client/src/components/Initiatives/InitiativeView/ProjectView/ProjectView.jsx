@@ -23,6 +23,7 @@ import ScrollToTop from '../../../ScrollToTop/ScrollToTop';
 import ProjectGallery from '../ProjectGallery/ProjectGallery';
 import { TextZoom } from '../../../TextZoom/TextZoom.jsx';
 import SEOHead from '../../../SEO/SEOHead.jsx';
+import { getResizedUrl } from '../../../../utils/firebaseImageResize';
 
 export const ProjectView = () => {
     const { slug } = useParams();
@@ -486,9 +487,13 @@ export const ProjectView = () => {
                     <div className="pvw-hero-background">
                         {currentProject.mainImage?.src ? (
                             <img
-                                src={currentProject.mainImage.src}
+                                src={getResizedUrl(currentProject.mainImage.src, 1200)}
                                 alt={currentProject.mainImage.alt || currentProject.title}
                                 className="pvw-hero-image"
+                                decoding="async"
+                                onError={(e) => {
+                                    if (e.target.src !== currentProject.mainImage.src) e.target.src = currentProject.mainImage.src;
+                                }}
                             />
                         ) : (
                             <div className="pvw-hero-placeholder">
@@ -525,7 +530,15 @@ export const ProjectView = () => {
                                     <div className="pvw-badges">
                                         {currentProject.logo && (
                                             <div className="pvw-logo">
-                                                <img src={currentProject.logo} alt={`${currentProject.title} logo`} />
+                                                <img
+                                                    src={getResizedUrl(currentProject.logo, 200)}
+                                                    alt={`${currentProject.title} logo`}
+                                                    loading="lazy"
+                                                    decoding="async"
+                                                    onError={(e) => {
+                                                        if (e.target.src !== currentProject.logo) e.target.src = currentProject.logo;
+                                                    }}
+                                                />
                                             </div>
                                         )}
                                         {currentProject.status && (
@@ -800,10 +813,20 @@ export const ProjectView = () => {
 
                                     {(section.image?.src || (section.images && section.images.length > 0)) && (
                                         <div className="pvw-section-image">
-                                            <img
-                                                src={section.image?.src || section.images[0]?.src}
-                                                alt={section.image?.alt || section.images[0]?.alt || section.title}
-                                            />
+                                            {(() => {
+                                                const original = section.image?.src || section.images[0]?.src;
+                                                return (
+                                                    <img
+                                                        src={getResizedUrl(original, 1200)}
+                                                        alt={section.image?.alt || section.images[0]?.alt || section.title}
+                                                        loading="lazy"
+                                                        decoding="async"
+                                                        onError={(e) => {
+                                                            if (original && e.target.src !== original) e.target.src = original;
+                                                        }}
+                                                    />
+                                                );
+                                            })()}
                                             {(section.image?.caption || section.images?.[0]?.caption) && (
                                                 <div className="project-view-image-caption">
                                                     {section.image?.caption || section.images[0]?.caption}
@@ -847,9 +870,14 @@ export const ProjectView = () => {
                                             <div className="pvw-dl-preview">
                                                 {material.image ? (
                                                     <img
-                                                        src={material.image.src}
+                                                        src={getResizedUrl(material.image.src, 200)}
                                                         alt={material.image.alt || material.title}
                                                         className="pvw-dl-preview-img"
+                                                        loading="lazy"
+                                                        decoding="async"
+                                                        onError={(e) => {
+                                                            if (material.image.src && e.target.src !== material.image.src) e.target.src = material.image.src;
+                                                        }}
                                                     />
                                                 ) : (
                                                     <div className="pvw-dl-preview-ph">
@@ -943,7 +971,15 @@ export const ProjectView = () => {
                                         <div key={index} className="pvw-team-member">
                                             {member.image && (
                                                 <div className="pvw-member-image">
-                                                    <img src={member.image} alt={member.name} />
+                                                    <img
+                                                        src={getResizedUrl(member.image, 200)}
+                                                        alt={member.name}
+                                                        loading="lazy"
+                                                        decoding="async"
+                                                        onError={(e) => {
+                                                            if (e.target.src !== member.image) e.target.src = member.image;
+                                                        }}
+                                                    />
                                                 </div>
                                             )}
                                             <div className="pvw-member-info">
@@ -983,11 +1019,19 @@ export const ProjectView = () => {
                                             {currentProject.contact.image && (
                                                 <div className="pvw-contact-photo">
                                                     <img
-                                                        src={currentProject.contact.image}
+                                                        src={getResizedUrl(currentProject.contact.image, 200)}
                                                         alt={currentProject.contact.name}
+                                                        loading="lazy"
+                                                        decoding="async"
                                                         onError={(e) => {
-                                                            e.target.style.display = 'none';
-                                                            e.target.nextSibling.style.display = 'flex';
+                                                            // Retry original on resize miss; if original also fails, show initials.
+                                                            if (e.target.dataset.retried !== 'true' && e.target.src !== currentProject.contact.image) {
+                                                                e.target.dataset.retried = 'true';
+                                                                e.target.src = currentProject.contact.image;
+                                                            } else {
+                                                                e.target.style.display = 'none';
+                                                                e.target.nextSibling.style.display = 'flex';
+                                                            }
                                                         }}
                                                     />
                                                     <div className="pvw-contact-initials" style={{ display: 'none' }}>

@@ -12,6 +12,7 @@ import ProjectFilters from './ProjectFilters/ProjectFilters';
 import ProjectSearch from './ProjectSearch/ProjectSearch';
 import ProjectsSlider from './ProjectsSlider/ProjectsSlider';
 import ScrollToTop from '../../ScrollToTop/ScrollToTop';
+import { getResizedUrl } from '../../../utils/firebaseImageResize';
 
 import './projectsList.css';
 import SEOHead from '../../SEO/SEOHead';
@@ -528,9 +529,14 @@ const ProjectsList = () => {
                                     <div className="featured-project-image">
                                         {featuredProject.mainImage?.src ? (
                                             <img
-                                                src={featuredProject.mainImage.src}
+                                                src={getResizedUrl(featuredProject.mainImage.src, 1200)}
                                                 alt={featuredProject.mainImage.alt || featuredProject.title}
                                                 className="featured-project-img"
+                                                loading="lazy"
+                                                decoding="async"
+                                                onError={(e) => {
+                                                    if (e.target.src !== featuredProject.mainImage.src) e.target.src = featuredProject.mainImage.src;
+                                                }}
                                             />
                                         ) : (
                                             <div className="featured-project-placeholder">
