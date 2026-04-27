@@ -6,6 +6,7 @@ import {
     faTimes, faChevronLeft, faChevronRight, 
     faDownload, faExpand, faImage
 } from '@fortawesome/free-solid-svg-icons';
+import { getResizedUrl } from '../../../../utils/firebaseImageResize';
 import './projectGallery.css';
 
 export const ProjectGallery = ({ gallery = [], title }) => {
@@ -103,9 +104,13 @@ export const ProjectGallery = ({ gallery = [], title }) => {
                     >
                         <div className="gallery-item-image">
                             <img
-                                src={image.src}
+                                src={getResizedUrl(image.src, 600)}
                                 alt={image.alt || `Gallery image ${index + 1}`}
                                 loading="lazy"
+                                decoding="async"
+                                onError={(e) => {
+                                    if (image.src && e.target.src !== image.src) e.target.src = image.src;
+                                }}
                             />
                             <div className="gallery-item-overlay">
                                 <div className="gallery-overlay-content">
@@ -143,9 +148,14 @@ export const ProjectGallery = ({ gallery = [], title }) => {
 
                         <div className="lightbox-image-container">
                             <img
-                                src={validImages[currentImageIndex]?.src}
+                                src={getResizedUrl(validImages[currentImageIndex]?.src, 1200)}
                                 alt={validImages[currentImageIndex]?.alt || `Gallery image ${currentImageIndex + 1}`}
                                 className="lightbox-image"
+                                decoding="async"
+                                onError={(e) => {
+                                    const original = validImages[currentImageIndex]?.src;
+                                    if (original && e.target.src !== original) e.target.src = original;
+                                }}
                             />
                         </div>
 

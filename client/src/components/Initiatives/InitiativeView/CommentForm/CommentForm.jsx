@@ -2,6 +2,7 @@
 import { useTranslation } from 'react-i18next';
 import { useAuthContext } from '../../../contexts/UserContext';
 import { useCommentForm } from '../../../hooks/useCommentForm';
+import { getResizedUrl } from '../../../../utils/firebaseImageResize';
 import './commentForm.css';
 
 export const CommentForm = ({
@@ -38,9 +39,20 @@ export const CommentForm = ({
         <div className={`initiative-comment-form ${isReply ? 'initiative-comment-form-reply' : ''}`}>
             <div className="initiative-comment-form-avatar">
                 {profileData?.details?.imageURL ? (
-                    <img src={profileData.details.imageURL} alt={displayName}
+                    <img
+                        src={getResizedUrl(profileData.details.imageURL, 200)}
+                        alt={displayName}
+                        loading="lazy"
+                        decoding="async"
                         onError={(e) => {
-                            e.target.src = "/images/homePage/user-it.png";
+                            // First try original on resize miss; if original also fails,
+                            // fall back to the static placeholder.
+                            if (e.target.dataset.retried !== 'true' && e.target.src !== profileData.details.imageURL) {
+                                e.target.dataset.retried = 'true';
+                                e.target.src = profileData.details.imageURL;
+                            } else {
+                                e.target.src = "/images/homePage/user-it.png";
+                            }
                         }}
                     />
                 ) : (

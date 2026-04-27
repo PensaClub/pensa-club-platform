@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import './storiesPublications.css';
 import { useTranslation } from 'react-i18next';
 import { truncateText } from '../../../../utils/truncateText';
+import { getResizedUrl } from '../../../../utils/firebaseImageResize';
 
 export const StoriesPublications = ({ stories = [], publications = [], showInProjectView = false }) => {
   const { t } = useTranslation('content');
@@ -62,7 +63,15 @@ export const StoriesPublications = ({ stories = [], publications = [], showInPro
           <article key={`${item.id}-${index}`|| index} className={cardClass}>
             {item.image && (
               <div className={imageClass}>
-                <img src={item.image.src} alt={item.image.alt} />
+                <img
+                  src={getResizedUrl(item.image.src, 600)}
+                  alt={item.image.alt}
+                  loading="lazy"
+                  decoding="async"
+                  onError={(e) => {
+                    if (item.image.src && e.target.src !== item.image.src) e.target.src = item.image.src;
+                  }}
+                />
                 <div className="story-type-badge" style={{ backgroundColor: getTypeColor(item.type) }}>
                   {getTypeLabel(item.type)}
                 </div>

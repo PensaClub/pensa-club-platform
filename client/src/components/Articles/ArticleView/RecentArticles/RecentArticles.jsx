@@ -6,6 +6,7 @@ import './recentArticles.css';
 import { useArticleContext } from '../../../contexts/ArticleContext';
 import { filterArticles } from '../../articleUtils/search';
 import { useTranslation } from 'react-i18next';
+import { getResizedUrl } from '../../../../utils/firebaseImageResize';
 
 const RecentArticles = ({ currentArticleId }) => {
   const { t } = useTranslation('content');
@@ -147,12 +148,22 @@ const RecentArticles = ({ currentArticleId }) => {
               <div className="recent-article-item" key={article.id}>
                 <Link to={`/articles/${article.slug}`} className="recent-article-link">
                   <div className="recent-article-image">
-                    <img
-                      src={article.mainImage.type === 'video' ?
-                        article.mainImage.thumbnail || article.mainImage.sources[0] :
-                        article.mainImage.sources[0]}
-                      alt={article.title}
-                    />
+                    {(() => {
+                      const original = article.mainImage.type === 'video'
+                        ? article.mainImage.thumbnail || article.mainImage.sources[0]
+                        : article.mainImage.sources[0];
+                      return (
+                        <img
+                          src={getResizedUrl(original, 200)}
+                          alt={article.title}
+                          loading="lazy"
+                          decoding="async"
+                          onError={(e) => {
+                            if (original && e.target.src !== original) e.target.src = original;
+                          }}
+                        />
+                      );
+                    })()}
                   </div>
                   <div className="recent-article-content">
                     <div className="article-category">

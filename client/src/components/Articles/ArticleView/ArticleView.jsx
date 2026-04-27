@@ -28,6 +28,7 @@ import ScrollToTop from '../../ScrollToTop/ScrollToTop';
 import { useArticleContext } from '../../contexts/ArticleContext';
 import { renderHtml } from '../articleUtils/article-utils.jsx';
 import { useArticleLimit } from '../../contexts/ArticleLimitContext';
+import { getResizedUrl } from '../../../utils/firebaseImageResize';
 import Pagination from '../Pagination/Pagination';
 import { TextZoom } from '../../TextZoom/TextZoom.jsx';
 import { useTrackContentView } from '../../hooks/useTrackContentView';
@@ -378,10 +379,15 @@ const ArticleView = () => {
       return (
         <figure className="article-main-image">
           <img
-            src={article.mainImage.sources[0]}
+            src={getResizedUrl(article.mainImage.sources[0], 1200)}
             alt={article.mainImage.alt}
             onClick={() => openImageModal(article.mainImage.sources)}
             style={{ cursor: 'pointer' }}
+            decoding="async"
+            onError={(e) => {
+              const fallback = article.mainImage.sources[0];
+              if (fallback && e.target.src !== fallback) e.target.src = fallback;
+            }}
           />
           {article.mainImage.caption && (
             <figcaption dangerouslySetInnerHTML={{ __html: article.mainImage.caption }} />
@@ -397,10 +403,15 @@ const ArticleView = () => {
         return (
           <figure className="section-figure">
             <img
-              src={section.image.src}
+              src={getResizedUrl(section.image.src, 1200)}
               alt={section.image.alt || t('articles.articleView.imageFor', { title: section.title })}
               onClick={() => openImageModal([section.image.src])}
               style={{ cursor: 'pointer' }}
+              loading="lazy"
+              decoding="async"
+              onError={(e) => {
+                if (e.target.src !== section.image.src) e.target.src = section.image.src;
+              }}
             />
             {section.image.caption && (
               <figcaption>{section.image.caption}</figcaption>
@@ -415,10 +426,15 @@ const ArticleView = () => {
       return (
         <figure className="section-figure">
           <img
-            src={image.src}
+            src={getResizedUrl(image.src, 1200)}
             alt={image.alt || t('articles.articleView.imageFor', { title: section.title })}
             onClick={() => openImageModal([image.src])}
             style={{ cursor: 'pointer' }}
+            loading="lazy"
+            decoding="async"
+            onError={(e) => {
+              if (e.target.src !== image.src) e.target.src = image.src;
+            }}
           />
           {image.caption && (
             <figcaption dangerouslySetInnerHTML={{ __html: image.caption }} />

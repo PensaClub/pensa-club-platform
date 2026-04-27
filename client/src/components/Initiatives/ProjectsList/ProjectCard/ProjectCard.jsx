@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { useInitiativeContext } from '../../../contexts/InitiativeProvider';
 import { getLocationFromCoordinates } from '../../../../utils/getLocationFromCoordinates';
 import { truncateText } from '../../../../utils/truncateText';
+import { getResizedUrl } from '../../../../utils/firebaseImageResize';
 import './projectCard.css';
 
 const ProjectCard = ({ project, featured = false }) => {
@@ -90,10 +91,14 @@ const ProjectCard = ({ project, featured = false }) => {
                 <div className="proj-card__image-section">
                     {project.mainImage?.src ? (
                         <img
-                            src={project.mainImage.src}
+                            src={getResizedUrl(project.mainImage.src, featured ? 1200 : 600)}
                             alt={project.mainImage.alt || project.title}
                             className="proj-card__image"
                             loading="lazy"
+                            decoding="async"
+                            onError={(e) => {
+                                if (e.target.src !== project.mainImage.src) e.target.src = project.mainImage.src;
+                            }}
                         />
                     ) : (
                         <div className="proj-card__image-placeholder">
