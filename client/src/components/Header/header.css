@@ -387,6 +387,10 @@ header.scrolled + .header-line {
   width: 40px;
   height: 40px;
   margin-right: 10px;
+  /* Logo file is landscape 380x258; without object-fit the square container
+     stretches it. `contain` preserves the aspect ratio and fits the logo
+     inside the 40x40 box (small letterboxing top/bottom). */
+  object-fit: contain;
 }
 
 .mobile-menu-header h3 {

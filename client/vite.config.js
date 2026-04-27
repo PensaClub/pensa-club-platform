@@ -30,6 +30,10 @@ export default defineConfig({
     },
     build: {
         outDir: 'dist',
+        // Generate .map files but DON'T link them from the bundle. Lighthouse
+        // and DevTools can still resolve them (request the .map URL directly),
+        // while regular site visitors won't auto-fetch them or see source code.
+        sourcemap: 'hidden',
     },
     resolve: {
         // alias: {
