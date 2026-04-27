@@ -2,6 +2,7 @@ import { truncateText } from '../../../../utils/truncateText';
 import './projectCard.css';
 import { useTranslation } from 'react-i18next';
 import { LocalizedLink as Link } from '../../../LocalizedLink/LocalizedLink';
+import { getResizedUrl } from '../../../../utils/firebaseImageResize';
 
 export const ProjectCard = ({ project }) => {
   const { t } = useTranslation('content');
@@ -32,9 +33,14 @@ export const ProjectCard = ({ project }) => {
     <div className="project-card">
       {project?.image && project?.image && (
         <div className="project-image">
-          <img 
-            src={project?.image} 
-            alt={ project.title} 
+          <img
+            src={getResizedUrl(project?.image, 600)}
+            alt={project.title}
+            loading="lazy"
+            decoding="async"
+            onError={(e) => {
+              if (project?.image && e.target.src !== project.image) e.target.src = project.image;
+            }}
           />
           <div 
             className="project-status-badge" 

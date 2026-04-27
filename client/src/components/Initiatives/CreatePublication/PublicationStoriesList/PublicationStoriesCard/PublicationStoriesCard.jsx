@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import './publicationStoriesCard.css';
 import { useAnalytics } from '../../../../contexts/AnalyticsContext';
 import { ViewedPublicationsManager } from '../../../../../utils/viewedPublications';
+import { getResizedUrl } from '../../../../../utils/firebaseImageResize';
 
 export const PublicationStoriesCard = ({ 
   content, 
@@ -128,12 +129,21 @@ export const PublicationStoriesCard = ({
       >
         <div className="ps-card-image-wrapper">
           {getImageSrc() ? (
-            <img
-              src={getImageSrc()}
-              alt={getImageAlt()}
-              className="ps-card-image"
-              loading="lazy"
-            />
+            (() => {
+              const original = getImageSrc();
+              return (
+                <img
+                  src={getResizedUrl(original, isFeatured ? 1200 : 600)}
+                  alt={getImageAlt()}
+                  className="ps-card-image"
+                  loading="lazy"
+                  decoding="async"
+                  onError={(e) => {
+                    if (original && e.target.src !== original) e.target.src = original;
+                  }}
+                />
+              );
+            })()
           ) : (
             <div className="ps-card-placeholder">
               <svg width="32" height="32" viewBox="0 0 24 24" fill="none">
@@ -195,9 +205,14 @@ export const PublicationStoriesCard = ({
               <div className="ps-author-info">
                 {typeof author === 'object' && author.avatar ? (
                   <img
-                    src={author.avatar}
+                    src={getResizedUrl(author.avatar, 200)}
                     alt={author.name}
                     className="ps-author-avatar"
+                    loading="lazy"
+                    decoding="async"
+                    onError={(e) => {
+                      if (author.avatar && e.target.src !== author.avatar) e.target.src = author.avatar;
+                    }}
                   />
                 ) : (
                   <div className="ps-author-avatar-placeholder">

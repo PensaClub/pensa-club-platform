@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { useCommentItem } from '../../../hooks/useCommentItem';
 import { formatDistanceToNow } from 'date-fns';
 import { bg, enUS } from 'date-fns/locale';
+import { getResizedUrl } from '../../../../utils/firebaseImageResize';
 import './commentItem.css';
 
 export const CommentItem = ({
@@ -85,7 +86,15 @@ export const CommentItem = ({
         <div className={`initiative-comment-item ${isReply ? 'initiative-comment-reply' : ''}`}>
             <div className="initiative-comment-avatar">
                 {comment.userAvatar ? (
-                    <img src={comment.userAvatar} alt={comment.userName} />
+                    <img
+                        src={getResizedUrl(comment.userAvatar, 200)}
+                        alt={comment.userName}
+                        loading="lazy"
+                        decoding="async"
+                        onError={(e) => {
+                            if (e.target.src !== comment.userAvatar) e.target.src = comment.userAvatar;
+                        }}
+                    />
                 ) : (
                     <div className="initiative-avatar-placeholder">
                         {comment.userName.charAt(0).toUpperCase()}

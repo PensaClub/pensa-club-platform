@@ -8,6 +8,7 @@ import { useInitiativeContext } from '../../../contexts/InitiativeProvider';
 import { ProjectsSearchAdmin } from './ProjectsSearchAdmin/ProjectsSearchAdmin';
 import { ProjectsHeaderAdmin } from './ProjectsHeaderAdmin/ProjectsHeaderAdmin';
 import { notify } from '../../../../utils/notify.jsx';
+import { getResizedUrl } from '../../../../utils/firebaseImageResize';
 
 export const AllProjects = () => {
     const { t } = useTranslation('content');
@@ -288,14 +289,26 @@ export const AllProjects = () => {
                 {filteredItems.map((item) => (
                     <div key={`${viewMode}-${item.id}`} className="all-projects-card">
                         <div className="all-projects-card-header">
-                            <img
-                                src={item.mainImage?.src || item.logo || getDefaultImage()}
-                                alt={item.title}
-                                className="all-projects-card-image"
-                                onError={(e) => {
-                                    e.target.src = getDefaultImage();
-                                }}
-                            />
+                            {(() => {
+                                const original = item.mainImage?.src || item.logo || getDefaultImage();
+                                return (
+                                    <img
+                                        src={getResizedUrl(original, 600)}
+                                        alt={item.title}
+                                        className="all-projects-card-image"
+                                        loading="lazy"
+                                        decoding="async"
+                                        onError={(e) => {
+                                            if (e.target.dataset.retried !== 'true' && e.target.src !== original) {
+                                                e.target.dataset.retried = 'true';
+                                                e.target.src = original;
+                                            } else {
+                                                e.target.src = getDefaultImage();
+                                            }
+                                        }}
+                                    />
+                                );
+                            })()}
                             <div className="all-projects-status-overlay">
                                 {getStatusBadge(item)}
                             </div>

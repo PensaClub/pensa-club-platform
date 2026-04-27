@@ -29,6 +29,7 @@ import {
 } from '@fortawesome/free-brands-svg-icons';
 import { TextZoom } from '../../TextZoom/TextZoom.jsx';
 import SEOHead from '../../SEO/SEOHead.jsx';
+import { getResizedUrl } from '../../../utils/firebaseImageResize';
 
 export const InitiativeView = () => {
     const { slug } = useParams();
@@ -375,9 +376,14 @@ export const InitiativeView = () => {
         if (images.length === 1) {
             return (
                 <img
-                    src={images[0].src}
+                    src={getResizedUrl(images[0].src, 1200)}
                     alt={images[0].alt}
                     className={className}
+                    loading="lazy"
+                    decoding="async"
+                    onError={(e) => {
+                        if (images[0].src && e.target.src !== images[0].src) e.target.src = images[0].src;
+                    }}
                 />
             );
         } else {
@@ -532,9 +538,13 @@ export const InitiativeView = () => {
                     <div className="initiative-hero-image">
                         {initiative.mainImage?.src ? (
                             <img
-                                src={initiative.mainImage.src}
+                                src={getResizedUrl(initiative.mainImage.src, 1200)}
                                 alt={initiative.mainImage.alt || initiative.title}
                                 className="hero-image"
+                                decoding="async"
+                                onError={(e) => {
+                                    if (e.target.src !== initiative.mainImage.src) e.target.src = initiative.mainImage.src;
+                                }}
                             />
                         ) : (
                             <div className="hero-placeholder">
@@ -548,7 +558,15 @@ export const InitiativeView = () => {
                         <div className="initiative-header">
                             {initiative.logo && (
                                 <div className="initiative-logo">
-                                    <img src={initiative.logo} alt="Initiative Logo" />
+                                    <img
+                                        src={getResizedUrl(initiative.logo, 200)}
+                                        alt="Initiative Logo"
+                                        loading="lazy"
+                                        decoding="async"
+                                        onError={(e) => {
+                                            if (e.target.src !== initiative.logo) e.target.src = initiative.logo;
+                                        }}
+                                    />
                                 </div>
                             )}
 
@@ -722,8 +740,13 @@ export const InitiativeView = () => {
                                             {!section.images && section.image && Array.isArray(section.image) && section.image.length > 0 && (
                                                 <div className="section-image">
                                                     <img
-                                                        src={section.image[0].src}
+                                                        src={getResizedUrl(section.image[0].src, 1200)}
                                                         alt={section.image[0].alt || section.title}
+                                                        loading="lazy"
+                                                        decoding="async"
+                                                        onError={(e) => {
+                                                            if (e.target.src !== section.image[0].src) e.target.src = section.image[0].src;
+                                                        }}
                                                     />
                                                 </div>
                                             )}
@@ -741,7 +764,15 @@ export const InitiativeView = () => {
                             <div className="gallery-grid">
                                 {initiative.gallery.map((image, index) => (
                                     <div key={index} className="gallery-item">
-                                        <img src={image.src} alt={image.alt} />
+                                        <img
+                                            src={getResizedUrl(image.src, 600)}
+                                            alt={image.alt}
+                                            loading="lazy"
+                                            decoding="async"
+                                            onError={(e) => {
+                                                if (image.src && e.target.src !== image.src) e.target.src = image.src;
+                                            }}
+                                        />
                                         {image.caption && (
                                             <p className="gallery-caption">{image.caption}</p>
                                         )}
@@ -763,7 +794,15 @@ export const InitiativeView = () => {
                                     <div key={`download-material-${material.id || material.titleSlug}`} className="material-card">
                                         <div className="material-preview">
                                             {material.image ? (
-                                                <img src={material.image.src} alt={material.image.alt} />
+                                                <img
+                                                    src={getResizedUrl(material.image.src, 200)}
+                                                    alt={material.image.alt}
+                                                    loading="lazy"
+                                                    decoding="async"
+                                                    onError={(e) => {
+                                                        if (material.image.src && e.target.src !== material.image.src) e.target.src = material.image.src;
+                                                    }}
+                                                />
                                             ) : (
                                                 <div className="material-icon">
                                                     {material.fileType === 'pdf' ? '📄' : '📁'}
@@ -1010,7 +1049,15 @@ export const InitiativeView = () => {
                                             <div key={index} className="partner-preview-card">
                                                 {partner.logo && (
                                                     <div className="partner-logo">
-                                                        <img src={partner.logo} alt={partner.name} />
+                                                        <img
+                                                            src={getResizedUrl(partner.logo, 200)}
+                                                            alt={partner.name}
+                                                            loading="lazy"
+                                                            decoding="async"
+                                                            onError={(e) => {
+                                                                if (e.target.src !== partner.logo) e.target.src = partner.logo;
+                                                            }}
+                                                        />
                                                     </div>
                                                 )}
                                                 <div className="partner-info">
@@ -1039,7 +1086,15 @@ export const InitiativeView = () => {
                                             <div key={index} className="sponsor-preview-card">
                                                 {sponsor.logo && (
                                                     <div className="sponsor-logo">
-                                                        <img src={sponsor.logo} alt={sponsor.name} />
+                                                        <img
+                                                            src={getResizedUrl(sponsor.logo, 200)}
+                                                            alt={sponsor.name}
+                                                            loading="lazy"
+                                                            decoding="async"
+                                                            onError={(e) => {
+                                                                if (e.target.src !== sponsor.logo) e.target.src = sponsor.logo;
+                                                            }}
+                                                        />
                                                     </div>
                                                 )}
                                                 <div className="sponsor-info">
@@ -1077,9 +1132,14 @@ export const InitiativeView = () => {
                                             <div className="responsible-image-section">
                                                 {initiative.responsible.image ? (
                                                     <img
-                                                        src={initiative.responsible.image}
+                                                        src={getResizedUrl(initiative.responsible.image, 600)}
                                                         alt={initiative.responsible.name}
                                                         className="responsible-photo"
+                                                        loading="lazy"
+                                                        decoding="async"
+                                                        onError={(e) => {
+                                                            if (e.target.src !== initiative.responsible.image) e.target.src = initiative.responsible.image;
+                                                        }}
                                                     />
                                                 ) : (
                                                     <div className="responsible-avatar">
