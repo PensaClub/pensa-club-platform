@@ -143,8 +143,23 @@ const generateContentSitemap = async (model, where, pathPrefix, opts = {}) => {
         order: [['updatedAt', 'DESC']],
     });
 
-    const entries = items
-        .filter((item) => item.slug) // Only include items with valid slugs
+    const validItems = items.filter((item) => item.slug);
+
+    // Fallback: if there are no published items yet, emit the category list
+    // page so the sitemap is never an empty <urlset> (Google rejects empty
+    // sitemaps with "Missing required <url> marker").
+    if (validItems.length === 0) {
+        const listPath = pathPrefix.replace(/\/$/, '');
+        return wrapSitemap(
+            generateUrlEntry(listPath, {
+                lastmod: new Date(),
+                changefreq,
+                priority: 0.5,
+            })
+        );
+    }
+
+    const entries = validItems
         .map((item) =>
             generateUrlEntry(`${pathPrefix}${item.slug}`, {
                 lastmod: item.updatedAt,
