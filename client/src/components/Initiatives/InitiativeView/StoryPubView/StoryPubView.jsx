@@ -16,6 +16,7 @@ import { ShareButton } from '../../../ShareButton/ShareButton';
 import SEOHead from '../../../SEO/SEOHead';
 import { TextZoom } from '../../../TextZoom/TextZoom.jsx';
 import { useTrackContentView } from '../../../hooks/useTrackContentView';
+import { getResizedUrl } from '../../../../utils/firebaseImageResize';
 
 export const StoryPubView = ({ type, previewMode = false, previewData = null }) => {
     const { slug } = useParams();
@@ -418,9 +419,13 @@ export const StoryPubView = ({ type, previewMode = false, previewData = null }) 
                 <div className="story-pub-view-hero-background">
                     {content.image?.src ? (
                         <img
-                            src={content.image.src}
+                            src={getResizedUrl(content.image.src, 1200)}
                             alt={content.image.alt || content.title || 'Publication'}
                             className="story-pub-view-hero-image"
+                            decoding="async"
+                            onError={(e) => {
+                                if (content.image.src && e.target.src !== content.image.src) e.target.src = content.image.src;
+                            }}
                         />
                     ) : (
                         <div className="story-pub-view-hero-placeholder">
@@ -515,10 +520,20 @@ export const StoryPubView = ({ type, previewMode = false, previewData = null }) 
                                                 {/* Section Image */}
                                                 {(section.image?.src || section.sectionImage?.src) && (
                                                     <div className="story-pub-view-section-image">
-                                                        <img
-                                                            src={section.image?.src || section.sectionImage?.src}
-                                                            alt={section.image?.alt || section.sectionImage?.alt || section.title}
-                                                        />
+                                                        {(() => {
+                                                            const original = section.image?.src || section.sectionImage?.src;
+                                                            return (
+                                                                <img
+                                                                    src={getResizedUrl(original, 1200)}
+                                                                    alt={section.image?.alt || section.sectionImage?.alt || section.title}
+                                                                    loading="lazy"
+                                                                    decoding="async"
+                                                                    onError={(e) => {
+                                                                        if (original && e.target.src !== original) e.target.src = original;
+                                                                    }}
+                                                                />
+                                                            );
+                                                        })()}
                                                     </div>
                                                 )}
 
@@ -559,8 +574,13 @@ export const StoryPubView = ({ type, previewMode = false, previewData = null }) 
                                     <div className="story-pub-view-author-avatar">
                                         {content.authorImage ? (
                                             <img
-                                                src={content.authorImage}
+                                                src={getResizedUrl(content.authorImage, 200)}
                                                 alt={content.author}
+                                                loading="lazy"
+                                                decoding="async"
+                                                onError={(e) => {
+                                                    if (e.target.src !== content.authorImage) e.target.src = content.authorImage;
+                                                }}
                                             />
                                         ) : (
                                             <div className="story-pub-view-author-placeholder">
@@ -792,7 +812,15 @@ export const StoryPubView = ({ type, previewMode = false, previewData = null }) 
                                                     className="story-pub-view-related-card"
                                                 >
                                                     <div className="story-pub-view-related-image">
-                                                        <img src={item.image.src} alt={item.image.alt} />
+                                                        <img
+                                                            src={getResizedUrl(item.image.src, 600)}
+                                                            alt={item.image.alt}
+                                                            loading="lazy"
+                                                            decoding="async"
+                                                            onError={(e) => {
+                                                                if (item.image.src && e.target.src !== item.image.src) e.target.src = item.image.src;
+                                                            }}
+                                                        />
                                                     </div>
                                                     <div className="story-pub-view-related-info">
                                                         <span className="story-pub-view-related-type">{getTypeTranslation()}</span>

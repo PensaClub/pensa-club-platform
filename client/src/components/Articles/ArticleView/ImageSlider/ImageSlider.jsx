@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
+import { getResizedUrl } from '../../../../utils/firebaseImageResize';
 import './imageSlider.css';
 
 const ImageSlider = ({ images, alt, onSlideChange, onImageClick, initialIndex = 0 }) => {
@@ -63,11 +64,20 @@ const ImageSlider = ({ images, alt, onSlideChange, onImageClick, initialIndex = 
           onClick={onImageClick ? () => onImageClick(currentIndex) : undefined}
           style={onImageClick ? { cursor: 'pointer' } : {}}
         >
-          <img
-            src={getImageSrc(currentImage)}
-            alt={getImageAlt(currentImage, currentIndex)}
-            className="slider-image"
-          />
+          {(() => {
+            const original = getImageSrc(currentImage);
+            return (
+              <img
+                src={getResizedUrl(original, 1200)}
+                alt={getImageAlt(currentImage, currentIndex)}
+                className="slider-image"
+                decoding="async"
+                onError={(e) => {
+                  if (original && e.target.src !== original) e.target.src = original;
+                }}
+              />
+            );
+          })()}
         </div>
         <button className="slider-arrow right" onClick={goToNext}>
           <FontAwesomeIcon icon={faArrowRight} />

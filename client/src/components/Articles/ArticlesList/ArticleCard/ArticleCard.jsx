@@ -7,6 +7,7 @@ import { useAnalytics } from '../../../contexts/AnalyticsContext';
 import { useTranslation } from 'react-i18next';
 import { useEffect } from 'react';
 import { truncateText } from '../../../../utils/truncateText';
+import { getResizedUrl } from '../../../../utils/firebaseImageResize';
 
 export const ArticleCard = ({ article, featured = false }) => {
   const { t } = useTranslation('content');
@@ -65,11 +66,21 @@ export const ArticleCard = ({ article, featured = false }) => {
       <div className={`article-card ${featured ? 'article-card-featured' : ''}`}>
         <div className="article-card-image-container">
           <Link to={`/articles/${article.slug}`}>
-            <img
-              src={getImageSource()}
-              alt={article.title}
-              className="article-image"
-            />
+            {(() => {
+              const original = getImageSource();
+              return (
+                <img
+                  src={getResizedUrl(original, featured ? 1200 : 600)}
+                  alt={article.title}
+                  className="article-image"
+                  loading="lazy"
+                  decoding="async"
+                  onError={(e) => {
+                    if (original && e.target.src !== original) e.target.src = original;
+                  }}
+                />
+              );
+            })()}
 
             {article.mainImage.type === 'slider' && article.mainImage.sources.length > 1 && (
               <div className="media-badge slider-badge">

@@ -4,6 +4,7 @@ import { LocalizedLink as Link } from '../../../LocalizedLink/LocalizedLink';
 import './initiativeCard.css';
 import { useTranslation } from 'react-i18next';
 import { useAnalytics } from '../../../contexts/AnalyticsContext';
+import { getResizedUrl } from '../../../../utils/firebaseImageResize';
 
 import { BookmarkIcon, ViewIcon } from '../../Icons/InitiativeIcons';
 
@@ -48,9 +49,15 @@ export const InitiativeCard = ({ initiative, isBookmarked, onBookmarkToggle, ind
       <div className="init-card-image-wrapper">
         <Link to={`/initiatives/${initiative?.slug}`}>
           <img
-            src={initiative.mainImage?.src}
+            src={getResizedUrl(initiative.mainImage?.src, 600)}
             alt={initiative.mainImage?.alt}
             className="init-card-image"
+            loading="lazy"
+            decoding="async"
+            onError={(e) => {
+              const fallback = initiative.mainImage?.src;
+              if (fallback && e.target.src !== fallback) e.target.src = fallback;
+            }}
           />
         </Link>
         

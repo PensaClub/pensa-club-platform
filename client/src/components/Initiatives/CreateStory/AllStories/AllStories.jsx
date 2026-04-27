@@ -11,6 +11,7 @@ import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 import { transformStoryForDisplay } from '../utils/dataTransformationUtils';
 import { StoriesSearchAdmin } from './CleanHystory/StoriesSearchAdmin/StoriesSearchAdmin';
 import { StoriesHeaderAdmin } from './CleanHystory/StoriesHeaderAdmin/StoriesHeaderAdmin';
+import { getResizedUrl } from '../../../../utils/firebaseImageResize';
 
 export const AllStories = () => {
     const { t } = useTranslation('content');
@@ -346,14 +347,27 @@ export const AllStories = () => {
                         {filteredItems.map((item) => (
                             <div key={`${viewMode}-${item.id}`} className="all-stories-card">
                                 <div className="all-stories-card-header">
+                                    {(() => {
+                                        const original = item.mainImage?.src || item.logo || getDefaultImage();
+                                        return (
                                     <img
-                                        src={item.mainImage?.src || item.logo || getDefaultImage()}
+                                        src={getResizedUrl(original, 600)}
                                         alt={item.mainImage?.alt || item.title}
                                         className="all-stories-card-image"
+                                        loading="lazy"
+                                        decoding="async"
                                         onError={(e) => {
-                                            e.target.src = getDefaultImage();
+                                            // Retry original if resize miss; if original also fails → default image.
+                                            if (e.target.dataset.retried !== 'true' && e.target.src !== original) {
+                                                e.target.dataset.retried = 'true';
+                                                e.target.src = original;
+                                            } else {
+                                                e.target.src = getDefaultImage();
+                                            }
                                         }}
                                     />
+                                        );
+                                    })()}
                                     <div className="all-stories-status-overlay">
                                         {getStatusBadge(item)}
                                     </div>

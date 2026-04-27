@@ -1,5 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
+import { getResizedUrl } from '../../../../utils/firebaseImageResize';
 import './sponsorsPartners.css';
 
 export const SponsorsPartners = ({ sponsors = [], partners = [] }) => {
@@ -33,12 +34,21 @@ export const SponsorsPartners = ({ sponsors = [], partners = [] }) => {
                                 <div key={sponsor.id || index} className="sponsor-card">
                                     {sponsor.logo && (
                                         <div className="sponsor-logo">
-                                            <img 
-                                                src={sponsor.logo} 
+                                            <img
+                                                src={getResizedUrl(sponsor.logo, 200)}
                                                 alt={sponsor.name}
+                                                loading="lazy"
+                                                decoding="async"
                                                 onError={(e) => {
-                                                    e.target.style.display = 'none';
-                                                    e.target.nextSibling.style.display = 'flex';
+                                                    // First try original on resize miss; if original also fails,
+                                                    // fall back to the initials placeholder.
+                                                    if (e.target.dataset.retried !== 'true' && e.target.src !== sponsor.logo) {
+                                                        e.target.dataset.retried = 'true';
+                                                        e.target.src = sponsor.logo;
+                                                    } else {
+                                                        e.target.style.display = 'none';
+                                                        e.target.nextSibling.style.display = 'flex';
+                                                    }
                                                 }}
                                             />
                                             <div className="sponsor-logo-fallback" style={{display: 'none'}}>
@@ -96,12 +106,19 @@ export const SponsorsPartners = ({ sponsors = [], partners = [] }) => {
                                 <div key={partner.id || index} className="partner-card">
                                     {partner.logo && (
                                         <div className="partner-logo">
-                                            <img 
-                                                src={partner.logo} 
+                                            <img
+                                                src={getResizedUrl(partner.logo, 200)}
                                                 alt={partner.name}
+                                                loading="lazy"
+                                                decoding="async"
                                                 onError={(e) => {
-                                                    e.target.style.display = 'none';
-                                                    e.target.nextSibling.style.display = 'flex';
+                                                    if (e.target.dataset.retried !== 'true' && e.target.src !== partner.logo) {
+                                                        e.target.dataset.retried = 'true';
+                                                        e.target.src = partner.logo;
+                                                    } else {
+                                                        e.target.style.display = 'none';
+                                                        e.target.nextSibling.style.display = 'flex';
+                                                    }
                                                 }}
                                             />
                                             <div className="partner-logo-fallback" style={{display: 'none'}}>

@@ -13,6 +13,7 @@ import {
 import './videoPlayer.css';
 import { LocalizedLink as Link } from '../../../LocalizedLink/LocalizedLink';
 import { useTranslation } from 'react-i18next';
+import { getResizedUrl } from '../../../../utils/firebaseImageResize';
 
 const VideoPlayer = ({ src, thumbnail, alt, downloadUrl = null, allowDownload = false }) => {
   const { t } = useTranslation('content');
@@ -306,7 +307,15 @@ if (isYouTubeLink && youtubeVideoId) {
     >
       {(thumbnail && !isPlaying && !isLoaded) && (
         <div className="thumbnail-container" onClick={(e) => togglePlay(e)}>
-          <img src={thumbnail} alt={alt || ''} className="video-thumbnail" />
+          <img
+            src={getResizedUrl(thumbnail, 1200)}
+            alt={alt || ''}
+            className="video-thumbnail"
+            decoding="async"
+            onError={(e) => {
+              if (e.target.src !== thumbnail) e.target.src = thumbnail;
+            }}
+          />
           <div className="play-button-overlay">
             <FontAwesomeIcon icon={faPlay} />
           </div>
