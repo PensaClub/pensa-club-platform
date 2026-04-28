@@ -169,55 +169,68 @@ async function botDetector(req, res, next) {
     }
 
     const botName = getBotName(userAgent);
-    const clientIP = getClientIP(req); 
+    const clientIP = getClientIP(req);
+
+    // Phase 2: detect language prefix (/en/, /de/) and strip it before pattern
+    // matching so a single set of regexes covers all 3 language URL variants.
+    // /en/articles/xyz → detectedLang='en', normalizedPath='/articles/xyz'.
+    let detectedLang = 'bg';
+    let normalizedPath = req.path;
+    const langPrefixMatch = normalizedPath.match(/^\/(en|de)(\/.*|$)/);
+    if (langPrefixMatch) {
+        detectedLang = langPrefixMatch[1];
+        normalizedPath = langPrefixMatch[2] || '/';
+    }
 
     console.log('🤖 Bot detected:', {
         bot: botName,
         url: req.path,
+        normalizedPath,
+        lang: detectedLang,
         timestamp: new Date().toISOString(),
         ip: clientIP
     });
 
-    // URL Pattern Matching
-    const articlesListMatch = req.path.match(/^\/articles$/);
-    const articleMatch = req.path.match(/^\/articles\/([a-zA-Z0-9-]+)$/) || req.path.match(/^\/articles\/single\/(\d+)$/);
-    const initiativesListMatch = req.path.match(/^\/initiatives$/);
-    const initiativeMatch = req.path.match(/^\/initiatives\/([a-zA-Z0-9-]+)$/);
-    const projectsListMatch = req.path.match(/^\/projects$/);
-    const projectMatch = req.path.match(/^\/projects\/([a-zA-Z0-9-]+)$/);
-    const clubsListMatch = req.path.match(/^\/clubs$/);
-    const clubMatch = req.path.match(/^\/clubs\/([a-zA-Z0-9-]+)$/);
-    const academyMatch = req.path.match(/^\/academy$/);
-    const mentorMatch = req.path.match(/^\/academy\/mentors\/(\d+)$/);
-    const gamesMatch = req.path.match(/^\/games$/);
-    const usefulLinksMatch = req.path.match(/^\/useful-links$/);
-    const publicationsListMatch = req.path.match(/^\/publications$/);
-    const publicationMatch = req.path.match(/^\/publications\/([a-zA-Z0-9-]+)$/);
-    const storiesListMatch = req.path.match(/^\/stories$/);
-    const storyMatch = req.path.match(/^\/stories\/([a-zA-Z0-9-]+)$/);
-    const coursesListMatch = req.path.match(/^\/academy\/courses$/);
-    const courseMatch = req.path.match(/^\/academy\/courses\/([a-zA-Z0-9-]+)$/);
-    const lecturesListMatch = req.path.match(/^\/academy\/lectures$/);
-    const lectureMatch = req.path.match(/^\/academy\/lectures\/([a-zA-Z0-9-]+)$/);
-    const seminarsListMatch = req.path.match(/^\/academy\/seminars$/);
-    const seminarDetailMatch = req.path.match(/^\/academy\/seminars\/([a-zA-Z0-9-]+)$/);
-    const telkMatch = req.path.match(/^\/telk-rkme-rzi$/);
-    const factCheckListMatch = req.path.match(/^\/fact-check$/);
-    const factCheckDetailMatch = req.path.match(/^\/fact-check\/([a-zA-Z0-9-]+)$/);
-    const reactionLandingMatch = req.path.match(/^\/reaction$/);
-    const reactionBookMatch = req.path.match(/^\/reaction\/book$/);
-    const forumCommunityMatch = req.path.match(/^\/academy\/community$/);
-    const homeMatch = req.path.match(/^\/$/);
-    const aboutMatch = req.path.match(/^\/about$/);
-    const contactMatch = req.path.match(/^\/contact$/);
-    const privacyPolicyMatch = req.path.match(/^\/privacy-policy$/);
+    // URL Pattern Matching (against language-stripped path)
+    const articlesListMatch = normalizedPath.match(/^\/articles$/);
+    const articleMatch = normalizedPath.match(/^\/articles\/([a-zA-Z0-9-]+)$/) || normalizedPath.match(/^\/articles\/single\/(\d+)$/);
+    const initiativesListMatch = normalizedPath.match(/^\/initiatives$/);
+    const initiativeMatch = normalizedPath.match(/^\/initiatives\/([a-zA-Z0-9-]+)$/);
+    const projectsListMatch = normalizedPath.match(/^\/projects$/);
+    const projectMatch = normalizedPath.match(/^\/projects\/([a-zA-Z0-9-]+)$/);
+    const clubsListMatch = normalizedPath.match(/^\/clubs$/);
+    const clubMatch = normalizedPath.match(/^\/clubs\/([a-zA-Z0-9-]+)$/);
+    const academyMatch = normalizedPath.match(/^\/academy$/);
+    const mentorMatch = normalizedPath.match(/^\/academy\/mentors\/(\d+)$/);
+    const gamesMatch = normalizedPath.match(/^\/games$/);
+    const usefulLinksMatch = normalizedPath.match(/^\/useful-links$/);
+    const publicationsListMatch = normalizedPath.match(/^\/publications$/);
+    const publicationMatch = normalizedPath.match(/^\/publications\/([a-zA-Z0-9-]+)$/);
+    const storiesListMatch = normalizedPath.match(/^\/stories$/);
+    const storyMatch = normalizedPath.match(/^\/stories\/([a-zA-Z0-9-]+)$/);
+    const coursesListMatch = normalizedPath.match(/^\/academy\/courses$/);
+    const courseMatch = normalizedPath.match(/^\/academy\/courses\/([a-zA-Z0-9-]+)$/);
+    const lecturesListMatch = normalizedPath.match(/^\/academy\/lectures$/);
+    const lectureMatch = normalizedPath.match(/^\/academy\/lectures\/([a-zA-Z0-9-]+)$/);
+    const seminarsListMatch = normalizedPath.match(/^\/academy\/seminars$/);
+    const seminarDetailMatch = normalizedPath.match(/^\/academy\/seminars\/([a-zA-Z0-9-]+)$/);
+    const telkMatch = normalizedPath.match(/^\/telk-rkme-rzi$/);
+    const factCheckListMatch = normalizedPath.match(/^\/fact-check$/);
+    const factCheckDetailMatch = normalizedPath.match(/^\/fact-check\/([a-zA-Z0-9-]+)$/);
+    const reactionLandingMatch = normalizedPath.match(/^\/reaction$/);
+    const reactionBookMatch = normalizedPath.match(/^\/reaction\/book$/);
+    const forumCommunityMatch = normalizedPath.match(/^\/academy\/community$/);
+    const homeMatch = normalizedPath.match(/^\/$/);
+    const aboutMatch = normalizedPath.match(/^\/about$/);
+    const contactMatch = normalizedPath.match(/^\/contact$/);
+    const privacyPolicyMatch = normalizedPath.match(/^\/privacy-policy$/);
 
     try {
         // ==================== HOME (СТАТИЧНА СТРАНИЦА) ====================
         if (homeMatch) {
             console.log('🏠 Processing HOME page');
-            await logBotRequest(botName, 'page', null, 'home', userAgent, clientIP);
-            const html = generateHomeMetaHTML();
+            await logBotRequest(botName, 'page', null, `home-${detectedLang}`, userAgent, clientIP);
+            const html = generateHomeMetaHTML(detectedLang);
             console.log('📤 Sending home HTML to bot');
             return res.send(html);
         }
@@ -225,8 +238,8 @@ async function botDetector(req, res, next) {
         // ==================== ABOUT (СТАТИЧНА СТРАНИЦА) ====================
         if (aboutMatch) {
             console.log('ℹ️ Processing ABOUT page');
-            await logBotRequest(botName, 'page', null, 'about', userAgent, clientIP);
-            const html = generateAboutMetaHTML();
+            await logBotRequest(botName, 'page', null, `about-${detectedLang}`, userAgent, clientIP);
+            const html = generateAboutMetaHTML(detectedLang);
             console.log('📤 Sending about HTML to bot');
             return res.send(html);
         }
@@ -234,8 +247,8 @@ async function botDetector(req, res, next) {
         // ==================== CONTACT (СТАТИЧНА СТРАНИЦА) ====================
         if (contactMatch) {
             console.log('📮 Processing CONTACT page');
-            await logBotRequest(botName, 'page', null, 'contact', userAgent, clientIP);
-            const html = generateContactMetaHTML();
+            await logBotRequest(botName, 'page', null, `contact-${detectedLang}`, userAgent, clientIP);
+            const html = generateContactMetaHTML(detectedLang);
             console.log('📤 Sending contact HTML to bot');
             return res.send(html);
         }
@@ -243,8 +256,8 @@ async function botDetector(req, res, next) {
         // ==================== PRIVACY POLICY (СТАТИЧНА СТРАНИЦА) ====================
         if (privacyPolicyMatch) {
             console.log('🔒 Processing PRIVACY POLICY page');
-            await logBotRequest(botName, 'page', null, 'privacy-policy', userAgent, clientIP);
-            const html = generatePrivacyPolicyMetaHTML();
+            await logBotRequest(botName, 'page', null, `privacy-policy-${detectedLang}`, userAgent, clientIP);
+            const html = generatePrivacyPolicyMetaHTML(detectedLang);
             console.log('📤 Sending privacy-policy HTML to bot');
             return res.send(html);
         }
