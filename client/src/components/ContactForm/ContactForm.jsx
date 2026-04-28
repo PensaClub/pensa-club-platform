@@ -4,11 +4,15 @@ import { useState, useRef, useEffect } from "react";
 import ReCAPTCHA from "react-google-recaptcha";
 import { useTranslation } from "react-i18next";
 import "./contactForm.css";
+import SEOHead from "../SEO/SEOHead";
 
 import { useAuthContext } from "../contexts/UserContext";
 
 export const ContactForm = () => {
     const { t } = useTranslation('auth');
+    // Separate hook for SEO meta keys which live in the default (translation)
+    // namespace, not in 'auth'.
+    const { t: tSeo } = useTranslation();
     const { userEmail, token, sendContactForm } = useAuthContext();
     const [formData, setFormData] = useState({
         name: "",
@@ -199,6 +203,12 @@ export const ContactForm = () => {
 
     return (
         <section className="pcf7x-section" ref={sectionRef}>
+            <SEOHead
+                title={tSeo('contact.meta.title', { defaultValue: 'Контакти | Pensa Club' })}
+                description={tSeo('contact.meta.description', { defaultValue: 'Свържете се с екипа на Pensa Club за въпроси, партньорства, доброволчество или регистрация на пенсионерски клуб. София, България.' })}
+                keywords={tSeo('contact.meta.keywords', { defaultValue: 'контакти, връзка с Pensa Club, имейл, София, доброволчество, партньорство' })}
+                image="/images/contactus/contactus.jpg"
+            />
             <div className="pcf7x-background">
                 <div className="pcf7x-bg-wave"></div>
                 <div className="pcf7x-bg-shape pcf7x-shape-primary"></div>

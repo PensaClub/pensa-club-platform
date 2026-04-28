@@ -10,6 +10,7 @@ import ScrollToTop from '../ScrollToTop/ScrollToTop';
 import AboutPartners from './AboutPartners/AboutPartners';
 import AboutPartnersTimeline from './AboutPartnersTimeline/AboutPartnersTimeline';
 import AboutPartnersCards from './AboutPartnersCards/AboutPartnersCards';
+import SEOHead from '../SEO/SEOHead';
 // import { AboutPlatform } from './components/AboutPlatform';
 // import { AboutFoundation } from './components/AboutFoundation';
 // import { AboutTeam } from './components/AboutTeam';
@@ -20,6 +21,12 @@ export const AboutPage = () => {
 
   return (
     <div className="aboutpage-wrapper">
+      <SEOHead
+        title={t('about.meta.title', { defaultValue: 'За Pensa Club — мисия, екип и партньори | Pensa Club' })}
+        description={t('about.meta.description', { defaultValue: 'Pensa Foundation създава Pensa Club, за да обедини 150+ пенсионерски клуба, доброволни ментори и общности в дигиталното пространство.' })}
+        keywords={t('about.meta.keywords', { defaultValue: 'Pensa Foundation, мисия, екип, партньори, DigiBridge Academy, пенсионерски клубове' })}
+        image="/images/about_us/about-us.webp"
+      />
       <AboutHero />
       <AboutPlatform />
       <AboutFoundation />
