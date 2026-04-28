@@ -26,6 +26,10 @@ const { generateFactCheckListMetaHTML, generateFactCheckDetailMetaHTML } = requi
 const { generateReactionLandingMetaHTML, generateReactionBookMetaHTML } = require('../utils/reactionMetaGenerator');
 const { generateForumCommunityMetaHTML } = require('../utils/forumMetaGenerator');
 const { generateSeminarsListMetaHTML, generateSeminarDetailMetaHTML } = require('../utils/seminarsMetaGenerator');
+const generateHomeMetaHTML = require('../utils/homeMetaGenerator');
+const generateAboutMetaHTML = require('../utils/aboutMetaGenerator');
+const generateContactMetaHTML = require('../utils/contactMetaGenerator');
+const generatePrivacyPolicyMetaHTML = require('../utils/privacyPolicyMetaGenerator');
 const geoip = require('geoip-lite');
 
 /**
@@ -203,8 +207,48 @@ async function botDetector(req, res, next) {
     const reactionLandingMatch = req.path.match(/^\/reaction$/);
     const reactionBookMatch = req.path.match(/^\/reaction\/book$/);
     const forumCommunityMatch = req.path.match(/^\/academy\/community$/);
+    const homeMatch = req.path.match(/^\/$/);
+    const aboutMatch = req.path.match(/^\/about$/);
+    const contactMatch = req.path.match(/^\/contact$/);
+    const privacyPolicyMatch = req.path.match(/^\/privacy-policy$/);
 
     try {
+        // ==================== HOME (СТАТИЧНА СТРАНИЦА) ====================
+        if (homeMatch) {
+            console.log('🏠 Processing HOME page');
+            await logBotRequest(botName, 'page', null, 'home', userAgent, clientIP);
+            const html = generateHomeMetaHTML();
+            console.log('📤 Sending home HTML to bot');
+            return res.send(html);
+        }
+
+        // ==================== ABOUT (СТАТИЧНА СТРАНИЦА) ====================
+        if (aboutMatch) {
+            console.log('ℹ️ Processing ABOUT page');
+            await logBotRequest(botName, 'page', null, 'about', userAgent, clientIP);
+            const html = generateAboutMetaHTML();
+            console.log('📤 Sending about HTML to bot');
+            return res.send(html);
+        }
+
+        // ==================== CONTACT (СТАТИЧНА СТРАНИЦА) ====================
+        if (contactMatch) {
+            console.log('📮 Processing CONTACT page');
+            await logBotRequest(botName, 'page', null, 'contact', userAgent, clientIP);
+            const html = generateContactMetaHTML();
+            console.log('📤 Sending contact HTML to bot');
+            return res.send(html);
+        }
+
+        // ==================== PRIVACY POLICY (СТАТИЧНА СТРАНИЦА) ====================
+        if (privacyPolicyMatch) {
+            console.log('🔒 Processing PRIVACY POLICY page');
+            await logBotRequest(botName, 'page', null, 'privacy-policy', userAgent, clientIP);
+            const html = generatePrivacyPolicyMetaHTML();
+            console.log('📤 Sending privacy-policy HTML to bot');
+            return res.send(html);
+        }
+
         // ==================== ARTICLES LIST ====================
         if (articlesListMatch) {
             console.log('📋 Processing ARTICLES LIST page');
