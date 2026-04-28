@@ -8,7 +8,9 @@ Disallow: /academy/mentor-dashboard
 Disallow: /mentor/
 Disallow: /logout
 Disallow: /sign-up
+Disallow: /sign-in
 Disallow: /forget-password
+Disallow: /forgot-password
 Disallow: /reset-password
 Disallow: /accept-invitation
 Disallow: /server-error
