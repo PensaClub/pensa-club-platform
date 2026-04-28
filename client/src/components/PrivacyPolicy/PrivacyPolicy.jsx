@@ -1,12 +1,19 @@
 
 import { useTranslation } from 'react-i18next';
 import './privacyPolicy.css';
+import SEOHead from '../SEO/SEOHead';
 
 export const PrivacyPolicy = () => {
     const { t } = useTranslation();
 
     return (
         <div className="privacy-policy-container">
+            <SEOHead
+                title={t('privacyPolicy.meta.title', { defaultValue: 'Политика за поверителност | Pensa Club' })}
+                description={t('privacyPolicy.meta.description', { defaultValue: 'Политика за поверителност и защита на лични данни на Pensa Club — как събираме, обработваме и защитаваме информацията на нашите потребители. Съответствие с GDPR.' })}
+                keywords={t('privacyPolicy.meta.keywords', { defaultValue: 'политика за поверителност, лични данни, GDPR, защита на данни, Pensa Club' })}
+                image="/images/privacy/Privacy_Policy.jpg"
+            />
             <h1>{t('privacyPolicy.title')}</h1>
 
             <section>

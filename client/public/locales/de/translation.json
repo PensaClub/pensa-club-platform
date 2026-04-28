@@ -79,6 +79,11 @@
     "main-title": "Was wir Ihnen anbieten"
   },
   "about": {
+    "meta": {
+      "title": "Über Pensa Club — Mission, Team und Partner | Pensa Club",
+      "description": "Pensa Foundation betreibt Pensa Club, um 150+ Rentnerclubs, freiwillige Mentoren und Gemeinschaften im digitalen Raum zu vereinen. Entdecken Sie unsere Mission, unser Team, unsere Partner und die Geschichte der DigiBridge Academy.",
+      "keywords": "Pensa Foundation, Mission, Team, Partner, DigiBridge Academy, EU Civic Innovation Fund, Rentnerclubs, digitale Kompetenz, Ehrenamt"
+    },
     "nonprofit-badge": "Gemeinnützige Stiftung",
     "title": "Unsere Mission",
     "desc": "Eine innovative Plattform zu schaffen, ein Werkzeug zum Aufbau einer Gemeinschaft. Wir vereinen Menschen gleichen Alters mit gemeinsamen Interessen, neuen Ideen und Wissen. Wir streben danach, eine Gemeinschaft aufzubauen, die auf Interaktion und gegenseitiger Hilfe basiert. Das erwartete Ergebnis ist die Verbesserung der Lebensqualität durch aktive Teilnahme an der Gegenwart, Unterstützung beim Erwerb neuer Fähigkeiten und Interessen sowie die Förderung eines gesunden, erfüllten und würdigen Lebens.",
@@ -743,6 +748,11 @@
     "current_date": "Aktuelles Datum"
   },
   "contact": {
+    "meta": {
+      "title": "Kontakt | Pensa Club",
+      "description": "Kontaktieren Sie das Pensa Club Team für Fragen, Partnerschaften, Ehrenamt oder zur Registrierung eines Rentnerclubs. Sofia, Bulgarien. E-Mail und soziale Medien.",
+      "keywords": "Kontakt, Pensa Club Kontakt, E-Mail, Sofia, Ehrenamt, Partnerschaft, Rentnerclub Registrierung"
+    },
     "title": "Kontaktieren Sie",
     "description": "Wenn Sie Fragen oder Vorschläge haben, zögern Sie nicht, uns zu kontaktieren",
     "location": {
@@ -1080,6 +1090,11 @@
     "accept": "Akzeptieren"
   },
   "privacyPolicy": {
+    "meta": {
+      "title": "Datenschutzerklärung | Pensa Club",
+      "description": "Datenschutzerklärung und Schutz personenbezogener Daten von Pensa Club — wie wir die Informationen unserer Nutzer sammeln, verarbeiten und schützen. DSGVO-konform.",
+      "keywords": "Datenschutzerklärung, personenbezogene Daten, DSGVO, Datenschutz, Pensa Club, Nutzerrechte, Cookies"
+    },
     "title": "Datenschutzerklärung",
     "introductionTitle": "Einführung",
     "introductionText": "Pensa Club verpflichtet sich, Ihre Privatsphäre zu schützen und alle geltenden Datenschutzgesetze einzuhalten.",

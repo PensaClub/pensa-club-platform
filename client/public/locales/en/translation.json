@@ -137,6 +137,11 @@
     "main-title": "What we offer you"
   },
   "about": {
+    "meta": {
+      "title": "About Pensa Club — mission, team and partners | Pensa Club",
+      "description": "Pensa Foundation runs Pensa Club to connect 150+ retirement clubs, volunteer mentors and communities in the digital space. Discover our mission, team, partners and the story of DigiBridge Academy.",
+      "keywords": "Pensa Foundation, mission, team, partners, DigiBridge Academy, EU Civic Innovation Fund, retirement clubs, digital literacy, volunteering"
+    },
     "nonprofit-badge": "Non-profit foundation for public benefit",
     "title": "Our mission",
     "desc": "To create an innovative platform, a tool for building community. We unite people of similar age with common interests, new ideas, and knowledge. We strive to build a community based on interaction and mutual support. The expected outcome is to improve quality of life through active engagement in modernity, support for acquiring new skills and interests, and encouraging a healthy, fulfilling, and dignified life.",
@@ -820,6 +825,11 @@
     "current_date": "Current Date"
   },
   "contact": {
+    "meta": {
+      "title": "Contact | Pensa Club",
+      "description": "Get in touch with the Pensa Club team for questions, partnerships, volunteering or to register a retirement club. Sofia, Bulgaria. Email and social media.",
+      "keywords": "contact, Pensa Club contact, email, Sofia, volunteering, partnership, retirement club registration"
+    },
     "title": "Contact",
     "description": "If you have any questions or suggestions, don't hesitate to get in touch with us",
     "location": {
@@ -1104,6 +1114,11 @@
     "accept": "Accept"
   },
   "privacyPolicy": {
+    "meta": {
+      "title": "Privacy Policy | Pensa Club",
+      "description": "Pensa Club privacy policy and personal data protection — how we collect, process and protect our users' information. GDPR compliant.",
+      "keywords": "privacy policy, personal data, GDPR, data protection, Pensa Club, user rights, cookies"
+    },
     "title": "Privacy Policy",
     "introductionTitle": "Introduction",
     "introductionText": "Pensa Club is committed to protecting your privacy and complying with all applicable data protection laws.",
