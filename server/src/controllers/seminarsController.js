@@ -73,6 +73,29 @@ const reloadSeminarWithFacilitators = async (seminarId) => {
   return enrichSeminar(fresh);
 };
 
+// Cover image fallback chain: if the seminar has no thumbnailUrl set
+// (admin didn't upload "Обложка") but at least one uploaded seminar_video
+// has a thumbnail (typically a YouTube auto-thumbnail), copy it onto the
+// seminar so catalog cards / hero section have something to render.
+// Called after seminar create/update and after add-seminar-video.
+// No-op when the seminar already has its own cover image.
+const syncSeminarCoverFromVideo = async (seminarId) => {
+  try {
+    const sem = await seminar.findByPk(seminarId, { attributes: ['id', 'thumbnailUrl'] });
+    if (!sem || sem.thumbnailUrl) return;
+    const firstVideo = await seminar_video.findOne({
+      where: { seminarId },
+      attributes: ['thumbnailUrl'],
+      order: [['sortOrder', 'ASC'], ['createdAt', 'ASC']],
+    });
+    if (firstVideo?.thumbnailUrl) {
+      await sem.update({ thumbnailUrl: firstVideo.thumbnailUrl });
+    }
+  } catch (err) {
+    console.error('[syncSeminarCoverFromVideo] error:', err?.message || err);
+  }
+};
+
 const { validateBody, validateQuery } = require('../middlewares/validateRequest');
 const {
   seminarCreateSchema,
@@ -3325,6 +3348,9 @@ seminarsController.post(
         });
       }
 
+      // Cover-from-video fallback (no-op if seminar already has thumbnailUrl).
+      await syncSeminarCoverFromVideo(newSeminar.id);
+
       res.status(201).json({
         success: true,
         message: 'Seminar created successfully',
@@ -3369,6 +3395,10 @@ seminarsController.put(
       }
 
       await seminarData.update(updates);
+
+      // Cover-from-video fallback after edit (e.g. admin cleared the cover
+      // and seminar already has uploaded videos → reuse first video's thumb).
+      await syncSeminarCoverFromVideo(seminarId);
 
       // If the caller sent a `facilitators` array, treat it as the new truth
       // and replace the junction rows. Caller NOT sending it → leave untouched.
@@ -5039,6 +5069,10 @@ seminarsController.post(
         durationMinutes: durationMinutes || null,
         sortOrder: (maxOrder || 0) + 1,
       });
+
+      // Cover-from-video fallback: if the seminar still has no cover image
+      // (admin never uploaded "Обложка"), reuse this video's thumbnail.
+      await syncSeminarCoverFromVideo(sem.id);
 
       res.status(201).json({ success: true, video });
     } catch (err) {

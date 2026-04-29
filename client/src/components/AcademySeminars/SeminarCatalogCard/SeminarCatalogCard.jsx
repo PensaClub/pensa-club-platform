@@ -58,15 +58,15 @@ const SeminarCatalogCard = ({ seminar, status, categoryColor, onClick }) => {
             style={{ '--card-color': categoryColor.primary, '--card-gradient': categoryColor.gradient }}
             onClick={onClick}
         >
-            {/* Thumbnail / Header */}
+            {/* Thumbnail / Header — server fills thumbnailUrl from first
+                video on save; default OG image fallback covers seminars
+                without cover or video so cards never render empty. */}
             <div className="ascc-thumb">
-                {seminar.thumbnailUrl ? (
-                    <img src={seminar.thumbnailUrl} alt={seminar.title} className="ascc-thumb-img" />
-                ) : (
-                    <div className="ascc-thumb-fallback" style={{ background: categoryColor.gradient }}>
-                        <span className="ascc-thumb-fallback-icon">{categoryColor.icon}</span>
-                    </div>
-                )}
+                <img
+                    src={seminar.thumbnailUrl || '/images/academy/academy-seminars-og.jpg'}
+                    alt={seminar.title}
+                    className="ascc-thumb-img"
+                />
                 <div className="ascc-thumb-overlay" />
 
                 {/* Status badge */}
