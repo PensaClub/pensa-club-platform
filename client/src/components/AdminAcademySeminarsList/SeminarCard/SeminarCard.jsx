@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { useLocalizedNavigate } from '../../../hooks/useLocalizedNavigate';
 import {
   Pencil, Eye, EyeOff, Trash2, XCircle,
-  Calendar, Clock, Users, MapPin, UserCheck, BookOpen,
+  Calendar, Clock, Users, MapPin, UserCheck,
 } from 'lucide-react';
 import './seminarCard.css';
 
@@ -43,15 +43,15 @@ const SeminarCard = ({ seminar, actionLoading, onPublishToggle, onDelete, onCanc
 
   return (
     <div className={`asmc-card ${!seminar.isPublished && seminar.status !== 'live' ? 'asmc-card-draft' : ''}`}>
-      {/* Thumbnail */}
+      {/* Thumbnail — server-side fallback fills thumbnailUrl from first
+          uploaded video; if neither cover nor video exists we render the
+          default academy OG image so the card never looks broken. */}
       <div className="asmc-card-thumb">
-        {seminar.thumbnailUrl ? (
-          <img src={seminar.thumbnailUrl} alt={seminar.title} className="asmc-card-img" />
-        ) : (
-          <div className="asmc-card-img-placeholder">
-            <BookOpen size={32} strokeWidth={1.5} />
-          </div>
-        )}
+        <img
+          src={seminar.thumbnailUrl || '/images/academy/academy-seminars-og.jpg'}
+          alt={seminar.title}
+          className="asmc-card-img"
+        />
 
         <span className={`asmc-badge ${getStatusBadgeClass()}`}>
           {seminar.status === 'live' && <span className="asmc-live-dot" />}
