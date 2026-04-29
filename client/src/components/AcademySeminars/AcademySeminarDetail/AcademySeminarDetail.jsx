@@ -491,7 +491,11 @@ const AcademySeminarDetail = () => { // НОВО
             {/* ========== HERO ========== */}
             <section className="asd-hero">
                 <div className="asd-hero-bg">
-                    {seminar.thumbnailUrl && <img src={seminar.thumbnailUrl} alt="" className="asd-hero-bg-img" />}
+                    <img
+                        src={seminar.thumbnailUrl || '/images/academy/academy-seminars-og.jpg'}
+                        alt=""
+                        className="asd-hero-bg-img"
+                    />
                     <div className="asd-hero-overlay" />
                     <div className="asd-hero-grid" />
                 </div>
