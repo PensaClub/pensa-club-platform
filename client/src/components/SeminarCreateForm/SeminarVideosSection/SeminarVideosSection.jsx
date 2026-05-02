@@ -119,11 +119,35 @@ export default function SeminarVideosSection({ seminarId, seminarSlug }) {
         }
     }, [seminarSlug, seminarId, uploadMultipleFiles, addSeminarVideo, t]);
 
+    // Try YouTube delete; return true if safe to proceed with DB/local removal,
+    // false if we must abort (auth issue or unknown error).
+    const tryYouTubeDelete = useCallback(async (videoUrl) => {
+        const ytId = extractYouTubeId(videoUrl);
+        if (!ytId) return true;
+        const result = await deleteFromYouTube(ytId);
+        if (result?.success) return true;
+        // Already gone or not ours — proceed with local removal
+        if (result?.code === 'NOT_FOUND' || result?.code === 'FORBIDDEN') {
+            console.warn('[YouTube delete] skip — code:', result.code, '|', result.message);
+            return true;
+        }
+        // Auth issue or unknown — abort, keep video in list so admin can retry
+        toast.error(result?.message || 'Грешка при изтриване от YouTube. Видеото остава в списъка.');
+        return false;
+    }, [deleteFromYouTube]);
+
     const handleDeleteSaved = useCallback(async (videoId) => {
         if (!deleteSeminarVideo) return;
         try {
-            // Delete from Firebase if it's a Firebase URL
             const video = videos.find(v => v.id === videoId);
+
+            // Delete from YouTube first (if applicable). Abort if YouTube delete fails for auth/unknown reason.
+            if (video?.videoProvider === 'youtube' && video?.videoUrl) {
+                const ok = await tryYouTubeDelete(video.videoUrl);
+                if (!ok) return;
+            }
+
+            // Delete from Firebase if it's a Firebase URL
             if (video?.videoUrl?.includes('firebasestorage.googleapis.com')) {
                 try {
                     const { deleteFileFromStorage } = await import('../../Articles/articleUtils/file-delete-utils');
@@ -137,17 +161,13 @@ export default function SeminarVideosSection({ seminarId, seminarSlug }) {
             console.error('Failed to delete video:', err);
             toast.error(t('seminarVideos.deleteError', 'Грешка при изтриване'));
         }
-    }, [seminarId, deleteSeminarVideo, videos, t]);
+    }, [seminarId, deleteSeminarVideo, videos, t, tryYouTubeDelete]);
 
     const handleDeletePending = useCallback(async (index) => {
         const video = pendingVideos[index];
         if (video?.videoProvider === 'youtube' && video?.videoUrl) {
-            try {
-                const ytId = extractYouTubeId(video.videoUrl);
-                if (ytId) await deleteFromYouTube(ytId);
-            } catch (err) {
-                console.error('Failed to delete from YouTube:', err);
-            }
+            const ok = await tryYouTubeDelete(video.videoUrl);
+            if (!ok) return;
         } else if (video?.videoUrl?.includes('firebasestorage.googleapis.com')) {
             try {
                 const { deleteFileFromStorage } = await import('../../Articles/articleUtils/file-delete-utils');
@@ -157,7 +177,7 @@ export default function SeminarVideosSection({ seminarId, seminarSlug }) {
             }
         }
         setPendingVideos(prev => prev.filter((_, i) => i !== index));
-    }, [pendingVideos, deleteFromYouTube]);
+    }, [pendingVideos, tryYouTubeDelete]);
 
     const handleAddUrl = useCallback(async () => {
         if (!urlInput.trim()) return;

@@ -11,6 +11,7 @@ import SeminarSettings from './SeminarSettings/SeminarSettings';
 import SeminarAdditional from './SeminarAdditional/SeminarAdditional';
 import SeminarMaterialsSection from './SeminarMaterialsSection/SeminarMaterialsSection';
 import SeminarVideosSection from './SeminarVideosSection/SeminarVideosSection';
+import YouTubeAuthCard from '../YouTubeAuthCard/YouTubeAuthCard';
 import './seminarCreateForm.css';
 import useSeminarCreateForm from '../hooks/useSeminarCreateForm';
 import { useLocalizedNavigate } from '../../hooks/useLocalizedNavigate';
@@ -124,6 +125,8 @@ const SeminarCreateForm = () => {
                         seminarId={seminarId}
                         seminarSlug={seminarSlug}
                     />
+
+                    <YouTubeAuthCard variant="banner" />
 
                     <SeminarVideosSection
                         seminarId={seminarId}
