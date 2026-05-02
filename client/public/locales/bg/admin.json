@@ -1086,6 +1086,10 @@
       "destination": "Дестинация"
     }
   },
+  "youtubeAuth": {
+    "title": "YouTube интеграция",
+    "description": "Свържи YouTube канала за качване на видеа от семинари"
+  },
   "googleDrive": {
     "title": "Google Drive",
     "description": "Управление на файлове в Google Drive (admin@pensa.club)",

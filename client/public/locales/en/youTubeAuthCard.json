@@ -1,0 +1,62 @@
+{
+    "title": "YouTube integration",
+    "subtitle": "Connect the official Pensa Club YouTube channel to upload seminar videos",
+    "status": {
+        "connected": "Connected",
+        "expiring": "Token expiring soon",
+        "disconnected": "Not connected",
+        "loading": "Checking..."
+    },
+    "meta": {
+        "lastRefreshed": "Last refreshed",
+        "expiresAt": "Token expires at",
+        "autoRefresh": "Token is refreshed automatically when needed.",
+        "notConnectedHint": "To upload videos to YouTube, connect the account."
+    },
+    "actions": {
+        "connect": "Connect YouTube",
+        "reconnect": "Reconnect",
+        "disconnect": "Disconnect",
+        "refresh": "Refresh"
+    },
+    "confirm": {
+        "disconnect": "Are you sure you want to disconnect YouTube? Uploading new videos will stop working."
+    },
+    "toast": {
+        "connected": "YouTube connected successfully!",
+        "disconnected": "YouTube disconnected.",
+        "disconnectError": "Error disconnecting YouTube."
+    },
+    "orphan": {
+        "toggle": "Delete orphan video from YouTube",
+        "description": "If a video is left on our YouTube channel but no longer linked to a seminar (e.g., it was deleted from the database without being removed from YouTube), enter its link or ID here to remove it from YouTube.",
+        "placeholder": "YouTube link or 11-char videoId",
+        "deleteBtn": "Delete from YouTube",
+        "deleting": "Deleting...",
+        "invalidInput": "Invalid YouTube link or ID. Expecting a full URL or an 11-character videoId.",
+        "confirm": "Are you sure you want to delete video {{id}} from YouTube? This action cannot be undone.",
+        "deleted": "Video deleted from YouTube.",
+        "notFound": "Video no longer exists on YouTube.",
+        "notOwner": "We can't delete this video — it wasn't uploaded by the platform.",
+        "scopeError": "OAuth token lacks delete permission. Disconnect and reconnect YouTube.",
+        "unknownError": "Error deleting from YouTube."
+    },
+    "help": {
+        "show": "What is this and how does it work?",
+        "hide": "Hide explanation",
+        "whyTitle": "What's it for?",
+        "whyText": "This integration lets the platform automatically upload seminar video files directly to the official Pensa Club YouTube channel. The video can then be embedded on the seminar page without using Firebase Storage and without a time limit. The connection is made only once — the token is kept on the server and refreshed automatically.",
+        "howTitle": "How do I connect the channel?",
+        "step1": "Click the \"Connect YouTube\" button below.",
+        "step2": "You'll be redirected to Google — sign in with the account that manages the Pensa Club channel.",
+        "step3": "Grant the app permission to upload and manage videos.",
+        "step4": "You'll be returned here with status \"Connected\". A \"Upload to YouTube\" button will then appear in the seminar's Videos section.",
+        "permsTitle": "What permissions do we request?",
+        "perm1": "Uploading videos to the channel (uploaded as \"unlisted\" by default — accessible only via link).",
+        "perm2": "Deleting videos we uploaded (so you can remove a video from a seminar).",
+        "notesTitle": "Important",
+        "note1": "Only one admin needs to connect — after that, all admins can upload videos without signing into Google again.",
+        "note2": "If you change your Google account password or revoke the permission from Google settings — you'll need to reconnect.",
+        "note3": "YouTube daily upload limit: ~6 videos/day for unverified projects. The limit is removed after verification."
+    }
+}

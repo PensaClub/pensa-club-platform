@@ -1,7 +1,7 @@
 import { useState, lazy, Suspense } from 'react';
 import { useTranslation } from 'react-i18next';
 import { LocalizedLink as Link } from '../LocalizedLink/LocalizedLink';
-import { ArrowLeft, Settings, Snowflake, BookOpen, Gift, Shield, Bug, MessageSquare, HardDrive, Cloud, UserCog, ScrollText, Mail, Palette } from 'lucide-react';
+import { ArrowLeft, Settings, Snowflake, BookOpen, Gift, Shield, Bug, MessageSquare, HardDrive, Cloud, UserCog, ScrollText, Mail, Palette, Youtube } from 'lucide-react';
 import { toast } from 'react-toastify';
 import { useSiteSettingsAdminContext } from '../contexts/SiteSettingsAdminContext';
 import SettingsAdminSection from './SettingsAdminSection/SettingsAdminSection';
@@ -22,6 +22,7 @@ const UserManagement = lazy(() => import('./UserManagement/UserManagement'));
 const AdminUserActionLogs = lazy(() => import('./AdminUserActionLogs/AdminUserActionLogs'));
 const NewsletterAutomationConfig = lazy(() => import('./NewsletterAutomationConfig/NewsletterAutomationConfig').then(m => ({ default: m.NewsletterAutomationConfig })));
 const NewsletterTemplateConfig = lazy(() => import('./NewsletterTemplateConfig/NewsletterTemplateConfig').then(m => ({ default: m.NewsletterTemplateConfig })));
+const YouTubeAuthCard = lazy(() => import('../YouTubeAuthCard/YouTubeAuthCard'));
 
 const SiteSettingsAdmin = () => {
     const { t } = useTranslation('admin');
@@ -108,6 +109,21 @@ const SiteSettingsAdmin = () => {
                     >
                         <Suspense fallback={<div className="ssa-loading"><div className="ssa-loading-spinner" /></div>}>
                             <GoogleDriveManager />
+                        </Suspense>
+                    </SettingsAdminSection>
+
+                    {/* YouTube Integration */}
+                    <SettingsAdminSection
+                        id="youtubeAuth"
+                        title={t('youtubeAuth.title', 'YouTube интеграция')}
+                        description={t('youtubeAuth.description', 'Свържи YouTube канала за качване на видеа от семинари')}
+                        icon={<Youtube size={24} />}
+                        color="#ff0000"
+                        isOpen={openCard === 'youtubeAuth'}
+                        onToggle={() => toggleCard('youtubeAuth')}
+                    >
+                        <Suspense fallback={<div className="ssa-loading"><div className="ssa-loading-spinner" /></div>}>
+                            <YouTubeAuthCard variant="card" />
                         </Suspense>
                     </SettingsAdminSection>
 

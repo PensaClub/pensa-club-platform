@@ -1,0 +1,62 @@
+{
+    "title": "YouTube-Integration",
+    "subtitle": "Verbinde den offiziellen Pensa Club YouTube-Kanal, um Seminarvideos hochzuladen",
+    "status": {
+        "connected": "Verbunden",
+        "expiring": "Token läuft bald ab",
+        "disconnected": "Nicht verbunden",
+        "loading": "Prüfung..."
+    },
+    "meta": {
+        "lastRefreshed": "Zuletzt aktualisiert",
+        "expiresAt": "Token läuft ab am",
+        "autoRefresh": "Das Token wird bei Bedarf automatisch aktualisiert.",
+        "notConnectedHint": "Verbinde das Konto, um Videos auf YouTube hochzuladen."
+    },
+    "actions": {
+        "connect": "YouTube verbinden",
+        "reconnect": "Erneut verbinden",
+        "disconnect": "Verbindung trennen",
+        "refresh": "Aktualisieren"
+    },
+    "confirm": {
+        "disconnect": "Möchtest du die Verbindung zu YouTube wirklich trennen? Das Hochladen neuer Videos funktioniert dann nicht mehr."
+    },
+    "toast": {
+        "connected": "YouTube erfolgreich verbunden!",
+        "disconnected": "YouTube getrennt.",
+        "disconnectError": "Fehler beim Trennen von YouTube."
+    },
+    "orphan": {
+        "toggle": "Orphan-Video von YouTube löschen",
+        "description": "Wenn ein Video auf unserem YouTube-Kanal verbleibt, aber nicht mehr mit einem Seminar verknüpft ist (z. B. wenn es aus der Datenbank gelöscht wurde, ohne von YouTube entfernt zu werden), gib hier den Link oder die ID ein, um es von YouTube zu entfernen.",
+        "placeholder": "YouTube-Link oder 11-stellige videoId",
+        "deleteBtn": "Von YouTube löschen",
+        "deleting": "Löschen...",
+        "invalidInput": "Ungültiger YouTube-Link oder ID. Erwartet wird eine vollständige URL oder eine 11-stellige videoId.",
+        "confirm": "Möchtest du das Video {{id}} wirklich von YouTube löschen? Diese Aktion kann nicht rückgängig gemacht werden.",
+        "deleted": "Video von YouTube gelöscht.",
+        "notFound": "Video existiert nicht mehr auf YouTube.",
+        "notOwner": "Dieses Video können wir nicht löschen — es wurde nicht über die Plattform hochgeladen.",
+        "scopeError": "Das OAuth-Token hat keine Löschberechtigung. Trenne und verbinde YouTube erneut.",
+        "unknownError": "Fehler beim Löschen von YouTube."
+    },
+    "help": {
+        "show": "Was ist das und wie funktioniert es?",
+        "hide": "Erklärung ausblenden",
+        "whyTitle": "Wofür ist das?",
+        "whyText": "Mit dieser Integration kann die Plattform Seminarvideos automatisch direkt in den offiziellen Pensa Club YouTube-Kanal hochladen. Das Video kann dann ohne Firebase-Storage-Verbrauch und ohne Zeitlimit auf der Seminarseite eingebettet werden. Die Verbindung wird nur einmal hergestellt — das Token wird auf dem Server gespeichert und automatisch erneuert.",
+        "howTitle": "Wie verbinde ich den Kanal?",
+        "step1": "Klicke unten auf die Schaltfläche \"YouTube verbinden\".",
+        "step2": "Du wirst zu Google weitergeleitet — melde dich mit dem Konto an, das den Pensa Club-Kanal verwaltet.",
+        "step3": "Erteile der App die Berechtigung, Videos hochzuladen und zu verwalten.",
+        "step4": "Du wirst mit dem Status \"Verbunden\" hierher zurückgebracht. Im Bereich \"Videos\" des Seminars erscheint dann eine Schaltfläche \"Auf YouTube hochladen\".",
+        "permsTitle": "Welche Berechtigungen fordern wir an?",
+        "perm1": "Hochladen von Videos in den Kanal (standardmäßig als \"nicht gelistet\" — nur per Link erreichbar).",
+        "perm2": "Löschen der von uns hochgeladenen Videos (damit du ein Video aus einem Seminar entfernen kannst).",
+        "notesTitle": "Wichtig",
+        "note1": "Nur ein Administrator muss die Verbindung herstellen — danach können alle Admins Videos hochladen, ohne sich erneut bei Google anzumelden.",
+        "note2": "Wenn du dein Google-Passwort änderst oder die Berechtigung in den Google-Einstellungen widerrufst, musst du dich erneut verbinden.",
+        "note3": "Tägliches YouTube-Upload-Limit: ~6 Videos/Tag für nicht verifizierte Projekte. Nach der Verifizierung entfällt das Limit."
+    }
+}
