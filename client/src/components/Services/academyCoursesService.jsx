@@ -946,18 +946,44 @@ checkSeminarRegistration: async (seminarId) => { // НОВО
 
     uploadToYouTube: async (formData, onProgress) => {
       const token = localStorage.getItem('auth') ? JSON.parse(localStorage.getItem('auth')).token : null;
-      const response = await fetch(`${apiUrl}/youtube/upload`, {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-        },
-        body: formData,
-      });
-      return response.json();
+      try {
+        const response = await fetch(`${apiUrl}/youtube/upload`, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+          },
+          body: formData,
+        });
+        const text = await response.text();
+        let data;
+        try { data = text ? JSON.parse(text) : {}; }
+        catch { data = { success: false, message: text || 'Invalid server response' }; }
+        if (!response.ok) {
+          return { success: false, status: response.status, ...data };
+        }
+        return data;
+      } catch (networkErr) {
+        console.error('uploadToYouTube network error:', networkErr);
+        return {
+          success: false,
+          message: 'Връзката със сървъра прекъсна по време на качването. Провери дали сървърът работи и виж конзолата му за грешки.',
+          error: networkErr.message,
+        };
+      }
     },
 
     deleteFromYouTube: async (videoId) => {
-      return requester.del(`${apiUrl}/youtube/delete/${videoId}`);
+      try {
+        return await requester.del(`${apiUrl}/youtube/delete/${videoId}`);
+      } catch (errBody) {
+        // requester throws the parsed JSON body on non-2xx — surface it so caller can branch on `code`
+        if (errBody && typeof errBody === 'object') return errBody;
+        return { success: false, code: 'NETWORK', message: errBody?.message || 'Network error' };
+      }
+    },
+
+    disconnectYouTube: async () => {
+      return requester.del(`${apiUrl}/youtube/disconnect`);
     },
   };
 };

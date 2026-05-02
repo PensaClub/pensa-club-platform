@@ -2212,6 +2212,15 @@ export const AcademyCoursesProvider = ({ children }) => {
     }
   }, []);
 
+  const disconnectYouTube = useCallback(async () => {
+    try {
+      return await coursesService.disconnectYouTube();
+    } catch (error) {
+      console.error('Error disconnecting YouTube:', error);
+      throw error;
+    }
+  }, []);
+
   const deleteLessonMaterial = useCallback(async (lessonId, materialId) => {
     if (!isAdmin) {
       toast.error('Нямате права за тази операция');
@@ -2676,6 +2685,7 @@ export const AcademyCoursesProvider = ({ children }) => {
     getYouTubeAuthUrl,
     uploadToYouTube,
     deleteFromYouTube,
+    disconnectYouTube,
   }), [isLoading, courses, currentCourse, lectures, seminars, myDashboard,
     currentLesson, lessonsProgress, enrollmentStats, currentTestData]);
 

@@ -31,12 +31,13 @@ oauth2Client.on('tokens', (tokens) => {
 });
 
 // Generate auth URL for admin to authorize
+// youtube.force-ssl required for delete operations (covers upload + manage)
 const getAuthUrl = () => {
     return oauth2Client.generateAuthUrl({
         access_type: 'offline',
         scope: [
             'https://www.googleapis.com/auth/youtube.upload',
-            'https://www.googleapis.com/auth/youtube',
+            'https://www.googleapis.com/auth/youtube.force-ssl',
         ],
         prompt: 'consent',
     });

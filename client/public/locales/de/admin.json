@@ -1076,6 +1076,10 @@
       "destination": "Ziel"
     }
   },
+  "youtubeAuth": {
+    "title": "YouTube-Integration",
+    "description": "YouTube-Kanal verbinden, um Seminarvideos hochzuladen"
+  },
   "googleDrive": {
     "title": "Google Drive",
     "description": "Dateien in Google Drive verwalten (admin@pensa.club)",
