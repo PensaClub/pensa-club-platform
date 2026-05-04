@@ -9,8 +9,15 @@ import './usefulLinksDisplay.css';
 
 const isFirebaseUrl = (url) => typeof url === 'string' && url.includes('firebasestorage.googleapis.com');
 
+const ensureProtocol = (url) => {
+    if (typeof url !== 'string') return '';
+    const trimmed = url.trim();
+    if (!trimmed) return '';
+    return /^https?:\/\//i.test(trimmed) ? trimmed : `https://${trimmed}`;
+};
+
 const getHostname = (url) => {
-    try { return new URL(url).hostname.replace(/^www\./, ''); }
+    try { return new URL(ensureProtocol(url)).hostname.replace(/^www\./, ''); }
     catch { return ''; }
 };
 
@@ -45,13 +52,15 @@ const UsefulLinkCard = ({ link }) => {
         }
     };
 
+    const safeHref = ensureProtocol(link.url);
+
     return (
         <a
             className="uld-card"
-            href={link.url}
+            href={safeHref}
             target="_blank"
             rel="noopener noreferrer"
-            title={link.url}
+            title={safeHref}
         >
             {showImage ? (
                 <div className="uld-card-image-wrap">
@@ -82,7 +91,7 @@ const UsefulLinksDisplay = ({ links }) => {
     const { t } = useTranslation('content');
 
     const cleaned = Array.isArray(links)
-        ? links.filter((l) => l && typeof l.url === 'string' && /^https?:\/\//.test(l.url))
+        ? links.filter((l) => l && typeof l.url === 'string' && l.url.trim() !== '')
         : [];
 
     if (cleaned.length === 0) return null;

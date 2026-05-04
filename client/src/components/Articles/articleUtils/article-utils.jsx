@@ -125,11 +125,19 @@ export const prepareArticleValuesForSubmit = (values) => {
   // strip empty rows (no URL) and normalise shape so the server gets a
   // predictable JSONB array.
   if (Array.isArray(values.usefulLinks)) {
+    const normaliseUrl = (raw) => {
+      const trimmed = (raw || '').trim();
+      if (!trimmed) return '';
+      // Prepend https:// when the user typed a bare hostname (no protocol).
+      if (!/^https?:\/\//i.test(trimmed)) return `https://${trimmed}`;
+      return trimmed;
+    };
+
     prepared.usefulLinks = values.usefulLinks
       .filter(link => link && typeof link.url === 'string' && link.url.trim() !== '')
       .map(link => ({
         label: typeof link.label === 'string' ? link.label.trim() : '',
-        url: link.url.trim(),
+        url: normaliseUrl(link.url),
         image: link.image || null,
         ogImage: link.ogImage || null,
         description: typeof link.description === 'string' ? link.description.trim() : '',
