@@ -47,7 +47,292 @@ const articleIncludeConfig = [
     },
 ];
 
-const articleAttributes = ['id', 'title', 'slug', 'summary', 'author', 'publishDate', 'tags', 'updatedBy', 'createdAt', 'updatedAt'];
+const articleAttributes = ['id', 'title', 'slug', 'summary', 'author', 'publishDate', 'tags', 'updatedBy', 'usefulLinks', 'createdAt', 'updatedAt'];
+
+const MAX_USEFUL_LINKS = 50;
+const MAX_URL_FETCH_BYTES = 5 * 1024 * 1024;
+const URL_FETCH_TIMEOUT_MS = 8000;
+const MAX_REDIRECTS = 3;
+const ALLOWED_IMAGE_SOURCES = ['og', 'url', 'upload', 'none'];
+
+const sanitizeUsefulLinks = (input) => {
+    if (!Array.isArray(input)) return [];
+    const cleaned = [];
+    for (const raw of input) {
+        if (!raw || typeof raw !== 'object') continue;
+        const url = typeof raw.url === 'string' ? raw.url.trim() : '';
+        if (!url) continue;
+        const label = typeof raw.label === 'string' ? raw.label.trim() : '';
+        const description = typeof raw.description === 'string' ? raw.description.trim() : '';
+        const image = typeof raw.image === 'string' && raw.image.trim() ? raw.image.trim() : null;
+        const ogImage = typeof raw.ogImage === 'string' && raw.ogImage.trim() ? raw.ogImage.trim() : null;
+        const imageSource = ALLOWED_IMAGE_SOURCES.includes(raw.imageSource) ? raw.imageSource : 'none';
+        const fetchedAt = typeof raw.fetchedAt === 'string' && raw.fetchedAt.trim()
+            ? raw.fetchedAt.trim()
+            : new Date().toISOString();
+        cleaned.push({ label, url, image, ogImage, description, imageSource, fetchedAt });
+        if (cleaned.length >= MAX_USEFUL_LINKS) break;
+    }
+    return cleaned;
+};
+
+const isPrivateIp = (ip) => {
+    if (!ip) return true;
+    if (ip === '::1' || ip === '0:0:0:0:0:0:0:1') return true;
+    if (ip.startsWith('::ffff:')) return isPrivateIp(ip.slice(7));
+    if (/^f[cd][0-9a-f]{2}:/i.test(ip)) return true;
+    if (/^fe80:/i.test(ip)) return true;
+
+    const parts = ip.split('.').map(Number);
+    if (parts.length !== 4 || parts.some((p) => Number.isNaN(p))) return false;
+    const [a, b] = parts;
+    if (a === 10) return true;
+    if (a === 127) return true;
+    if (a === 0) return true;
+    if (a === 169 && b === 254) return true;
+    if (a === 172 && b >= 16 && b <= 31) return true;
+    if (a === 192 && b === 168) return true;
+    if (a === 100 && b >= 64 && b <= 127) return true;
+    return false;
+};
+
+const decodeHtmlEntities = (str) => {
+    if (!str) return '';
+    return str
+        .replace(/&amp;/g, '&')
+        .replace(/&lt;/g, '<')
+        .replace(/&gt;/g, '>')
+        .replace(/&quot;/g, '"')
+        .replace(/&#39;/g, "'")
+        .replace(/&apos;/g, "'")
+        .replace(/&#(\d+);/g, (_, code) => String.fromCharCode(parseInt(code, 10)))
+        .replace(/&#x([0-9a-f]+);/gi, (_, code) => String.fromCharCode(parseInt(code, 16)));
+};
+
+const extractMetaContent = (html, propertyName, attrName = 'property') => {
+    const safeName = propertyName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const patterns = [
+        new RegExp(`<meta[^>]+${attrName}=["']${safeName}["'][^>]*content=["']([^"']*)["'][^>]*>`, 'i'),
+        new RegExp(`<meta[^>]+content=["']([^"']*)["'][^>]*${attrName}=["']${safeName}["'][^>]*>`, 'i'),
+    ];
+    for (const re of patterns) {
+        const m = html.match(re);
+        if (m && m[1]) return decodeHtmlEntities(m[1].trim());
+    }
+    return '';
+};
+
+const extractTitleTag = (html) => {
+    const m = html.match(/<title[^>]*>([\s\S]*?)<\/title>/i);
+    if (m && m[1]) return decodeHtmlEntities(m[1].trim().replace(/\s+/g, ' '));
+    return '';
+};
+
+// Find <link rel="icon|apple-touch-icon|shortcut icon" href="..." sizes="NxN">
+// Returns array of {href, area} sorted by area desc (largest first).
+const extractIconLinks = (html) => {
+    const out = [];
+    const linkRe = /<link\b([^>]+)>/gi;
+    let m;
+    while ((m = linkRe.exec(html))) {
+        const attrs = m[1];
+        const relMatch = attrs.match(/\brel\s*=\s*["']([^"']+)["']/i);
+        if (!relMatch) continue;
+        const rel = relMatch[1].toLowerCase();
+        if (!/\b(?:apple-touch-icon|icon|shortcut)\b/.test(rel)) continue;
+        const hrefMatch = attrs.match(/\bhref\s*=\s*["']([^"']+)["']/i);
+        if (!hrefMatch) continue;
+        const href = decodeHtmlEntities(hrefMatch[1].trim());
+        if (!href) continue;
+        const sizesMatch = attrs.match(/\bsizes\s*=\s*["']([^"']+)["']/i);
+        let area = 0;
+        if (sizesMatch) {
+            const dims = sizesMatch[1].toLowerCase().split(/\s+/);
+            for (const d of dims) {
+                const dm = d.match(/^(\d+)x(\d+)$/);
+                if (dm) area = Math.max(area, parseInt(dm[1], 10) * parseInt(dm[2], 10));
+            }
+        }
+        // Apple touch icons are typically high-quality even without sizes attr
+        if (!area && /apple-touch-icon/.test(rel)) area = 180 * 180;
+        out.push({ href, area });
+    }
+    out.sort((a, b) => b.area - a.area);
+    return out;
+};
+
+const resolveAbsoluteUrl = (maybeRelative, baseUrl) => {
+    if (!maybeRelative) return '';
+    try {
+        return new URL(maybeRelative, baseUrl).toString();
+    } catch (_) {
+        return maybeRelative;
+    }
+};
+
+const fetchUrlMetadata = async (rawUrl) => {
+    let parsed;
+    try {
+        parsed = new URL(rawUrl);
+    } catch (_) {
+        return { status: 400, body: { success: false, code: 'BLOCKED', message: 'Invalid URL' } };
+    }
+    if (parsed.protocol !== 'http:' && parsed.protocol !== 'https:') {
+        return { status: 400, body: { success: false, code: 'BLOCKED', message: 'Only http and https are allowed' } };
+    }
+
+    const dns = require('dns').promises;
+    try {
+        const lookups = await dns.lookup(parsed.hostname, { all: true });
+        if (!lookups.length || lookups.some((r) => isPrivateIp(r.address))) {
+            return { status: 400, body: { success: false, code: 'BLOCKED', message: 'Private or loopback target rejected' } };
+        }
+    } catch (_) {
+        return { status: 400, body: { success: false, code: 'BLOCKED', message: 'DNS resolution failed' } };
+    }
+
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), URL_FETCH_TIMEOUT_MS);
+
+    let currentUrl = parsed.toString();
+    let response;
+    let redirects = 0;
+    try {
+        while (true) {
+            response = await fetch(currentUrl, {
+                method: 'GET',
+                redirect: 'manual',
+                signal: controller.signal,
+                headers: {
+                    'User-Agent': 'PensaClubBot/1.0 (+https://pensa.club)',
+                    'Accept': 'text/html,application/xhtml+xml',
+                    'Accept-Language': 'en;q=0.8',
+                },
+            });
+            if (response.status >= 300 && response.status < 400 && response.headers.get('location')) {
+                redirects += 1;
+                if (redirects > MAX_REDIRECTS) {
+                    clearTimeout(timer);
+                    return { status: 200, body: { success: false, code: 'NETWORK', message: 'Too many redirects' } };
+                }
+                const next = resolveAbsoluteUrl(response.headers.get('location'), currentUrl);
+                let nextParsed;
+                try { nextParsed = new URL(next); } catch (_) {
+                    clearTimeout(timer);
+                    return { status: 200, body: { success: false, code: 'NETWORK', message: 'Invalid redirect target' } };
+                }
+                if (nextParsed.protocol !== 'http:' && nextParsed.protocol !== 'https:') {
+                    clearTimeout(timer);
+                    return { status: 400, body: { success: false, code: 'BLOCKED', message: 'Redirect to non-http target' } };
+                }
+                try {
+                    const lookups = await dns.lookup(nextParsed.hostname, { all: true });
+                    if (!lookups.length || lookups.some((r) => isPrivateIp(r.address))) {
+                        clearTimeout(timer);
+                        return { status: 400, body: { success: false, code: 'BLOCKED', message: 'Redirect to private target rejected' } };
+                    }
+                } catch (_) {
+                    clearTimeout(timer);
+                    return { status: 400, body: { success: false, code: 'BLOCKED', message: 'Redirect DNS failed' } };
+                }
+                currentUrl = nextParsed.toString();
+                continue;
+            }
+            break;
+        }
+    } catch (err) {
+        clearTimeout(timer);
+        if (err && err.name === 'AbortError') {
+            return { status: 504, body: { success: false, code: 'TIMEOUT', message: 'Fetch timed out' } };
+        }
+        return { status: 200, body: { success: false, code: 'NETWORK', message: err && err.message ? err.message : 'Network error' } };
+    }
+
+    if (!response.ok) {
+        clearTimeout(timer);
+        return { status: 200, body: { success: false, code: 'NETWORK', message: `HTTP ${response.status}` } };
+    }
+
+    const ctype = (response.headers.get('content-type') || '').toLowerCase();
+    if (ctype && !ctype.includes('text/html') && !ctype.includes('application/xhtml')) {
+        clearTimeout(timer);
+        return { status: 200, body: { success: false, code: 'NOT_HTML', message: `Unsupported content-type: ${ctype}` } };
+    }
+
+    let received = 0;
+    const chunks = [];
+    try {
+        const reader = response.body.getReader();
+        while (true) {
+            const { done, value } = await reader.read();
+            if (done) break;
+            received += value.length;
+            if (received > MAX_URL_FETCH_BYTES) {
+                try { await reader.cancel(); } catch (_) {}
+                break;
+            }
+            chunks.push(value);
+        }
+    } catch (err) {
+        clearTimeout(timer);
+        if (err && err.name === 'AbortError') {
+            return { status: 504, body: { success: false, code: 'TIMEOUT', message: 'Body read timed out' } };
+        }
+        return { status: 200, body: { success: false, code: 'NETWORK', message: err && err.message ? err.message : 'Body read error' } };
+    }
+    clearTimeout(timer);
+
+    const totalLen = chunks.reduce((acc, c) => acc + c.length, 0);
+    const buffer = new Uint8Array(totalLen);
+    let offset = 0;
+    for (const c of chunks) { buffer.set(c, offset); offset += c.length; }
+    const html = new TextDecoder('utf-8', { fatal: false }).decode(buffer);
+
+    const headSnippet = html.slice(0, 256 * 1024);
+
+    let image = extractMetaContent(headSnippet, 'og:image')
+        || extractMetaContent(headSnippet, 'og:image:secure_url')
+        || extractMetaContent(headSnippet, 'twitter:image', 'name')
+        || extractMetaContent(headSnippet, 'twitter:image', 'property')
+        || extractMetaContent(headSnippet, 'twitter:image:src', 'name');
+    let title = extractMetaContent(headSnippet, 'og:title')
+        || extractMetaContent(headSnippet, 'twitter:title', 'name')
+        || extractTitleTag(headSnippet);
+    let description = extractMetaContent(headSnippet, 'og:description')
+        || extractMetaContent(headSnippet, 'twitter:description', 'name')
+        || extractMetaContent(headSnippet, 'description', 'name');
+    const siteName = extractMetaContent(headSnippet, 'og:site_name')
+        || extractMetaContent(headSnippet, 'application-name', 'name');
+
+    if (image) image = resolveAbsoluteUrl(image, currentUrl);
+
+    // Fallback: largest favicon / apple-touch-icon on the page
+    if (!image) {
+        const icons = extractIconLinks(headSnippet);
+        for (const icon of icons) {
+            const abs = resolveAbsoluteUrl(icon.href, currentUrl);
+            if (abs && /^https?:\/\//i.test(abs)) { image = abs; break; }
+        }
+    }
+    // Final fallback: Google's public favicon service (always returns SOMETHING)
+    if (!image) {
+        try {
+            const host = new URL(currentUrl).hostname;
+            if (host) image = `https://www.google.com/s2/favicons?domain=${encodeURIComponent(host)}&sz=128`;
+        } catch (_) { /* noop */ }
+    }
+
+    return {
+        status: 200,
+        body: {
+            success: true,
+            image: image || null,
+            title: title || null,
+            description: description || null,
+            siteName: siteName || null,
+        },
+    };
+};
 
 articleController.get('/all', checkPermission('article', 'read'), async (req, res, next) => {
     try {
@@ -109,6 +394,7 @@ articleController.post('/create', isAuth, checkPermission('article', 'create'), 
             relatedArticleId,
             nextArticleId,
             previousArticleId,
+            usefulLinks,
         } = req.body;
 
         const errors = {};
@@ -148,6 +434,7 @@ articleController.post('/create', isAuth, checkPermission('article', 'create'), 
                     relatedArticleId,
                     nextArticleId,
                     previousArticleId,
+                    usefulLinks: sanitizeUsefulLinks(usefulLinks),
                 },
                 { transaction: t }
             );
@@ -241,18 +528,19 @@ articleController.put('/:id', isAuth, checkPermission('article', 'update'), asyn
             });
         }
 
-        const { 
-            title, 
-            slug, 
-            summary, 
+        const {
+            title,
+            slug,
+            summary,
             author,
-            publishDate,  
-            mainImage: mainImageData, 
-            sections, 
-            tags, 
-            relatedArticleId, 
-            nextArticleId, 
-            previousArticleId 
+            publishDate,
+            mainImage: mainImageData,
+            sections,
+            tags,
+            relatedArticleId,
+            nextArticleId,
+            previousArticleId,
+            usefulLinks,
         } = req.body;
 
         const existingArticle = await article.findByPk(articleId, {
@@ -291,8 +579,9 @@ articleController.put('/:id', isAuth, checkPermission('article', 'update'), asyn
             ...(slug !== undefined && { slug }),
             ...(summary !== undefined && { summary }),
             ...(author !== undefined && { author }),
-            ...(publishDate !== undefined && { publishDate }), 
+            ...(publishDate !== undefined && { publishDate }),
             ...(tags !== undefined && { tags }),
+            ...(usefulLinks !== undefined && { usefulLinks: sanitizeUsefulLinks(usefulLinks) }),
             updatedBy: userDetails.username,
         };
             await existingArticle.update(articleUpdate, { transaction: t });
@@ -521,6 +810,30 @@ articleController.delete('/:id', isAuth, checkPermission('article', 'delete'), a
         });
     } catch (err) {
         next(err);
+    }
+});
+
+articleController.get('/url-metadata', isAuth, checkPermission('article', 'create'), async (req, res, next) => {
+    try {
+        const url = typeof req.query.url === 'string' ? req.query.url.trim() : '';
+        if (!url) {
+            return res.status(400).json({ success: false, code: 'BLOCKED', message: 'Missing url query param' });
+        }
+        if (!/^https?:\/\//i.test(url)) {
+            return res.status(400).json({ success: false, code: 'BLOCKED', message: 'URL must start with http:// or https://' });
+        }
+
+        const result = await fetchUrlMetadata(url);
+        const body = result.body || {};
+        if (body.success) {
+            console.log(`[url-metadata] fetched: ${url} -> image=${!!body.image} title=${!!body.title}`);
+        } else {
+            console.log(`[url-metadata] failed: ${url} -> code=${body.code || 'UNKNOWN'}`);
+        }
+        return res.status(result.status).json(body);
+    } catch (err) {
+        console.error('[url-metadata] unexpected error:', err && err.message ? err.message : err);
+        return res.status(200).json({ success: false, code: 'NETWORK', message: 'Unexpected error' });
     }
 });
 

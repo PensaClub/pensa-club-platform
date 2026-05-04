@@ -188,6 +188,9 @@
       "youtubePlayer": "YouTube video player"
     },
     "articleView": {
+      "usefulLinks": {
+        "title": "Useful links"
+      },
       "articleNotFound": "Article not found",
       "backToArticles": "Back to all articles",
       "imageFor": "Image for {{title}}",
@@ -2615,5 +2618,39 @@
   },
   "location": {
     "loading": "Loading..."
+  },
+  "usefulLinks": {
+    "title": "Useful links",
+    "subtitle": "Add recommended external resources for this article — the title, description and image are fetched automatically from the link.",
+    "addBtn": "+ Add link",
+    "empty": "No links added yet",
+    "urlLabel": "URL",
+    "urlPlaceholder": "https://...",
+    "labelLabel": "Link title",
+    "descriptionLabel": "Description (optional)",
+    "fetching": "Fetching data...",
+    "fetchFailed": "Could not fetch metadata — please fill in manually",
+    "removeBtn": "Remove",
+    "moveUp": "Move up",
+    "moveDown": "Move down",
+    "invalidUrl": "Please enter a valid URL",
+    "image": {
+      "modeOg": "OG (auto)",
+      "modeUrl": "URL",
+      "modeUpload": "Upload",
+      "urlPlaceholder": "https://example.com/image.jpg",
+      "uploadHint": "Drop an image here or choose a file",
+      "changeBtn": "Change",
+        "previewError": "Image cannot be loaded (broken URL, hotlink protection, or mixed content).",
+      "removeBtn": "Remove",
+      "autoBadge": "Auto from link"
+    },
+    "draft": {
+      "restored": "Recovered an unsaved draft",
+      "conflictTitle": "You have unsaved changes",
+      "conflictMsg": "We found earlier changes that are not saved on the server. Would you like to restore them?",
+      "restoreBtn": "Restore",
+      "discardBtn": "Discard"
+    }
   }
 }

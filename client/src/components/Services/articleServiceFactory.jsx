@@ -28,6 +28,12 @@ export const articleServiceFactory = (token) => {
     
     deleteArticle: async (id) => {
       return requester.del(`${apiUrl}/articles/${id}`);
+    },
+
+    // Returns og:image / title / description / siteName for a remote URL.
+    // Backend endpoint: GET /api/articles/url-metadata?url=<encoded>
+    getUrlMetadata: async (url) => {
+      return requester.get(`${apiUrl}/articles/url-metadata?url=${encodeURIComponent(url)}`);
     }
   };
 };

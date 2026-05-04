@@ -1,0 +1,72 @@
+/* UsefulLinksSection — prefix .aul- */
+
+.aul-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.aul-wrapper span,
+.aul-wrapper label,
+.aul-wrapper p,
+.aul-wrapper input {
+    font-size: inherit;
+}
+
+.aul-subtitle {
+    color: #555;
+    font-size: 0.95rem;
+    line-height: 1.4;
+    margin: 0;
+}
+
+.aul-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.aul-empty {
+    padding: 22px;
+    border: 2px dashed #d6d6d6;
+    border-radius: 12px;
+    background: #fafafa;
+    color: #777;
+    text-align: center;
+    font-size: 0.95rem;
+}
+
+.aul-add-row {
+    display: flex;
+    justify-content: flex-start;
+}
+
+.aul-add-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 18px;
+    border: none;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #20b2aa, #006666);
+    color: #fff;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.aul-add-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 10px rgba(32, 178, 170, 0.3);
+}
+
+.aul-add-btn svg {
+    color: #fff !important;
+}
+
+@media (max-width: 600px) {
+    .aul-add-btn {
+        width: 100%;
+        justify-content: center;
+    }
+}

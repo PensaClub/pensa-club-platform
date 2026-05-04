@@ -97,6 +97,11 @@ module.exports = (sequelize, DataTypes) => {
                     key: 'id',
                 },
             },
+            usefulLinks: {
+                type: DataTypes.JSONB,
+                allowNull: true,
+                defaultValue: [],
+            },
         },
         {
             sequelize,
