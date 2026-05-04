@@ -1,0 +1,213 @@
+/* UsefulLinkImagePicker — prefix .aulip- */
+
+.aulip-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    border: 1px dashed #d6d6d6;
+    border-radius: 10px;
+    padding: 14px;
+    background: #fbfbfb;
+}
+
+.aulip-wrapper span,
+.aulip-wrapper label,
+.aulip-wrapper p,
+.aulip-wrapper input {
+    font-size: inherit;
+}
+
+.aulip-tabs {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+.aulip-tab {
+    flex: 1 1 auto;
+    min-width: 90px;
+    padding: 8px 12px;
+    border: 1px solid #d6d6d6;
+    border-radius: 8px;
+    background: #fff;
+    color: #444;
+    cursor: pointer;
+    font-size: 0.88rem;
+    transition: all 0.2s ease;
+}
+
+.aulip-tab:hover {
+    border-color: #20b2aa;
+}
+
+.aulip-tab.aulip-tab-active {
+    background: linear-gradient(135deg, #20b2aa, #006666);
+    color: #fff;
+    border-color: transparent;
+    font-weight: 600;
+}
+
+.aulip-body {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.aulip-input {
+    width: 100%;
+    padding: 10px 12px;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    background: #fff;
+    font-size: 0.95rem;
+}
+
+.aulip-input:focus {
+    border-color: #20b2aa;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(32, 178, 170, 0.18);
+}
+
+.aulip-preview {
+    position: relative;
+    display: inline-block;
+    max-width: 320px;
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1px solid #e0e0e0;
+    background: #f1f1f1;
+}
+
+.aulip-preview img {
+    display: block;
+    width: 100%;
+    height: auto;
+    max-height: 200px;
+    object-fit: cover;
+}
+
+.aulip-preview-error {
+    padding: 16px;
+    color: #c0392b;
+    font-size: 0.85rem;
+    text-align: center;
+    background: #fff3f0;
+    line-height: 1.4;
+}
+
+.aulip-badge {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    background: rgba(0, 102, 102, 0.9);
+    color: #fff;
+    padding: 4px 8px;
+    border-radius: 6px;
+    font-size: 0.72rem;
+    font-weight: 600;
+}
+
+.aulip-preview-actions {
+    display: flex;
+    gap: 6px;
+    margin-top: 8px;
+}
+
+.aulip-btn {
+    padding: 6px 12px;
+    border: 1px solid #d6d6d6;
+    border-radius: 6px;
+    background: #fff;
+    color: #444;
+    cursor: pointer;
+    font-size: 0.85rem;
+    transition: all 0.2s ease;
+}
+
+.aulip-btn:hover {
+    background: #f3f3f3;
+    border-color: #999;
+}
+
+.aulip-btn.aulip-btn-danger {
+    color: #c0392b;
+    border-color: #f0c4c0;
+}
+
+.aulip-btn.aulip-btn-danger:hover {
+    background: #ffefee;
+    border-color: #c0392b;
+}
+
+.aulip-dropzone {
+    border: 2px dashed #d6d6d6;
+    border-radius: 10px;
+    padding: 22px;
+    text-align: center;
+    background: #fff;
+    cursor: pointer;
+    transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+.aulip-dropzone:hover,
+.aulip-dropzone.aulip-dropzone-active {
+    border-color: #20b2aa;
+    background: #f0fbfa;
+}
+
+.aulip-dropzone p {
+    color: #666;
+    margin: 0 0 8px;
+    font-size: 0.92rem;
+}
+
+.aulip-file-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #20b2aa, #006666);
+    color: #fff;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.aulip-file-input {
+    display: none;
+}
+
+.aulip-progress {
+    height: 6px;
+    background: #eee;
+    border-radius: 3px;
+    overflow: hidden;
+    margin-top: 6px;
+}
+
+.aulip-progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, #20b2aa, #006666);
+    transition: width 0.2s ease;
+}
+
+.aulip-progress-text {
+    display: block;
+    font-size: 0.8rem;
+    color: #555;
+    margin-top: 4px;
+}
+
+.aulip-empty {
+    color: #888;
+    font-size: 0.88rem;
+    padding: 8px 0;
+}
+
+@media (max-width: 600px) {
+    .aulip-tab {
+        min-width: 0;
+        font-size: 0.82rem;
+    }
+}

@@ -1610,3 +1610,64 @@
 .form-group-article input.valid {
     border-color: #28a745;
 }
+
+/* Draft conflict banner — surfaced when useArticleDraftPersist detects
+   a localStorage draft newer than the server copy of the article. */
+.article-draft-banner {
+    margin: 0 0 16px;
+    padding: 14px 16px;
+    border-radius: 10px;
+    background: #fff7e6;
+    border: 1px solid #f5c577;
+    color: #6b4a08;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+}
+
+.article-draft-banner .article-draft-banner-msg {
+    flex: 1 1 240px;
+    font-size: 0.95rem;
+    line-height: 1.4;
+}
+
+.article-draft-banner .article-draft-banner-msg strong {
+    display: block;
+    margin-bottom: 2px;
+    color: #5a3d05;
+}
+
+.article-draft-banner-actions {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.article-draft-banner-btn {
+    padding: 8px 14px;
+    border-radius: 8px;
+    border: 1px solid transparent;
+    font-weight: 600;
+    cursor: pointer;
+    font-size: 0.9rem;
+}
+
+.article-draft-banner-btn.primary {
+    background: #006666;
+    color: #fff;
+}
+
+.article-draft-banner-btn.primary:hover {
+    background: #00504f;
+}
+
+.article-draft-banner-btn.secondary {
+    background: #fff;
+    color: #6b4a08;
+    border-color: #d6b56a;
+}
+
+.article-draft-banner-btn.secondary:hover {
+    background: #fff1d6;
+}

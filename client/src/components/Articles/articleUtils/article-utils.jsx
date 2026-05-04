@@ -121,12 +121,31 @@ export const prepareArticleValuesForSubmit = (values) => {
     return updatedSection;
   });
   
+  // Useful Links — plain string fields, no Slate conversion needed. We
+  // strip empty rows (no URL) and normalise shape so the server gets a
+  // predictable JSONB array.
+  if (Array.isArray(values.usefulLinks)) {
+    prepared.usefulLinks = values.usefulLinks
+      .filter(link => link && typeof link.url === 'string' && link.url.trim() !== '')
+      .map(link => ({
+        label: typeof link.label === 'string' ? link.label.trim() : '',
+        url: link.url.trim(),
+        image: link.image || null,
+        ogImage: link.ogImage || null,
+        description: typeof link.description === 'string' ? link.description.trim() : '',
+        imageSource: link.imageSource || 'none',
+        fetchedAt: link.fetchedAt || null,
+      }));
+  } else {
+    prepared.usefulLinks = [];
+  }
+
   // Премахваме други ненужни полета от основния обект
   delete prepared.id;
   delete prepared.createdAt;
   delete prepared.updatedAt;
   delete prepared.updateAt;
-  
+
   return prepared;
 };
 

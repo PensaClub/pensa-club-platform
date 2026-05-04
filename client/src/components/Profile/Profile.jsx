@@ -1233,8 +1233,10 @@ export const Profile = () => {
 
                   <li>
                     <NavLink
+                      to="articles"
                       onClick={() => toggleSubMenu('articles')}
-                      className="nav-link-button"
+                      className={({ isActive }) => `nav-link-button${isActive ? ' active' : ''}`}
+                      end
                     >
                       <span className="link-content">
                         <ForumIcon className="icon" />
@@ -1256,8 +1258,10 @@ export const Profile = () => {
 
                   <li>
                     <NavLink
+                      to="initiatives"
                       onClick={() => toggleSubMenu('initiatives')}
-                      className="nav-link-button"
+                      className={({ isActive }) => `nav-link-button${isActive ? ' active' : ''}`}
+                      end
                     >
                       <span className="link-content">
                         <InitiativesIcon />

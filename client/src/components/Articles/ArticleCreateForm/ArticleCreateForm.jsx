@@ -22,6 +22,7 @@ import { SectionQuickMenu } from "../ArticleCreateForm/SectionQuickMenu/SectionQ
 import ArticlePreview from "./ArticlePreview/ArticlePreview";
 import { useCreateArticle } from "../../hooks/useCreateArticle";
 import VideoPlayer from "../ArticleView/VideoPlayer/VideoPlayer";
+import UsefulLinksSection from "./UsefulLinksSection/UsefulLinksSection";
 import { convertToRaw } from "draft-js";
 import draftToHtml from "draftjs-to-html";
 import { generateSlug, isValidSlug, sanitizeSlug } from "../../../utils/slugUtils";
@@ -301,6 +302,13 @@ const ArticleCreateForm = forwardRef(({ initialValues: propInitialValues, onSubm
         addTag,
         updateImageInfo,
         removeTag,
+        addUsefulLink,
+        updateUsefulLink,
+        removeUsefulLink,
+        reorderUsefulLinks,
+        hasConflict,
+        restoreDraft,
+        discardDraft,
         mediaFiles,
         uploadThumbnailFile,
     } = useCreateArticle(processedInitialValues, onSubmitHandler || createArticle);
@@ -761,6 +769,33 @@ const ArticleCreateForm = forwardRef(({ initialValues: propInitialValues, onSubm
             <h2 className="article-form-title">{formTitle}</h2>
 
             <form className="article-form" onSubmit={onSubmit}>
+                {/* Draft conflict banner — only shown when localStorage has
+                    a newer copy than the server (edit mode). */}
+                {hasConflict && (
+                    <div className="article-draft-banner" role="alert">
+                        <div className="article-draft-banner-msg">
+                            <strong>{t('usefulLinks.draft.conflictTitle')}</strong>
+                            {t('usefulLinks.draft.conflictMsg')}
+                        </div>
+                        <div className="article-draft-banner-actions">
+                            <button
+                                type="button"
+                                className="article-draft-banner-btn primary"
+                                onClick={restoreDraft}
+                            >
+                                {t('usefulLinks.draft.restoreBtn')}
+                            </button>
+                            <button
+                                type="button"
+                                className="article-draft-banner-btn secondary"
+                                onClick={discardDraft}
+                            >
+                                {t('usefulLinks.draft.discardBtn')}
+                            </button>
+                        </div>
+                    </div>
+                )}
+
                 {/* Основна информация */}
                 <div className="form-section">
                     <h3>{t('articles.createForm.basicInfo')}</h3>
@@ -1306,6 +1341,20 @@ const ArticleCreateForm = forwardRef(({ initialValues: propInitialValues, onSubm
                                 </div>
                             </div>
                         ))}
+                    </div>
+                </div>
+
+                {/* Полезни връзки */}
+                <div className="form-section">
+                    <h3>{t('usefulLinks.title')}</h3>
+                    <div className="form-section-content">
+                        <UsefulLinksSection
+                            usefulLinks={values.usefulLinks || []}
+                            onAdd={addUsefulLink}
+                            onUpdate={updateUsefulLink}
+                            onRemove={removeUsefulLink}
+                            onReorder={reorderUsefulLinks}
+                        />
                     </div>
                 </div>
 

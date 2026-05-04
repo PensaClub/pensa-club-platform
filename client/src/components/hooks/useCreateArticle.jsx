@@ -9,6 +9,7 @@ import { updateSectionImageAlt } from "../Articles/articleUtils/image-utils";
 import { addTagToArray, removeTagByIndex } from "../Articles/articleUtils/tags";
 import { htmlToSlate, isHtmlContent, createSlateEditorState } from "../Articles/articleUtils/htmlToSlate";
 import { generateSlug } from "../../utils/slugUtils";
+import { useArticleDraftPersist } from "./useArticleDraftPersist";
 
 const convertSlateToHtml = (slateValue) => {
   if (!Array.isArray(slateValue)) return '';
@@ -99,6 +100,7 @@ export const useCreateArticle = (initialValues, onSubmitHandler) => {
       },
     ],
     tags: [],
+    usefulLinks: [],
     previousArticle: null,
     nextArticle: null,
   }), []);
@@ -307,6 +309,74 @@ export const useCreateArticle = (initialValues, onSubmitHandler) => {
       ...prev,
       tags: removeTagByIndex(prev.tags, index)
     }));
+  }, []);
+
+  // ---------------- Useful links CRUD helpers ----------------
+  // The shape matches what server stores in JSONB:
+  //   { label, url, image, description, imageSource, fetchedAt }
+  const addUsefulLink = useCallback(() => {
+    setValues(prev => ({
+      ...prev,
+      usefulLinks: [
+        ...(Array.isArray(prev.usefulLinks) ? prev.usefulLinks : []),
+        {
+          label: '',
+          url: '',
+          image: null,
+          ogImage: null,
+          description: '',
+          imageSource: 'none',
+          fetchedAt: null,
+        },
+      ],
+    }));
+  }, []);
+
+  const updateUsefulLink = useCallback((index, partial) => {
+    setValues(prev => {
+      const list = Array.isArray(prev.usefulLinks) ? [...prev.usefulLinks] : [];
+      if (!list[index]) return prev;
+      list[index] = { ...list[index], ...partial };
+      return { ...prev, usefulLinks: list };
+    });
+  }, []);
+
+  const removeUsefulLink = useCallback((index) => {
+    setValues(prev => {
+      const list = Array.isArray(prev.usefulLinks) ? [...prev.usefulLinks] : [];
+      if (index < 0 || index >= list.length) return prev;
+      const removed = list[index];
+      // If the removed link was using a Firebase-hosted image, delete the
+      // file from Storage so we don't leak orphans.
+      const img = removed?.image;
+      if (
+        removed?.imageSource === 'upload' &&
+        typeof img === 'string' &&
+        img.includes('firebasestorage.googleapis.com')
+      ) {
+        import('../Articles/articleUtils/file-delete-utils')
+          .then(({ deleteFileFromStorage }) => deleteFileFromStorage(img))
+          .catch((err) => console.warn('Failed to delete useful-link image:', err));
+      }
+      list.splice(index, 1);
+      return { ...prev, usefulLinks: list };
+    });
+  }, []);
+
+  const reorderUsefulLinks = useCallback((fromIdx, toIdx) => {
+    setValues(prev => {
+      const list = Array.isArray(prev.usefulLinks) ? [...prev.usefulLinks] : [];
+      if (
+        fromIdx < 0 || fromIdx >= list.length ||
+        toIdx < 0 || toIdx >= list.length ||
+        fromIdx === toIdx
+      ) {
+        return prev;
+      }
+      const [moved] = list.splice(fromIdx, 1);
+      list.splice(toIdx, 0, moved);
+      return { ...prev, usefulLinks: list };
+    });
   }, []);
 
   // Media file handling
@@ -752,6 +822,29 @@ export const useCreateArticle = (initialValues, onSubmitHandler) => {
     }
   }, []);
 
+  // -------- Draft persistence (localStorage autosave + recovery) -------
+  // articleId comes from initialValues only on edit; create mode uses
+  // 'new' as the per-user slot. serverUpdatedAt is needed to detect the
+  // "draft is newer than server" conflict scenario.
+  const articleIdForDraft = initialValues?.id || null;
+  const serverUpdatedAt = initialValues?.updatedAt || initialValues?.updateAt || null;
+
+  const {
+    hasConflict,
+    restoreDraft,
+    discardDraft,
+    clearDraft,
+    hasExternalChange,
+    persistDisabled,
+  } = useArticleDraftPersist({
+    articleId: articleIdForDraft,
+    values,
+    setValues,
+    isEditMode: !!initialValues,
+    serverUpdatedAt,
+    enabled: true,
+  });
+
   // Submit handler
   const onSubmit = useCallback(async (e) => {
     e.preventDefault();
@@ -770,6 +863,9 @@ export const useCreateArticle = (initialValues, onSubmitHandler) => {
         await onSubmitHandler(preparedValues);
       }
 
+      // Drop the persisted draft now that the server has the latest copy.
+      try { clearDraft(); } catch (err) { /* never block submit */ }
+
       // DON'T RESET VALUES ON EDIT
       if (!initialValues) {
         setValues(defaultValues);
@@ -783,7 +879,7 @@ export const useCreateArticle = (initialValues, onSubmitHandler) => {
       console.error("Error submitting article:", error);
       notify("notification.error", error);
     }
-  }, [validateForm, uploadAllMedia, onSubmitHandler, initialValues, defaultValues]);
+  }, [validateForm, uploadAllMedia, onSubmitHandler, initialValues, defaultValues, clearDraft]);
 
   return {
     values,
@@ -810,6 +906,17 @@ export const useCreateArticle = (initialValues, onSubmitHandler) => {
     removeSection,
     addTag,
     removeTag,
+    addUsefulLink,
+    updateUsefulLink,
+    removeUsefulLink,
+    reorderUsefulLinks,
+    // Draft persistence (localStorage autosave + conflict UI hooks)
+    hasConflict,
+    restoreDraft,
+    discardDraft,
+    clearDraft,
+    hasExternalChange,
+    persistDisabled,
     mediaFiles,
     createSlateEditorState,
     convertEditorToHtml: convertSlateToHtml
