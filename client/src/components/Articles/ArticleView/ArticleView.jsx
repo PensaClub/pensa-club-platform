@@ -18,6 +18,7 @@ import {
   faTelegram
 } from '@fortawesome/free-brands-svg-icons';
 import './articleView.css';
+import UsefulLinksDisplay from './UsefulLinksDisplay/UsefulLinksDisplay';
 import RecentArticles from './RecentArticles/RecentArticles';
 import { useAnalytics } from '../../contexts/AnalyticsContext';
 import { useTranslation } from 'react-i18next';
@@ -535,6 +536,8 @@ const ArticleView = () => {
                   </div>
                 )}
               </div>
+
+              <UsefulLinksDisplay links={article.usefulLinks} />
 
               {article.tags && article.tags.length > 0 && (
                 <div className="article-tags-view">

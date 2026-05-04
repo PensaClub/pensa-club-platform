@@ -188,6 +188,9 @@
       "youtubePlayer": "YouTube-Video-Player"
     },
     "articleView": {
+      "usefulLinks": {
+        "title": "Nützliche Links"
+      },
       "articleNotFound": "Artikel nicht gefunden",
       "backToArticles": "Zu allen Artikeln",
       "imageFor": "Bild zu {{title}}",
@@ -1919,5 +1922,39 @@
   },
   "location": {
     "loading": "Laden..."
+  },
+  "usefulLinks": {
+    "title": "Nützliche Links",
+    "subtitle": "Fügen Sie empfohlene externe Ressourcen für diesen Artikel hinzu — Titel, Beschreibung und Bild werden automatisch vom Link geladen.",
+    "addBtn": "+ Link hinzufügen",
+    "empty": "Noch keine Links hinzugefügt",
+    "urlLabel": "URL",
+    "urlPlaceholder": "https://...",
+    "labelLabel": "Link-Titel",
+    "descriptionLabel": "Beschreibung (optional)",
+    "fetching": "Daten werden abgerufen...",
+    "fetchFailed": "Metadaten konnten nicht abgerufen werden — bitte manuell ausfüllen",
+    "removeBtn": "Entfernen",
+    "moveUp": "Nach oben",
+    "moveDown": "Nach unten",
+    "invalidUrl": "Bitte geben Sie eine gültige URL ein",
+    "image": {
+      "modeOg": "OG (automatisch)",
+      "modeUrl": "URL",
+      "modeUpload": "Hochladen",
+      "urlPlaceholder": "https://example.com/image.jpg",
+      "uploadHint": "Bild hier ablegen oder Datei auswählen",
+      "changeBtn": "Ändern",
+        "previewError": "Bild kann nicht geladen werden (ungültige URL, Hotlink-Schutz oder Mixed Content).",
+      "removeBtn": "Entfernen",
+      "autoBadge": "Automatisch vom Link"
+    },
+    "draft": {
+      "restored": "Ein nicht gespeicherter Entwurf wurde wiederhergestellt",
+      "conflictTitle": "Sie haben nicht gespeicherte Änderungen",
+      "conflictMsg": "Wir haben frühere Änderungen gefunden, die nicht auf dem Server gespeichert sind. Möchten Sie sie wiederherstellen?",
+      "restoreBtn": "Wiederherstellen",
+      "discardBtn": "Verwerfen"
+    }
   }
 }

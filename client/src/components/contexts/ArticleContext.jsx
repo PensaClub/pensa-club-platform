@@ -190,6 +190,27 @@ export const ArticleProvider = ({ children }) => {
     }
   };
 
+  // Wrapper around the article service. Backend returns
+  // { success, image, title, description, siteName } or
+  // { success: false, code, message } — we surface as-is so the caller can
+  // decide how to react (auto-fill vs. show "fetch failed").
+  const getUrlMetadata = async (url) => {
+    if (!url || typeof url !== 'string') {
+      return { success: false, code: 'INVALID_URL', message: 'Invalid URL' };
+    }
+    try {
+      const response = await articleService.getUrlMetadata(url);
+      return response;
+    } catch (e) {
+      console.error('Грешка при извличане на метаданни:', e);
+      return {
+        success: false,
+        code: e?.code || 'FETCH_FAILED',
+        message: e?.message || 'Failed to fetch metadata',
+      };
+    }
+  };
+
   const updateArticle = async (id,articleData) => {
     if (!isAdmin) {
       console.warn('Потребителят не е администратор, не може да редактира статия');
@@ -227,8 +248,9 @@ export const ArticleProvider = ({ children }) => {
     invalidateArticlesCache,
     getArticleById,
     getAllArticles,
-    deleteArticle, 
-    updateArticle, 
+    deleteArticle,
+    updateArticle,
+    getUrlMetadata,
     articles,
     isLoading,
     articlesLoaded,

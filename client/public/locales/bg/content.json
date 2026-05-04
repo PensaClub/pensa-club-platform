@@ -186,6 +186,9 @@
       "youtubePlayer": "YouTube видео плейър"
     },
     "articleView": {
+      "usefulLinks": {
+        "title": "Полезни връзки"
+      },
       "articleNotFound": "Статията не е намерена",
       "backToArticles": "Към всички статии",
       "imageFor": "Изображение към {{title}}",
@@ -2664,5 +2667,39 @@
   },
   "location": {
     "loading": "Зареждане..."
+  },
+  "usefulLinks": {
+    "title": "Полезни връзки",
+    "subtitle": "Добави препоръчани външни ресурси за тази статия — заглавие, описание и изображение се извличат автоматично от линка.",
+    "addBtn": "+ Добави линк",
+    "empty": "Все още няма добавени линкове",
+    "urlLabel": "URL",
+    "urlPlaceholder": "https://...",
+    "labelLabel": "Заглавие на линка",
+    "descriptionLabel": "Описание (по избор)",
+    "fetching": "Извличам данни...",
+    "fetchFailed": "Не успях да взема метаданни — попълни ръчно",
+    "removeBtn": "Премахни",
+    "moveUp": "Премести нагоре",
+    "moveDown": "Премести надолу",
+    "invalidUrl": "Моля въведи валиден URL адрес",
+    "image": {
+      "modeOg": "OG (автоматично)",
+      "modeUrl": "URL",
+      "modeUpload": "Качване",
+      "urlPlaceholder": "https://example.com/image.jpg",
+      "uploadHint": "Пусни изображение тук или избери файл",
+      "changeBtn": "Промени",
+        "previewError": "Изображението не се зарежда (грешен URL, hotlink или mixed content).",
+      "removeBtn": "Премахни",
+      "autoBadge": "Автоматично от линка"
+    },
+    "draft": {
+      "restored": "Възстановен е незапазен черновик",
+      "conflictTitle": "Имаш незапазени промени",
+      "conflictMsg": "Намерихме промени отпреди, които не са запазени на сървъра. Искаш ли да ги възстановиш?",
+      "restoreBtn": "Възстанови",
+      "discardBtn": "Отхвърли"
+    }
   }
 }
