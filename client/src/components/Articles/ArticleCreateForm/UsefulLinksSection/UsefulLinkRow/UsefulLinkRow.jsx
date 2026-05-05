@@ -48,24 +48,15 @@ const UsefulLinkRow = ({
   const [fetchError, setFetchError] = useState(false);
   const [urlError, setUrlError] = useState(false);
 
-  // Per-field dirty flags so a metadata refetch doesn't overwrite values
-  // the user has typed manually.
-  const dirtyRef = useRef({
-    label: !!link.label,
-    description: !!link.description,
-    image: !!link.image,
-  });
-
   const debounceTimerRef = useRef(null);
   const lastFetchedUrlRef = useRef(null);
   const inFlightRef = useRef(null);
-
-  // Keep dirty flags accurate when parent rehydrates the link (e.g. draft restore).
-  useEffect(() => {
-    if (link.label) dirtyRef.current.label = true;
-    if (link.description) dirtyRef.current.description = true;
-    if (link.image) dirtyRef.current.image = true;
-  }, [link.label, link.description, link.image]);
+  // Snapshot the link at fetch dispatch time so the async callback can
+  // check what was empty AT THAT MOMENT — not what the (possibly stale)
+  // closure captured. This is what lets "clear field → change URL → refetch"
+  // populate the cleared field correctly.
+  const linkAtFetchRef = useRef(link);
+  linkAtFetchRef.current = link;
 
   const triggerMetadataFetch = useCallback(async (rawUrl) => {
     const trimmed = (rawUrl || '').trim();
@@ -91,18 +82,38 @@ const UsefulLinkRow = ({
       if (inFlightRef.current !== trimmed) return;
 
       if (result && result.success) {
+        const current = linkAtFetchRef.current;
         const partial = { fetchedAt: new Date().toISOString() };
-        // Always persist the og:image on the link itself, regardless of which
-        // image the user is currently displaying — needed for the "Премахни"
-        // → fallback-to-OG flow across reloads.
+
+        // If we're about to overwrite a Firebase-mirrored OG image with a
+        // different one (URL changed → new mirror), schedule deletion of the
+        // old mirror so we don't accumulate orphans in Storage.
+        const isFirebase = (u) => typeof u === 'string' && u.includes('firebasestorage.googleapis.com');
+        if (
+          result.image &&
+          isFirebase(current.ogImage) &&
+          current.ogImage !== result.image
+        ) {
+          import('../../../articleUtils/file-delete-utils')
+            .then(({ deleteFileFromStorage }) => deleteFileFromStorage(current.ogImage))
+            .catch((err) => console.warn('Failed to delete previous OG mirror:', err));
+        }
+
+        // Always persist the og:image on the link itself — needed for the
+        // "Премахни" → fallback-to-OG flow across reloads.
         if (result.image) partial.ogImage = result.image;
-        if (!dirtyRef.current.label && result.title) {
+        // Label/description: only fill when EMPTY. Lets the user clear a
+        // field and change URL to get fresh metadata, while preserving any
+        // value the user has manually typed.
+        if (!current.label && result.title) {
           partial.label = result.title;
         }
-        if (!dirtyRef.current.description && result.description) {
+        if (!current.description && result.description) {
           partial.description = result.description;
         }
-        if (!dirtyRef.current.image && result.image) {
+        // Image: refresh on new URL when the user hasn't picked their own.
+        // Preserve URL/upload choices (imageSource is the source-of-truth).
+        if (result.image && (!current.image || current.imageSource === 'og' || current.imageSource === 'none')) {
           partial.image = result.image;
           partial.imageSource = 'og';
         }
@@ -129,8 +140,13 @@ const UsefulLinkRow = ({
     setUrlError(false);
     setFetchError(false);
 
-    // Debounce the metadata call so we don't hammer the backend on every keystroke.
     if (debounceTimerRef.current) clearTimeout(debounceTimerRef.current);
+    if (!value.trim()) {
+      // Clearing the URL invalidates the dedupe guard so re-pasting the same
+      // URL afterwards triggers a fresh fetch instead of being skipped.
+      lastFetchedUrlRef.current = null;
+      return;
+    }
     debounceTimerRef.current = setTimeout(() => {
       triggerMetadataFetch(value);
     }, URL_FETCH_DEBOUNCE_MS);
@@ -143,22 +159,14 @@ const UsefulLinkRow = ({
   }, [triggerMetadataFetch]);
 
   const handleLabelChange = useCallback((e) => {
-    dirtyRef.current.label = true;
     onUpdate({ label: e.target.value });
   }, [onUpdate]);
 
   const handleDescriptionChange = useCallback((e) => {
-    dirtyRef.current.description = true;
     onUpdate({ description: e.target.value });
   }, [onUpdate]);
 
   const handleImagePickerChange = useCallback((partial) => {
-    if (partial.image !== undefined) {
-      // User has explicitly chosen an image (URL/upload/OG) — mark dirty
-      // so a subsequent metadata fetch doesn't overwrite their choice.
-      // OG mode is the exception: choosing "auto" should re-bind to fetched data.
-      dirtyRef.current.image = partial.imageSource !== 'og' && partial.image !== null;
-    }
     onUpdate(partial);
   }, [onUpdate]);
 
