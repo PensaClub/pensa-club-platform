@@ -346,17 +346,25 @@ export const useCreateArticle = (initialValues, onSubmitHandler) => {
       const list = Array.isArray(prev.usefulLinks) ? [...prev.usefulLinks] : [];
       if (index < 0 || index >= list.length) return prev;
       const removed = list[index];
-      // If the removed link was using a Firebase-hosted image, delete the
-      // file from Storage so we don't leak orphans.
-      const img = removed?.image;
-      if (
-        removed?.imageSource === 'upload' &&
-        typeof img === 'string' &&
-        img.includes('firebasestorage.googleapis.com')
-      ) {
+      // Collect every Firebase-hosted URL from this link (image + ogImage,
+      // since we now mirror og:images to our own bucket too) and delete the
+      // unique files. This covers all imageSource modes — upload, og, none.
+      const firebaseUrls = new Set();
+      const collect = (u) => {
+        if (typeof u === 'string' && u.includes('firebasestorage.googleapis.com')) {
+          firebaseUrls.add(u);
+        }
+      };
+      collect(removed?.image);
+      collect(removed?.ogImage);
+      if (firebaseUrls.size > 0) {
         import('../Articles/articleUtils/file-delete-utils')
-          .then(({ deleteFileFromStorage }) => deleteFileFromStorage(img))
-          .catch((err) => console.warn('Failed to delete useful-link image:', err));
+          .then(({ deleteFileFromStorage }) => {
+            firebaseUrls.forEach((u) => {
+              deleteFileFromStorage(u).catch((err) => console.warn('Failed to delete useful-link image:', err));
+            });
+          })
+          .catch((err) => console.warn('Failed to load delete helper:', err));
       }
       list.splice(index, 1);
       return { ...prev, usefulLinks: list };

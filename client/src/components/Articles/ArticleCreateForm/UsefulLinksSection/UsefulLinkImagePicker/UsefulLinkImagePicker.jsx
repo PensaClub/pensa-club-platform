@@ -110,16 +110,21 @@ const UsefulLinkImagePicker = ({
   }, [onChange]);
 
   const handleRemoveImage = useCallback(() => {
+    // Always delete the user's own upload from Firebase if applicable.
     if (imageSource === MODES.UPLOAD) safeDeleteFirebase(image);
     if (fileInputRef.current) fileInputRef.current.value = '';
     setExternalUrl('');
-    // Fallback chain after removing the current image: prefer OG (auto)
-    // if we have one fetched from the URL — otherwise leave empty.
-    if (ogImage) {
+    const fromUserChoice = imageSource === MODES.URL || imageSource === MODES.UPLOAD;
+    if (fromUserChoice && ogImage) {
+      // Removing a URL/upload choice → fall back to the saved OG image.
       setMode(MODES.OG);
       onChange({ image: ogImage, imageSource: MODES.OG });
     } else {
-      onChange({ image: null, imageSource: 'none' });
+      // OG mode (or no fallback) → clear image AND ogImage. The mirrored
+      // OG file in Firebase is now an orphan, so delete it too.
+      if (image && image !== ogImage) safeDeleteFirebase(image);
+      safeDeleteFirebase(ogImage);
+      onChange({ image: null, ogImage: null, imageSource: 'none' });
     }
   }, [image, imageSource, ogImage, onChange]);
 

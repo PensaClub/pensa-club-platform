@@ -7,6 +7,139 @@ const { checkPermission } = require('../middlewares/rbac');
 
 const { Op, where } = require('sequelize');
 const rateLimiter = require('../middlewares/rateLimiter');
+const crypto = require('crypto');
+const path = require('path');
+const fsSync = require('fs');
+const { Storage } = require('@google-cloud/storage');
+
+// Reuse Firebase Storage credentials (same setup as storageController) so we
+// can host og:image previews on our own bucket instead of hot-linking.
+let _ogStorageBucket = null;
+const getOgStorageBucket = () => {
+    if (_ogStorageBucket) return _ogStorageBucket;
+    let storage;
+    if (process.env.NODE_ENV !== 'production') {
+        const saPath = path.resolve(__dirname, '../config/firebase-service-account.json');
+        storage = fsSync.existsSync(saPath)
+            ? new Storage({ projectId: 'pensaclub-909e0', keyFilename: saPath })
+            : new Storage({ projectId: 'pensaclub-909e0' });
+    } else if (process.env.FIREBASE_PROJECT_ID && process.env.FIREBASE_CLIENT_EMAIL && process.env.FIREBASE_PRIVATE_KEY) {
+        storage = new Storage({
+            projectId: process.env.FIREBASE_PROJECT_ID,
+            credentials: {
+                client_email: process.env.FIREBASE_CLIENT_EMAIL,
+                private_key: process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, '\n'),
+            },
+        });
+    } else {
+        storage = new Storage({ projectId: 'pensaclub-909e0' });
+    }
+    const bucketName = process.env.GCS_BUCKET || 'pensaclub-909e0.appspot.com';
+    _ogStorageBucket = storage.bucket(bucketName);
+    return _ogStorageBucket;
+};
+
+const OG_IMAGE_MAX_BYTES = 5 * 1024 * 1024; // 5MB
+const OG_IMAGE_FETCH_TIMEOUT_MS = 8000;
+const OG_IMAGE_ALLOWED_MIMES = ['image/jpeg', 'image/png', 'image/webp', 'image/gif', 'image/svg+xml'];
+
+const mimeToExt = (mime) => {
+    if (!mime) return 'bin';
+    const m = mime.toLowerCase().split(';')[0].trim();
+    if (m === 'image/jpeg') return 'jpg';
+    if (m === 'image/png') return 'png';
+    if (m === 'image/webp') return 'webp';
+    if (m === 'image/gif') return 'gif';
+    if (m === 'image/svg+xml') return 'svg';
+    return 'bin';
+};
+
+// Mirror an external image URL to our Firebase Storage. Returns the Firebase
+// download URL on success, or the original URL on any failure (so the user
+// at least sees something instead of an empty preview).
+const proxyOgImageToFirebase = async (sourceUrl) => {
+    if (!sourceUrl || typeof sourceUrl !== 'string') return null;
+    if (!/^https?:\/\//i.test(sourceUrl)) return sourceUrl;
+
+    let parsed;
+    try { parsed = new URL(sourceUrl); }
+    catch { return sourceUrl; }
+
+    // SSRF guard — same private-IP rejection as the metadata endpoint.
+    try {
+        const dns = require('dns').promises;
+        const lookups = await dns.lookup(parsed.hostname, { all: true });
+        if (!lookups.length || lookups.some((r) => isPrivateIp(r.address))) return sourceUrl;
+    } catch { return sourceUrl; }
+
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), OG_IMAGE_FETCH_TIMEOUT_MS);
+
+    try {
+        const resp = await fetch(sourceUrl, {
+            redirect: 'follow',
+            signal: controller.signal,
+            headers: {
+                'User-Agent': 'facebookexternalhit/1.1 (+http://www.facebook.com/externalhit_uatext.php)',
+                'Accept': 'image/*',
+            },
+        });
+        if (!resp.ok) { clearTimeout(timer); return sourceUrl; }
+
+        const contentType = (resp.headers.get('content-type') || '').toLowerCase().split(';')[0].trim();
+        if (!OG_IMAGE_ALLOWED_MIMES.includes(contentType)) { clearTimeout(timer); return sourceUrl; }
+
+        const declaredLen = parseInt(resp.headers.get('content-length') || '0', 10);
+        if (declaredLen && declaredLen > OG_IMAGE_MAX_BYTES) { clearTimeout(timer); return sourceUrl; }
+
+        // Read with size cap.
+        let received = 0;
+        const chunks = [];
+        const reader = resp.body.getReader();
+        while (true) {
+            const { done, value } = await reader.read();
+            if (done) break;
+            received += value.length;
+            if (received > OG_IMAGE_MAX_BYTES) {
+                try { await reader.cancel(); } catch { /* noop */ }
+                clearTimeout(timer);
+                return sourceUrl;
+            }
+            chunks.push(value);
+        }
+        clearTimeout(timer);
+
+        const buffer = Buffer.concat(chunks.map((c) => Buffer.from(c)));
+        const ext = mimeToExt(contentType);
+        const random = crypto.randomBytes(6).toString('hex');
+        const filename = `${Date.now()}-${random}.${ext}`;
+        const storagePath = `articles/useful-links/og/${filename}`;
+
+        const bucket = getOgStorageBucket();
+        const file = bucket.file(storagePath);
+        const downloadToken = crypto.randomUUID();
+        await file.save(buffer, {
+            contentType,
+            resumable: false,
+            metadata: {
+                contentType,
+                metadata: {
+                    firebaseStorageDownloadTokens: downloadToken,
+                    sourceUrl,
+                },
+            },
+        });
+
+        // Build the standard Firebase Storage download URL pattern that
+        // matches what the client SDK produces.
+        const encodedPath = encodeURIComponent(storagePath);
+        return `https://firebasestorage.googleapis.com/v0/b/${bucket.name}/o/${encodedPath}?alt=media&token=${downloadToken}`;
+    } catch (err) {
+        clearTimeout(timer);
+        console.warn('[og-image proxy] failed:', err && err.message);
+        return sourceUrl;
+    }
+};
 
 const articleIncludeConfig = [
     {
@@ -204,7 +337,10 @@ const fetchUrlMetadata = async (rawUrl) => {
                 redirect: 'manual',
                 signal: controller.signal,
                 headers: {
-                    'User-Agent': 'PensaClubBot/1.0 (+https://pensa.club)',
+                    // Facebook's crawler UA — most sites optimize their meta
+                    // tags for it (incl. our own botDetector), giving
+                    // article-specific og:* instead of an SPA shell.
+                    'User-Agent': 'facebookexternalhit/1.1 (+http://www.facebook.com/externalhit_uatext.php)',
                     'Accept': 'text/html,application/xhtml+xml',
                     'Accept-Language': 'en;q=0.8',
                 },
@@ -322,11 +458,23 @@ const fetchUrlMetadata = async (rawUrl) => {
         } catch (_) { /* noop */ }
     }
 
+    // Mirror the meta image to our Firebase bucket so we never depend on
+    // the source server staying up / not blocking hotlinks. On any failure
+    // proxyOgImageToFirebase returns the original URL — degraded but usable.
+    let mirroredImage = image;
+    if (image) {
+        try {
+            mirroredImage = await proxyOgImageToFirebase(image);
+        } catch (_) {
+            mirroredImage = image;
+        }
+    }
+
     return {
         status: 200,
         body: {
             success: true,
-            image: image || null,
+            image: mirroredImage || null,
             title: title || null,
             description: description || null,
             siteName: siteName || null,
