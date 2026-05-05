@@ -145,8 +145,57 @@ const ArticleView = () => {
     };
   }, [isModalOpen]);
 
+  // Pagination ↔ URL hash sync. Hash never reaches the server, so SEO stays
+  // intact (canonical URL, sitemap, crawler view all see the same /articles/slug).
+  const parsePageFromHash = useCallback(() => {
+    const m = (typeof window !== 'undefined' ? window.location.hash : '').match(/page=(\d+)/);
+    if (!m) return 1;
+    const n = parseInt(m[1], 10);
+    return Number.isFinite(n) && n >= 1 ? n : 1;
+  }, []);
+
+  const writePageToHash = useCallback((pageNumber, { push = false } = {}) => {
+    if (typeof window === 'undefined') return;
+    const url = `${window.location.pathname}${window.location.search}${pageNumber > 1 ? `#page=${pageNumber}` : ''}`;
+    // pushState for explicit user navigation (so back/forward walks through
+    // pages); replaceState for initial seeding / clamping fixes (so we
+    // don't add a phantom history entry on mount).
+    if (push) {
+      window.history.pushState(null, '', url);
+    } else {
+      window.history.replaceState(null, '', url);
+    }
+  }, []);
+
+  // On article load (or slug change), seed currentPage from URL hash and clamp
+  // to the actual range. Runs after `article` is available so totalPages is real.
+  useEffect(() => {
+    if (!article || !article.sections) return;
+    const total = calculateTotalPages(article.sections);
+    const fromHash = parsePageFromHash();
+    const clamped = Math.min(Math.max(fromHash, 1), total);
+    if (clamped !== currentPage) setCurrentPage(clamped);
+    // If hash was invalid/out-of-range, clean it up.
+    if (clamped !== fromHash) writePageToHash(clamped);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [article?.id]);
+
+  // Browser back/forward (or external hash edit) → sync state.
+  useEffect(() => {
+    const onHashChange = () => {
+      if (!article || !article.sections) return;
+      const total = calculateTotalPages(article.sections);
+      const next = Math.min(Math.max(parsePageFromHash(), 1), total);
+      setCurrentPage(next);
+    };
+    window.addEventListener('hashchange', onHashChange);
+    return () => window.removeEventListener('hashchange', onHashChange);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [article?.id]);
+
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
+    writePageToHash(pageNumber, { push: true });
     window.scrollTo({
       top: document.querySelector('.article-body-view').offsetTop - 100,
       behavior: 'smooth'
