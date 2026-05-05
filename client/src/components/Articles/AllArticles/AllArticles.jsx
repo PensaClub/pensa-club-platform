@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { useAnalytics } from '../../contexts/AnalyticsContext';
 import './allArticles.css';
 import { useArticleContext } from '../../contexts/ArticleContext';
@@ -64,8 +64,64 @@ export const AllArticles = () => {
   const indexOfLastArticle = currentPage * articlesPerPage;
   const indexOfFirstArticle = indexOfLastArticle - articlesPerPage;
   const currentArticles = filteredArticles.slice(indexOfFirstArticle, indexOfLastArticle);
+  const totalPages = Math.max(1, Math.ceil(filteredArticles.length / articlesPerPage));
 
-  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+  // ─── URL hash ↔ pagination sync ────────────────────────────────────────
+  const parsePageFromHash = useCallback(() => {
+    const m = (typeof window !== 'undefined' ? window.location.hash : '').match(/page=(\d+)/);
+    if (!m) return 1;
+    const n = parseInt(m[1], 10);
+    return Number.isFinite(n) && n >= 1 ? n : 1;
+  }, []);
+
+  const writePageToHash = useCallback((pageNumber, { push = false } = {}) => {
+    if (typeof window === 'undefined') return;
+    const url = `${window.location.pathname}${window.location.search}${pageNumber > 1 ? `#page=${pageNumber}` : ''}`;
+    if (push) {
+      window.history.pushState(null, '', url);
+    } else {
+      window.history.replaceState(null, '', url);
+    }
+  }, []);
+
+  // Seed page from hash once articles are loaded; clamp to valid range.
+  useEffect(() => {
+    if (filteredArticles.length === 0) return;
+    const fromHash = parsePageFromHash();
+    const clamped = Math.min(Math.max(fromHash, 1), totalPages);
+    if (clamped !== currentPage) setCurrentPage(clamped);
+    if (clamped !== fromHash) writePageToHash(clamped);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [filteredArticles.length, totalPages]);
+
+  // Browser back/forward sync.
+  useEffect(() => {
+    const onHashChange = () => {
+      const next = Math.min(Math.max(parsePageFromHash(), 1), totalPages);
+      setCurrentPage(next);
+    };
+    window.addEventListener('hashchange', onHashChange);
+    return () => window.removeEventListener('hashchange', onHashChange);
+  }, [totalPages, parsePageFromHash]);
+
+  // Reset to page 1 + clear hash when filters/sort actually change. We must
+  // skip the FIRST render — otherwise on mount we'd wipe the hash before the
+  // seed effect above gets a chance to read it (refresh on /articles#page=3
+  // would land on page 1 instead of page 3).
+  const filtersInitedRef = useRef(false);
+  useEffect(() => {
+    if (!filtersInitedRef.current) {
+      filtersInitedRef.current = true;
+      return;
+    }
+    setCurrentPage(1);
+    writePageToHash(1);
+  }, [searchTerm, sortOption, writePageToHash]);
+
+  const paginate = (pageNumber) => {
+    setCurrentPage(pageNumber);
+    writePageToHash(pageNumber, { push: true });
+  };
 
   return (
     <div className="admin-articles-container">

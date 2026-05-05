@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 
-import { useState, useEffect,useMemo } from 'react';
+import { useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import './articlesList.css';
 import { ArticleCard } from './ArticleCard/ArticleCard';
 import { ArticlesSlider } from './ArticlesSlider/ArticlesSlider';
@@ -316,9 +316,63 @@ const ArticlesList = () => {
     });
   };
 
+  // ─── URL hash ↔ pagination sync ────────────────────────────────────────
+  // Hash never reaches the server, so canonical URL / sitemap / SEOHead
+  // remain unaffected.
+  const parsePageFromHash = useCallback(() => {
+    const m = (typeof window !== 'undefined' ? window.location.hash : '').match(/page=(\d+)/);
+    if (!m) return 1;
+    const n = parseInt(m[1], 10);
+    return Number.isFinite(n) && n >= 1 ? n : 1;
+  }, []);
+
+  const writePageToHash = useCallback((pageNumber, { push = false } = {}) => {
+    if (typeof window === 'undefined') return;
+    const url = `${window.location.pathname}${window.location.search}${pageNumber > 1 ? `#page=${pageNumber}` : ''}`;
+    if (push) {
+      window.history.pushState(null, '', url);
+    } else {
+      window.history.replaceState(null, '', url);
+    }
+  }, []);
+
+  // Seed page from hash once display set is known; clamp to range.
+  useEffect(() => {
+    if (totalPages < 1) return;
+    const fromHash = parsePageFromHash();
+    const clamped = Math.min(Math.max(fromHash, 1), totalPages);
+    if (clamped !== currentPage) setCurrentPage(clamped);
+    if (clamped !== fromHash) writePageToHash(clamped);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [totalPages]);
+
+  // Browser back/forward sync.
+  useEffect(() => {
+    const onHashChange = () => {
+      const next = Math.min(Math.max(parsePageFromHash(), 1), Math.max(totalPages, 1));
+      setCurrentPage(next);
+    };
+    window.addEventListener('hashchange', onHashChange);
+    return () => window.removeEventListener('hashchange', onHashChange);
+  }, [totalPages, parsePageFromHash]);
+
+  // Reset to page 1 + clean hash when search actually changes. Skip the
+  // FIRST render so we don't wipe the hash on mount before the seed effect
+  // above reads it (refresh on /articles#page=3 must restore page 3).
+  const filtersInitedRef = useRef(false);
+  useEffect(() => {
+    if (!filtersInitedRef.current) {
+      filtersInitedRef.current = true;
+      return;
+    }
+    setCurrentPage(1);
+    writePageToHash(1);
+  }, [isSearchActive, searchTerm, writePageToHash]);
+
   // Функция за смяна на страницата
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
+    writePageToHash(pageNumber, { push: true });
 
     // Скролваме до началото на секцията "Всички статии"
     const allArticlesSection = document.querySelector('.all-articles-title');
