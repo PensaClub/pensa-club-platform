@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { memo, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { LocalizedLink } from '../../../LocalizedLink/LocalizedLink';
 import { useLocalizedNavigate } from '../../../../hooks/useLocalizedNavigate';
@@ -10,16 +10,23 @@ import './adminArticleCard.css';
 
 /**
  * AdminArticleCard — grid card variant for the admin articles list.
- * Phase 2 deliverable.
+ * Phase 2 deliverable; Phase 3 layered selection mode + quick preview.
  *
- * Click on the card body navigates to /profile/article-edit/:id.
- * Action buttons stop propagation so they don't trigger that navigation.
- *
- * Phase 3 prep: the click-to-edit handler is read off the card root, NOT off
- * inner content. To add a checkbox/selection layer later, we just gate the
- * root onClick behind a "selectionMode" flag — no restructuring needed.
+ * Click on the card body navigates to /profile/article-edit/:id when no
+ * selection is active. When `selectionMode` is true, clicking the body
+ * toggles selection instead. Action buttons stop propagation so they don't
+ * trigger that navigation.
  */
-const AdminArticleCard = ({ article, onDeleteRequest, onToggleVisibility, busy = false }) => {
+const AdminArticleCardImpl = ({
+  article,
+  onDeleteRequest,
+  onToggleVisibility,
+  onQuickPreview,
+  onSelect,
+  isSelected = false,
+  selectionMode = false,
+  busy = false,
+}) => {
   const { t, i18n } = useTranslation('adminArticles');
   const navigate = useLocalizedNavigate();
   const { getViewCount } = useAnalytics();
@@ -75,6 +82,10 @@ const AdminArticleCard = ({ article, onDeleteRequest, onToggleVisibility, busy =
 
   const handleCardClick = () => {
     if (busy) return;
+    if (selectionMode) {
+      onSelect?.(article.id);
+      return;
+    }
     navigateToEdit();
   };
 
@@ -124,15 +135,41 @@ const AdminArticleCard = ({ article, onDeleteRequest, onToggleVisibility, busy =
     }
   })();
 
+  const cardClassName = [
+    'aac-card',
+    `aac-status-${effectiveStatus}`,
+    busy ? 'aac-busy' : '',
+    selectionMode ? 'aac-selection-mode' : '',
+    isSelected ? 'aac-selected' : '',
+  ].filter(Boolean).join(' ');
+
   return (
     <div
-      className={`aac-card aac-status-${effectiveStatus} ${busy ? 'aac-busy' : ''}`}
+      className={cardClassName}
       role="button"
       tabIndex={0}
       onClick={handleCardClick}
       onKeyDown={handleCardKey}
       aria-label={article.title}
+      aria-pressed={selectionMode ? isSelected : undefined}
     >
+      {/* Selection checkbox layer — visible on hover, on touch devices, or
+       * whenever selection mode is active (so clicks remain easy). */}
+      <label
+        className="aac-select-wrap"
+        onClick={stop}
+        title={t('card.selectArticle')}
+      >
+        <input
+          type="checkbox"
+          className="aac-select"
+          checked={isSelected}
+          onChange={() => onSelect?.(article.id)}
+          onClick={stop}
+          aria-label={t('card.selectArticle')}
+        />
+      </label>
+
       <div className="aac-image-wrap">
         <img
           src={getResizedUrl(imageSrc, 600)}
@@ -266,6 +303,7 @@ const AdminArticleCard = ({ article, onDeleteRequest, onToggleVisibility, busy =
             }}
             disabled={busy}
             title={toggleLabel}
+            aria-label={toggleLabel}
           >
             {toggleAction === 'archived' ? (
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
@@ -280,6 +318,24 @@ const AdminArticleCard = ({ article, onDeleteRequest, onToggleVisibility, busy =
             <span>{toggleLabel}</span>
           </button>
 
+          <button
+            type="button"
+            className="aac-action aac-action-quick"
+            onClick={(e) => {
+              stop(e);
+              onQuickPreview?.(article);
+            }}
+            disabled={busy}
+            title={t('card.quickPreviewBtn')}
+            aria-label={t('card.quickPreviewBtn')}
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z" stroke="currentColor" strokeWidth="1.6" />
+              <circle cx="12" cy="12" r="3.2" fill="currentColor" />
+            </svg>
+            <span>{t('card.quickPreviewBtn')}</span>
+          </button>
+
           <a
             href={localePath(`/articles/${article.slug}`, i18n.language)}
             target="_blank"
@@ -287,6 +343,7 @@ const AdminArticleCard = ({ article, onDeleteRequest, onToggleVisibility, busy =
             className="aac-action aac-action-preview"
             onClick={stop}
             title={t('card.previewBtn')}
+            aria-label={t('card.previewBtn')}
           >
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
               <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
@@ -303,6 +360,7 @@ const AdminArticleCard = ({ article, onDeleteRequest, onToggleVisibility, busy =
             }}
             disabled={busy}
             title={t('card.deleteBtn')}
+            aria-label={t('card.deleteBtn')}
           >
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
               <path d="M3 6h18M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2M6 6l1 14a2 2 0 002 2h6a2 2 0 002-2l1-14M10 11v6M14 11v6" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
@@ -315,4 +373,19 @@ const AdminArticleCard = ({ article, onDeleteRequest, onToggleVisibility, busy =
   );
 };
 
+// Memoize to avoid re-rendering every card when only selection changes for
+// other rows. We do an explicit comparison on the props that actually
+// affect this card.
+const propsEqual = (a, b) => (
+  a.article === b.article
+  && a.busy === b.busy
+  && a.isSelected === b.isSelected
+  && a.selectionMode === b.selectionMode
+  && a.onDeleteRequest === b.onDeleteRequest
+  && a.onToggleVisibility === b.onToggleVisibility
+  && a.onQuickPreview === b.onQuickPreview
+  && a.onSelect === b.onSelect
+);
+
+const AdminArticleCard = memo(AdminArticleCardImpl, propsEqual);
 export default AdminArticleCard;

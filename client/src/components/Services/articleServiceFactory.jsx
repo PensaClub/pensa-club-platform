@@ -55,6 +55,14 @@ export const articleServiceFactory = (token) => {
       return requester.del(`${apiUrl}/articles/${id}`);
     },
 
+    // Bulk action over a list of article ids. Backend: POST /articles/bulk
+    // Body: { ids: number[], action: 'delete'|'archive'|'publish'|'draft' }
+    // Returns { success: true, updated, action } on full success
+    // or 207 with { success: false, results: [{id, ok, error}] } on partial.
+    bulkArticles: async (ids, action) => {
+      return requester.post(`${apiUrl}/articles/bulk`, { ids, action });
+    },
+
     // Returns og:image / title / description / siteName for a remote URL.
     // Backend endpoint: GET /api/articles/url-metadata?url=<encoded>
     getUrlMetadata: async (url) => {

@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import './deleteConfirmModal.css';
 
 /**
@@ -66,7 +67,9 @@ const DeleteConfirmModal = ({
 
   if (!open) return null;
 
-  return (
+  // Render via Portal so the fixed-positioned overlay anchors to the
+  // viewport, escaping any ancestor `contain`/`transform` containment.
+  return createPortal((
     <div
       className="dcm-overlay"
       role="dialog"
@@ -101,7 +104,7 @@ const DeleteConfirmModal = ({
         </div>
       </div>
     </div>
-  );
+  ), document.body);
 };
 
 export default DeleteConfirmModal;
