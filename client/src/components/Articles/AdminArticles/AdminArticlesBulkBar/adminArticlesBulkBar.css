@@ -1,0 +1,292 @@
+/* AdminArticlesBulkBar — prefix `aabb-`. Sticky bulk-action bar that slides
+ * down from the top of the admin articles list when the user has at least
+ * one item selected. */
+
+.aabb-wrap {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  background: linear-gradient(135deg, #fff7f0, #fff0e2);
+  border: 1px solid rgba(226, 96, 32, 0.35);
+  border-radius: 12px;
+  box-shadow: 0 6px 16px rgba(226, 96, 32, 0.18);
+  margin-bottom: 12px;
+  /* Slide-down + fade in. The wrap is rendered always so that React
+   * doesn't tear it down between selection toggles, but is collapsed to
+   * height 0 when invisible. */
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  transform: translateY(-6px);
+  transition: max-height 200ms ease, opacity 160ms ease, transform 200ms ease;
+}
+
+.aabb-wrap.aabb-visible {
+  max-height: 200px;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.aabb-inner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 16px;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+.aabb-summary {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 14px;
+  min-width: 0;
+  flex: 1 1 auto;
+}
+
+.aabb-count {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #c8531a;
+  white-space: nowrap;
+}
+
+.aabb-divider {
+  font-size: 1rem;
+  color: rgba(200, 83, 26, 0.4);
+  user-select: none;
+}
+
+.aabb-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 10px;
+  min-height: 32px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #c8531a;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 140ms ease, color 140ms ease, border-color 140ms ease;
+}
+
+.aabb-link:hover:not(:disabled) {
+  background: rgba(226, 96, 32, 0.1);
+  border-color: rgba(226, 96, 32, 0.25);
+}
+
+.aabb-link:focus-visible {
+  outline: 2px solid #E26020;
+  outline-offset: 2px;
+}
+
+.aabb-link-danger {
+  color: #b91c1c;
+}
+
+.aabb-link-danger:hover:not(:disabled) {
+  background: rgba(185, 28, 28, 0.08);
+  border-color: rgba(185, 28, 28, 0.2);
+}
+
+.aabb-link:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.aabb-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.aabb-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 8px 14px;
+  min-height: 38px;
+  border-radius: 10px;
+  border: 1px solid #e5e7eb;
+  background: #ffffff;
+  color: #374151;
+  font-size: 0.85rem;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background 140ms ease, color 140ms ease, border-color 140ms ease, transform 120ms ease, box-shadow 140ms ease;
+}
+
+.aabb-btn span {
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.aabb-btn svg {
+  flex-shrink: 0;
+}
+
+.aabb-btn:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px rgba(15, 23, 42, 0.08);
+}
+
+.aabb-btn:focus-visible {
+  outline: 2px solid #E26020;
+  outline-offset: 2px;
+}
+
+.aabb-btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.aabb-btn-publish {
+  background: #ecfdf5;
+  border-color: #a7f3d0;
+  color: #15803d;
+}
+.aabb-btn-publish:hover:not(:disabled) {
+  background: #15803d;
+  color: #ffffff;
+  border-color: #15803d;
+}
+
+.aabb-btn-archive {
+  background: #fffbeb;
+  border-color: #fcd9a4;
+  color: #b45309;
+}
+.aabb-btn-archive:hover:not(:disabled) {
+  background: #b45309;
+  color: #ffffff;
+  border-color: #b45309;
+}
+
+.aabb-btn-draft {
+  background: #f3f4f6;
+  border-color: #d1d5db;
+  color: #4b5563;
+}
+.aabb-btn-draft:hover:not(:disabled) {
+  background: #4b5563;
+  color: #ffffff;
+  border-color: #4b5563;
+}
+
+.aabb-btn-delete {
+  background: #fef2f2;
+  border-color: #fecaca;
+  color: #b91c1c;
+}
+.aabb-btn-delete:hover:not(:disabled) {
+  background: #b91c1c;
+  color: #ffffff;
+  border-color: #b91c1c;
+}
+
+.aabb-btn-menu {
+  background: #ffffff;
+  border-color: #e5e7eb;
+  color: #c8531a;
+}
+
+/* Responsive — switch to dropdown menu on narrow viewports. */
+.aabb-actions-mobile {
+  position: relative;
+  display: none;
+}
+
+.aabb-menu {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 6px);
+  min-width: 180px;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  box-shadow: 0 12px 26px rgba(15, 23, 42, 0.14);
+  padding: 4px;
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.aabb-menu-item {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 10px 14px;
+  min-height: 38px;
+  border: 0;
+  background: transparent;
+  text-align: left;
+  font-size: 0.9rem;
+  font-weight: 600;
+  font-family: inherit;
+  color: #374151;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 140ms ease, color 140ms ease;
+}
+
+.aabb-menu-item:hover:not(:disabled) {
+  background: #f3f4f6;
+}
+
+.aabb-menu-item:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.aabb-menu-item-danger {
+  color: #b91c1c;
+}
+
+.aabb-menu-item-danger:hover:not(:disabled) {
+  background: #fef2f2;
+}
+
+@media (max-width: 600px) {
+  .aabb-inner {
+    padding: 10px 12px;
+    gap: 8px;
+  }
+  .aabb-summary {
+    width: 100%;
+    gap: 6px 10px;
+  }
+  .aabb-divider {
+    display: none;
+  }
+  .aabb-count {
+    font-size: 0.88rem;
+  }
+  .aabb-link {
+    font-size: 0.8rem;
+    padding: 4px 8px;
+    min-height: 30px;
+  }
+  .aabb-actions-inline {
+    display: none;
+  }
+  .aabb-actions-mobile {
+    display: block;
+  }
+}

@@ -32,6 +32,66 @@
   pointer-events: none;
 }
 
+/* Selection state — orange ring + slight scale-down so the user can scan
+ * which items are picked while the bulk bar is open. */
+.aac-card.aac-selected {
+  transform: scale(0.98);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06), 0 0 0 3px #E26020;
+}
+
+.aac-card.aac-selected:hover {
+  transform: scale(0.985);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.10), 0 0 0 3px #E26020;
+}
+
+/* Selection checkbox — sits in the top-left of the image area. Always shown
+ * on touch devices, otherwise on hover or when the page is in selection
+ * mode. Big enough for a comfortable tap target. */
+.aac-select-wrap {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 3;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  padding: 8px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: 0 2px 6px rgba(15, 23, 42, 0.12);
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 140ms ease, background 140ms ease;
+}
+
+.aac-card:hover .aac-select-wrap,
+.aac-card:focus-within .aac-select-wrap,
+.aac-card.aac-selection-mode .aac-select-wrap,
+.aac-card.aac-selected .aac-select-wrap {
+  opacity: 1;
+}
+
+@media (hover: none) {
+  .aac-select-wrap {
+    opacity: 1;
+  }
+}
+
+.aac-select {
+  width: 18px;
+  height: 18px;
+  margin: 0;
+  cursor: pointer;
+  accent-color: #E26020;
+}
+
+.aac-select:focus-visible {
+  outline: 2px solid #E26020;
+  outline-offset: 2px;
+}
+
 /* Image area */
 .aac-image-wrap {
   position: relative;
@@ -255,6 +315,7 @@
 
 .aac-action-toggle-publish,
 .aac-action-toggle-archive,
+.aac-action-quick,
 .aac-action-preview,
 .aac-action-delete {
   flex: 0 0 auto;
@@ -264,6 +325,7 @@
 
 .aac-action-toggle-publish span,
 .aac-action-toggle-archive span,
+.aac-action-quick span,
 .aac-action-preview span,
 .aac-action-delete span {
   display: none;
@@ -330,6 +392,12 @@
   color: #b45309;
 }
 
+.aac-action-quick:hover:not(:disabled) {
+  background: #fff7ed;
+  border-color: #E26020;
+  color: #E26020;
+}
+
 .aac-action-preview:hover:not(:disabled) {
   background: #eef2ff;
   border-color: #4338ca;
@@ -369,9 +437,16 @@
   }
   .aac-action-toggle-publish,
   .aac-action-toggle-archive,
+  .aac-action-quick,
   .aac-action-preview,
   .aac-action-delete {
     width: 36px;
+  }
+  /* On the very narrowest phones, drop the "open in new tab" button to
+   * save horizontal real-estate — Quick Preview already covers the
+   * scan-the-content use case. */
+  .aac-action-preview {
+    display: none;
   }
   .aac-action-edit span {
     font-size: 0.78rem;

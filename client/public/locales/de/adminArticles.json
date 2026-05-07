@@ -49,9 +49,11 @@
   "card": {
     "editBtn": "Bearbeiten",
     "previewBtn": "Vorschau",
+    "quickPreviewBtn": "Schnellvorschau",
     "deleteBtn": "Löschen",
     "archiveBtn": "Archivieren",
     "publishBtn": "Veröffentlichen",
+    "selectArticle": "Artikel auswählen",
     "statusBadge": {
       "published": "Veröffentlicht",
       "scheduled": "Geplant",
@@ -96,6 +98,61 @@
   },
   "error": {
     "fetchFailed": "Fehler beim Laden der Artikel. Bitte versuchen Sie es erneut."
+  },
+  "bulk": {
+    "selected_one": "{{count}} ausgewählt",
+    "selected_other": "{{count}} ausgewählt",
+    "selected": "{{count}} ausgewählt",
+    "selectAllOnPage": "Alle auf der Seite auswählen",
+    "selectAllMatching_one": "Alle {{count}} auswählen",
+    "selectAllMatching_other": "Alle {{count}} auswählen",
+    "selectAllMatching": "Alle {{count}} auswählen",
+    "clearSelection": "Auswahl aufheben",
+    "actionsMenu": "Aktionen",
+    "actions": {
+      "delete": "Löschen",
+      "archive": "Archivieren",
+      "publish": "Veröffentlichen",
+      "draft": "In Entwurf verschieben"
+    },
+    "confirm": {
+      "deleteTitle": "Ausgewählte Artikel löschen",
+      "deleteMessage_one": "Möchten Sie wirklich {{count}} Artikel löschen? Diese Aktion kann nicht rückgängig gemacht werden.",
+      "deleteMessage_other": "Möchten Sie wirklich {{count}} Artikel löschen? Diese Aktion kann nicht rückgängig gemacht werden.",
+      "deleteMessage": "Möchten Sie wirklich {{count}} Artikel löschen? Diese Aktion kann nicht rückgängig gemacht werden.",
+      "deleteConfirm": "Löschen"
+    },
+    "toast": {
+      "successDelete_one": "{{count}} Artikel gelöscht.",
+      "successDelete_other": "{{count}} Artikel gelöscht.",
+      "successDelete": "{{count}} Artikel gelöscht.",
+      "successArchive_one": "{{count}} Artikel archiviert.",
+      "successArchive_other": "{{count}} Artikel archiviert.",
+      "successArchive": "{{count}} Artikel archiviert.",
+      "successPublish_one": "{{count}} Artikel veröffentlicht.",
+      "successPublish_other": "{{count}} Artikel veröffentlicht.",
+      "successPublish": "{{count}} Artikel veröffentlicht.",
+      "successDraft_one": "{{count}} Artikel in Entwurf verschoben.",
+      "successDraft_other": "{{count}} Artikel in Entwurf verschoben.",
+      "successDraft": "{{count}} Artikel in Entwurf verschoben.",
+      "partialFailure": "Erfolgreich bei {{ok}} von {{total}} Artikeln. Bitte versuchen Sie es für den Rest erneut.",
+      "error": "Massenaktion fehlgeschlagen. Bitte erneut versuchen."
+    }
+  },
+  "quickPreview": {
+    "title": "Schnellvorschau",
+    "close": "Schließen",
+    "edit": "Bearbeiten",
+    "openExternal": "In neuem Tab öffnen",
+    "loading": "Wird geladen...",
+    "noContent": "Keine Inhalte zur Vorschau.",
+    "byAuthor": "von {{name}}",
+    "viewsLabel_one": "{{count}} Aufruf",
+    "viewsLabel_other": "{{count}} Aufrufe",
+    "viewsLabel": "{{count}} Aufrufe",
+    "tagsLabel": "Tags",
+    "linksLabel": "Nützliche Links",
+    "sectionsLabel": "Abschnitte"
   },
   "relativeTime": {
     "justNow": "gerade eben",

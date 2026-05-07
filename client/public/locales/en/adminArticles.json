@@ -49,9 +49,11 @@
   "card": {
     "editBtn": "Edit",
     "previewBtn": "Preview",
+    "quickPreviewBtn": "Quick preview",
     "deleteBtn": "Delete",
     "archiveBtn": "Archive",
     "publishBtn": "Publish",
+    "selectArticle": "Select article",
     "statusBadge": {
       "published": "Published",
       "scheduled": "Scheduled",
@@ -96,6 +98,61 @@
   },
   "error": {
     "fetchFailed": "Failed to load articles. Please try again."
+  },
+  "bulk": {
+    "selected_one": "{{count}} selected",
+    "selected_other": "{{count}} selected",
+    "selected": "{{count}} selected",
+    "selectAllOnPage": "Select all on page",
+    "selectAllMatching_one": "Select all {{count}}",
+    "selectAllMatching_other": "Select all {{count}}",
+    "selectAllMatching": "Select all {{count}}",
+    "clearSelection": "Clear selection",
+    "actionsMenu": "Actions",
+    "actions": {
+      "delete": "Delete",
+      "archive": "Archive",
+      "publish": "Publish",
+      "draft": "Move to draft"
+    },
+    "confirm": {
+      "deleteTitle": "Delete selected articles",
+      "deleteMessage_one": "Are you sure you want to delete {{count}} article? This action cannot be undone.",
+      "deleteMessage_other": "Are you sure you want to delete {{count}} articles? This action cannot be undone.",
+      "deleteMessage": "Are you sure you want to delete {{count}} articles? This action cannot be undone.",
+      "deleteConfirm": "Delete"
+    },
+    "toast": {
+      "successDelete_one": "{{count}} article deleted.",
+      "successDelete_other": "{{count}} articles deleted.",
+      "successDelete": "{{count}} articles deleted.",
+      "successArchive_one": "{{count}} article archived.",
+      "successArchive_other": "{{count}} articles archived.",
+      "successArchive": "{{count}} articles archived.",
+      "successPublish_one": "{{count}} article published.",
+      "successPublish_other": "{{count}} articles published.",
+      "successPublish": "{{count}} articles published.",
+      "successDraft_one": "{{count}} article moved to draft.",
+      "successDraft_other": "{{count}} articles moved to draft.",
+      "successDraft": "{{count}} articles moved to draft.",
+      "partialFailure": "Succeeded for {{ok}} of {{total}} articles. Try again for the rest.",
+      "error": "Bulk action failed. Please try again."
+    }
+  },
+  "quickPreview": {
+    "title": "Quick preview",
+    "close": "Close",
+    "edit": "Edit",
+    "openExternal": "Open in new tab",
+    "loading": "Loading...",
+    "noContent": "No content to preview.",
+    "byAuthor": "by {{name}}",
+    "viewsLabel_one": "{{count}} view",
+    "viewsLabel_other": "{{count}} views",
+    "viewsLabel": "{{count}} views",
+    "tagsLabel": "Tags",
+    "linksLabel": "Useful links",
+    "sectionsLabel": "Sections"
   },
   "relativeTime": {
     "justNow": "just now",

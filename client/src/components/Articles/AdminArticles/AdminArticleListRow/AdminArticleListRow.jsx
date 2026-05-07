@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { memo, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { LocalizedLink } from '../../../LocalizedLink/LocalizedLink';
 import { useLocalizedNavigate } from '../../../../hooks/useLocalizedNavigate';
@@ -10,9 +10,19 @@ import './adminArticleListRow.css';
 
 /**
  * AdminArticleListRow — denser horizontal row variant. Same actions as the
- * card; better scan-density for power users.
+ * card; better scan-density for power users. Phase 3 added selection mode +
+ * quick preview button.
  */
-const AdminArticleListRow = ({ article, onDeleteRequest, onToggleVisibility, busy = false }) => {
+const AdminArticleListRowImpl = ({
+  article,
+  onDeleteRequest,
+  onToggleVisibility,
+  onQuickPreview,
+  onSelect,
+  isSelected = false,
+  selectionMode = false,
+  busy = false,
+}) => {
   const { t, i18n } = useTranslation('adminArticles');
   const navigate = useLocalizedNavigate();
   const { getViewCount } = useAnalytics();
@@ -54,6 +64,10 @@ const AdminArticleListRow = ({ article, onDeleteRequest, onToggleVisibility, bus
 
   const handleClick = () => {
     if (busy) return;
+    if (selectionMode) {
+      onSelect?.(article.id);
+      return;
+    }
     navigateToEdit();
   };
 
@@ -82,15 +96,41 @@ const AdminArticleListRow = ({ article, onDeleteRequest, onToggleVisibility, bus
     }
   })();
 
+  const rowClassName = [
+    'aalr-row',
+    `aalr-status-${effectiveStatus}`,
+    busy ? 'aalr-busy' : '',
+    selectionMode ? 'aalr-selection-mode' : '',
+    isSelected ? 'aalr-selected' : '',
+  ].filter(Boolean).join(' ');
+
   return (
     <div
-      className={`aalr-row aalr-status-${effectiveStatus} ${busy ? 'aalr-busy' : ''}`}
+      className={rowClassName}
       role="button"
       tabIndex={0}
       onClick={handleClick}
       onKeyDown={handleKey}
       aria-label={article.title}
+      aria-pressed={selectionMode ? isSelected : undefined}
     >
+      {/* Selection checkbox — leading slot. Visible always on touch, on
+       * hover/focus on desktop, and when the page is in selection mode. */}
+      <label
+        className="aalr-select-wrap"
+        onClick={stop}
+        title={t('card.selectArticle')}
+      >
+        <input
+          type="checkbox"
+          className="aalr-select"
+          checked={isSelected}
+          onChange={() => onSelect?.(article.id)}
+          onClick={stop}
+          aria-label={t('card.selectArticle')}
+        />
+      </label>
+
       <div className="aalr-thumb-wrap">
         <img
           src={getResizedUrl(imageSrc, 600)}
@@ -167,6 +207,23 @@ const AdminArticleListRow = ({ article, onDeleteRequest, onToggleVisibility, bus
           )}
         </button>
 
+        <button
+          type="button"
+          className="aalr-action aalr-action-quick"
+          onClick={(e) => {
+            stop(e);
+            onQuickPreview?.(article);
+          }}
+          disabled={busy}
+          title={t('card.quickPreviewBtn')}
+          aria-label={t('card.quickPreviewBtn')}
+        >
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z" stroke="currentColor" strokeWidth="1.6" />
+            <circle cx="12" cy="12" r="3.2" fill="currentColor" />
+          </svg>
+        </button>
+
         <a
           href={localePath(`/articles/${article.slug}`, i18n.language)}
           target="_blank"
@@ -201,4 +258,16 @@ const AdminArticleListRow = ({ article, onDeleteRequest, onToggleVisibility, bus
   );
 };
 
+const propsEqual = (a, b) => (
+  a.article === b.article
+  && a.busy === b.busy
+  && a.isSelected === b.isSelected
+  && a.selectionMode === b.selectionMode
+  && a.onDeleteRequest === b.onDeleteRequest
+  && a.onToggleVisibility === b.onToggleVisibility
+  && a.onQuickPreview === b.onQuickPreview
+  && a.onSelect === b.onSelect
+);
+
+const AdminArticleListRow = memo(AdminArticleListRowImpl, propsEqual);
 export default AdminArticleListRow;
