@@ -12,6 +12,8 @@ import AdminArticleCard from './AdminArticleCard/AdminArticleCard';
 import AdminArticleListRow from './AdminArticleListRow/AdminArticleListRow';
 import AdminArticlesEmptyState from './AdminArticlesEmptyState/AdminArticlesEmptyState';
 import AdminArticlesSkeleton from './AdminArticlesSkeleton/AdminArticlesSkeleton';
+import AdminArticlesBulkBar from './AdminArticlesBulkBar/AdminArticlesBulkBar';
+import AdminArticleQuickPreview from './AdminArticleQuickPreview/AdminArticleQuickPreview';
 import DeleteConfirmModal from './DeleteConfirmModal/DeleteConfirmModal';
 
 import { serializeAdminParams } from './adminArticlesUtils';
@@ -35,20 +37,29 @@ const DEFAULT_FILTERS = {
 
 const ALLOWED_LIMITS = [6, 12, 24, 48];
 
+const BULK_ACTION_TO_TOAST_KEY = {
+  delete: 'successDelete',
+  archive: 'successArchive',
+  publish: 'successPublish',
+  draft: 'successDraft',
+};
+
 /**
- * AdminArticlesPage — Phase 2 redesign of the admin articles list.
+ * AdminArticlesPage — Phase 3 redesign of the admin articles list.
  *
- * Phase 3 prep:
- * - Selection state will live alongside `filters` in this component (just
- *   add a `selectedIds` set + a sticky bulk-action bar). Card/Row already
- *   isolate their action buttons via `stopPropagation`, so a top-left
- *   checkbox layer can be added without breaking click-to-edit.
- * - Quick Preview slide-in panel will share the existing fetch/state — pass
- *   a `previewArticleId` and render a sibling drawer.
+ * Phase 3 deliverables on top of Phase 2:
+ * - Multi-select with sticky bulk action bar (delete / archive / publish /
+ *   draft) talking to POST /articles/bulk.
+ * - Quick Preview slide-in panel that hydrates sections lazily.
  */
 const AdminArticlesPage = () => {
   const { t } = useTranslation('adminArticles');
-  const { getArticlesPaginated, updateArticleStatus, deleteArticle } = useArticleContext();
+  const {
+    getArticlesPaginated,
+    updateArticleStatus,
+    deleteArticle,
+    bulkArticles,
+  } = useArticleContext();
   const { loadArticleViewCounts } = useAnalytics();
 
   // Persisted prefs
@@ -81,6 +92,14 @@ const AdminArticlesPage = () => {
   const [pendingDelete, setPendingDelete] = useState(null);
   const [deleteLoading, setDeleteLoading] = useState(false);
 
+  // Phase 3 — selection state
+  const [selectedIds, setSelectedIds] = useState(() => new Set());
+  const [bulkBusy, setBulkBusy] = useState(false);
+  const [pendingBulkDelete, setPendingBulkDelete] = useState(false);
+
+  // Phase 3 — quick preview state
+  const [quickPreviewArticle, setQuickPreviewArticle] = useState(null);
+
   // Persist viewMode + limit
   useEffect(() => {
     try { window.localStorage.setItem(VIEW_MODE_KEY, viewMode); } catch { /* ignore */ }
@@ -90,8 +109,8 @@ const AdminArticlesPage = () => {
   }, [filters.limit]);
 
   // ─── URL hash ↔ pagination sync ──────────────────────────────────────
-  // Mirror the proven pattern from ArticlesList.jsx / AllArticles.jsx so
-  // refresh on /profile/articles#page=3 lands on page 3.
+  // Mirror the proven pattern from ArticlesList.jsx so refresh on
+  // /profile/articles#page=3 lands on page 3.
   const parsePageFromHash = useCallback(() => {
     const m = (typeof window !== 'undefined' ? window.location.hash : '').match(/page=(\d+)/);
     if (!m) return 1;
@@ -154,6 +173,9 @@ const AdminArticlesPage = () => {
     }
     setFilters((f) => (f.page === 1 ? f : { ...f, page: 1 }));
     writePageToHash(1);
+    // Clearing filters / search should also clear any stale selection so
+    // the bulk bar doesn't reference items that aren't visible anymore.
+    setSelectedIds((prev) => (prev.size === 0 ? prev : new Set()));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     filters.search, filters.status, filters.sort, filters.order,
@@ -199,8 +221,10 @@ const AdminArticlesPage = () => {
   const handlePageChange = (pageNumber) => {
     setFilters((f) => ({ ...f, page: pageNumber }));
     writePageToHash(pageNumber, { push: true });
-    // Smooth-scroll to top of the grid section so the user knows the page
-    // changed even on long lists.
+    // Page change shouldn't keep selections from a different page (the user
+    // would lose visual feedback) — but the bulk bar may still be useful, so
+    // we preserve. Up to UX preference; for now we KEEP selections across
+    // pages so a user can pick across multiple pages.
     requestAnimationFrame(() => {
       if (gridSectionRef.current) {
         const top = gridSectionRef.current.getBoundingClientRect().top + window.scrollY - 100;
@@ -221,7 +245,7 @@ const AdminArticlesPage = () => {
   };
 
   // ─── Item action callbacks ───────────────────────────────────────────
-  const handleToggleVisibility = async (article, nextStatus) => {
+  const handleToggleVisibility = useCallback(async (article, nextStatus) => {
     setBusyId(article.id);
     try {
       const updated = await updateArticleStatus(article.id, nextStatus);
@@ -239,11 +263,11 @@ const AdminArticlesPage = () => {
     } finally {
       setBusyId(null);
     }
-  };
+  }, [updateArticleStatus, t]);
 
-  const handleDeleteRequest = (article) => {
+  const handleDeleteRequest = useCallback((article) => {
     setPendingDelete(article);
-  };
+  }, []);
 
   const handleDeleteConfirm = async () => {
     if (!pendingDelete) return;
@@ -272,6 +296,103 @@ const AdminArticlesPage = () => {
     setPendingDelete(null);
   };
 
+  // ─── Phase 3 — selection helpers ─────────────────────────────────────
+  const handleToggleSelect = useCallback((id) => {
+    setSelectedIds((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  }, []);
+
+  const isSelected = useCallback((id) => selectedIds.has(id), [selectedIds]);
+
+  const allOnPageSelected = items.length > 0 && items.every((a) => selectedIds.has(a.id));
+
+  const handleSelectAllOnPage = useCallback(() => {
+    setSelectedIds((prev) => {
+      const next = new Set(prev);
+      const everyOnPage = items.every((a) => next.has(a.id));
+      if (everyOnPage) {
+        items.forEach((a) => next.delete(a.id));
+      } else {
+        items.forEach((a) => next.add(a.id));
+      }
+      return next;
+    });
+  }, [items]);
+
+  const handleClearSelection = useCallback(() => {
+    setSelectedIds(new Set());
+  }, []);
+
+  // Selection mode is implicit — once anything is selected, the page is in
+  // selection mode (cards & rows show the checkbox and the bulk bar slides
+  // in).
+  const selectionMode = selectedIds.size > 0;
+
+  // ─── Phase 3 — quick preview helpers ─────────────────────────────────
+  const handleQuickPreview = useCallback((article) => {
+    setQuickPreviewArticle(article);
+  }, []);
+
+  const handleQuickPreviewClose = useCallback(() => {
+    setQuickPreviewArticle(null);
+  }, []);
+
+  // ─── Phase 3 — bulk action handlers ──────────────────────────────────
+  const runBulkAction = async (action) => {
+    if (selectedIds.size === 0) return;
+    const ids = Array.from(selectedIds);
+    setBulkBusy(true);
+    try {
+      const resp = await bulkArticles(ids, action);
+      if (resp?.success) {
+        const key = BULK_ACTION_TO_TOAST_KEY[action] || 'successDelete';
+        toast.success(
+          t(`bulk.toast.${key}`, { count: Number.isFinite(resp.updated) ? resp.updated : ids.length }),
+          { role: 'alert' }
+        );
+      } else if (Array.isArray(resp?.results)) {
+        const okCount = resp.results.filter((r) => r.ok).length;
+        toast.warn(
+          t('bulk.toast.partialFailure', { ok: okCount, total: resp.results.length }),
+          { role: 'alert' }
+        );
+      } else {
+        toast.error(t('bulk.toast.error'), { role: 'alert' });
+      }
+    } catch {
+      toast.error(t('bulk.toast.error'), { role: 'alert' });
+    } finally {
+      setBulkBusy(false);
+      // Always reset selection + refresh; the user expects a clean slate.
+      setSelectedIds(new Set());
+      fetchData(filters);
+    }
+  };
+
+  const handleBulkAction = (action) => {
+    if (action === 'delete') {
+      // Defer to confirm modal.
+      setPendingBulkDelete(true);
+      return;
+    }
+    // For non-destructive actions, fire-and-toast.
+    runBulkAction(action);
+  };
+
+  const handleBulkDeleteConfirm = async () => {
+    setPendingBulkDelete(false);
+    await runBulkAction('delete');
+  };
+
+  const handleBulkDeleteCancel = () => {
+    if (bulkBusy) return;
+    setPendingBulkDelete(false);
+  };
+
   // ─── Author / tag option lists ───────────────────────────────────────
   const authorOptions = useMemo(() => {
     const set = new Set();
@@ -282,7 +403,7 @@ const AdminArticlesPage = () => {
   const tagOptions = useMemo(() => {
     const set = new Set();
     items.forEach((a) => {
-      if (Array.isArray(a.tags)) a.tags.forEach((t) => t && set.add(t));
+      if (Array.isArray(a.tags)) a.tags.forEach((tg) => tg && set.add(tg));
     });
     return Array.from(set).sort();
   }, [items]);
@@ -335,6 +456,17 @@ const AdminArticlesPage = () => {
         totalCount={total}
       />
 
+      <AdminArticlesBulkBar
+        selectedCount={selectedIds.size}
+        pageCount={items.length}
+        totalMatching={total}
+        allOnPageSelected={allOnPageSelected}
+        onSelectAllOnPage={handleSelectAllOnPage}
+        onClearSelection={handleClearSelection}
+        onAction={handleBulkAction}
+        busy={bulkBusy}
+      />
+
       {totalPages > 1 && (
         <div className="aap-pagination-top">
           <Pagination
@@ -361,7 +493,11 @@ const AdminArticlesPage = () => {
                 article={article}
                 onDeleteRequest={handleDeleteRequest}
                 onToggleVisibility={handleToggleVisibility}
-                busy={busyId === article.id}
+                onQuickPreview={handleQuickPreview}
+                onSelect={handleToggleSelect}
+                isSelected={isSelected(article.id)}
+                selectionMode={selectionMode}
+                busy={busyId === article.id || bulkBusy}
               />
             ))}
           </div>
@@ -373,7 +509,11 @@ const AdminArticlesPage = () => {
                 article={article}
                 onDeleteRequest={handleDeleteRequest}
                 onToggleVisibility={handleToggleVisibility}
-                busy={busyId === article.id}
+                onQuickPreview={handleQuickPreview}
+                onSelect={handleToggleSelect}
+                isSelected={isSelected(article.id)}
+                selectionMode={selectionMode}
+                busy={busyId === article.id || bulkBusy}
               />
             ))}
           </div>
@@ -400,6 +540,24 @@ const AdminArticlesPage = () => {
         onConfirm={handleDeleteConfirm}
         loading={deleteLoading}
         variant="danger"
+      />
+
+      <DeleteConfirmModal
+        open={pendingBulkDelete}
+        title={t('bulk.confirm.deleteTitle')}
+        message={t('bulk.confirm.deleteMessage', { count: selectedIds.size })}
+        cancelLabel={t('delete.cancel')}
+        confirmLabel={t('bulk.confirm.deleteConfirm')}
+        onCancel={handleBulkDeleteCancel}
+        onConfirm={handleBulkDeleteConfirm}
+        loading={bulkBusy}
+        variant="danger"
+      />
+
+      <AdminArticleQuickPreview
+        open={Boolean(quickPreviewArticle)}
+        article={quickPreviewArticle}
+        onClose={handleQuickPreviewClose}
       />
     </div>
   );

@@ -254,6 +254,40 @@ export const ArticleProvider = ({ children }) => {
     }
   };
 
+  // Bulk actions over a selection of article ids. Phase 3 of admin articles
+  // redesign. The service returns either { success: true, updated, action }
+  // (200) or { success: false, results: [...] } (207 — partial). The
+  // requester normalizes both into a parsed JSON body, so we just pass it
+  // through and let the caller decide how to react.
+  const bulkArticles = async (ids, action) => {
+    if (!isAdmin) {
+      console.warn('Потребителят не е администратор, не може да извърши групово действие');
+      notify('unauthorized-action');
+      return { success: false, code: 'UNAUTHORIZED' };
+    }
+    if (!Array.isArray(ids) || ids.length === 0) {
+      return { success: false, code: 'EMPTY_SELECTION' };
+    }
+    try {
+      setIsLoading(true);
+      const response = await articleService.bulkArticles(ids, action);
+      // Bust the legacy cache so public list/recent refetch.
+      invalidateArticlesCache();
+      return response;
+    } catch (e) {
+      console.error('Грешка при групово действие върху статии:', e);
+      notify('error', e);
+      showErrorAndSetTimeouts(e.message);
+      return {
+        success: false,
+        code: e?.code || 'BULK_FAILED',
+        message: e?.message || 'Bulk action failed',
+      };
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const updateArticle = async (id,articleData) => {
     if (!isAdmin) {
       console.warn('Потребителят не е администратор, не може да редактира статия');
@@ -293,6 +327,7 @@ export const ArticleProvider = ({ children }) => {
     getAllArticles,
     getArticlesPaginated,
     updateArticleStatus,
+    bulkArticles,
     deleteArticle,
     updateArticle,
     getUrlMetadata,

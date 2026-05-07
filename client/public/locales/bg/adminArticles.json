@@ -49,9 +49,11 @@
   "card": {
     "editBtn": "Редактирай",
     "previewBtn": "Преглед",
+    "quickPreviewBtn": "Бърз преглед",
     "deleteBtn": "Изтрий",
     "archiveBtn": "Архивирай",
     "publishBtn": "Публикувай",
+    "selectArticle": "Избери статията",
     "statusBadge": {
       "published": "Публикувана",
       "scheduled": "Планирана",
@@ -96,6 +98,61 @@
   },
   "error": {
     "fetchFailed": "Неуспешно зареждане на статиите. Моля, опитайте отново."
+  },
+  "bulk": {
+    "selected_one": "{{count}} избрана",
+    "selected_other": "{{count}} избрани",
+    "selected": "{{count}} избрани",
+    "selectAllOnPage": "Избери всички на страницата",
+    "selectAllMatching_one": "Избери всички {{count}}",
+    "selectAllMatching_other": "Избери всички {{count}}",
+    "selectAllMatching": "Избери всички {{count}}",
+    "clearSelection": "Изчисти селекцията",
+    "actionsMenu": "Действия",
+    "actions": {
+      "delete": "Изтрий",
+      "archive": "Архивирай",
+      "publish": "Публикувай",
+      "draft": "В чернова"
+    },
+    "confirm": {
+      "deleteTitle": "Изтриване на избраните статии",
+      "deleteMessage_one": "Сигурен ли си, че искаш да изтриеш {{count}} статия? Това действие е необратимо.",
+      "deleteMessage_other": "Сигурен ли си, че искаш да изтриеш {{count}} статии? Това действие е необратимо.",
+      "deleteMessage": "Сигурен ли си, че искаш да изтриеш {{count}} статии? Това действие е необратимо.",
+      "deleteConfirm": "Изтрий"
+    },
+    "toast": {
+      "successDelete_one": "{{count}} статия беше изтрита.",
+      "successDelete_other": "{{count}} статии бяха изтрити.",
+      "successDelete": "{{count}} статии бяха изтрити.",
+      "successArchive_one": "{{count}} статия беше архивирана.",
+      "successArchive_other": "{{count}} статии бяха архивирани.",
+      "successArchive": "{{count}} статии бяха архивирани.",
+      "successPublish_one": "{{count}} статия беше публикувана.",
+      "successPublish_other": "{{count}} статии бяха публикувани.",
+      "successPublish": "{{count}} статии бяха публикувани.",
+      "successDraft_one": "{{count}} статия беше върната като чернова.",
+      "successDraft_other": "{{count}} статии бяха върнати като чернови.",
+      "successDraft": "{{count}} статии бяха върнати като чернови.",
+      "partialFailure": "Действието успя за {{ok}} от {{total}} статии. Опитай отново за останалите.",
+      "error": "Грешка при груповото действие. Моля, опитай отново."
+    }
+  },
+  "quickPreview": {
+    "title": "Бърз преглед",
+    "close": "Затвори",
+    "edit": "Редактирай",
+    "openExternal": "Отвори в нов таб",
+    "loading": "Зареждане...",
+    "noContent": "Няма съдържание за визуализация.",
+    "byAuthor": "от {{name}}",
+    "viewsLabel_one": "{{count}} преглед",
+    "viewsLabel_other": "{{count}} прегледа",
+    "viewsLabel": "{{count}} прегледа",
+    "tagsLabel": "Тагове",
+    "linksLabel": "Полезни линкове",
+    "sectionsLabel": "Секции"
   },
   "relativeTime": {
     "justNow": "току-що",
