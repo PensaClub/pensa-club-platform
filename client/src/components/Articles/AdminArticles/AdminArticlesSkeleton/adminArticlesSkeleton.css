@@ -1,0 +1,145 @@
+/* AdminArticlesSkeleton — prefix `aas-`. */
+
+.aas-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr));
+  gap: 24px;
+  width: 100%;
+}
+
+.aas-card {
+  background: #ffffff;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
+}
+
+.aas-thumb {
+  width: 100%;
+  height: 180px;
+  background-color: #eef2f7;
+}
+
+.aas-thumb-sm {
+  width: 96px;
+  height: 64px;
+  border-radius: 8px;
+  flex-shrink: 0;
+}
+
+.aas-card-body {
+  padding: 16px;
+}
+
+.aas-line {
+  background-color: #eef2f7;
+  border-radius: 6px;
+  height: 14px;
+  margin-bottom: 10px;
+}
+
+.aas-line-title { height: 18px; width: 80%; }
+.aas-line-meta { height: 12px; width: 60%; }
+.aas-line-summary { height: 12px; width: 100%; }
+.aas-line-summary-short { height: 12px; width: 70%; }
+
+.aas-tags-row {
+  display: flex;
+  gap: 8px;
+  margin: 12px 0;
+}
+
+.aas-tag {
+  height: 22px;
+  width: 50px;
+  border-radius: 11px;
+  background-color: #eef2f7;
+}
+
+.aas-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.aas-action {
+  flex: 1;
+  height: 36px;
+  border-radius: 8px;
+  background-color: #eef2f7;
+}
+
+/* List view skeleton */
+.aas-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.aas-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 12px 16px;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+}
+
+.aas-row-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.aas-row-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.aas-pill {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  background-color: #eef2f7;
+}
+
+/* Shimmer animation */
+.aas-shimmer {
+  position: relative;
+  overflow: hidden;
+}
+
+.aas-shimmer::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.7) 50%,
+    transparent 100%
+  );
+  animation: aas-shimmer-anim 1.4s infinite;
+  transform: translateX(-100%);
+}
+
+@keyframes aas-shimmer-anim {
+  0%   { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .aas-shimmer::after {
+    animation: none;
+  }
+}
+
+@media (max-width: 600px) {
+  .aas-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  .aas-row-actions {
+    display: none;
+  }
+}

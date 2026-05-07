@@ -1,0 +1,196 @@
+/* AdminArticleListRow — prefix `aalr-`. Compact horizontal row variant. */
+
+.aalr-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 12px 16px;
+  background: #ffffff;
+  border-radius: 12px;
+  cursor: pointer;
+  outline: none;
+  transition: transform 140ms ease, box-shadow 140ms ease, background 140ms ease;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+  border-left: 4px solid transparent;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+.aalr-row:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.08);
+}
+
+.aalr-row:focus-visible {
+  outline: 2px solid #E26020;
+  outline-offset: 2px;
+}
+
+.aalr-row.aalr-busy {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+.aalr-status-published   { border-left-color: #15803d; }
+.aalr-status-scheduled   { border-left-color: #b45309; }
+.aalr-status-draft       { border-left-color: #6b7280; }
+.aalr-status-archived    { border-left-color: #b91c1c; }
+
+.aalr-thumb-wrap {
+  flex-shrink: 0;
+  width: 96px;
+  height: 64px;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #f3f4f6;
+}
+
+.aalr-thumb {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.aalr-body {
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  overflow: hidden;
+}
+
+.aalr-title-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.aalr-title {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #111827;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+  min-width: 0;
+}
+
+.aalr-status-pill {
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 999px;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  flex-shrink: 0;
+}
+
+.aalr-status-pill-published { background: #dcfce7; color: #15803d; }
+.aalr-status-pill-scheduled { background: #fef3c7; color: #b45309; }
+.aalr-status-pill-draft { background: #e5e7eb; color: #6b7280; }
+.aalr-status-pill-archived { background: #fee2e2; color: #b91c1c; border: 1px solid rgba(239, 68, 68, 0.4); }
+
+.aalr-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  font-size: 0.78rem;
+  color: #6b7280;
+  align-items: center;
+}
+
+.aalr-meta-sep {
+  opacity: 0.5;
+  font-size: 0.78rem;
+}
+
+.aalr-meta-edited {
+  color: #9ca3af;
+  font-style: italic;
+  font-size: 0.78rem;
+}
+
+.aalr-meta span {
+  font-size: 0.78rem;
+}
+
+.aalr-actions {
+  display: flex;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.aalr-action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 36px;
+  min-height: 36px;
+  padding: 8px;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  background: #f3f4f6;
+  color: #4b5563;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background 120ms ease, color 120ms ease, transform 120ms ease;
+}
+
+.aalr-action:hover:not(:disabled) {
+  transform: translateY(-1px);
+}
+
+.aalr-action:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.aalr-action-edit:hover { background: #E26020; color: #ffffff; }
+.aalr-action-publish { background: #dcfce7; color: #15803d; }
+.aalr-action-publish:hover:not(:disabled) { background: #15803d; color: #ffffff; }
+.aalr-action-archive { background: #fef3c7; color: #b45309; }
+.aalr-action-archive:hover:not(:disabled) { background: #b45309; color: #ffffff; }
+.aalr-action-preview { background: #e0e7ff; color: #3730a3; }
+.aalr-action-preview:hover { background: #3730a3; color: #ffffff; }
+.aalr-action-delete { background: #fee2e2; color: #b91c1c; }
+.aalr-action-delete:hover:not(:disabled) { background: #b91c1c; color: #ffffff; }
+
+@media (max-width: 600px) {
+  .aalr-row {
+    flex-wrap: wrap;
+    padding: 10px 12px;
+    gap: 12px;
+  }
+  .aalr-thumb-wrap {
+    width: 72px;
+    height: 56px;
+  }
+  .aalr-actions {
+    width: 100%;
+    justify-content: flex-end;
+  }
+  .aalr-meta {
+    font-size: 0.72rem;
+    gap: 4px;
+  }
+  .aalr-meta span {
+    font-size: 0.72rem;
+  }
+  .aalr-meta-sep,
+  .aalr-meta-edited {
+    font-size: 0.72rem;
+  }
+  .aalr-title {
+    font-size: 0.92rem;
+  }
+  .aalr-title {
+    font-size: 0.95rem;
+  }
+}

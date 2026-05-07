@@ -1,7 +1,7 @@
 const articleController = require('express').Router();
 const { updateArticleRelationships, transformArticle } = require('../utils/articleUtils');
 const customError = require('../utils/customError');
-const { article, mainImage, section, image, user_details } = require('../sequelize/models');
+const { article, mainImage, section, image, user_details, user_account, sequelize } = require('../sequelize/models');
 const isAuth = require('../middlewares/isAuth');
 const { checkPermission } = require('../middlewares/rbac');
 
@@ -180,7 +180,34 @@ const articleIncludeConfig = [
     },
 ];
 
-const articleAttributes = ['id', 'title', 'slug', 'summary', 'author', 'publishDate', 'tags', 'updatedBy', 'usefulLinks', 'createdAt', 'updatedAt'];
+const articleAttributes = ['id', 'title', 'slug', 'summary', 'author', 'publishDate', 'tags', 'updatedBy', 'usefulLinks', 'status', 'updatedById', 'createdAt', 'updatedAt'];
+
+const STAFF_ROLES = ['admin', 'moderator'];
+const ALLOWED_STATUSES = ['draft', 'published', 'archived'];
+const ALLOWED_SORT_FIELDS = ['updatedAt', 'publishDate', 'createdAt', 'title', 'author', 'views'];
+const VIEWS_COUNT_SQL = `(SELECT COUNT(*) FROM content_views WHERE content_views.content_type = 'article' AND content_views.content_id = "article"."id" AND content_views.is_bot = false)`;
+
+const PAGINATION_PARAM_KEYS = ['page', 'limit', 'search', 'sort', 'order', 'status', 'author', 'tag', 'dateFrom', 'dateTo', 'publicOnly'];
+
+const isStaff = (user) => !!user && STAFF_ROLES.includes(user.role);
+
+const parseBool = (value, defaultValue = false) => {
+    if (value === undefined || value === null || value === '') return defaultValue;
+    if (typeof value === 'boolean') return value;
+    const v = String(value).toLowerCase();
+    if (v === 'true' || v === '1' || v === 'yes') return true;
+    if (v === 'false' || v === '0' || v === 'no') return false;
+    return defaultValue;
+};
+
+const parseIsoDate = (value) => {
+    if (!value || typeof value !== 'string') return null;
+    const trimmed = value.trim();
+    if (!trimmed) return null;
+    const d = new Date(trimmed);
+    if (isNaN(d.getTime())) return null;
+    return d;
+};
 
 const MAX_USEFUL_LINKS = 50;
 const MAX_URL_FETCH_BYTES = 5 * 1024 * 1024;
@@ -482,17 +509,134 @@ const fetchUrlMetadata = async (rawUrl) => {
     };
 };
 
-articleController.get('/all', checkPermission('article', 'read'), async (req, res, next) => {
+articleController.get('/all', isAuth.allowGuest, checkPermission('article', 'read'), async (req, res, next) => {
     try {
         const excludeSections = articleIncludeConfig.filter((config) => config.as !== 'sections');
 
-        const articles = await article.findAll({
+        // Backward compat: if no recognized query params are present, return the
+        // legacy array shape so existing public callers keep working.
+        const hasPaginationParams = PAGINATION_PARAM_KEYS.some((key) =>
+            Object.prototype.hasOwnProperty.call(req.query, key)
+        );
+
+        if (!hasPaginationParams) {
+            const articles = await article.findAll({
+                include: excludeSections,
+                attributes: articleAttributes,
+                order: [['publishDate', 'DESC']],
+            });
+            return res.json(articles || []);
+        }
+
+        // New mode — paginated, filtered, sorted response.
+        const page = Math.max(1, parseInt(req.query.page, 10) || 1);
+        const requestedLimit = parseInt(req.query.limit, 10);
+        const limit = Math.min(100, Math.max(1, Number.isFinite(requestedLimit) && requestedLimit > 0 ? requestedLimit : 20));
+        const offset = (page - 1) * limit;
+
+        const sortField = typeof req.query.sort === 'string' ? req.query.sort : 'updatedAt';
+        if (!ALLOWED_SORT_FIELDS.includes(sortField)) {
+            throw new customError({
+                message: `Invalid sort field. Allowed: ${ALLOWED_SORT_FIELDS.join(', ')}`,
+                statusCode: 400,
+            });
+        }
+        const orderRaw = typeof req.query.order === 'string' ? req.query.order.toLowerCase() : 'desc';
+        if (orderRaw !== 'asc' && orderRaw !== 'desc') {
+            throw new customError({ message: 'Invalid order. Allowed: asc, desc', statusCode: 400 });
+        }
+        const orderDir = orderRaw === 'asc' ? 'ASC' : 'DESC';
+
+        const statusParam = typeof req.query.status === 'string' ? req.query.status : 'all';
+        if (statusParam !== 'all' && !ALLOWED_STATUSES.includes(statusParam)) {
+            throw new customError({
+                message: `Invalid status. Allowed: ${ALLOWED_STATUSES.join(', ')}, all`,
+                statusCode: 400,
+            });
+        }
+
+        const publicOnly = parseBool(req.query.publicOnly, false);
+
+        // Security: non-staff callers cannot inspect drafts/archived content.
+        // Force them into the public-only path.
+        const callerIsStaff = isStaff(req.user);
+        const effectivePublicOnly = publicOnly || !callerIsStaff;
+
+        const whereClause = {};
+        if (effectivePublicOnly) {
+            whereClause.status = 'published';
+            whereClause.publishDate = { [Op.lte]: new Date() };
+        } else if (statusParam !== 'all') {
+            whereClause.status = statusParam;
+        }
+
+        const search = typeof req.query.search === 'string' ? req.query.search.trim() : '';
+        if (search) {
+            // PostgreSQL parameter binding via the same query — escape single quotes for safety.
+            const escaped = search.replace(/'/g, "''");
+            whereClause[Op.and] = (whereClause[Op.and] || []).concat([{
+                [Op.or]: [
+                    { title: { [Op.iLike]: `%${search}%` } },
+                    { summary: { [Op.iLike]: `%${search}%` } },
+                    { author: { [Op.iLike]: `%${search}%` } },
+                    // Self-joins (relatedArticle/next/previous) also have a `tags`
+                    // column, so reference must be table-qualified explicitly.
+                    sequelize.literal(`array_to_string("article"."tags", ',') ILIKE '%${escaped}%'`),
+                ],
+            }]);
+        }
+
+        const author = typeof req.query.author === 'string' ? req.query.author.trim() : '';
+        if (author) {
+            whereClause.author = author;
+        }
+
+        const tag = typeof req.query.tag === 'string' ? req.query.tag.trim() : '';
+        if (tag) {
+            const escapedTag = tag.replace(/'/g, "''");
+            whereClause[Op.and] = (whereClause[Op.and] || []).concat([
+                sequelize.literal(`"article"."tags" @> ARRAY['${escapedTag}']::varchar[]`),
+            ]);
+        }
+
+        const dateFrom = parseIsoDate(req.query.dateFrom);
+        const dateTo = parseIsoDate(req.query.dateTo);
+        if (dateFrom || dateTo) {
+            const range = whereClause.publishDate && typeof whereClause.publishDate === 'object'
+                ? { ...whereClause.publishDate }
+                : {};
+            if (dateFrom) range[Op.gte] = dateFrom;
+            if (dateTo) range[Op.lte] = dateTo;
+            whereClause.publishDate = range;
+        }
+
+        let order;
+        if (sortField === 'views') {
+            order = [[sequelize.literal(VIEWS_COUNT_SQL), orderDir]];
+        } else {
+            order = [[sortField, orderDir]];
+        }
+
+        const { rows, count } = await article.findAndCountAll({
+            where: whereClause,
             include: excludeSections,
             attributes: articleAttributes,
-            order: [['publishDate', 'DESC']],
+            order,
+            limit,
+            offset,
+            distinct: true,
+            subQuery: false,
         });
 
-        return res.json(articles || []);
+        const totalPages = Math.max(1, Math.ceil(count / limit));
+
+        return res.json({
+            items: rows || [],
+            total: count,
+            page,
+            limit,
+            totalPages,
+        });
     } catch (err) {
         console.error('Error in /all endpoint:', err);
         next(err);
@@ -543,11 +687,15 @@ articleController.post('/create', isAuth, checkPermission('article', 'create'), 
             nextArticleId,
             previousArticleId,
             usefulLinks,
+            status,
         } = req.body;
 
         const errors = {};
         if (!title) errors.title = 'Title is required';
         if (!slug) errors.slug = 'Slug is required';
+        if (status !== undefined && !ALLOWED_STATUSES.includes(status)) {
+            errors.status = `Status must be one of: ${ALLOWED_STATUSES.join(', ')}`;
+        }
 
         if (Object.keys(errors).length > 0) {
             throw new customError({
@@ -579,6 +727,8 @@ articleController.post('/create', isAuth, checkPermission('article', 'create'), 
                     publishDate,
                     tags: tags || [],
                     updatedBy: userDetails.username,
+                    updatedById: req.user.userId,
+                    status: status || 'published',
                     relatedArticleId,
                     nextArticleId,
                     previousArticleId,
@@ -689,7 +839,15 @@ articleController.put('/:id', isAuth, checkPermission('article', 'update'), asyn
             nextArticleId,
             previousArticleId,
             usefulLinks,
+            status,
         } = req.body;
+
+        if (status !== undefined && !ALLOWED_STATUSES.includes(status)) {
+            throw new customError({
+                message: `Invalid status. Allowed: ${ALLOWED_STATUSES.join(', ')}`,
+                statusCode: 400,
+            });
+        }
 
         const existingArticle = await article.findByPk(articleId, {
             include: articleIncludeConfig,
@@ -730,7 +888,9 @@ articleController.put('/:id', isAuth, checkPermission('article', 'update'), asyn
             ...(publishDate !== undefined && { publishDate }),
             ...(tags !== undefined && { tags }),
             ...(usefulLinks !== undefined && { usefulLinks: sanitizeUsefulLinks(usefulLinks) }),
+            ...(status !== undefined && { status }),
             updatedBy: userDetails.username,
+            updatedById: req.user.userId,
         };
             await existingArticle.update(articleUpdate, { transaction: t });
 
@@ -879,6 +1039,40 @@ articleController.put('/:id', isAuth, checkPermission('article', 'update'), asyn
     }
 });
 
+// Re-wires next/previous/relatedArticleId pointers around an article that's
+// about to be deleted, then destroys it. Must run inside a transaction.
+const deleteArticleWithChainCleanup = async (articleInstance, t) => {
+    const articleId = articleInstance.id;
+
+    if (articleInstance.nextArticle && articleInstance.previousArticle) {
+        await articleInstance.previousArticle.update(
+            { nextArticleId: articleInstance.nextArticle.id },
+            { transaction: t }
+        );
+        await articleInstance.nextArticle.update(
+            { previousArticleId: articleInstance.previousArticle.id },
+            { transaction: t }
+        );
+    } else if (articleInstance.nextArticle) {
+        await articleInstance.nextArticle.update(
+            { previousArticleId: null },
+            { transaction: t }
+        );
+    } else if (articleInstance.previousArticle) {
+        await articleInstance.previousArticle.update(
+            { nextArticleId: null },
+            { transaction: t }
+        );
+    }
+
+    await article.update(
+        { relatedArticleId: null },
+        { where: { relatedArticleId: articleId }, transaction: t }
+    );
+
+    await articleInstance.destroy({ transaction: t });
+};
+
 articleController.delete('/:id', isAuth, checkPermission('article', 'delete'), async (req, res, next) => {
     try {
         const articleId = parseInt(req.params.id);
@@ -909,53 +1103,107 @@ articleController.delete('/:id', isAuth, checkPermission('article', 'delete'), a
         });
 
         await article.sequelize.transaction(async (t) => {
-            if (articleToDelete.nextArticle && articleToDelete.previousArticle) {
-                await articleToDelete.previousArticle.update(
-                    {
-                        nextArticleId: articleToDelete.nextArticle.id,
-                    },
-                    { transaction: t }
-                );
-
-                await articleToDelete.nextArticle.update(
-                    {
-                        previousArticleId: articleToDelete.previousArticle.id,
-                    },
-                    { transaction: t }
-                );
-            } else if (articleToDelete.nextArticle) {
-                await articleToDelete.nextArticle.update(
-                    {
-                        previousArticleId: null,
-                    },
-                    { transaction: t }
-                );
-            } else if (articleToDelete.previousArticle) {
-                await articleToDelete.previousArticle.update(
-                    {
-                        nextArticleId: null,
-                    },
-                    { transaction: t }
-                );
-            }
-
-            await article.update(
-                {
-                    relatedArticleId: null,
-                },
-                {
-                    where: { relatedArticleId: articleId },
-                    transaction: t,
-                }
-            );
-
-            await articleToDelete.destroy({ transaction: t });
+            await deleteArticleWithChainCleanup(articleToDelete, t);
         });
 
         return res.json({
             message: 'Article deleted successfully',
             affectedArticles: affectedArticles,
         });
+    } catch (err) {
+        next(err);
+    }
+});
+
+articleController.post('/bulk', isAuth, checkPermission('article', 'update'), async (req, res, next) => {
+    try {
+        const { ids, action } = req.body || {};
+
+        const allowedActions = ['delete', 'archive', 'publish', 'draft'];
+        if (!action || !allowedActions.includes(action)) {
+            throw new customError({
+                message: `Invalid action. Allowed: ${allowedActions.join(', ')}`,
+                statusCode: 400,
+            });
+        }
+
+        if (!Array.isArray(ids) || ids.length === 0) {
+            throw new customError({
+                message: 'ids must be a non-empty array',
+                statusCode: 400,
+            });
+        }
+        if (ids.length > 100) {
+            throw new customError({
+                message: 'Cannot process more than 100 ids per request',
+                statusCode: 400,
+            });
+        }
+
+        const cleanIds = [];
+        for (const raw of ids) {
+            const n = typeof raw === 'number' ? raw : parseInt(raw, 10);
+            if (!Number.isInteger(n) || n <= 0) {
+                throw new customError({
+                    message: 'All ids must be positive integers',
+                    statusCode: 400,
+                });
+            }
+            cleanIds.push(n);
+        }
+
+        const statusByAction = {
+            archive: 'archived',
+            publish: 'published',
+            draft: 'draft',
+        };
+
+        const results = [];
+        let updated = 0;
+
+        await article.sequelize.transaction(async (t) => {
+            if (action === 'delete') {
+                for (const id of cleanIds) {
+                    try {
+                        const target = await article.findByPk(id, {
+                            include: articleIncludeConfig,
+                            transaction: t,
+                        });
+                        if (!target) {
+                            results.push({ id, ok: false, error: 'not_found' });
+                            continue;
+                        }
+                        await deleteArticleWithChainCleanup(target, t);
+                        results.push({ id, ok: true });
+                        updated += 1;
+                    } catch (e) {
+                        results.push({ id, ok: false, error: e?.message || 'error' });
+                    }
+                }
+            } else {
+                const newStatus = statusByAction[action];
+                const [affected] = await article.update(
+                    {
+                        status: newStatus,
+                        updatedById: req.user.userId,
+                    },
+                    {
+                        where: { id: { [Op.in]: cleanIds } },
+                        transaction: t,
+                    }
+                );
+                updated = affected;
+                for (const id of cleanIds) {
+                    results.push({ id, ok: true });
+                }
+            }
+        });
+
+        const allOk = results.every((r) => r.ok);
+        if (allOk) {
+            return res.json({ success: true, updated, action });
+        }
+        return res.status(207).json({ success: false, updated, action, results });
     } catch (err) {
         next(err);
     }

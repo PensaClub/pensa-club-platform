@@ -17,11 +17,24 @@
     margin-bottom: 16px;
 }
 
-.yac-root span,
-.yac-root label,
-.yac-root p,
-.yac-root input {
-    font-size: inherit;
+.yac-badge span {
+    font-size: 12px;
+}
+
+.yac-meta-row span {
+    font-size: 13px;
+}
+
+.yac-btn span {
+    font-size: 13px;
+}
+
+.yac-help-toggle span {
+    font-size: 12px;
+}
+
+.yac-help-list li {
+    font-size: 13px;
 }
 
 .yac-head {
