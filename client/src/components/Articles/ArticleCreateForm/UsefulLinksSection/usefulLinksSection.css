@@ -6,11 +6,12 @@
     gap: 16px;
 }
 
-.aul-wrapper span,
-.aul-wrapper label,
-.aul-wrapper p,
-.aul-wrapper input {
-    font-size: inherit;
+.aul-add-btn {
+    font-size: 0.95rem;
+}
+
+.aul-add-btn span {
+    font-size: 0.95rem;
 }
 
 .aul-subtitle {

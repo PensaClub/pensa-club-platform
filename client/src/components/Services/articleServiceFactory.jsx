@@ -21,9 +21,34 @@ export const articleServiceFactory = (token) => {
     getAllArticles: async () => {
       return requester.get(`${apiUrl}/articles/all`);
     },
-    
+
+    // Paginated mode of GET /articles/all — backend switches modes based on
+    // presence of any pagination query param. We always at least send `page`
+    // so we get the {items,total,page,limit,totalPages} envelope.
+    //
+    // params: { page, limit, search, sort, order, status, author, tag,
+    //           dateFrom, dateTo, publicOnly }
+    getArticlesPaginated: async (params = {}) => {
+      const qs = new URLSearchParams();
+      const safeParams = {
+        page: 1,
+        ...params,
+      };
+      Object.entries(safeParams).forEach(([key, value]) => {
+        if (value === undefined || value === null || value === '') return;
+        qs.append(key, String(value));
+      });
+      return requester.get(`${apiUrl}/articles/all?${qs.toString()}`);
+    },
+
     updateArticle: async (id,articleData) => {
       return requester.put(`${apiUrl}/articles/${id}`, articleData);
+    },
+
+    // Visibility toggle — reuses PUT /:id with just { status } in the body.
+    // The controller accepts status on update (Phase 1 contract).
+    updateArticleStatus: async (id, status) => {
+      return requester.put(`${apiUrl}/articles/${id}`, { status });
     },
     
     deleteArticle: async (id) => {

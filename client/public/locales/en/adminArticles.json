@@ -1,0 +1,113 @@
+{
+  "page": {
+    "title": "Article management",
+    "totalCount_zero": "No articles yet",
+    "totalCount_one": "{{count}} article",
+    "totalCount_other": "{{count}} articles",
+    "totalCount": "{{count}} articles",
+    "newArticle": "New article"
+  },
+  "toolbar": {
+    "searchPlaceholder": "Search by title, author, summary or tag...",
+    "sortBy": "Sort by",
+    "sortOptions": {
+      "updatedAt": "Recently updated",
+      "publishDate": "By publish date",
+      "createdAt": "By creation date",
+      "title": "By title",
+      "author": "By author",
+      "views": "By views"
+    },
+    "order": {
+      "asc": "Ascending",
+      "desc": "Descending"
+    },
+    "status": {
+      "all": "All",
+      "draft": "Drafts",
+      "published": "Published",
+      "archived": "Archived"
+    },
+    "author": {
+      "label": "Author",
+      "placeholder": "All authors"
+    },
+    "tag": {
+      "label": "Tag",
+      "placeholder": "All tags"
+    },
+    "dateFrom": "From date",
+    "dateTo": "To date",
+    "itemsPerPage": "Per page",
+    "viewMode": {
+      "grid": "Grid",
+      "list": "List"
+    },
+    "clearFilters": "Clear filters",
+    "filters": "Filters"
+  },
+  "card": {
+    "editBtn": "Edit",
+    "previewBtn": "Preview",
+    "deleteBtn": "Delete",
+    "archiveBtn": "Archive",
+    "publishBtn": "Publish",
+    "statusBadge": {
+      "published": "Published",
+      "scheduled": "Scheduled",
+      "draft": "Draft",
+      "archived": "Archived"
+    },
+    "lastEditedBy": "Edited by {{name}} on {{date}}",
+    "lastEditedByRelative": "Edited by {{name}} {{relative}}",
+    "viewsLabel": "{{count}} views",
+    "tagsMore": "+{{count}}",
+    "noAuthor": "No author",
+    "noDate": "—",
+    "richness": {
+      "sections": "{{count}} sections",
+      "images": "{{count}} images",
+      "links": "{{count}} useful links"
+    },
+    "externalSource": "External source",
+    "slider": "{{count}} photos",
+    "video": "Video"
+  },
+  "delete": {
+    "title": "Confirm deletion",
+    "message": "Are you sure you want to delete the article \"{{title}}\"? This action cannot be undone.",
+    "cancel": "Cancel",
+    "confirm": "Delete",
+    "successToast": "Article deleted successfully.",
+    "errorToast": "Failed to delete the article."
+  },
+  "toggleVisibility": {
+    "successPublished": "Article published.",
+    "successArchived": "Article archived.",
+    "successDraft": "Article moved back to draft.",
+    "error": "Failed to change visibility."
+  },
+  "empty": {
+    "title": "No articles found",
+    "subtitle": "Try changing the filters or create your first article.",
+    "subtitleNoFilters": "You haven't created any articles yet. Get started now!",
+    "cta": "Create first article",
+    "ctaWithFilters": "Clear filters"
+  },
+  "error": {
+    "fetchFailed": "Failed to load articles. Please try again."
+  },
+  "relativeTime": {
+    "justNow": "just now",
+    "minutesAgo_one": "{{count}} minute ago",
+    "minutesAgo_other": "{{count}} minutes ago",
+    "hoursAgo_one": "{{count}} hour ago",
+    "hoursAgo_other": "{{count}} hours ago",
+    "daysAgo_one": "{{count}} day ago",
+    "daysAgo_other": "{{count}} days ago",
+    "monthsAgo_one": "{{count}} month ago",
+    "monthsAgo_other": "{{count}} months ago",
+    "yearsAgo_one": "{{count}} year ago",
+    "yearsAgo_other": "{{count}} years ago"
+  }
+}

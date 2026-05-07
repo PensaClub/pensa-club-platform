@@ -1,0 +1,124 @@
+/* DeleteConfirmModal — prefix `dcm-`. Generic confirm dialog. */
+
+.dcm-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.55);
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  padding: 16px;
+  animation: dcm-fade-in 140ms ease-out;
+}
+
+.dcm-card {
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+  padding: 24px;
+  width: 100%;
+  max-width: 480px;
+  animation: dcm-pop-in 180ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.dcm-title {
+  margin: 0 0 12px 0;
+  font-size: 1.25rem;
+  color: #111827;
+  font-weight: 700;
+}
+
+.dcm-message {
+  color: #374151;
+  line-height: 1.55;
+  margin-bottom: 20px;
+  font-size: 1rem;
+}
+
+.dcm-message strong {
+  font-size: 1rem;
+}
+
+.dcm-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.dcm-btn {
+  padding: 10px 18px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  font-size: 0.95rem;
+  font-weight: 600;
+  font-family: inherit;
+  transition: transform 120ms ease, box-shadow 120ms ease, background-color 120ms ease;
+  min-height: 40px;
+  min-width: 96px;
+}
+
+.dcm-btn:focus-visible {
+  outline: 2px solid #E26020;
+  outline-offset: 2px;
+}
+
+.dcm-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.dcm-btn-cancel {
+  background: #f3f4f6;
+  color: #374151;
+}
+.dcm-btn-cancel:hover:not(:disabled) {
+  background: #e5e7eb;
+}
+
+.dcm-btn-danger {
+  background: #dc2626;
+  color: #ffffff;
+}
+.dcm-btn-danger:hover:not(:disabled) {
+  background: #b91c1c;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 14px rgba(220, 38, 38, 0.35);
+}
+
+.dcm-btn-primary {
+  background: #E26020;
+  color: #ffffff;
+}
+.dcm-btn-primary:hover:not(:disabled) {
+  background: #c8531a;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 14px rgba(226, 96, 32, 0.35);
+}
+
+@keyframes dcm-fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes dcm-pop-in {
+  from { transform: scale(0.92); opacity: 0; }
+  to   { transform: scale(1); opacity: 1; }
+}
+
+@media (max-width: 480px) {
+  .dcm-card {
+    padding: 20px;
+    border-radius: 14px;
+  }
+  .dcm-actions {
+    flex-direction: column-reverse;
+  }
+  .dcm-btn {
+    width: 100%;
+  }
+}

@@ -211,6 +211,49 @@ export const ArticleProvider = ({ children }) => {
     }
   };
 
+  // Paginated, server-filtered fetch for the admin list view (Phase 2). Does
+  // NOT touch the cached `articles` state so that legacy callers
+  // (RecentArticles, ArticleView, ArticlesList) keep their cached behavior.
+  const getArticlesPaginated = async (params = {}) => {
+    try {
+      setIsLoading(true);
+      const response = await articleService.getArticlesPaginated(params);
+      return response;
+    } catch (e) {
+      console.error('Грешка при получаване на статии (paginated):', e);
+      notify('error', e);
+      showErrorAndSetTimeouts(e.message);
+      return { items: [], total: 0, page: 1, limit: params.limit || 20, totalPages: 0 };
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Single-item visibility toggle — used by AdminArticleCard / ListRow to
+  // flip status between draft / published / archived. Falls through to the
+  // existing PUT /:id endpoint with just { status } in the body.
+  const updateArticleStatus = async (id, status) => {
+    if (!isAdmin) {
+      console.warn('Потребителят не е администратор, не може да променя видимостта');
+      notify('unauthorized-action');
+      return null;
+    }
+    try {
+      setIsLoading(true);
+      const response = await articleService.updateArticleStatus(id, status);
+      // Bust the legacy cache so the public list refetches next time.
+      invalidateArticlesCache();
+      return response;
+    } catch (e) {
+      console.error('Грешка при промяна на статуса:', e);
+      notify('error', e);
+      showErrorAndSetTimeouts(e.message);
+      return null;
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const updateArticle = async (id,articleData) => {
     if (!isAdmin) {
       console.warn('Потребителят не е администратор, не може да редактира статия');
@@ -248,6 +291,8 @@ export const ArticleProvider = ({ children }) => {
     invalidateArticlesCache,
     getArticleById,
     getAllArticles,
+    getArticlesPaginated,
+    updateArticleStatus,
     deleteArticle,
     updateArticle,
     getUrlMetadata,
@@ -257,7 +302,15 @@ export const ArticleProvider = ({ children }) => {
   };
   const pagesWithLazyLoading = ['/articles'];
 
-   const shouldShowLoader = isLoading && !pagesWithLazyLoading.includes(location.pathname);
+  // The admin paginated list (`/profile/articles`) renders its own skeleton
+  // and toolbar-level loading state, so the global Loader would visually
+  // collide on every filter change. Suppress it for that route.
+  const isAdminArticlesPage = typeof location.pathname === 'string'
+    && location.pathname.endsWith('/profile/articles');
+
+  const shouldShowLoader = isLoading
+    && !pagesWithLazyLoading.includes(location.pathname)
+    && !isAdminArticlesPage;
   return (
     <ArticleContext.Provider value={contextService}>
       {children}
