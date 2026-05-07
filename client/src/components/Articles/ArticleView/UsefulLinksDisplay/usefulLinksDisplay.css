@@ -10,13 +10,6 @@
     font-family: 'Montserrat', sans-serif;
 }
 
-.uld-root span,
-.uld-root label,
-.uld-root p,
-.uld-root input {
-    font-size: inherit;
-}
-
 .uld-title {
     display: flex;
     align-items: center;

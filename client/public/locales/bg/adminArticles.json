@@ -1,0 +1,113 @@
+{
+  "page": {
+    "title": "Управление на статии",
+    "totalCount_zero": "Все още няма статии",
+    "totalCount_one": "{{count}} статия",
+    "totalCount_other": "{{count}} статии",
+    "totalCount": "{{count}} статии",
+    "newArticle": "Нова статия"
+  },
+  "toolbar": {
+    "searchPlaceholder": "Търси по заглавие, автор, обобщение или таг...",
+    "sortBy": "Сортиране",
+    "sortOptions": {
+      "updatedAt": "Последно редактирани",
+      "publishDate": "По дата на публикуване",
+      "createdAt": "По дата на създаване",
+      "title": "По заглавие",
+      "author": "По автор",
+      "views": "По преглеждания"
+    },
+    "order": {
+      "asc": "Възходящо",
+      "desc": "Низходящо"
+    },
+    "status": {
+      "all": "Всички",
+      "draft": "Чернови",
+      "published": "Публикувани",
+      "archived": "Архивирани"
+    },
+    "author": {
+      "label": "Автор",
+      "placeholder": "Всички автори"
+    },
+    "tag": {
+      "label": "Таг",
+      "placeholder": "Всички тагове"
+    },
+    "dateFrom": "От дата",
+    "dateTo": "До дата",
+    "itemsPerPage": "Брой на страница",
+    "viewMode": {
+      "grid": "Мрежа",
+      "list": "Списък"
+    },
+    "clearFilters": "Изчисти филтрите",
+    "filters": "Филтри"
+  },
+  "card": {
+    "editBtn": "Редактирай",
+    "previewBtn": "Преглед",
+    "deleteBtn": "Изтрий",
+    "archiveBtn": "Архивирай",
+    "publishBtn": "Публикувай",
+    "statusBadge": {
+      "published": "Публикувана",
+      "scheduled": "Планирана",
+      "draft": "Чернова",
+      "archived": "Архивирана"
+    },
+    "lastEditedBy": "Редактирана от {{name}} на {{date}}",
+    "lastEditedByRelative": "Редактирана от {{name}} {{relative}}",
+    "viewsLabel": "{{count}} прегл.",
+    "tagsMore": "+{{count}}",
+    "noAuthor": "Без автор",
+    "noDate": "—",
+    "richness": {
+      "sections": "{{count}} секции",
+      "images": "{{count}} изображения",
+      "links": "{{count}} полезни линка"
+    },
+    "externalSource": "Външен източник",
+    "slider": "{{count}} снимки",
+    "video": "Видео"
+  },
+  "delete": {
+    "title": "Потвърждение на изтриването",
+    "message": "Сигурен ли сте, че искате да изтриете статията \"{{title}}\"? Това действие е необратимо.",
+    "cancel": "Отказ",
+    "confirm": "Изтрий",
+    "successToast": "Статията е изтрита успешно.",
+    "errorToast": "Грешка при изтриването на статията."
+  },
+  "toggleVisibility": {
+    "successPublished": "Статията е публикувана.",
+    "successArchived": "Статията е архивирана.",
+    "successDraft": "Статията е върната като чернова.",
+    "error": "Грешка при промяна на видимостта."
+  },
+  "empty": {
+    "title": "Няма намерени статии",
+    "subtitle": "Опитайте да промените филтрите или създайте първата си статия.",
+    "subtitleNoFilters": "Все още не сте създали нито една статия. Стартирайте сега!",
+    "cta": "Създай първа статия",
+    "ctaWithFilters": "Изчисти филтрите"
+  },
+  "error": {
+    "fetchFailed": "Неуспешно зареждане на статиите. Моля, опитайте отново."
+  },
+  "relativeTime": {
+    "justNow": "току-що",
+    "minutesAgo_one": "преди {{count}} минута",
+    "minutesAgo_other": "преди {{count}} минути",
+    "hoursAgo_one": "преди {{count}} час",
+    "hoursAgo_other": "преди {{count}} часа",
+    "daysAgo_one": "преди {{count}} ден",
+    "daysAgo_other": "преди {{count}} дни",
+    "monthsAgo_one": "преди {{count}} месец",
+    "monthsAgo_other": "преди {{count}} месеца",
+    "yearsAgo_one": "преди {{count}} година",
+    "yearsAgo_other": "преди {{count}} години"
+  }
+}

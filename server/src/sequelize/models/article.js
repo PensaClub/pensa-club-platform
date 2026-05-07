@@ -32,6 +32,11 @@ module.exports = (sequelize, DataTypes) => {
                 foreignKey: 'previousArticleId',
                 as: 'previousArticle',
             });
+
+            Article.belongsTo(models.user_account, {
+                foreignKey: 'updatedById',
+                as: 'lastEditor',
+            });
         }
     }
 
@@ -101,6 +106,25 @@ module.exports = (sequelize, DataTypes) => {
                 type: DataTypes.JSONB,
                 allowNull: true,
                 defaultValue: [],
+            },
+            status: {
+                type: DataTypes.STRING(20),
+                allowNull: false,
+                defaultValue: 'published',
+                validate: {
+                    isIn: {
+                        args: [['draft', 'published', 'archived']],
+                        msg: 'Status must be one of: draft, published, archived',
+                    },
+                },
+            },
+            updatedById: {
+                type: DataTypes.INTEGER,
+                allowNull: true,
+                references: {
+                    model: 'user_accounts',
+                    key: 'id',
+                },
             },
         },
         {

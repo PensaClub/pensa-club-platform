@@ -1,0 +1,113 @@
+{
+  "page": {
+    "title": "Artikelverwaltung",
+    "totalCount_zero": "Noch keine Artikel",
+    "totalCount_one": "{{count}} Artikel",
+    "totalCount_other": "{{count}} Artikel",
+    "totalCount": "{{count}} Artikel",
+    "newArticle": "Neuer Artikel"
+  },
+  "toolbar": {
+    "searchPlaceholder": "Suche nach Titel, Autor, Zusammenfassung oder Tag...",
+    "sortBy": "Sortieren nach",
+    "sortOptions": {
+      "updatedAt": "Zuletzt aktualisiert",
+      "publishDate": "Nach Veröffentlichungsdatum",
+      "createdAt": "Nach Erstellungsdatum",
+      "title": "Nach Titel",
+      "author": "Nach Autor",
+      "views": "Nach Aufrufen"
+    },
+    "order": {
+      "asc": "Aufsteigend",
+      "desc": "Absteigend"
+    },
+    "status": {
+      "all": "Alle",
+      "draft": "Entwürfe",
+      "published": "Veröffentlicht",
+      "archived": "Archiviert"
+    },
+    "author": {
+      "label": "Autor",
+      "placeholder": "Alle Autoren"
+    },
+    "tag": {
+      "label": "Tag",
+      "placeholder": "Alle Tags"
+    },
+    "dateFrom": "Von Datum",
+    "dateTo": "Bis Datum",
+    "itemsPerPage": "Pro Seite",
+    "viewMode": {
+      "grid": "Raster",
+      "list": "Liste"
+    },
+    "clearFilters": "Filter löschen",
+    "filters": "Filter"
+  },
+  "card": {
+    "editBtn": "Bearbeiten",
+    "previewBtn": "Vorschau",
+    "deleteBtn": "Löschen",
+    "archiveBtn": "Archivieren",
+    "publishBtn": "Veröffentlichen",
+    "statusBadge": {
+      "published": "Veröffentlicht",
+      "scheduled": "Geplant",
+      "draft": "Entwurf",
+      "archived": "Archiviert"
+    },
+    "lastEditedBy": "Bearbeitet von {{name}} am {{date}}",
+    "lastEditedByRelative": "Bearbeitet von {{name}} {{relative}}",
+    "viewsLabel": "{{count}} Aufrufe",
+    "tagsMore": "+{{count}}",
+    "noAuthor": "Kein Autor",
+    "noDate": "—",
+    "richness": {
+      "sections": "{{count}} Abschnitte",
+      "images": "{{count}} Bilder",
+      "links": "{{count}} nützliche Links"
+    },
+    "externalSource": "Externe Quelle",
+    "slider": "{{count}} Fotos",
+    "video": "Video"
+  },
+  "delete": {
+    "title": "Löschen bestätigen",
+    "message": "Möchten Sie den Artikel \"{{title}}\" wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden.",
+    "cancel": "Abbrechen",
+    "confirm": "Löschen",
+    "successToast": "Artikel erfolgreich gelöscht.",
+    "errorToast": "Fehler beim Löschen des Artikels."
+  },
+  "toggleVisibility": {
+    "successPublished": "Artikel veröffentlicht.",
+    "successArchived": "Artikel archiviert.",
+    "successDraft": "Artikel als Entwurf gespeichert.",
+    "error": "Fehler beim Ändern der Sichtbarkeit."
+  },
+  "empty": {
+    "title": "Keine Artikel gefunden",
+    "subtitle": "Ändern Sie die Filter oder erstellen Sie Ihren ersten Artikel.",
+    "subtitleNoFilters": "Sie haben noch keine Artikel erstellt. Legen Sie jetzt los!",
+    "cta": "Ersten Artikel erstellen",
+    "ctaWithFilters": "Filter löschen"
+  },
+  "error": {
+    "fetchFailed": "Fehler beim Laden der Artikel. Bitte versuchen Sie es erneut."
+  },
+  "relativeTime": {
+    "justNow": "gerade eben",
+    "minutesAgo_one": "vor {{count}} Minute",
+    "minutesAgo_other": "vor {{count}} Minuten",
+    "hoursAgo_one": "vor {{count}} Stunde",
+    "hoursAgo_other": "vor {{count}} Stunden",
+    "daysAgo_one": "vor {{count}} Tag",
+    "daysAgo_other": "vor {{count}} Tagen",
+    "monthsAgo_one": "vor {{count}} Monat",
+    "monthsAgo_other": "vor {{count}} Monaten",
+    "yearsAgo_one": "vor {{count}} Jahr",
+    "yearsAgo_other": "vor {{count}} Jahren"
+  }
+}

@@ -11,11 +11,8 @@
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
 }
 
-.aulr-row span,
-.aulr-row label,
-.aulr-row p,
-.aulr-row input {
-    font-size: inherit;
+.aulr-fetch-status span {
+    font-size: 0.85rem;
 }
 
 .aulr-header {

@@ -55,7 +55,7 @@ import { SuggestResolvedUsers } from "../AdminDashboard/AdminSuggestUser/SuggesR
 import { ProfileMessages } from "./ProfileMessages";
 import { AdminSubscription } from "../AdminDashboard/AdminSubscription/AdminSubscription";
 import ArticleCreateForm from "../Articles/ArticleCreateForm/ArticleCreateForm";
-import { AllArticles } from "../Articles/AllArticles/AllArticles";
+import AdminArticlesPage from "../Articles/AdminArticles/AdminArticlesPage";
 import EditArticle from "../Articles/AllArticles/EditArticle/EditArticle";
 import i18next from "i18next";
 import InitiativeCreateForm from "../Initiatives/CreateIniciative/InitiativeCreateForm/InitiativeCreateForm";
@@ -1431,7 +1431,7 @@ export const Profile = () => {
             <Route path="ads-admin" element={<ManagementGuard><AllAnnouncements /></ManagementGuard>} />
             <Route path="reviews-management" element={<ManagementGuard><ReviewsManagement /></ManagementGuard>} />
             <Route path="article-create" element={<ManagementGuard><ArticleCreateForm /></ManagementGuard>} />
-            <Route path="articles" element={<ManagementGuard><AllArticles /></ManagementGuard>} />
+            <Route path="articles" element={<ManagementGuard><AdminArticlesPage /></ManagementGuard>} />
             <Route path="projects" element={<ManagementGuard><AllProjects /></ManagementGuard>} />
             <Route path="projects-drafts" element={<ManagementGuard><DraftProjects /></ManagementGuard>} />
             <Route path="initiatives" element={<ManagementGuard><AllInitiatives /></ManagementGuard>} />
