@@ -274,7 +274,14 @@ const runBot = async (botId, { trigger = 'cron' } = {}) => {
     for (const source of sources) {
         sourcesScanned += 1;
 
-        const fetchUrl = source.rssUrl || source.url;
+        // Honour rssUrl ONLY for explicitly-RSS sources. Older runs may have
+        // auto-discovered a feed and persisted rssUrl on an 'auto' source; if
+        // the admin then bumped maxPages (clear HTML pagination intent), we
+        // must NOT keep dragging the legacy feed URL — fall back to the
+        // original page URL so HTML scraping + pagination work as expected.
+        const fetchUrl = (source.sourceType === 'rss' && source.rssUrl)
+            ? source.rssUrl
+            : source.url;
         const headers = {};
         if (source.etag) headers['If-None-Match'] = source.etag;
         if (source.lastModified) headers['If-Modified-Since'] = source.lastModified;
@@ -317,23 +324,35 @@ const runBot = async (botId, { trigger = 'cron' } = {}) => {
         }
 
         // Three-way fork: source.sourceType can be 'rss', 'html', or 'auto'.
-        // For 'rss' and 'auto' we first try the feed path (with auto-
-        // discovery if the body is HTML). For 'html' or when feed path
-        // fails on 'auto', we scrape the HTML body for article-like blocks.
+        //   • 'rss': always feed path (with auto-discovery if the URL points
+        //     to an HTML page that advertises a feed).
+        //   • 'html': always scrape, ignore any embedded feed link.
+        //   • 'auto': try feed path UNLESS the admin set maxPages > 1, which
+        //     is a clear signal they want HTML pagination (RSS doesn't
+        //     paginate, so picking RSS would silently lose history). We also
+        //     intentionally DO NOT persist any sourceType / rssUrl change
+        //     during auto runs — the user keeps the freedom to switch later
+        //     just by changing maxPages or sourceType in the UI.
         const declaredType = source.sourceType || 'rss';
         let body = result.body;
         let mode = null; // 'rss' | 'html'
         let scrapedItems = null;
 
-        const tryFeedPath = declaredType === 'rss' || declaredType === 'auto';
+        const userWantsPagination = (source.maxPages || 1) > 1;
+        const tryFeedPath = declaredType === 'rss'
+            || (declaredType === 'auto' && !userWantsPagination);
 
         if (tryFeedPath && looksLikeFeed(body)) {
             mode = 'rss';
         } else if (tryFeedPath) {
-            // Body is HTML — try to discover a feed first (Phase 1 behaviour).
+            // Body is HTML — try to discover a feed.
             const discovered = await discoverRssUrl(fetchUrl, body);
             if (discovered) {
-                try { await source.update({ rssUrl: discovered, sourceType: 'rss' }); } catch (_) { /* non-fatal */ }
+                // Persist ONLY for explicit 'rss' sources — for 'auto' we
+                // don't lock the user in (see comment block above).
+                if (declaredType === 'rss') {
+                    try { await source.update({ rssUrl: discovered, sourceType: 'rss' }); } catch (_) { /* non-fatal */ }
+                }
                 const probe = await safeFetchBody(discovered);
                 if (probe.body && looksLikeFeed(probe.body)) {
                     body = probe.body;
@@ -376,10 +395,8 @@ const runBot = async (botId, { trigger = 'cron' } = {}) => {
                 }
                 scrapedItems = extracted.items;
                 mode = 'html';
-                // Persist sourceType for clarity; harmless if already 'html'.
-                if (declaredType === 'auto') {
-                    try { await source.update({ sourceType: 'html' }); } catch (_) { /* non-fatal */ }
-                }
+                // Don't persist sourceType for 'auto' — keep the source
+                // pliant so admin can flip behavior later via maxPages alone.
             } catch (err) {
                 errors.push({
                     sourceId: source.id,
