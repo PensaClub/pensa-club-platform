@@ -19,7 +19,56 @@
   gap: 12px;
   justify-content: space-between;
   align-items: center;
+  margin-bottom: 12px;
+}
+
+.bcfl-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: flex-end;
   margin-bottom: 16px;
+  padding: 10px 12px;
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+}
+
+.bcfl-control {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+  flex: 1 1 200px;
+}
+
+.bcfl-control-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #4b5563;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.bcfl-select {
+  width: 100%;
+  min-width: 0;
+  padding: 8px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #111827;
+  font-family: inherit;
+  font-size: 0.875rem;
+  min-height: 36px;
+  cursor: pointer;
+  transition: border-color 120ms ease, box-shadow 120ms ease;
+}
+
+.bcfl-select:focus {
+  outline: none;
+  border-color: #E26020;
+  box-shadow: 0 0 0 3px rgba(226, 96, 32, 0.15);
 }
 
 .bcfl-chips {

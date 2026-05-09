@@ -194,6 +194,7 @@
     "selectors": {
       "title": "CSS-Selektoren für HTML",
       "help": "Selektoren geben an, wo Artikel auf der Seite sind. Beispiel: 'article.news' wählt jedes Element mit Klasse news. Attribute nutzen @, z. B. 'a@href' = das href-Attribut des ersten Links.",
+      "autoDetectedHint": "Diese Werte wurden automatisch von der Seite erkannt. Du kannst sie übernehmen, anpassen oder eigene schreiben — und dann 'Erneut testen' klicken.",
       "modeAuto": "Auto-Erkennung",
       "modeCustom": "Benutzerdefiniert",
       "retest": "Mit diesen Selektoren erneut testen",
@@ -224,6 +225,16 @@
       "used": "Verwendet"
     },
     "searchPlaceholder": "Suche Titel oder Beschreibung…",
+    "orderBy": {
+      "label": "Sortierung",
+      "published_desc": "Neueste (nach Veröffentlichung)",
+      "published_asc": "Älteste (nach Veröffentlichung)",
+      "found_desc": "Neueste (nach Funddatum)"
+    },
+    "sourceFilter": {
+      "label": "Quelle",
+      "all": "Alle Quellen"
+    },
     "card": {
       "open": "Öffnen",
       "startArticle": "Artikel beginnen",

@@ -166,10 +166,28 @@ const AddSourceModal = ({ open, onClose, onSave, source = null }) => {
       const result = await validateSourceUrl(payload);
       setValidation(result || { ok: false, code: 'NETWORK_ERROR' });
 
-      // If the backend returned discovered selectors and we're in auto
-      // mode, seed the editor with them so toggling "Custom" shows them.
-      if (result?.ok && result?.selectors && selectorMode === 'auto') {
-        setSelectors({ ...EMPTY_SELECTORS, ...result.selectors });
+      // Reveal the editable selectors panel whenever the admin is likely to
+      // want to inspect or override them:
+      //   • success with detectedType=html — show suggestions for review
+      //   • parser/no-rss failures on auto/html — give them a way to fix it
+      // Plain network failures (HTTP_404, FETCH_ERROR, etc.) leave the panel
+      // closed because no selector edit will save them — the URL is wrong.
+      const isHtmlSuccess = result?.ok === true && result?.detectedType === 'html';
+      const isFixableHtmlFailure = result?.ok === false
+        && (result.code === 'PARSER_ERROR' || result.code === 'NO_RSS_FOUND')
+        && form.sourceType !== 'rss';
+      if (isHtmlSuccess || isFixableHtmlFailure) {
+        setAdvancedOpen(true);
+        if (result?.selectors) {
+          // Detection produced suggestions — pre-fill and switch to
+          // editable ('custom') mode so the values are visible AND mutable.
+          setSelectors({ ...EMPTY_SELECTORS, ...result.selectors });
+          setSelectorMode('custom');
+        } else if (isFixableHtmlFailure) {
+          // No suggestions to seed with — open custom mode anyway so the
+          // admin can hand-write selectors from scratch.
+          setSelectorMode('custom');
+        }
       }
 
       // Auto-fill the name field on first successful validation.
@@ -566,12 +584,18 @@ const SelectorEditor = ({
   };
 
   const display = mode === 'auto' ? (detectedSelectors || EMPTY_SELECTORS) : selectors;
+  const hasDetected = !!detectedSelectors && Object.values(detectedSelectors).some(Boolean);
 
   return (
     <div className="bcasm-selectors">
       <div className="bcasm-selectors-head">
         <span className="bcasm-label">{t('source.selectors.title')}</span>
         <p className="bcasm-selectors-help">{t('source.selectors.help')}</p>
+        {mode === 'custom' && hasDetected && (
+          <p className="bcasm-selectors-detected-hint">
+            {t('source.selectors.autoDetectedHint')}
+          </p>
+        )}
       </div>
 
       <div className="bcasm-selectors-tabs" role="tablist">

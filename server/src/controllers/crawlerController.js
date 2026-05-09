@@ -933,6 +933,14 @@ crawlerController.get(
                 where.botId = botId;
             }
 
+            if (req.query.sourceId) {
+                const sourceId = parseInt(req.query.sourceId, 10);
+                if (!Number.isFinite(sourceId)) {
+                    return res.status(400).json({ message: 'Invalid sourceId', code: 'BAD_FILTER' });
+                }
+                where.sourceId = sourceId;
+            }
+
             if (req.query.status) {
                 if (!FINDING_STATUSES.includes(req.query.status)) {
                     return res.status(400).json({ message: 'Invalid status filter', code: 'BAD_FILTER' });
@@ -950,13 +958,44 @@ crawlerController.get(
                 }
             }
 
+            // Sort modes:
+            //   published_desc (default) — newest first using publishedAt when
+            //     present, falling back to foundAt so undated items don't sink
+            //     to the bottom of the list (they sort by when WE saw them).
+            //   published_asc            — oldest first, same fallback.
+            //   found_desc               — strict by foundAt DESC (use this to
+            //     review what came out of the most recent run).
+            // Sort modes — using sequelize.fn + sequelize.col with model-
+            // qualified names so Sequelize aliases the main table correctly
+            // even when include[] adds joins. None of the joined models carry
+            // publishedAt/foundAt, so referring to them is unambiguous.
+            const orderParam = (req.query.order || 'published_desc').toString();
+            const coalesce = sequelize.fn(
+                'COALESCE',
+                sequelize.col('crawler_finding.publishedAt'),
+                sequelize.col('crawler_finding.foundAt'),
+            );
+            let order;
+            switch (orderParam) {
+                case 'published_asc':
+                    order = [[coalesce, 'ASC'], ['id', 'ASC']];
+                    break;
+                case 'found_desc':
+                    order = [['foundAt', 'DESC'], ['id', 'DESC']];
+                    break;
+                case 'published_desc':
+                default:
+                    order = [[coalesce, 'DESC'], ['id', 'DESC']];
+                    break;
+            }
+
             const { rows, count } = await crawler_finding.findAndCountAll({
                 where,
                 include: [
                     { model: crawler_source, as: 'source', attributes: ['id', 'name', 'url'] },
                     { model: crawler_bot, as: 'bot', attributes: ['id', 'name'] },
                 ],
-                order: [['foundAt', 'DESC']],
+                order,
                 limit,
                 offset,
             });

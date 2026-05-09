@@ -194,6 +194,7 @@
     "selectors": {
       "title": "CSS selectors for HTML",
       "help": "Selectors tell the bot where articles live on the page. Example: 'article.news' picks every element with class news. Attributes use @, e.g. 'a@href' = the href attribute of the first link.",
+      "autoDetectedHint": "These values were auto-detected from the page. You can keep them, refine them, or write your own — then click \"Re-test\".",
       "modeAuto": "Auto-detect",
       "modeCustom": "Custom",
       "retest": "Re-test with these selectors",
@@ -224,6 +225,16 @@
       "used": "Used"
     },
     "searchPlaceholder": "Search title or description…",
+    "orderBy": {
+      "label": "Sort by",
+      "published_desc": "Newest (by publish date)",
+      "published_asc": "Oldest (by publish date)",
+      "found_desc": "Newest (by when bot found it)"
+    },
+    "sourceFilter": {
+      "label": "Source",
+      "all": "All sources"
+    },
     "card": {
       "open": "Open",
       "startArticle": "Start article",

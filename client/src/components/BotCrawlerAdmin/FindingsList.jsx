@@ -8,16 +8,20 @@ import { getResizedUrl } from '../../utils/firebaseImageResize';
 import './findingsList.css';
 
 const STATUS_FILTERS = ['new', 'reviewed', 'dismissed', 'used'];
+const ORDER_OPTIONS = ['published_desc', 'published_asc', 'found_desc'];
 const PAGE_SIZE = 20;
 
 const FindingsList = ({ botId }) => {
   const { t, i18n } = useTranslation('botCrawler');
-  const { listFindings, updateFindingStatus } = useCrawlerContext();
+  const { listFindings, updateFindingStatus, listSources } = useCrawlerContext();
 
   const [items, setItems] = useState([]);
   const [pagination, setPagination] = useState({ page: 1, limit: PAGE_SIZE, total: 0, totalPages: 0 });
   const [loading, setLoading] = useState(true);
   const [statusFilter, setStatusFilter] = useState('new');
+  const [orderBy, setOrderBy] = useState('published_desc');
+  const [sourceFilter, setSourceFilter] = useState(''); // empty = all
+  const [sources, setSources] = useState([]);
   const [page, setPage] = useState(1);
   const [searchInput, setSearchInput] = useState('');
   const [debouncedSearch, setDebouncedSearch] = useState('');
@@ -33,20 +37,39 @@ const FindingsList = ({ botId }) => {
     return () => debounceRef.current && clearTimeout(debounceRef.current);
   }, [searchInput]);
 
+  // Load sources for the source-filter dropdown. Only meaningful when scoped
+  // to a single bot — the cross-bot view doesn't have one source list.
+  useEffect(() => {
+    if (!botId) { setSources([]); return; }
+    let cancelled = false;
+    (async () => {
+      try {
+        const data = await listSources(botId);
+        const list = Array.isArray(data) ? data : (Array.isArray(data?.items) ? data.items : []);
+        if (!cancelled) setSources(list);
+      } catch {
+        if (!cancelled) setSources([]);
+      }
+    })();
+    return () => { cancelled = true; };
+  }, [botId, listSources]);
+
   const fetchData = useCallback(async () => {
     setLoading(true);
     const params = {
       page,
       limit: PAGE_SIZE,
       status: statusFilter,
+      order: orderBy,
     };
     if (botId) params.botId = botId;
+    if (sourceFilter) params.sourceId = sourceFilter;
     if (debouncedSearch) params.search = debouncedSearch;
     const response = await listFindings(params);
     setItems(Array.isArray(response?.items) ? response.items : []);
     setPagination(response?.pagination || { page: 1, limit: PAGE_SIZE, total: 0, totalPages: 0 });
     setLoading(false);
-  }, [botId, listFindings, page, statusFilter, debouncedSearch]);
+  }, [botId, listFindings, page, statusFilter, debouncedSearch, orderBy, sourceFilter]);
 
   useEffect(() => {
     fetchData();
@@ -122,6 +145,36 @@ const FindingsList = ({ botId }) => {
             onChange={(e) => setSearchInput(e.target.value)}
           />
         </div>
+      </div>
+
+      <div className="bcfl-controls">
+        <label className="bcfl-control">
+          <span className="bcfl-control-label">{t('findings.orderBy.label')}</span>
+          <select
+            className="bcfl-select"
+            value={orderBy}
+            onChange={(e) => { setOrderBy(e.target.value); setPage(1); }}
+          >
+            {ORDER_OPTIONS.map((opt) => (
+              <option key={opt} value={opt}>{t(`findings.orderBy.${opt}`)}</option>
+            ))}
+          </select>
+        </label>
+        {botId && sources.length > 0 && (
+          <label className="bcfl-control">
+            <span className="bcfl-control-label">{t('findings.sourceFilter.label')}</span>
+            <select
+              className="bcfl-select"
+              value={sourceFilter}
+              onChange={(e) => { setSourceFilter(e.target.value); setPage(1); }}
+            >
+              <option value="">{t('findings.sourceFilter.all')}</option>
+              {sources.map((s) => (
+                <option key={s.id} value={s.id}>{s.name || s.url}</option>
+              ))}
+            </select>
+          </label>
+        )}
       </div>
 
       {loading ? (

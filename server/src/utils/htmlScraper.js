@@ -19,10 +19,14 @@ const MAX_DESCRIPTION_LEN = 500;
 const AUTO_DESCRIPTION_LEN = 200;
 
 // Class-name patterns we consider "article-like" wrappers when nothing better
-// is configured. Covers common WP/Drupal/Hugo blog classes plus list-item /
-// loop-wrapper used by Beaver Builder, Elementor and many govt CMS templates
-// (e.g. noi.bg). Still conservative — bigger nets bring in nav/footer noise.
-const AUTO_CLASS_RE = /\b(article|news|post|story|item|card|entry|publication|tile|teaser|loop-wrapper|list-item)\b/i;
+// is configured. Covers WordPress/Drupal/Hugo blog conventions, Beaver
+// Builder + Elementor + Avada loop classes, govt-CMS templates (e.g. noi.bg),
+// and common search-result / archive markup. Still conservative — bigger
+// nets bring in nav/footer noise. Word-boundary matching means partial hits
+// like `hentry`, `fl-post-feed-post`, `elementor-loop-item`, `feed-item`,
+// `wp-block-post-template-...` already pass via the smaller core keywords
+// (entry, post, item) without needing per-framework rules.
+const AUTO_CLASS_RE = /\b(article|news|post|story|item|card|entry|publication|tile|teaser|loop-wrapper|list-item|hentry|permalink|excerpt|archive-item|result|link-card|media-object|headline|feed-item|search-result|blog-item)\b/i;
 
 const HEADING_TAGS = ['h1', 'h2', 'h3', 'h4'];
 
