@@ -1,0 +1,134 @@
+/* BotDetailPage — prefix `bcd-` */
+
+.bcd-page {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  padding: 210px 24px 24px 24px;
+  font-size: 16px;
+  color: #1f2937;
+}
+
+.bcd-page * {
+  box-sizing: border-box;
+}
+
+.bcd-header {
+  margin-bottom: 18px;
+}
+
+.bcd-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: #6b7280;
+  text-decoration: none;
+  font-size: 0.875rem;
+  font-weight: 500;
+  padding: 8px 0;
+  margin-bottom: 8px;
+  transition: color 120ms ease;
+}
+
+.bcd-back span {
+  font-size: 0.875rem;
+}
+
+.bcd-back:hover {
+  color: #E26020;
+}
+
+.bcd-title-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  min-width: 0;
+}
+
+.bcd-title {
+  margin: 0;
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #111827;
+  line-height: 1.2;
+  word-break: break-word;
+}
+
+.bcd-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.bcd-badge-active   { background: #d1fae5; color: #065f46; }
+.bcd-badge-paused   { background: #fef3c7; color: #92400e; }
+.bcd-badge-archived { background: #e5e7eb; color: #4b5563; }
+
+.bcd-desc {
+  margin: 8px 0 0 0;
+  color: #4b5563;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.bcd-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  border-bottom: 1px solid #e5e7eb;
+  margin-bottom: 20px;
+}
+
+.bcd-tab {
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  padding: 10px 14px;
+  cursor: pointer;
+  font-size: 0.95rem;
+  font-weight: 500;
+  font-family: inherit;
+  color: #6b7280;
+  min-height: 40px;
+  transition: color 120ms ease, border-color 120ms ease;
+}
+
+.bcd-tab:hover {
+  color: #E26020;
+}
+
+.bcd-tab-active {
+  color: #E26020;
+  border-bottom-color: #E26020;
+  font-weight: 600;
+}
+
+.bcd-tab-panel {
+  width: 100%;
+  min-width: 0;
+}
+
+.bcd-empty {
+  background: #ffffff;
+  border-radius: 16px;
+  border: 1px dashed #e5e7eb;
+  padding: 40px 20px;
+  text-align: center;
+  color: #6b7280;
+  font-size: 0.95rem;
+}
+
+.bcd-empty p {
+  font-size: 0.95rem;
+  margin: 0;
+}
+
+@media (max-width: 600px) {
+  .bcd-page { padding: 16px; }
+  .bcd-title { font-size: 1.35rem; }
+}

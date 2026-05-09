@@ -319,6 +319,13 @@ const permissions = {
         readAll: ['admin'],
         delete: ['admin'],
     },
+    crawler: {
+        read: ROLES.STAFF,
+        create: ROLES.STAFF,
+        update: ROLES.STAFF,
+        delete: ROLES.STAFF,
+        run: ROLES.STAFF,
+    },
 };
 
 module.exports = permissions;

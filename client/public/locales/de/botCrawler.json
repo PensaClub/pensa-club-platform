@@ -1,0 +1,289 @@
+{
+  "page": {
+    "title": "Bot Crawler",
+    "newBot": "Neuer Bot",
+    "empty": {
+      "title": "Noch keine Bots",
+      "subtitle": "Erstellen Sie Ihren ersten Bot, um Nachrichten aus RSS-Feeds zu beobachten.",
+      "cta": "Bot erstellen"
+    }
+  },
+  "tabs": {
+    "findings": "Funde",
+    "sources": "Quellen",
+    "settings": "Einstellungen",
+    "history": "Verlauf"
+  },
+  "card": {
+    "lastRun": "Letzter Lauf",
+    "sources": "Quellen",
+    "newFindings": "Neue Funde",
+    "status": {
+      "active": "Aktiv",
+      "paused": "Pausiert",
+      "archived": "Archiviert"
+    },
+    "actions": {
+      "view": "Ansehen",
+      "runNow": "Jetzt prüfen",
+      "edit": "Bearbeiten",
+      "pause": "Pausieren",
+      "resume": "Aktivieren",
+      "delete": "Löschen",
+      "save": "Speichern",
+      "cancel": "Abbrechen",
+      "clearFindings": "Funde löschen"
+    },
+    "pausedHint": "Bot pausiert — läuft nicht nach Zeitplan. Du kannst ihn manuell prüfen oder aktivieren."
+  },
+  "bot": {
+    "section": {
+      "basic": "Basisinformationen",
+      "schedule": "Wann ausführen",
+      "criteria": "Was suchen",
+      "state": "Zustand"
+    },
+    "fields": {
+      "name": "Bot-Name",
+      "description": "Themenbeschreibung",
+      "schedule": "Zeitplan (cron)",
+      "scheduleMode": "Ausführungsmodus",
+      "everyMinutes": "Wie oft (Minuten)",
+      "everyHours": "Alle N Stunden",
+      "hour": "Stunde",
+      "minute": "Minute",
+      "days": "Wochentage",
+      "cronRaw": "Cron-Ausdruck (erweitert)",
+      "keywords": "Stichwörter",
+      "match": "Wie zuordnen",
+      "caseSensitive": "Groß-/Kleinschreibung beachten",
+      "status": "Bot-Status",
+      "useLlm": "KI-Bewertung mit Claude (in Kürze)",
+      "lookBackDays": "Wie weit zurückblicken"
+    },
+    "placeholder": {
+      "name": "z. B. Renten und Soziales",
+      "description": "Kurze Themenbeschreibung — wird später für KI-Bewertung verwendet.",
+      "keyword": "Wort eingeben und Enter drücken"
+    },
+    "help": {
+      "name": "Kurzes Label, das in der Bot-Liste erscheint.",
+      "description": "Freier Text zur Beschreibung — für deine Referenz und zukünftige KI-Bewertung.",
+      "schedule": "Wie oft der Bot seine Quellen auf neue Artikel prüft. Deine Auswahl unten wird automatisch in einen technischen 'cron'-Ausdruck umgewandelt.",
+      "cron": "Cron ist ein Standard-Zeitplanformat: Minute Stunde Tag_des_Monats Monat Wochentag. Beispiel: '0 9 * * 1-5' = werktags morgens um 9:00.",
+      "keywords": "Der Bot behält einen Artikel, wenn dessen Titel oder Beschreibung mindestens eines (oder alle — siehe unten) dieser Wörter enthält.",
+      "match": "'Beliebig' = wenn mindestens ein Stichwort vorhanden → behalten. 'Alle' = jedes Stichwort muss vorhanden sein.",
+      "caseSensitive": "Wenn aus (empfohlen), werden 'NOI' und 'noi' als dasselbe Wort behandelt.",
+      "status": "Aktiv — läuft nach Zeitplan. Pausiert — temporär aus, Verlauf bleibt. Archiviert — aus der Hauptliste ausgeblendet.",
+      "useLlm": "KI bewertet jeden Fund auf Themenrelevanz (0-100). Kommt in Phase 4.",
+      "lookBackDays": "Artikel überspringen, die älter als der gewählte Zeitraum sind (anhand des RSS-Veröffentlichungsdatums). Nützlich für aktuelle Nachrichten. 'Unbegrenzt' akzeptiert alles."
+    },
+    "lookBack": {
+      "unlimited": "Unbegrenzt",
+      "day1": "Letzte 24 Stunden",
+      "days3": "Letzte 3 Tage",
+      "days7": "Letzte Woche",
+      "days14": "Letzte 2 Wochen",
+      "days30": "Letzter Monat",
+      "days90": "Letzte 3 Monate",
+      "days180": "Letzte 6 Monate",
+      "days365": "Letztes Jahr"
+    },
+    "match": {
+      "any": "Beliebiges Stichwort",
+      "all": "Alle Stichwörter"
+    },
+    "scheduleMode": {
+      "minutes": "Alle N Minuten",
+      "hours": "Alle N Stunden",
+      "daily": "Täglich",
+      "weekly": "Bestimmte Tage",
+      "custom": "Benutzerdefiniert (cron)"
+    },
+    "everyMinutes_one": "Alle {{count}} Minute",
+    "everyMinutes_other": "Alle {{count}} Minuten",
+    "everyHours_one": "Alle {{count}} Stunde",
+    "everyHours_other": "Alle {{count}} Stunden",
+    "weekday": {
+      "0": "So",
+      "1": "Mo",
+      "2": "Di",
+      "3": "Mi",
+      "4": "Do",
+      "5": "Fr",
+      "6": "Sa"
+    },
+    "scheduleSummaryLabel": "Auswahl:",
+    "scheduleSummary": {
+      "minutes_one": "Alle {{count}} Minute",
+      "minutes_other": "Alle {{count}} Minuten",
+      "hours_one": "Alle {{count}} Stunde",
+      "hours_other": "Alle {{count}} Stunden",
+      "daily": "Jeden Tag um {{time}}",
+      "weekly": "An {{days}} um {{time}}",
+      "custom": "Benutzerdefiniert ({{cron}})"
+    },
+    "scheduleHelp": "z. B. 0 * * * * = jede Stunde"
+  },
+  "source": {
+    "add": "Quelle hinzufügen",
+    "edit": "Quelle bearbeiten",
+    "fields": {
+      "name": "Name",
+      "url": "URL",
+      "sourceType": "Quellentyp",
+      "active": "Aktiv",
+      "robotsCrawlDelay": "Verzögerung (s)",
+      "maxPages": "Max. Seiten"
+    },
+    "help": {
+      "maxPages": "Für HTML-Quellen: wie viele Pagination-Seiten zu durchsuchen sind (1 = nur die erste Seite). Der Bot stoppt früher, wenn alle Elemente bereits gesehen oder älter als das 'Wie weit zurück'-Limit sind. Nützlich, um historische Ergebnisse von Suchseiten zu holen."
+    },
+    "type": {
+      "rss": "RSS",
+      "html": "HTML",
+      "auto": "Automatisch"
+    },
+    "empty": "Noch keine Quellen hinzugefügt. Füge deinen ersten RSS-Feed hinzu.",
+    "advancedSettings": "Erweiterte Einstellungen",
+    "validation": {
+      "title": "Quellen-Prüfung",
+      "button": "Quelle testen",
+      "revalidate": "Erneut prüfen",
+      "saveAnyway": "Ohne Prüfung speichern",
+      "loading": "Prüfe…",
+      "feedDiscovered": "RSS-Feed automatisch erkannt: {{url}}",
+      "robotsAllowed": "Robots.txt erlaubt Crawling",
+      "robotsBlocked": "Robots.txt verbietet Crawling",
+      "robotsWarning": "Die Seite schränkt Bots in robots.txt ein — Fortsetzung auf eigenes Risiko.",
+      "crawlDelay": "Crawl-Delay: {{seconds}}s",
+      "samplesTitle": "Beispielartikel",
+      "noSamples": "Keine Artikel gefunden",
+      "lastValidatedAt": "Zuletzt geprüft: {{time}}",
+      "neverValidated": "Quelle wurde noch nicht geprüft.",
+      "status": {
+        "ok": "Geprüft",
+        "unreachable": "Nicht erreichbar",
+        "no_rss": "Kein RSS",
+        "parser_error": "Parser-Fehler",
+        "blocked_by_robots": "Durch robots.txt blockiert",
+        "unknown": "Nicht geprüft"
+      },
+      "detectedType": {
+        "rss": "RSS-Feed",
+        "html": "HTML-Seite",
+        "auto": "Automatisch"
+      },
+      "errorCode": {
+        "INVALID_URL": "Ungültige URL.",
+        "VALIDATION": "Ungültige Eingabe.",
+        "PARSER_ERROR": "Inhalt konnte nicht geparst werden.",
+        "NO_RSS_FOUND": "Kein RSS-Feed auf dieser Seite gefunden.",
+        "FETCH_ERROR": "Seite konnte nicht abgerufen werden.",
+        "HTTP_404": "Seite nicht gefunden (404).",
+        "HTTP_403": "Zugriff verweigert (403).",
+        "HTTP_500": "Serverfehler (500).",
+        "DNS_FAILED": "DNS-Auflösung fehlgeschlagen.",
+        "BLOCKED_PRIVATE_IP": "Adresse zeigt auf privates Netzwerk — blockiert.",
+        "BODY_TOO_LARGE": "Seite ist zu groß.",
+        "TIMEOUT": "Zeitüberschreitung.",
+        "NETWORK_ERROR": "Netzwerkfehler.",
+        "BLOCKED_BY_ROBOTS": "Robots.txt verbietet das Crawlen."
+      }
+    },
+    "selectors": {
+      "title": "CSS-Selektoren für HTML",
+      "help": "Selektoren geben an, wo Artikel auf der Seite sind. Beispiel: 'article.news' wählt jedes Element mit Klasse news. Attribute nutzen @, z. B. 'a@href' = das href-Attribut des ersten Links.",
+      "modeAuto": "Auto-Erkennung",
+      "modeCustom": "Benutzerdefiniert",
+      "retest": "Mit diesen Selektoren erneut testen",
+      "field": {
+        "item": "Element (Artikel)",
+        "title": "Titel",
+        "link": "Link",
+        "image": "Bild",
+        "description": "Beschreibung",
+        "published": "Datum"
+      },
+      "placeholder": {
+        "item": "z. B. article.news-card",
+        "title": "z. B. h2.title",
+        "link": "z. B. a@href",
+        "image": "z. B. img@src",
+        "description": "z. B. p.summary",
+        "published": "z. B. time@datetime"
+      }
+    }
+  },
+  "findings": {
+    "filters": {
+      "all": "Alle",
+      "new": "Neu",
+      "reviewed": "Geprüft",
+      "dismissed": "Verworfen",
+      "used": "Verwendet"
+    },
+    "searchPlaceholder": "Suche Titel oder Beschreibung…",
+    "card": {
+      "open": "Öffnen",
+      "startArticle": "Artikel beginnen",
+      "dismiss": "Verwerfen",
+      "used": "Verwendet",
+      "foundOn": "Gefunden am {{time}}",
+      "foundAtTooltip": "Die Quelle stellt kein maschinenlesbares Veröffentlichungsdatum bereit — angezeigt wird, wann der Bot den Artikel zuerst gesehen hat."
+    },
+    "empty": "Keine Funde."
+  },
+  "runs": {
+    "columns": {
+      "startedAt": "Start",
+      "trigger": "Auslöser",
+      "status": "Status",
+      "sourcesScanned": "Quellen",
+      "itemsSeen": "Gesehen",
+      "itemsNew": "Neu"
+    },
+    "status": {
+      "running": "Läuft",
+      "success": "Erfolg",
+      "partial_failure": "Teilweise",
+      "failed": "Fehlgeschlagen"
+    },
+    "trigger": {
+      "cron": "Geplant",
+      "manual": "Manuell"
+    }
+  },
+  "confirm": {
+    "deleteBot": {
+      "title": "Bot löschen",
+      "message": "Möchten Sie \"{{name}}\" wirklich löschen? Dies kann nicht rückgängig gemacht werden."
+    },
+    "deleteSource": {
+      "title": "Quelle löschen",
+      "message": "Möchten Sie die Quelle \"{{name}}\" wirklich löschen?"
+    },
+    "clearFindings": {
+      "title": "Funde löschen",
+      "help": "Entfernt alle Funde dieses Bots. Nützlich, wenn du die Stichwörter änderst und der Bot beim nächsten Lauf alles neu auswerten soll.",
+      "message": "Möchten Sie ALLE Funde dieses Bots wirklich löschen? Sie werden beim nächsten Lauf neu ausgewertet."
+    }
+  },
+  "toast": {
+    "botCreated": "Bot erstellt.",
+    "botUpdated": "Bot aktualisiert.",
+    "sourceAdded": "Quelle hinzugefügt.",
+    "sourceUpdated": "Quelle aktualisiert.",
+    "sourceDeleted": "Quelle gelöscht.",
+    "findingsCleared_one": "1 Fund gelöscht.",
+    "findingsCleared_other": "{{count}} Funde gelöscht.",
+    "botDeleted": "Bot gelöscht.",
+    "runStarted": "Lauf gestartet.",
+    "runFinished_one": "Fertig — {{count}} neuer Fund.",
+    "runFinished_other": "Fertig — {{count}} neue Funde.",
+    "runFinished_zero": "Fertig — keine neuen Funde.",
+    "findingDismissed": "Fund verworfen.",
+    "findingUsed": "Als verwendet markiert.",
+    "error": "Ein Fehler ist aufgetreten."
+  }
+}

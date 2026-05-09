@@ -931,6 +931,26 @@ export const Profile = () => {
                   </li>
                   <li>
                     <NavLink
+                      to="/admin/bot-crawler"
+                      className={({ isActive }) => isActive ? 'active' : ''}
+                    >
+                      <span className="link-content">
+                        {/* Bot Crawler — Phase 1 admin-only RSS news monitor.
+                            Inline SVG matches the rest of this sidebar's icon style. */}
+                        <svg className="menu-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <rect x="4" y="7" width="16" height="12" rx="2" stroke="currentColor" strokeWidth="1.5" />
+                          <path d="M12 7V3M9 3h6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+                          <circle cx="9" cy="13" r="1" fill="currentColor" />
+                          <circle cx="15" cy="13" r="1" fill="currentColor" />
+                          <path d="M9 16h6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+                          <path d="M2 12h2M20 12h2" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+                        </svg>
+                        Bot Crawler
+                      </span>
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink
                       onClick={() => toggleSubMenu('ads')}
                       className="nav-link-button"
                     >
