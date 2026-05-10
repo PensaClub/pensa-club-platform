@@ -11,6 +11,7 @@
   "tabs": {
     "findings": "Findings",
     "sources": "Sources",
+    "ai": "AI",
     "settings": "Settings",
     "history": "History"
   },
@@ -60,7 +61,7 @@
       "match": "How to match",
       "caseSensitive": "Case sensitive matching",
       "status": "Bot status",
-      "useLlm": "AI scoring with Claude (coming soon)",
+      "useLlm": "AI scoring with Claude",
       "lookBackDays": "How far back to look",
       "cleanupEnabled": "Enable auto cleanup",
       "cleanupDay": "Cleanup day",
@@ -83,7 +84,7 @@
       "match": "'Any' = if at least one keyword is present → keep. 'All' = every keyword must be present.",
       "caseSensitive": "When off (recommended), 'NOI' and 'noi' are treated as the same word.",
       "status": "Active — runs on schedule. Paused — temporarily off but history kept. Archived — hidden from the main list.",
-      "useLlm": "AI will score each finding's relevance to your topic (0-100). Coming in Phase 4.",
+      "useLlm": "AI will score each finding's relevance to your topic (0-100). Detailed settings (model, prompt, score threshold, daily cost cap) are in the 'AI' tab.",
       "lookBackDays": "Skip articles older than the selected window (using their RSS publish date). Useful for fresh news only. 'Unlimited' accepts everything.",
       "cleanupEnabled": "When enabled, the N oldest findings of this bot are deleted automatically on the chosen day + hour — regardless of status. Disable if you prefer to clean only manually with the buttons below.",
       "cleanupDay": "Which day of the week the auto-cleanup runs. 'Daily' = every night.",
@@ -269,7 +270,8 @@
       "label": "Sort by",
       "published_desc": "Newest (by publish date)",
       "published_asc": "Oldest (by publish date)",
-      "found_desc": "Newest (by when bot found it)"
+      "found_desc": "Newest (by when bot found it)",
+      "relevance_desc": "By AI relevance (highest)"
     },
     "sourceFilter": {
       "label": "Source",
@@ -318,6 +320,66 @@
       "title": "Clear findings",
       "help": "Removes all findings for this bot. Useful when you change keywords and want the bot to re-evaluate everything from scratch on the next run.",
       "message": "Are you sure you want to delete ALL findings for this bot? They will be re-evaluated on the next run."
+    }
+  },
+  "ai": {
+    "master": {
+      "label": "Enable AI scoring with Claude",
+      "desc": "When enabled, every new finding is sent to Claude for a 0-100 relevance score against the bot's topic. Below the threshold → auto-dismissed (if auto-dismiss is on). Per-bot only — doesn't affect other bots."
+    },
+    "model": { "title": "Model and cost" },
+    "scoring": { "title": "Score and behaviour" },
+    "prompt": {
+      "title": "Prompt instructions",
+      "resetToDefault": "Reset to default"
+    },
+    "test": {
+      "title": "Test before enabling",
+      "desc": "Send one article through AI with current settings. See exact prompt + response. Counts toward daily cost cap.",
+      "pickFinding": "Pick a finding to test",
+      "useSample": "(use sample article)",
+      "run": "Run test",
+      "running": "Sending...",
+      "score": "Score",
+      "reasoning": "Reasoning",
+      "tokensIn": "Input tokens",
+      "tokensOut": "Output tokens",
+      "cost": "Cost",
+      "showPrompt": "Show full prompt",
+      "error": "Error"
+    },
+    "stats": {
+      "title": "Today",
+      "tokensIn": "Input tokens",
+      "tokensOut": "Output tokens",
+      "costToday": "Spent today",
+      "reset": "Reset counters",
+      "modelInfo": "Selected model price:"
+    },
+    "fields": {
+      "model": "Model",
+      "minScore": "Minimum score to keep",
+      "autoDismiss": "Auto-dismiss below minimum",
+      "temperature": "Temperature",
+      "maxTokens": "Max output tokens",
+      "dailyCostCap": "Daily cost cap ($)",
+      "systemPrompt": "System prompt (core instructions)",
+      "extraInstructions": "Additional instructions"
+    },
+    "placeholder": {
+      "extraInstructions": "e.g. Ignore foreign-country articles unless about pensions. Score articles with concrete numbers higher."
+    },
+    "help": {
+      "minScore": "Articles with a lower AI score → auto-dismissed (if the toggle below is on).",
+      "autoDismiss": "When off: all articles stay as 'new', just get a score badge — you decide manually.",
+      "temperature": "0 = strict and stable (same input = same score). Higher = more varied scores.",
+      "maxTokens": "Max tokens Claude can return. 300 is enough for score + 1-2 sentences of reasoning.",
+      "dailyCostCap": "When reached, AI scoring stops for the day. New findings are saved without a score, nothing crashes. Resets at Sofia midnight.",
+      "systemPrompt": "Core instructions sent every time. You can use {{bot_description}}, {{keywords}}, {{bot_name}} placeholders. Empty = use built-in default.",
+      "extraInstructions": "Extra instructions appended to the system prompt. Add topic-specific tweaks here."
+    },
+    "toast": {
+      "countersReset": "Daily counters reset."
     }
   },
   "cleanup": {

@@ -619,7 +619,6 @@ const BotEditModal = ({ open, bot, onClose, onSave, onChanged }) => {
                             type="checkbox"
                             checked={form.useLlm}
                             onChange={(e) => updateField('useLlm', e.target.checked)}
-                            disabled
                         />
                         <span>
                             {t('bot.fields.useLlm')}

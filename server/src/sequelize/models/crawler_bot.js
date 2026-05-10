@@ -105,6 +105,71 @@ module.exports = (sequelize, DataTypes) => {
                 defaultValue: null,
                 // Array of strings; falsy/empty -> fall back to env default.
             },
+            // ── Phase 4: LLM scoring ─────────────────────────────────────
+            llmModel: {
+                type: DataTypes.STRING(40),
+                allowNull: false,
+                defaultValue: 'claude-haiku-4-5',
+            },
+            llmMinScore: {
+                type: DataTypes.INTEGER,
+                allowNull: false,
+                defaultValue: 40,
+                validate: { min: 0, max: 100 },
+            },
+            llmAutoDismiss: {
+                type: DataTypes.BOOLEAN,
+                allowNull: false,
+                defaultValue: true,
+            },
+            llmTemperature: {
+                type: DataTypes.DECIMAL(3, 2),
+                allowNull: false,
+                defaultValue: 0.0,
+                validate: { min: 0, max: 1 },
+            },
+            llmMaxTokens: {
+                type: DataTypes.INTEGER,
+                allowNull: false,
+                defaultValue: 300,
+                validate: { min: 50, max: 2000 },
+            },
+            llmSystemPrompt: {
+                type: DataTypes.TEXT,
+                allowNull: true,
+                defaultValue: null,
+            },
+            llmExtraInstructions: {
+                type: DataTypes.TEXT,
+                allowNull: true,
+                defaultValue: null,
+            },
+            llmDailyCostCap: {
+                type: DataTypes.DECIMAL(8, 4),
+                allowNull: false,
+                defaultValue: 1.0,
+                validate: { min: 0 },
+            },
+            llmTokensInToday: {
+                type: DataTypes.INTEGER,
+                allowNull: false,
+                defaultValue: 0,
+            },
+            llmTokensOutToday: {
+                type: DataTypes.INTEGER,
+                allowNull: false,
+                defaultValue: 0,
+            },
+            llmCostToday: {
+                type: DataTypes.DECIMAL(8, 4),
+                allowNull: false,
+                defaultValue: 0,
+            },
+            llmCostResetDate: {
+                type: DataTypes.DATEONLY,
+                allowNull: true,
+                defaultValue: null,
+            },
             lastRunAt: {
                 type: DataTypes.DATE,
                 allowNull: true,
