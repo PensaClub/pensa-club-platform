@@ -1,0 +1,128 @@
+/* RunHistory — prefix `bcrh-` */
+
+.bcrh-wrap {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  font-size: 16px;
+  color: #1f2937;
+}
+
+.bcrh-wrap * {
+  box-sizing: border-box;
+}
+
+.bcrh-table-wrap {
+  background: #ffffff;
+  border-radius: 16px;
+  border: 1px solid #e5e7eb;
+  overflow-x: auto;
+}
+
+.bcrh-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+}
+
+.bcrh-table thead th {
+  text-align: left;
+  padding: 12px 14px;
+  background: #f9fafb;
+  color: #374151;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-bottom: 1px solid #e5e7eb;
+  white-space: nowrap;
+}
+
+.bcrh-table tbody td {
+  padding: 12px 14px;
+  color: #1f2937;
+  font-size: 0.875rem;
+  border-bottom: 1px solid #f3f4f6;
+  vertical-align: top;
+  word-break: break-word;
+}
+
+.bcrh-row:nth-child(odd) td {
+  background: #fafafa;
+}
+
+.bcrh-row-expandable {
+  cursor: pointer;
+  transition: background-color 120ms ease;
+}
+
+.bcrh-row-expandable:hover td {
+  background: #fff7ed;
+}
+
+.bcrh-row-open td {
+  background: #fff7ed !important;
+  border-bottom-color: #fed7aa;
+}
+
+.bcrh-error-row td {
+  background: #fffbeb;
+  padding: 16px;
+}
+
+.bcrh-error-list {
+  margin: 0;
+  padding-left: 20px;
+}
+
+.bcrh-error-item {
+  font-size: 0.875rem;
+  color: #92400e;
+  line-height: 1.5;
+}
+
+.bcrh-error-pre {
+  margin: 0;
+  background: #ffffff;
+  border: 1px solid #fed7aa;
+  border-radius: 8px;
+  padding: 10px 12px;
+  font-size: 0.8125rem;
+  color: #7c2d12;
+  white-space: pre-wrap;
+  word-break: break-word;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.bcrh-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.bcrh-badge-running          { background: #dbeafe; color: #1e40af; }
+.bcrh-badge-success          { background: #d1fae5; color: #065f46; }
+.bcrh-badge-partial_failure  { background: #fef3c7; color: #92400e; }
+.bcrh-badge-failed           { background: #fee2e2; color: #991b1b; }
+
+.bcrh-empty {
+  background: #ffffff;
+  border-radius: 16px;
+  border: 1px dashed #e5e7eb;
+  padding: 40px 20px;
+  text-align: center;
+  color: #6b7280;
+}
+
+.bcrh-empty p {
+  margin: 0;
+  font-size: 0.95rem;
+  color: #6b7280;
+}

@@ -11,6 +11,8 @@ const crypto = require('crypto');
 const path = require('path');
 const fsSync = require('fs');
 const { Storage } = require('@google-cloud/storage');
+const { isPrivateIp } = require('../utils/networkSafety');
+const { decodeHtmlEntities } = require('../utils/htmlEntities');
 
 // Reuse Firebase Storage credentials (same setup as storageController) so we
 // can host og:image previews on our own bucket instead of hot-linking.
@@ -234,39 +236,6 @@ const sanitizeUsefulLinks = (input) => {
         if (cleaned.length >= MAX_USEFUL_LINKS) break;
     }
     return cleaned;
-};
-
-const isPrivateIp = (ip) => {
-    if (!ip) return true;
-    if (ip === '::1' || ip === '0:0:0:0:0:0:0:1') return true;
-    if (ip.startsWith('::ffff:')) return isPrivateIp(ip.slice(7));
-    if (/^f[cd][0-9a-f]{2}:/i.test(ip)) return true;
-    if (/^fe80:/i.test(ip)) return true;
-
-    const parts = ip.split('.').map(Number);
-    if (parts.length !== 4 || parts.some((p) => Number.isNaN(p))) return false;
-    const [a, b] = parts;
-    if (a === 10) return true;
-    if (a === 127) return true;
-    if (a === 0) return true;
-    if (a === 169 && b === 254) return true;
-    if (a === 172 && b >= 16 && b <= 31) return true;
-    if (a === 192 && b === 168) return true;
-    if (a === 100 && b >= 64 && b <= 127) return true;
-    return false;
-};
-
-const decodeHtmlEntities = (str) => {
-    if (!str) return '';
-    return str
-        .replace(/&amp;/g, '&')
-        .replace(/&lt;/g, '<')
-        .replace(/&gt;/g, '>')
-        .replace(/&quot;/g, '"')
-        .replace(/&#39;/g, "'")
-        .replace(/&apos;/g, "'")
-        .replace(/&#(\d+);/g, (_, code) => String.fromCharCode(parseInt(code, 10)))
-        .replace(/&#x([0-9a-f]+);/gi, (_, code) => String.fromCharCode(parseInt(code, 16)));
 };
 
 const extractMetaContent = (html, propertyName, attrName = 'property') => {

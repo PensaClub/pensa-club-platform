@@ -1,0 +1,378 @@
+{
+  "page": {
+    "title": "Bot Crawler",
+    "newBot": "New bot",
+    "empty": {
+      "title": "No bots yet",
+      "subtitle": "Create your first bot to start monitoring news from RSS feeds.",
+      "cta": "Create bot"
+    }
+  },
+  "tabs": {
+    "findings": "Findings",
+    "sources": "Sources",
+    "settings": "Settings",
+    "history": "History"
+  },
+  "card": {
+    "lastRun": "Last run",
+    "sources": "Sources",
+    "newFindings": "New findings",
+    "status": {
+      "active": "Active",
+      "paused": "Paused",
+      "archived": "Archived"
+    },
+    "actions": {
+      "view": "View",
+      "runNow": "Check now",
+      "edit": "Edit",
+      "pause": "Pause",
+      "resume": "Activate",
+      "delete": "Delete",
+      "save": "Save",
+      "cancel": "Cancel",
+      "clearFindings": "Clear findings"
+    },
+    "pausedHint": "Bot is paused — won't run on schedule. You can still check manually or activate it."
+  },
+  "bot": {
+    "section": {
+      "basic": "Basic info",
+      "schedule": "When to run",
+      "criteria": "What to match",
+      "cleanup": "Auto cleanup of findings",
+      "notifications": "Email notifications",
+      "state": "State"
+    },
+    "fields": {
+      "name": "Bot name",
+      "description": "Topic description",
+      "schedule": "Schedule (cron)",
+      "scheduleMode": "Run mode",
+      "everyMinutes": "How often (minutes)",
+      "everyHours": "Every N hours",
+      "hour": "Hour",
+      "minute": "Minute",
+      "days": "Days of week",
+      "cronRaw": "Cron expression (advanced)",
+      "keywords": "Keywords",
+      "match": "How to match",
+      "caseSensitive": "Case sensitive matching",
+      "status": "Bot status",
+      "useLlm": "AI scoring with Claude (coming soon)",
+      "lookBackDays": "How far back to look",
+      "cleanupEnabled": "Enable auto cleanup",
+      "cleanupDay": "Cleanup day",
+      "cleanupHour": "At what hour",
+      "cleanupBatchSize": "How many to delete per run",
+      "notificationEmails": "Email recipients"
+    },
+    "placeholder": {
+      "name": "e.g. Pensions and social",
+      "description": "Briefly describe the topic — used by AI scoring later if you enable it.",
+      "keyword": "Type a word and press Enter",
+      "email": "Type an email and press Enter"
+    },
+    "help": {
+      "name": "Short label you'll see in the bots list.",
+      "description": "Free text describing the topic — for your reference and future AI scoring.",
+      "schedule": "How often the bot polls its sources for new articles. Your choice below converts to the technical 'cron' string automatically.",
+      "cron": "Cron is a standard schedule format: minute hour day_of_month month day_of_week. Example: '0 9 * * 1-5' = weekday mornings at 9:00.",
+      "keywords": "The bot will keep an article when its title or description contains at least one (or all — see below) of these words.",
+      "match": "'Any' = if at least one keyword is present → keep. 'All' = every keyword must be present.",
+      "caseSensitive": "When off (recommended), 'NOI' and 'noi' are treated as the same word.",
+      "status": "Active — runs on schedule. Paused — temporarily off but history kept. Archived — hidden from the main list.",
+      "useLlm": "AI will score each finding's relevance to your topic (0-100). Coming in Phase 4.",
+      "lookBackDays": "Skip articles older than the selected window (using their RSS publish date). Useful for fresh news only. 'Unlimited' accepts everything.",
+      "cleanupEnabled": "When enabled, the N oldest findings of this bot are deleted automatically on the chosen day + hour — regardless of status. Disable if you prefer to clean only manually with the buttons below.",
+      "cleanupDay": "Which day of the week the auto-cleanup runs. 'Daily' = every night.",
+      "cleanupHour": "At which hour (Sofia time) the cleanup runs. Recommended at night (02:00-05:00) when traffic is lowest.",
+      "cleanupBatchSize": "How many oldest findings to delete on each run. Example: 100 = from 320 findings → 220 remain (the 100 oldest by foundAt are deleted).",
+      "notificationEmails": "Email addresses to receive a report after every run of this bot. Press Enter (or comma) after each address. Leave empty to use the system defaults."
+    },
+    "cleanupDay": {
+      "daily": "Daily",
+      "mon": "Monday",
+      "tue": "Tuesday",
+      "wed": "Wednesday",
+      "thu": "Thursday",
+      "fri": "Friday",
+      "sat": "Saturday",
+      "sun": "Sunday"
+    },
+    "lookBack": {
+      "unlimited": "Unlimited",
+      "day1": "Last 24 hours",
+      "days3": "Last 3 days",
+      "days7": "Last week",
+      "days14": "Last 2 weeks",
+      "days30": "Last month",
+      "days90": "Last 3 months",
+      "days180": "Last 6 months",
+      "days365": "Last year"
+    },
+    "match": {
+      "any": "Any keyword",
+      "all": "All keywords"
+    },
+    "scheduleMode": {
+      "minutes": "Every N minutes",
+      "hours": "Every N hours",
+      "daily": "Daily",
+      "weekly": "Specific days",
+      "custom": "Custom (cron)"
+    },
+    "everyMinutes_one": "Every {{count}} minute",
+    "everyMinutes_other": "Every {{count}} minutes",
+    "everyHours_one": "Every {{count}} hour",
+    "everyHours_other": "Every {{count}} hours",
+    "weekday": {
+      "0": "Sun",
+      "1": "Mon",
+      "2": "Tue",
+      "3": "Wed",
+      "4": "Thu",
+      "5": "Fri",
+      "6": "Sat"
+    },
+    "scheduleSummaryLabel": "Selected:",
+    "scheduleSummary": {
+      "minutes_one": "Every {{count}} minute",
+      "minutes_other": "Every {{count}} minutes",
+      "hours_one": "Every {{count}} hour",
+      "hours_other": "Every {{count}} hours",
+      "daily": "Every day at {{time}}",
+      "weekly": "On {{days}} at {{time}}",
+      "custom": "Custom ({{cron}})"
+    },
+    "scheduleHelp": "e.g. 0 * * * * = every hour",
+    "cleanupSummary": "Auto cleanup: {{day}} at {{time}} EEST → {{count}} oldest findings will be deleted.",
+    "notifications": {
+      "fallbackHint": "System default emails will be used (CRAWLER_DEFAULT_NOTIFICATION_EMAILS).",
+      "invalidEmail": "Invalid email address."
+    }
+  },
+  "source": {
+    "add": "Add source",
+    "edit": "Edit source",
+    "fields": {
+      "name": "Name",
+      "url": "URL",
+      "sourceType": "Source type",
+      "active": "Active",
+      "robotsCrawlDelay": "Crawl delay (s)",
+      "maxPages": "Max pages"
+    },
+    "help": {
+      "maxPages": "For HTML sources: how many pagination pages to crawl (1 = first page only). The bot stops early if all items are already seen or older than the bot's 'How far back' setting. Useful for fetching historical results from search pages (e.g., /search?q=topic&page=1..10)."
+    },
+    "type": {
+      "rss": "RSS",
+      "html": "HTML",
+      "auto": "Auto"
+    },
+    "empty": "No sources yet. Add your first RSS feed.",
+    "advancedSettings": "Advanced settings",
+    "validation": {
+      "title": "Source validation",
+      "button": "Test source",
+      "revalidate": "Re-validate",
+      "saveAnyway": "Save without validating",
+      "loading": "Validating…",
+      "feedDiscovered": "RSS feed auto-discovered: {{url}}",
+      "robotsAllowed": "Robots.txt allows crawling",
+      "robotsBlocked": "Robots.txt disallows crawling",
+      "robotsWarning": "The site restricts bots in robots.txt — proceed at your own risk.",
+      "crawlDelay": "Crawl-delay: {{seconds}}s",
+      "samplesTitle": "Sample articles",
+      "noSamples": "No articles found",
+      "lastValidatedAt": "Last validated: {{time}}",
+      "neverValidated": "Source has not been validated yet.",
+      "status": {
+        "ok": "Validated",
+        "unreachable": "Unreachable",
+        "no_rss": "No RSS",
+        "parser_error": "Parser error",
+        "blocked_by_robots": "Blocked by robots.txt",
+        "unknown": "Not validated"
+      },
+      "detectedType": {
+        "rss": "RSS feed",
+        "html": "HTML page",
+        "auto": "Auto"
+      },
+      "errorCode": {
+        "INVALID_URL": "Invalid URL.",
+        "VALIDATION": "Invalid input.",
+        "PARSER_ERROR": "Couldn't parse the page content.",
+        "NO_RSS_FOUND": "No RSS feed found on this page.",
+        "FETCH_ERROR": "Couldn't fetch the page.",
+        "HTTP_404": "Page not found (404).",
+        "HTTP_403": "Access forbidden (403).",
+        "HTTP_500": "Server error (500).",
+        "DNS_FAILED": "DNS lookup failed.",
+        "BLOCKED_PRIVATE_IP": "Address points to a private network — blocked.",
+        "BODY_TOO_LARGE": "Page is too large.",
+        "TIMEOUT": "Request timed out.",
+        "NETWORK_ERROR": "Network error.",
+        "BLOCKED_BY_ROBOTS": "Robots.txt disallows crawling."
+      }
+    },
+    "selectors": {
+      "title": "CSS selectors for HTML",
+      "help": "Selectors tell the bot where articles live on the page. Example: 'article.news' picks every element with class news. Attributes use @, e.g. 'a@href' = the href attribute of the first link.",
+      "autoDetectedHint": "These values were auto-detected from the page. You can keep them, refine them, or write your own — then click \"Re-test\".",
+      "modeAuto": "Auto-detect",
+      "modeCustom": "Custom",
+      "retest": "Re-test with these selectors",
+      "field": {
+        "item": "Item (article)",
+        "title": "Title",
+        "link": "Link",
+        "image": "Image",
+        "description": "Description",
+        "published": "Published"
+      },
+      "placeholder": {
+        "item": "e.g. article.news-card",
+        "title": "e.g. h2.title",
+        "link": "e.g. a@href",
+        "image": "e.g. img@src",
+        "description": "e.g. p.summary",
+        "published": "e.g. time@datetime"
+      }
+    }
+  },
+  "findings": {
+    "filters": {
+      "all": "All",
+      "new": "New",
+      "reviewed": "Reviewed",
+      "dismissed": "Dismissed",
+      "used": "Used"
+    },
+    "searchPlaceholder": "Search title or description…",
+    "totalLabel": "Total findings",
+    "bulk": {
+      "selectAll": "Select all on this page",
+      "selectItem": "Select",
+      "selected_one": "{{count}} selected",
+      "selected_other": "{{count}} selected",
+      "barLabel": "Bulk operations",
+      "markReviewed": "Mark reviewed",
+      "markDismissed": "Dismiss",
+      "markUsed": "Mark used",
+      "clearSelection": "Clear selection"
+    },
+    "orderBy": {
+      "label": "Sort by",
+      "published_desc": "Newest (by publish date)",
+      "published_asc": "Oldest (by publish date)",
+      "found_desc": "Newest (by when bot found it)"
+    },
+    "sourceFilter": {
+      "label": "Source",
+      "all": "All sources"
+    },
+    "card": {
+      "open": "Open",
+      "startArticle": "Start article",
+      "dismiss": "Dismiss",
+      "used": "Used",
+      "foundOn": "Found on {{time}}",
+      "foundAtTooltip": "Source doesn't expose a machine-readable publish date — showing when the bot first saw the article."
+    },
+    "empty": "No findings found."
+  },
+  "runs": {
+    "columns": {
+      "startedAt": "Started",
+      "trigger": "Trigger",
+      "status": "Status",
+      "sourcesScanned": "Sources",
+      "itemsSeen": "Seen",
+      "itemsNew": "New"
+    },
+    "status": {
+      "running": "Running",
+      "success": "Success",
+      "partial_failure": "Partial",
+      "failed": "Failed"
+    },
+    "trigger": {
+      "cron": "Scheduled",
+      "manual": "Manual"
+    }
+  },
+  "confirm": {
+    "deleteBot": {
+      "title": "Delete bot",
+      "message": "Are you sure you want to delete \"{{name}}\"? This cannot be undone."
+    },
+    "deleteSource": {
+      "title": "Delete source",
+      "message": "Are you sure you want to delete source \"{{name}}\"?"
+    },
+    "clearFindings": {
+      "title": "Clear findings",
+      "help": "Removes all findings for this bot. Useful when you change keywords and want the bot to re-evaluate everything from scratch on the next run.",
+      "message": "Are you sure you want to delete ALL findings for this bot? They will be re-evaluated on the next run."
+    }
+  },
+  "cleanup": {
+    "zone": {
+      "title": "Cleanup findings",
+      "desc": "Manual bulk operations. Auto-cleanup is configured in Edit → Auto cleanup of findings."
+    },
+    "dismissed": {
+      "button": "Clear all dismissed",
+      "help": "Deletes every finding with status 'Dismissed'.",
+      "confirmTitle": "Clear all dismissed",
+      "confirmMessage": "Are you sure you want to delete ALL dismissed findings of this bot? This cannot be undone."
+    },
+    "used": {
+      "button": "Clear used older than {{months}} mo.",
+      "help": "Deletes findings marked as 'Used' that are older than X months — to free space after long-running work.",
+      "monthsLabel": "months:",
+      "confirmTitle": "Clear old used findings",
+      "confirmMessage": "Are you sure you want to delete used findings older than {{months}} months? This cannot be undone.",
+      "confirmButton": "Clear"
+    }
+  },
+  "fromFinding": {
+    "loading": "Loading finding data…",
+    "error": "Couldn't load the finding. Start a new article with the blank form below.",
+    "linkLabel": "Original publication ({{source}})",
+    "linkLabelGeneric": "Original publication",
+    "banner": {
+      "title": "Started from a bot finding",
+      "text": "The fields below are pre-filled with a suggestion from the bot — title, description, image and a link back to the original. This is just a starting point. Read the original and write your own content to avoid plagiarism.",
+      "source": "Source",
+      "openOriginal": "Open original"
+    }
+  },
+  "toast": {
+    "botCreated": "Bot created.",
+    "botUpdated": "Bot updated.",
+    "sourceAdded": "Source added.",
+    "sourceUpdated": "Source updated.",
+    "sourceDeleted": "Source deleted.",
+    "findingsCleared_one": "Cleared 1 finding.",
+    "findingsCleared_other": "Cleared {{count}} findings.",
+    "botDeleted": "Bot deleted.",
+    "runStarted": "Run started.",
+    "runFinished_one": "Done — {{count}} new finding.",
+    "runFinished_other": "Done — {{count}} new findings.",
+    "runFinished_zero": "Done — no new findings.",
+    "findingDismissed": "Finding dismissed.",
+    "findingUsed": "Marked as used.",
+    "bulkReviewed_one": "Marked as reviewed.",
+    "bulkReviewed_other": "{{count}} marked as reviewed.",
+    "bulkDismissed_one": "Dismissed.",
+    "bulkDismissed_other": "{{count}} dismissed.",
+    "bulkUsed_one": "Marked as used.",
+    "bulkUsed_other": "{{count}} marked as used.",
+    "error": "Something went wrong."
+  }
+}
