@@ -112,6 +112,9 @@ router.use('/showcase', showcaseController);
 const newsletterController = require('./controllers/newsletterController');
 router.use('/newsletter', newsletterController);
 
+const crawlerController = require('./controllers/crawlerController');
+router.use('/crawler', crawlerController);
+
 router.use((err, req, res, next) => {
     errorHandler(err, req, res, err.statusCode || 500);
 });
