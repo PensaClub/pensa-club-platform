@@ -1,5 +1,7 @@
 # Use an official Node.js runtime as a parent image
-FROM node:18-alpine
+# Node 20 (LTS) — required because undici 7+ uses the global File class
+# which only exists in Node 20+. Node 18 went EOL in April 2025 anyway.
+FROM node:20-alpine
 
 # Set the working directory in the container
 WORKDIR /usr/src/app
