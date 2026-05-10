@@ -41,6 +41,8 @@
       "basic": "Basic info",
       "schedule": "When to run",
       "criteria": "What to match",
+      "cleanup": "Auto cleanup of findings",
+      "notifications": "Email notifications",
       "state": "State"
     },
     "fields": {
@@ -59,12 +61,18 @@
       "caseSensitive": "Case sensitive matching",
       "status": "Bot status",
       "useLlm": "AI scoring with Claude (coming soon)",
-      "lookBackDays": "How far back to look"
+      "lookBackDays": "How far back to look",
+      "cleanupEnabled": "Enable auto cleanup",
+      "cleanupDay": "Cleanup day",
+      "cleanupHour": "At what hour",
+      "cleanupBatchSize": "How many to delete per run",
+      "notificationEmails": "Email recipients"
     },
     "placeholder": {
       "name": "e.g. Pensions and social",
       "description": "Briefly describe the topic — used by AI scoring later if you enable it.",
-      "keyword": "Type a word and press Enter"
+      "keyword": "Type a word and press Enter",
+      "email": "Type an email and press Enter"
     },
     "help": {
       "name": "Short label you'll see in the bots list.",
@@ -76,7 +84,22 @@
       "caseSensitive": "When off (recommended), 'NOI' and 'noi' are treated as the same word.",
       "status": "Active — runs on schedule. Paused — temporarily off but history kept. Archived — hidden from the main list.",
       "useLlm": "AI will score each finding's relevance to your topic (0-100). Coming in Phase 4.",
-      "lookBackDays": "Skip articles older than the selected window (using their RSS publish date). Useful for fresh news only. 'Unlimited' accepts everything."
+      "lookBackDays": "Skip articles older than the selected window (using their RSS publish date). Useful for fresh news only. 'Unlimited' accepts everything.",
+      "cleanupEnabled": "When enabled, the N oldest findings of this bot are deleted automatically on the chosen day + hour — regardless of status. Disable if you prefer to clean only manually with the buttons below.",
+      "cleanupDay": "Which day of the week the auto-cleanup runs. 'Daily' = every night.",
+      "cleanupHour": "At which hour (Sofia time) the cleanup runs. Recommended at night (02:00-05:00) when traffic is lowest.",
+      "cleanupBatchSize": "How many oldest findings to delete on each run. Example: 100 = from 320 findings → 220 remain (the 100 oldest by foundAt are deleted).",
+      "notificationEmails": "Email addresses to receive a report after every run of this bot. Press Enter (or comma) after each address. Leave empty to use the system defaults."
+    },
+    "cleanupDay": {
+      "daily": "Daily",
+      "mon": "Monday",
+      "tue": "Tuesday",
+      "wed": "Wednesday",
+      "thu": "Thursday",
+      "fri": "Friday",
+      "sat": "Saturday",
+      "sun": "Sunday"
     },
     "lookBack": {
       "unlimited": "Unlimited",
@@ -123,7 +146,12 @@
       "weekly": "On {{days}} at {{time}}",
       "custom": "Custom ({{cron}})"
     },
-    "scheduleHelp": "e.g. 0 * * * * = every hour"
+    "scheduleHelp": "e.g. 0 * * * * = every hour",
+    "cleanupSummary": "Auto cleanup: {{day}} at {{time}} EEST → {{count}} oldest findings will be deleted.",
+    "notifications": {
+      "fallbackHint": "System default emails will be used (CRAWLER_DEFAULT_NOTIFICATION_EMAILS).",
+      "invalidEmail": "Invalid email address."
+    }
   },
   "source": {
     "add": "Add source",
@@ -225,6 +253,18 @@
       "used": "Used"
     },
     "searchPlaceholder": "Search title or description…",
+    "totalLabel": "Total findings",
+    "bulk": {
+      "selectAll": "Select all on this page",
+      "selectItem": "Select",
+      "selected_one": "{{count}} selected",
+      "selected_other": "{{count}} selected",
+      "barLabel": "Bulk operations",
+      "markReviewed": "Mark reviewed",
+      "markDismissed": "Dismiss",
+      "markUsed": "Mark used",
+      "clearSelection": "Clear selection"
+    },
     "orderBy": {
       "label": "Sort by",
       "published_desc": "Newest (by publish date)",
@@ -280,6 +320,38 @@
       "message": "Are you sure you want to delete ALL findings for this bot? They will be re-evaluated on the next run."
     }
   },
+  "cleanup": {
+    "zone": {
+      "title": "Cleanup findings",
+      "desc": "Manual bulk operations. Auto-cleanup is configured in Edit → Auto cleanup of findings."
+    },
+    "dismissed": {
+      "button": "Clear all dismissed",
+      "help": "Deletes every finding with status 'Dismissed'.",
+      "confirmTitle": "Clear all dismissed",
+      "confirmMessage": "Are you sure you want to delete ALL dismissed findings of this bot? This cannot be undone."
+    },
+    "used": {
+      "button": "Clear used older than {{months}} mo.",
+      "help": "Deletes findings marked as 'Used' that are older than X months — to free space after long-running work.",
+      "monthsLabel": "months:",
+      "confirmTitle": "Clear old used findings",
+      "confirmMessage": "Are you sure you want to delete used findings older than {{months}} months? This cannot be undone.",
+      "confirmButton": "Clear"
+    }
+  },
+  "fromFinding": {
+    "loading": "Loading finding data…",
+    "error": "Couldn't load the finding. Start a new article with the blank form below.",
+    "linkLabel": "Original publication ({{source}})",
+    "linkLabelGeneric": "Original publication",
+    "banner": {
+      "title": "Started from a bot finding",
+      "text": "The fields below are pre-filled with a suggestion from the bot — title, description, image and a link back to the original. This is just a starting point. Read the original and write your own content to avoid plagiarism.",
+      "source": "Source",
+      "openOriginal": "Open original"
+    }
+  },
   "toast": {
     "botCreated": "Bot created.",
     "botUpdated": "Bot updated.",
@@ -295,6 +367,12 @@
     "runFinished_zero": "Done — no new findings.",
     "findingDismissed": "Finding dismissed.",
     "findingUsed": "Marked as used.",
+    "bulkReviewed_one": "Marked as reviewed.",
+    "bulkReviewed_other": "{{count}} marked as reviewed.",
+    "bulkDismissed_one": "Dismissed.",
+    "bulkDismissed_other": "{{count}} dismissed.",
+    "bulkUsed_one": "Marked as used.",
+    "bulkUsed_other": "{{count}} marked as used.",
     "error": "Something went wrong."
   }
 }

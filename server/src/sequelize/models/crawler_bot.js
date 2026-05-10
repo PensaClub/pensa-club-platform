@@ -71,6 +71,40 @@ module.exports = (sequelize, DataTypes) => {
                 // null = no time limit; otherwise findings older than now -
                 // lookBackDays are skipped at engine level.
             },
+            cleanupEnabled: {
+                type: DataTypes.BOOLEAN,
+                allowNull: false,
+                defaultValue: true,
+            },
+            cleanupDay: {
+                type: DataTypes.STRING(10),
+                allowNull: false,
+                defaultValue: 'daily',
+                validate: {
+                    isIn: {
+                        args: [['daily', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun']],
+                        msg: 'cleanupDay must be one of: daily, mon, tue, wed, thu, fri, sat, sun',
+                    },
+                },
+            },
+            cleanupBatchSize: {
+                type: DataTypes.INTEGER,
+                allowNull: false,
+                defaultValue: 100,
+                validate: { min: 10, max: 10000 },
+            },
+            cleanupHour: {
+                type: DataTypes.INTEGER,
+                allowNull: false,
+                defaultValue: 3,
+                validate: { min: 0, max: 23 },
+            },
+            notificationEmails: {
+                type: DataTypes.JSONB,
+                allowNull: true,
+                defaultValue: null,
+                // Array of strings; falsy/empty -> fall back to env default.
+            },
             lastRunAt: {
                 type: DataTypes.DATE,
                 allowNull: true,

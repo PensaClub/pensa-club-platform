@@ -63,7 +63,7 @@ module.exports = (sequelize, DataTypes) => {
             robotsCrawlDelay: {
                 type: DataTypes.INTEGER,
                 allowNull: false,
-                defaultValue: 0,
+                defaultValue: 5,
             },
             validationStatus: {
                 type: DataTypes.STRING(20),

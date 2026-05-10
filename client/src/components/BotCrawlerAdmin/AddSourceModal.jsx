@@ -32,7 +32,10 @@ const DEFAULT_FORM = {
   url: '',
   sourceType: 'auto',
   active: true,
-  robotsCrawlDelay: 0,
+  // 5s is a polite default that satisfies almost every site's robots.txt
+  // crawl-delay, avoids tripping rate-limiters during multi-page pagination
+  // and is invisible to the admin (cron runs are async anyway).
+  robotsCrawlDelay: 5,
   maxPages: 1,
 };
 

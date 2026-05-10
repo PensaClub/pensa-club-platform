@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { ExternalLink, FilePlus, EyeOff, Check, Search } from 'lucide-react';
+import { ExternalLink, FilePlus, EyeOff, Check, Search, Eye, X as XIcon } from 'lucide-react';
 import { LocalizedLink } from '../LocalizedLink/LocalizedLink';
 import { useCrawlerContext } from '../contexts/CrawlerContext';
 import { notify } from '../../utils/notify.jsx';
@@ -13,10 +13,11 @@ const PAGE_SIZE = 20;
 
 const FindingsList = ({ botId }) => {
   const { t, i18n } = useTranslation('botCrawler');
-  const { listFindings, updateFindingStatus, listSources } = useCrawlerContext();
+  const { listFindings, updateFindingStatus, bulkUpdateFindingStatus, listSources } = useCrawlerContext();
 
   const [items, setItems] = useState([]);
   const [pagination, setPagination] = useState({ page: 1, limit: PAGE_SIZE, total: 0, totalPages: 0 });
+  const [counts, setCounts] = useState({ new: 0, reviewed: 0, dismissed: 0, used: 0, total: 0 });
   const [loading, setLoading] = useState(true);
   const [statusFilter, setStatusFilter] = useState('new');
   const [orderBy, setOrderBy] = useState('published_desc');
@@ -26,6 +27,10 @@ const FindingsList = ({ botId }) => {
   const [searchInput, setSearchInput] = useState('');
   const [debouncedSearch, setDebouncedSearch] = useState('');
   const debounceRef = useRef(null);
+  // Selected finding ids for bulk operations. Cleared whenever the visible
+  // result set changes (filter / search / sort / source / page).
+  const [selectedIds, setSelectedIds] = useState(() => new Set());
+  const [bulkPending, setBulkPending] = useState(false);
 
   // Debounce search 300ms.
   useEffect(() => {
@@ -68,12 +73,27 @@ const FindingsList = ({ botId }) => {
     const response = await listFindings(params);
     setItems(Array.isArray(response?.items) ? response.items : []);
     setPagination(response?.pagination || { page: 1, limit: PAGE_SIZE, total: 0, totalPages: 0 });
+    if (response?.counts) {
+      setCounts({
+        new: response.counts.new || 0,
+        reviewed: response.counts.reviewed || 0,
+        dismissed: response.counts.dismissed || 0,
+        used: response.counts.used || 0,
+        total: response.counts.total || 0,
+      });
+    }
     setLoading(false);
   }, [botId, listFindings, page, statusFilter, debouncedSearch, orderBy, sourceFilter]);
 
   useEffect(() => {
     fetchData();
   }, [fetchData]);
+
+  // Reset selection any time the visible page changes — old ids may not be
+  // on the page any more, and silent persistence would surprise the admin.
+  useEffect(() => {
+    setSelectedIds(new Set());
+  }, [statusFilter, sourceFilter, debouncedSearch, orderBy, page]);
 
   const handleStatus = async (finding, nextStatus, toastKey) => {
     // Optimistic: remove from current view immediately.
@@ -87,6 +107,55 @@ const FindingsList = ({ botId }) => {
       setItems(prevItems);
     }
   };
+
+  const toggleOne = (id) => {
+    setSelectedIds((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id); else next.add(id);
+      return next;
+    });
+  };
+
+  const allOnPageSelected = items.length > 0 && items.every((f) => selectedIds.has(f.id));
+  const someOnPageSelected = items.some((f) => selectedIds.has(f.id));
+
+  const toggleAllOnPage = () => {
+    setSelectedIds((prev) => {
+      const next = new Set(prev);
+      if (allOnPageSelected) {
+        // Deselect all visible
+        items.forEach((f) => next.delete(f.id));
+      } else {
+        items.forEach((f) => next.add(f.id));
+      }
+      return next;
+    });
+  };
+
+  const handleBulkStatus = async (nextStatus, toastKey) => {
+    const ids = Array.from(selectedIds);
+    if (ids.length === 0) return;
+    setBulkPending(true);
+    const prevItems = items;
+    // Optimistic — drop them from view if the new status no longer matches
+    // the active filter.
+    if (nextStatus !== statusFilter) {
+      setItems((curr) => curr.filter((f) => !selectedIds.has(f.id)));
+    }
+    try {
+      const res = await bulkUpdateFindingStatus({ ids, status: nextStatus });
+      notify('success', null, t(toastKey, { count: res?.updated ?? ids.length }));
+      setSelectedIds(new Set());
+      // Refetch counts so the chips reflect the new totals.
+      fetchData();
+    } catch {
+      setItems(prevItems);
+    } finally {
+      setBulkPending(false);
+    }
+  };
+
+  const clearSelection = () => setSelectedIds(new Set());
 
   const formatDate = (iso) => {
     if (!iso) return '';
@@ -120,6 +189,10 @@ const FindingsList = ({ botId }) => {
 
   return (
     <div className="bcfl-wrap">
+      <div className="bcfl-total-row">
+        <span className="bcfl-total-label">{t('findings.totalLabel')}:</span>
+        <span className="bcfl-total-value">{counts.total}</span>
+      </div>
       <div className="bcfl-toolbar">
         <div className="bcfl-chips" role="tablist">
           {STATUS_FILTERS.map((s) => (
@@ -131,7 +204,8 @@ const FindingsList = ({ botId }) => {
               className={`bcfl-chip${statusFilter === s ? ' bcfl-chip-active' : ''}`}
               onClick={() => { setStatusFilter(s); setPage(1); }}
             >
-              {t(`findings.filters.${s}`)}
+              <span className="bcfl-chip-label">{t(`findings.filters.${s}`)}</span>
+              <span className="bcfl-chip-count">{counts[s] ?? 0}</span>
             </button>
           ))}
         </div>
@@ -177,6 +251,67 @@ const FindingsList = ({ botId }) => {
         )}
       </div>
 
+      {!loading && items.length > 0 && (
+        <div className="bcfl-select-row">
+          <label className="bcfl-select-all">
+            <input
+              type="checkbox"
+              checked={allOnPageSelected}
+              ref={(el) => { if (el) el.indeterminate = !allOnPageSelected && someOnPageSelected; }}
+              onChange={toggleAllOnPage}
+            />
+            <span>{t('findings.bulk.selectAll')}</span>
+          </label>
+          {selectedIds.size > 0 && (
+            <span className="bcfl-select-count">{t('findings.bulk.selected', { count: selectedIds.size })}</span>
+          )}
+        </div>
+      )}
+
+      {selectedIds.size > 0 && (
+        <div className="bcfl-bulk-bar" role="toolbar" aria-label={t('findings.bulk.barLabel')}>
+          <span className="bcfl-bulk-count">{t('findings.bulk.selected', { count: selectedIds.size })}</span>
+          <div className="bcfl-bulk-buttons">
+            <button
+              type="button"
+              className="bcfl-bulk-btn"
+              onClick={() => handleBulkStatus('reviewed', 'toast.bulkReviewed')}
+              disabled={bulkPending}
+            >
+              <Eye size={14} aria-hidden="true" />
+              <span>{t('findings.bulk.markReviewed')}</span>
+            </button>
+            <button
+              type="button"
+              className="bcfl-bulk-btn"
+              onClick={() => handleBulkStatus('dismissed', 'toast.bulkDismissed')}
+              disabled={bulkPending}
+            >
+              <EyeOff size={14} aria-hidden="true" />
+              <span>{t('findings.bulk.markDismissed')}</span>
+            </button>
+            <button
+              type="button"
+              className="bcfl-bulk-btn bcfl-bulk-btn-success"
+              onClick={() => handleBulkStatus('used', 'toast.bulkUsed')}
+              disabled={bulkPending}
+            >
+              <Check size={14} aria-hidden="true" />
+              <span>{t('findings.bulk.markUsed')}</span>
+            </button>
+            <button
+              type="button"
+              className="bcfl-bulk-btn bcfl-bulk-btn-ghost"
+              onClick={clearSelection}
+              disabled={bulkPending}
+            >
+              <XIcon size={14} aria-hidden="true" />
+              <span>{t('findings.bulk.clearSelection')}</span>
+            </button>
+          </div>
+        </div>
+      )}
+
       {loading ? (
         <div className="bcfl-empty">…</div>
       ) : items.length === 0 ? (
@@ -187,8 +322,16 @@ const FindingsList = ({ botId }) => {
         <ul className="bcfl-list">
           {items.map((f) => {
             const img = resolvedImage(f.imageUrl);
+            const isSelected = selectedIds.has(f.id);
             return (
-              <li key={f.id} className="bcfl-card">
+              <li key={f.id} className={`bcfl-card${isSelected ? ' bcfl-card-selected' : ''}`}>
+                <label className="bcfl-card-check" aria-label={t('findings.bulk.selectItem')}>
+                  <input
+                    type="checkbox"
+                    checked={isSelected}
+                    onChange={() => toggleOne(f.id)}
+                  />
+                </label>
                 {img && (
                   <div className="bcfl-thumb-wrap">
                     <img

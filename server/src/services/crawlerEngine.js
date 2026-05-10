@@ -17,6 +17,7 @@ const { parseRss } = require('../utils/rssParser');
 const { canonicalize, urlHash } = require('../utils/urlCanonical');
 const { safeFetchValidate } = require('../utils/networkSafety');
 const { extractItems, autoExtractItems } = require('../utils/htmlScraper');
+const { sendBotRunEmail } = require('../utils/botCrawlerEmail');
 
 // Some sites (esp. govt + Cloudflare-protected ones like noi.bg) actively
 // reject any UA that mentions "bot" — they drop the TCP connection at the
@@ -553,6 +554,46 @@ const runBot = async (botId, { trigger = 'cron' } = {}) => {
         lastRunAt: new Date(),
         lastRunStatus: status,
     });
+
+    // Fire-and-forget run summary email. Awaited (so the engine returns only
+    // after the email attempt) but errors are swallowed inside sendBotRunEmail
+    // so a mailer outage never poisons the run itself. Findings created in
+    // this run are looked up by runId — that's a small extra query but it
+    // gives the email accurate freshness.
+    try {
+        const { crawler_source: crawlerSourceModel, sequelize: db } = require('../sequelize/models');
+        const newFindings = await crawler_finding.findAll({
+            where: { botId, runId: run.id },
+            order: [
+                [
+                    db.fn(
+                        'COALESCE',
+                        db.col('crawler_finding.publishedAt'),
+                        db.col('crawler_finding.foundAt'),
+                    ),
+                    'DESC',
+                ],
+            ],
+            limit: 5,
+            include: [{
+                model: crawlerSourceModel,
+                as: 'source',
+                attributes: ['id', 'name', 'url'],
+            }],
+        });
+
+        await sendBotRunEmail({
+            bot,
+            run,
+            sourcesScanned,
+            itemsSeen,
+            itemsNew,
+            errors,
+            findings: newFindings,
+        });
+    } catch (mailErr) {
+        console.error('[crawlerEngine] post-run email failed:', mailErr?.message || mailErr);
+    }
 
     return {
         runId: run.id,

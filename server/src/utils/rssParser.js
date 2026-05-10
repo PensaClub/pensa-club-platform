@@ -18,6 +18,13 @@ const cleanText = (s) => {
     return decodeHtmlEntities(noCdata).trim();
 };
 
+// Strip HTML tags from a string. RSS feeds often embed HTML inside CDATA
+// blocks of <description> / <content>, and we want plain text in the DB
+// (the email + UI render the description as a snippet). Image-extraction
+// needs to happen BEFORE this — keep extractFirstImgInHtml(...) calls on
+// the raw description, not the stripped version.
+const stripHtml = (s) => String(s || '').replace(/<[^>]*>/g, '');
+
 // Match the inner text of <tag>...</tag>, taking the first occurrence within
 // the supplied block. Tag matching is case-insensitive and ignores attrs.
 const extractTag = (block, tag) => {
@@ -132,7 +139,7 @@ const parseRss = (xmlString) => {
                 items.push({
                     title,
                     link,
-                    description,
+                    description: stripHtml(description).replace(/\s+/g, ' ').trim(),
                     pubDate,
                     image: image || null,
                     categories,
@@ -155,7 +162,7 @@ const parseRss = (xmlString) => {
                 items.push({
                     title,
                     link,
-                    description,
+                    description: stripHtml(description).replace(/\s+/g, ' ').trim(),
                     pubDate,
                     image: image || null,
                     categories,

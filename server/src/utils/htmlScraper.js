@@ -42,6 +42,13 @@ const cleanText = (s) => {
     return String(s).replace(/\s+/g, ' ').trim();
 };
 
+// Defensive: some sites embed escaped HTML inside description-bearing
+// elements (e.g. JSON-LD snippets, lazy-render markup leaking into <p>),
+// or use templates where cheerio's `.text()` ends up returning raw `<img>`
+// markup as if it were text. Strip every tag-like sequence to make sure
+// only human-readable text reaches the DB.
+const stripHtml = (s) => String(s || '').replace(/<[^>]*>/g, '');
+
 const resolveUrl = (raw, baseUrl) => {
     if (!raw) return null;
     const trimmed = String(raw).trim();
@@ -343,7 +350,7 @@ const extractItems = (html, baseUrl, selectors) => {
 
         let description = null;
         if (selectors.description) {
-            const txt = cleanText(extractValue($, root, selectors.description));
+            const txt = cleanText(stripHtml(extractValue($, root, selectors.description)));
             if (txt) description = truncate(txt, MAX_DESCRIPTION_LEN);
         }
 
@@ -530,11 +537,11 @@ const autoExtractItems = (html, baseUrl) => {
         let description = '';
         const p = root.find('p').first();
         if (p.length) {
-            description = cleanText(p.text());
+            description = cleanText(stripHtml(p.text()));
         }
         if (!description) {
             // Fallback: text of the wrapper minus the title.
-            const full = cleanText(root.text());
+            const full = cleanText(stripHtml(root.text()));
             if (full && full.length > title.length) {
                 description = full.replace(title, '').trim();
             }

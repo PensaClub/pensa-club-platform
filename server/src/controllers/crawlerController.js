@@ -157,6 +157,56 @@ const validateBotPayload = (body, { partial = false } = {}) => {
         }
     }
 
+    if (body.cleanupEnabled !== undefined) {
+        out.cleanupEnabled = !!body.cleanupEnabled;
+    }
+    if (body.cleanupDay !== undefined) {
+        const allowed = ['daily', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
+        if (!allowed.includes(String(body.cleanupDay))) {
+            errors.push({ field: 'cleanupDay', message: `must be one of: ${allowed.join(', ')}` });
+        } else {
+            out.cleanupDay = String(body.cleanupDay);
+        }
+    }
+    if (body.cleanupBatchSize !== undefined) {
+        const n = parseInt(body.cleanupBatchSize, 10);
+        if (!Number.isFinite(n) || n < 10 || n > 10000) {
+            errors.push({ field: 'cleanupBatchSize', message: 'must be between 10 and 10000' });
+        } else {
+            out.cleanupBatchSize = n;
+        }
+    }
+    if (body.cleanupHour !== undefined) {
+        const n = parseInt(body.cleanupHour, 10);
+        if (!Number.isFinite(n) || n < 0 || n > 23) {
+            errors.push({ field: 'cleanupHour', message: 'must be between 0 and 23' });
+        } else {
+            out.cleanupHour = n;
+        }
+    }
+    if (body.notificationEmails !== undefined) {
+        if (body.notificationEmails === null || body.notificationEmails === '') {
+            out.notificationEmails = null;
+        } else if (!Array.isArray(body.notificationEmails)) {
+            errors.push({ field: 'notificationEmails', message: 'must be an array of strings' });
+        } else {
+            // Basic email regex — same one used elsewhere in the codebase
+            // (RFC-strict is overkill for an admin-curated whitelist).
+            const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            const cleaned = body.notificationEmails
+                .map((e) => String(e || '').trim().toLowerCase())
+                .filter(Boolean);
+            const bad = cleaned.filter((e) => !emailRe.test(e));
+            if (bad.length) {
+                errors.push({ field: 'notificationEmails', message: `invalid email(s): ${bad.join(', ')}` });
+            } else {
+                // Dedupe + cap at 20 — defensive against accidental paste of
+                // a giant list.
+                out.notificationEmails = Array.from(new Set(cleaned)).slice(0, 20);
+            }
+        }
+    }
+
     return { errors, data: out };
 };
 
@@ -244,6 +294,11 @@ const serializeBot = (bot, extras = {}) => ({
     criteria: bot.criteria,
     useLlm: bot.useLlm,
     lookBackDays: bot.lookBackDays,
+    cleanupEnabled: bot.cleanupEnabled !== false,
+    cleanupDay: bot.cleanupDay || 'daily',
+    cleanupBatchSize: bot.cleanupBatchSize ?? 100,
+    cleanupHour: bot.cleanupHour ?? 3,
+    notificationEmails: Array.isArray(bot.notificationEmails) ? bot.notificationEmails : [],
     lastRunAt: bot.lastRunAt,
     lastRunStatus: bot.lastRunStatus,
     createdById: bot.createdById,
@@ -749,6 +804,53 @@ crawlerController.post(
     },
 );
 
+// Bulk-clear findings by status. Three modes the UI exposes as separate
+// buttons; the backend folds them into one endpoint to keep RBAC and
+// validation in one place.
+//   • dismissed         — delete every dismissed finding (regardless of age)
+//   • used-older-than   — delete used findings older than N months
+//   • all               — full wipe (UI requires double confirm)
+crawlerController.post(
+    '/bots/:id/findings/bulk-clear',
+    isAuth,
+    checkPermission('crawler', 'delete'),
+    async (req, res, next) => {
+        try {
+            const id = parseInt(req.params.id, 10);
+            if (!Number.isFinite(id)) return res.status(400).json({ message: 'Invalid id', code: 'BAD_ID' });
+            const bot = await crawler_bot.findByPk(id);
+            if (!bot) return res.status(404).json({ message: 'Bot not found', code: 'NOT_FOUND' });
+
+            const mode = String(req.body?.mode || '');
+            const where = { botId: id };
+
+            if (mode === 'dismissed') {
+                where.status = 'dismissed';
+            } else if (mode === 'used-older-than') {
+                const months = parseInt(req.body?.monthsOld, 10);
+                if (!Number.isFinite(months) || months < 1 || months > 120) {
+                    return res.status(400).json({
+                        message: 'monthsOld must be between 1 and 120',
+                        code: 'VALIDATION',
+                    });
+                }
+                where.status = 'used';
+                where.foundAt = { [Op.lt]: new Date(Date.now() - months * 30 * 86_400_000) };
+            } else if (mode === 'all') {
+                // No extra filter — botId scope is enough.
+            } else {
+                return res.status(400).json({
+                    message: "mode must be one of: 'dismissed', 'used-older-than', 'all'",
+                    code: 'VALIDATION',
+                });
+            }
+
+            const deleted = await crawler_finding.destroy({ where });
+            res.json({ success: true, deleted, mode });
+        } catch (err) { next(err); }
+    },
+);
+
 // ─────────────────────────────────────────────────────────────────────────
 // SOURCES
 // ─────────────────────────────────────────────────────────────────────────
@@ -1000,10 +1102,90 @@ crawlerController.get(
                 offset,
             });
 
+            // Per-status counts — same scope as the listing (bot/source/search)
+            // but ignoring the status filter, so chips show the full breakdown.
+            // Uses GROUP BY so it's a single query regardless of how many
+            // statuses we have.
+            const countsWhere = { ...where };
+            delete countsWhere.status;
+            const countsRows = await crawler_finding.findAll({
+                where: countsWhere,
+                attributes: ['status', [sequelize.fn('COUNT', sequelize.col('id')), 'cnt']],
+                group: ['status'],
+                raw: true,
+            });
+            const counts = { new: 0, reviewed: 0, dismissed: 0, used: 0, total: 0 };
+            for (const r of countsRows) {
+                const k = r.status;
+                if (k in counts) counts[k] = Number(r.cnt) || 0;
+                counts.total += Number(r.cnt) || 0;
+            }
+
             res.json({
                 items: rows.map(serializeFinding),
                 pagination: { page, limit, total: count, totalPages: Math.ceil(count / limit) },
+                counts,
             });
+        } catch (err) { next(err); }
+    },
+);
+
+// Single finding by id — used by ArticleCreateForm to pre-fill the editor
+// when the admin clicks "Започни статия" on a card. Returns the source +
+// bot relations so the UI can render a proper attribution banner.
+crawlerController.get(
+    '/findings/:id',
+    isAuth,
+    checkPermission('crawler', 'read'),
+    async (req, res, next) => {
+        try {
+            const id = parseInt(req.params.id, 10);
+            if (!Number.isFinite(id)) return res.status(400).json({ message: 'Invalid id', code: 'BAD_ID' });
+            const finding = await crawler_finding.findByPk(id, {
+                include: [
+                    { model: crawler_source, as: 'source', attributes: ['id', 'name', 'url'] },
+                    { model: crawler_bot, as: 'bot', attributes: ['id', 'name'] },
+                ],
+            });
+            if (!finding) return res.status(404).json({ message: 'Finding not found', code: 'NOT_FOUND' });
+            res.json({ item: serializeFinding(finding) });
+        } catch (err) { next(err); }
+    },
+);
+
+// Bulk status change — used by the FindingsList multi-select toolbar so the
+// admin can mark a page-worth of findings as reviewed/dismissed/used in one
+// click instead of clicking through each card.
+crawlerController.post(
+    '/findings/bulk-status',
+    isAuth,
+    checkPermission('crawler', 'update'),
+    async (req, res, next) => {
+        try {
+            const ids = Array.isArray(req.body?.ids) ? req.body.ids : null;
+            const status = req.body?.status;
+            if (!ids || ids.length === 0) {
+                return res.status(400).json({ message: 'ids must be a non-empty array', code: 'VALIDATION' });
+            }
+            if (!FINDING_STATUSES.includes(status)) {
+                return res.status(400).json({
+                    message: `status must be one of: ${FINDING_STATUSES.join(', ')}`,
+                    code: 'VALIDATION',
+                });
+            }
+            const numericIds = ids
+                .map((x) => parseInt(x, 10))
+                .filter((n) => Number.isFinite(n));
+            if (numericIds.length === 0) {
+                return res.status(400).json({ message: 'no valid ids', code: 'VALIDATION' });
+            }
+            // For bulk we drop usedInArticleId — the per-item endpoint is the
+            // place where an article link is set; bulk just flips the label.
+            const [updated] = await crawler_finding.update(
+                { status, usedInArticleId: null },
+                { where: { id: { [Op.in]: numericIds } } },
+            );
+            res.json({ success: true, updated });
         } catch (err) { next(err); }
     },
 );

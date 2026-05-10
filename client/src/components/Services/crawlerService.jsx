@@ -102,8 +102,20 @@ export const crawlerServiceFactory = (token) => {
       return requester.get(`${apiUrl}/crawler/findings${buildQuery(params)}`);
     },
 
+    getFinding: async (id) => {
+      return requester.get(`${apiUrl}/crawler/findings/${id}`);
+    },
+
     updateFindingStatus: async (id, payload) => {
       return requester.put(`${apiUrl}/crawler/findings/${id}/status`, payload);
+    },
+
+    bulkUpdateFindingStatus: async (payload) => {
+      return requester.post(`${apiUrl}/crawler/findings/bulk-status`, payload);
+    },
+
+    bulkClearFindings: async (botId, payload) => {
+      return requester.post(`${apiUrl}/crawler/bots/${botId}/findings/bulk-clear`, payload);
     },
 
     // ===========================================================

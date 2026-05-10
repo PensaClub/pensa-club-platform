@@ -5,11 +5,16 @@
 // effect without a restart. One bot's failure must not poison the others.
 
 const cron = require('node-cron');
+const { runCrawlerCleanup } = require('../utils/crawlerCleanup');
 
 const RESYNC_INTERVAL_MS = 5 * 60 * 1000;
 
 // Map<botId, { cronExpr, task }>
 const scheduledJobs = new Map();
+
+// Daily 03:00 EEST TTL cleanup. Defined at module scope so it survives
+// resyncs (it's not a per-bot job).
+let cleanupTask = null;
 
 const stopJob = (botId) => {
     const entry = scheduledJobs.get(botId);
@@ -72,6 +77,22 @@ const syncJobs = async () => {
     }
 };
 
+const startCleanupCron = () => {
+    if (cleanupTask) return; // already started
+    // Tick at the top of every hour — each bot decides internally if its
+    // cleanupDay + cleanupHour match the current Sofia-local time. This
+    // lets admins schedule per bot ("every Mon at 04:00", "daily at 22:00")
+    // with a single global cron registration.
+    cleanupTask = cron.schedule('0 * * * *', async () => {
+        try {
+            await runCrawlerCleanup();
+        } catch (err) {
+            console.error('[CrawlerCleanup] crashed:', err?.message);
+        }
+    }, { timezone: 'Europe/Sofia' });
+    console.log('[CrawlerScheduler] TTL cleanup cron registered (hourly, per-bot day/hour gate)');
+};
+
 const startCrawlerScheduler = async () => {
     try {
         await syncJobs();
@@ -79,6 +100,8 @@ const startCrawlerScheduler = async () => {
     } catch (err) {
         console.error('[CrawlerScheduler] Initial sync failed:', err && err.message);
     }
+
+    startCleanupCron();
 
     setInterval(() => {
         syncJobs().catch((err) => {

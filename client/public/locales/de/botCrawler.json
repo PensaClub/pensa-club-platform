@@ -41,6 +41,8 @@
       "basic": "Basisinformationen",
       "schedule": "Wann ausführen",
       "criteria": "Was suchen",
+      "cleanup": "Auto-Bereinigung der Funde",
+      "notifications": "E-Mail-Benachrichtigungen",
       "state": "Zustand"
     },
     "fields": {
@@ -59,12 +61,18 @@
       "caseSensitive": "Groß-/Kleinschreibung beachten",
       "status": "Bot-Status",
       "useLlm": "KI-Bewertung mit Claude (in Kürze)",
-      "lookBackDays": "Wie weit zurückblicken"
+      "lookBackDays": "Wie weit zurückblicken",
+      "cleanupEnabled": "Auto-Bereinigung aktivieren",
+      "cleanupDay": "Bereinigungstag",
+      "cleanupHour": "Um welche Stunde",
+      "cleanupBatchSize": "Wie viele pro Lauf löschen",
+      "notificationEmails": "E-Mail-Empfänger"
     },
     "placeholder": {
       "name": "z. B. Renten und Soziales",
       "description": "Kurze Themenbeschreibung — wird später für KI-Bewertung verwendet.",
-      "keyword": "Wort eingeben und Enter drücken"
+      "keyword": "Wort eingeben und Enter drücken",
+      "email": "E-Mail eingeben und Enter drücken"
     },
     "help": {
       "name": "Kurzes Label, das in der Bot-Liste erscheint.",
@@ -76,7 +84,22 @@
       "caseSensitive": "Wenn aus (empfohlen), werden 'NOI' und 'noi' als dasselbe Wort behandelt.",
       "status": "Aktiv — läuft nach Zeitplan. Pausiert — temporär aus, Verlauf bleibt. Archiviert — aus der Hauptliste ausgeblendet.",
       "useLlm": "KI bewertet jeden Fund auf Themenrelevanz (0-100). Kommt in Phase 4.",
-      "lookBackDays": "Artikel überspringen, die älter als der gewählte Zeitraum sind (anhand des RSS-Veröffentlichungsdatums). Nützlich für aktuelle Nachrichten. 'Unbegrenzt' akzeptiert alles."
+      "lookBackDays": "Artikel überspringen, die älter als der gewählte Zeitraum sind (anhand des RSS-Veröffentlichungsdatums). Nützlich für aktuelle Nachrichten. 'Unbegrenzt' akzeptiert alles.",
+      "cleanupEnabled": "Wenn aktiv, werden am gewählten Tag und zur gewählten Stunde die N ältesten Funde dieses Bots automatisch gelöscht — unabhängig vom Status. Deaktiviere diese Option, wenn du nur manuell mit den Schaltflächen unten bereinigen willst.",
+      "cleanupDay": "An welchem Wochentag die Auto-Bereinigung läuft. 'Täglich' = jede Nacht.",
+      "cleanupHour": "Zu welcher Stunde (Sofia-Zeit) die Bereinigung läuft. Empfohlen nachts (02:00-05:00), wenn der Traffic am niedrigsten ist.",
+      "cleanupBatchSize": "Wie viele älteste Funde pro Lauf gelöscht werden. Beispiel: 100 = von 320 Funden → 220 bleiben (die 100 ältesten nach foundAt werden gelöscht).",
+      "notificationEmails": "E-Mail-Adressen, die nach jedem Lauf dieses Bots einen Bericht erhalten. Nach jeder Adresse Enter (oder Komma) drücken. Leer lassen, um die Systemstandards zu verwenden."
+    },
+    "cleanupDay": {
+      "daily": "Täglich",
+      "mon": "Montag",
+      "tue": "Dienstag",
+      "wed": "Mittwoch",
+      "thu": "Donnerstag",
+      "fri": "Freitag",
+      "sat": "Samstag",
+      "sun": "Sonntag"
     },
     "lookBack": {
       "unlimited": "Unbegrenzt",
@@ -123,7 +146,12 @@
       "weekly": "An {{days}} um {{time}}",
       "custom": "Benutzerdefiniert ({{cron}})"
     },
-    "scheduleHelp": "z. B. 0 * * * * = jede Stunde"
+    "scheduleHelp": "z. B. 0 * * * * = jede Stunde",
+    "cleanupSummary": "Auto-Bereinigung: {{day}} um {{time}} EEST → {{count}} älteste Funde werden gelöscht.",
+    "notifications": {
+      "fallbackHint": "Es werden die System-Standard-E-Mails verwendet (CRAWLER_DEFAULT_NOTIFICATION_EMAILS).",
+      "invalidEmail": "Ungültige E-Mail-Adresse."
+    }
   },
   "source": {
     "add": "Quelle hinzufügen",
@@ -225,6 +253,18 @@
       "used": "Verwendet"
     },
     "searchPlaceholder": "Suche Titel oder Beschreibung…",
+    "totalLabel": "Funde insgesamt",
+    "bulk": {
+      "selectAll": "Alle auf dieser Seite auswählen",
+      "selectItem": "Auswählen",
+      "selected_one": "{{count}} ausgewählt",
+      "selected_other": "{{count}} ausgewählt",
+      "barLabel": "Bulk-Operationen",
+      "markReviewed": "Als geprüft markieren",
+      "markDismissed": "Verwerfen",
+      "markUsed": "Als verwendet markieren",
+      "clearSelection": "Auswahl aufheben"
+    },
     "orderBy": {
       "label": "Sortierung",
       "published_desc": "Neueste (nach Veröffentlichung)",
@@ -280,6 +320,38 @@
       "message": "Möchten Sie ALLE Funde dieses Bots wirklich löschen? Sie werden beim nächsten Lauf neu ausgewertet."
     }
   },
+  "cleanup": {
+    "zone": {
+      "title": "Funde bereinigen",
+      "desc": "Manuelle Bulk-Operationen. Auto-Bereinigung wird unter Bearbeiten → Auto-Bereinigung der Funde konfiguriert."
+    },
+    "dismissed": {
+      "button": "Alle verworfenen löschen",
+      "help": "Löscht alle Funde mit Status 'Verworfen'.",
+      "confirmTitle": "Alle verworfenen löschen",
+      "confirmMessage": "Bist du sicher, dass du ALLE verworfenen Funde dieses Bots löschen willst? Diese Aktion kann nicht rückgängig gemacht werden."
+    },
+    "used": {
+      "button": "Verwendete älter als {{months}} Mon. löschen",
+      "help": "Löscht Funde mit Status 'Verwendet', die älter als X Monate sind — um nach längerer Arbeit Speicher freizugeben.",
+      "monthsLabel": "Monate:",
+      "confirmTitle": "Alte verwendete löschen",
+      "confirmMessage": "Bist du sicher, dass du verwendete Funde älter als {{months}} Monate löschen willst? Diese Aktion kann nicht rückgängig gemacht werden.",
+      "confirmButton": "Löschen"
+    }
+  },
+  "fromFinding": {
+    "loading": "Daten des Funds werden geladen…",
+    "error": "Fund konnte nicht geladen werden. Starte einen neuen Artikel mit dem leeren Formular unten.",
+    "linkLabel": "Originalveröffentlichung ({{source}})",
+    "linkLabelGeneric": "Originalveröffentlichung",
+    "banner": {
+      "title": "Gestartet aus einem Bot-Fund",
+      "text": "Die Felder unten sind mit einem Vorschlag des Bots vorausgefüllt — Titel, Beschreibung, Bild und Link zum Original. Das ist nur ein Ausgangspunkt. Lies das Original und schreibe deinen eigenen Inhalt, um Plagiate zu vermeiden.",
+      "source": "Quelle",
+      "openOriginal": "Original öffnen"
+    }
+  },
   "toast": {
     "botCreated": "Bot erstellt.",
     "botUpdated": "Bot aktualisiert.",
@@ -295,6 +367,12 @@
     "runFinished_zero": "Fertig — keine neuen Funde.",
     "findingDismissed": "Fund verworfen.",
     "findingUsed": "Als verwendet markiert.",
+    "bulkReviewed_one": "Als geprüft markiert.",
+    "bulkReviewed_other": "{{count}} als geprüft markiert.",
+    "bulkDismissed_one": "Verworfen.",
+    "bulkDismissed_other": "{{count}} verworfen.",
+    "bulkUsed_one": "Als verwendet markiert.",
+    "bulkUsed_other": "{{count}} als verwendet markiert.",
     "error": "Ein Fehler ist aufgetreten."
   }
 }

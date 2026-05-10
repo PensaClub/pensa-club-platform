@@ -252,3 +252,77 @@
   font-size: 0.875rem;
   line-height: 1.5;
 }
+
+.bcs-cleanup-zone {
+  margin-top: 24px;
+  padding: 20px;
+  background: #fffbeb;
+  border: 1px solid #fcd34d;
+  border-radius: 16px;
+}
+
+.bcs-cleanup-title {
+  margin: 0 0 6px;
+  color: #78350f;
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.bcs-cleanup-desc {
+  margin: 0 0 14px;
+  color: #92400e;
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+.bcs-cleanup-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: flex-start;
+}
+
+.bcs-cleanup-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+}
+
+.bcs-cleanup-months {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.bcs-cleanup-months-label {
+  font-size: 0.78rem;
+  color: #78350f;
+  font-weight: 600;
+}
+
+.bcs-cleanup-months-input {
+  width: 70px;
+  padding: 6px 8px;
+  font-size: 0.875rem;
+  border: 1px solid #fcd34d;
+  border-radius: 6px;
+  background: #ffffff;
+  color: #111827;
+}
+
+.bcs-btn-soft {
+  background: #fef3c7;
+  color: #78350f;
+  border: 1px solid #fcd34d;
+}
+
+.bcs-btn-soft:hover:not(:disabled) {
+  background: #fde68a;
+  border-color: #f59e0b;
+}
+
+.bcs-btn-soft span {
+  font-size: 0.875rem;
+  font-weight: 600;
+}

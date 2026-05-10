@@ -222,6 +222,34 @@
   margin-top: 8px;
 }
 
+.bcem-cleanup-summary {
+  margin-top: 4px;
+  padding: 8px 12px;
+  background: #ecfeff;
+  border: 1px solid #a5f3fc;
+  border-radius: 8px;
+  color: #075985;
+  font-size: 0.85rem;
+  line-height: 1.4;
+}
+
+.bcem-email-error {
+  margin-top: 6px;
+  padding: 6px 10px;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: 6px;
+  color: #991b1b;
+  font-size: 0.8rem;
+}
+
+.bcem-emails-fallback-hint {
+  margin-top: 6px;
+  font-size: 0.78rem;
+  color: #6b7280;
+  font-style: italic;
+}
+
 .bcem-btn {
   display: inline-flex;
   align-items: center;

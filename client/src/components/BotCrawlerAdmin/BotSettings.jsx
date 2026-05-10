@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Trash2, Save, X, Eraser } from 'lucide-react';
+import { Trash2, Save, X, Eraser, EyeOff, CheckSquare, AlertTriangle } from 'lucide-react';
 import { useCrawlerContext } from '../contexts/CrawlerContext';
 import { useLocalizedNavigate } from '../../hooks/useLocalizedNavigate';
 import { notify } from '../../utils/notify.jsx';
@@ -16,7 +16,7 @@ const STATUS_OPTIONS = ['active', 'paused', 'archived'];
  */
 const BotSettings = ({ bot, onChanged }) => {
   const { t } = useTranslation('botCrawler');
-  const { updateBot, deleteBot, clearBotFindings } = useCrawlerContext();
+  const { updateBot, deleteBot, clearBotFindings, bulkClearFindings } = useCrawlerContext();
   const navigate = useLocalizedNavigate();
 
   const [form, setForm] = useState(() => ({
@@ -36,6 +36,9 @@ const BotSettings = ({ bot, onChanged }) => {
   const [deletePending, setDeletePending] = useState(false);
   const [clearOpen, setClearOpen] = useState(false);
   const [clearPending, setClearPending] = useState(false);
+  const [bulkOpen, setBulkOpen] = useState(null); // 'dismissed' | 'used' | null
+  const [bulkPending, setBulkPending] = useState(false);
+  const [usedMonths, setUsedMonths] = useState(6);
 
   useEffect(() => {
     setForm({
@@ -127,6 +130,24 @@ const BotSettings = ({ bot, onChanged }) => {
       // toasted
     } finally {
       setClearPending(false);
+    }
+  };
+
+  const confirmBulk = async () => {
+    if (!bulkOpen) return;
+    setBulkPending(true);
+    try {
+      const payload = bulkOpen === 'used'
+        ? { mode: 'used-older-than', monthsOld: parseInt(usedMonths, 10) || 6 }
+        : { mode: 'dismissed' };
+      const res = await bulkClearFindings(bot.id, payload);
+      notify('success', null, t('toast.findingsCleared', { count: res?.deleted || 0 }));
+      setBulkOpen(null);
+      onChanged?.();
+    } catch {
+      // toasted
+    } finally {
+      setBulkPending(false);
     }
   };
 
@@ -278,17 +299,54 @@ const BotSettings = ({ bot, onChanged }) => {
         </div>
       </form>
 
-      <div className="bcs-danger-zone">
-        <h3 className="bcs-danger-title">{t('confirm.clearFindings.title')}</h3>
-        <p className="bcs-danger-desc">{t('confirm.clearFindings.help')}</p>
-        <button
-          type="button"
-          className="bcs-btn bcs-btn-warn"
-          onClick={() => setClearOpen(true)}
-        >
-          <Eraser size={16} aria-hidden="true" />
-          <span>{t('card.actions.clearFindings')}</span>
-        </button>
+      <div className="bcs-cleanup-zone">
+        <div className="bcs-cleanup-title">{t('cleanup.zone.title')}</div>
+        <p className="bcs-cleanup-desc">{t('cleanup.zone.desc')}</p>
+
+        <div className="bcs-cleanup-buttons">
+          <button
+            type="button"
+            className="bcs-btn bcs-btn-soft"
+            onClick={() => setBulkOpen('dismissed')}
+            title={t('cleanup.dismissed.help')}
+          >
+            <EyeOff size={16} aria-hidden="true" />
+            <span>{t('cleanup.dismissed.button')}</span>
+          </button>
+
+          <div className="bcs-cleanup-row">
+            <button
+              type="button"
+              className="bcs-btn bcs-btn-soft"
+              onClick={() => setBulkOpen('used')}
+              title={t('cleanup.used.help')}
+            >
+              <CheckSquare size={16} aria-hidden="true" />
+              <span>{t('cleanup.used.button', { months: usedMonths })}</span>
+            </button>
+            <label className="bcs-cleanup-months">
+              <span className="bcs-cleanup-months-label">{t('cleanup.used.monthsLabel')}</span>
+              <input
+                type="number"
+                className="bcs-cleanup-months-input"
+                min={1}
+                max={120}
+                value={usedMonths}
+                onChange={(e) => setUsedMonths(e.target.value)}
+              />
+            </label>
+          </div>
+
+          <button
+            type="button"
+            className="bcs-btn bcs-btn-warn"
+            onClick={() => setClearOpen(true)}
+            title={t('confirm.clearFindings.help')}
+          >
+            <Eraser size={16} aria-hidden="true" />
+            <span>{t('card.actions.clearFindings')}</span>
+          </button>
+        </div>
       </div>
 
       <div className="bcs-danger-zone">
@@ -325,6 +383,30 @@ const BotSettings = ({ bot, onChanged }) => {
         loading={clearPending}
         onCancel={() => setClearOpen(false)}
         onConfirm={confirmClear}
+      />
+
+      <DeleteConfirmModal
+        open={bulkOpen === 'dismissed'}
+        variant="primary"
+        title={t('cleanup.dismissed.confirmTitle')}
+        message={t('cleanup.dismissed.confirmMessage')}
+        cancelLabel={t('card.actions.cancel', 'Cancel')}
+        confirmLabel={t('cleanup.dismissed.button')}
+        loading={bulkPending}
+        onCancel={() => setBulkOpen(null)}
+        onConfirm={confirmBulk}
+      />
+
+      <DeleteConfirmModal
+        open={bulkOpen === 'used'}
+        variant="primary"
+        title={t('cleanup.used.confirmTitle')}
+        message={t('cleanup.used.confirmMessage', { months: usedMonths })}
+        cancelLabel={t('card.actions.cancel', 'Cancel')}
+        confirmLabel={t('cleanup.used.confirmButton')}
+        loading={bulkPending}
+        onCancel={() => setBulkOpen(null)}
+        onConfirm={confirmBulk}
       />
     </div>
   );

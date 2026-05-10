@@ -212,6 +212,36 @@ export const CrawlerProvider = ({ children }) => {
     }
   }, [crawlerService]);
 
+  const getFinding = useCallback(async (id) => {
+    try {
+      return await crawlerService.getFinding(id);
+    } catch (error) {
+      console.error('CrawlerContext.getFinding error:', error);
+      notify('error', error);
+      throw error;
+    }
+  }, [crawlerService]);
+
+  const bulkClearFindings = useCallback(async (botId, payload) => {
+    try {
+      return await crawlerService.bulkClearFindings(botId, payload);
+    } catch (error) {
+      console.error('CrawlerContext.bulkClearFindings error:', error);
+      notify('error', error);
+      throw error;
+    }
+  }, [crawlerService]);
+
+  const bulkUpdateFindingStatus = useCallback(async (payload) => {
+    try {
+      return await crawlerService.bulkUpdateFindingStatus(payload);
+    } catch (error) {
+      console.error('CrawlerContext.bulkUpdateFindingStatus error:', error);
+      notify('error', error);
+      throw error;
+    }
+  }, [crawlerService]);
+
   // ---------- Runs ----------
   const listRuns = useCallback(async (botId, limit = 20) => {
     try {
@@ -238,13 +268,16 @@ export const CrawlerProvider = ({ children }) => {
     validateSourceUrl,
     revalidateSource,
     listFindings,
+    getFinding,
     updateFindingStatus,
+    bulkUpdateFindingStatus,
+    bulkClearFindings,
     listRuns,
   }), [
     listBots, getBot, createBot, updateBot, deleteBot, runBotNow, clearBotFindings,
     listSources, createSource, updateSource, deleteSource,
     validateSourceUrl, revalidateSource,
-    listFindings, updateFindingStatus, listRuns,
+    listFindings, getFinding, updateFindingStatus, bulkUpdateFindingStatus, bulkClearFindings, listRuns,
   ]);
 
   return (

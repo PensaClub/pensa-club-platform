@@ -17,6 +17,7 @@ const STATUS_OPTIONS = ['active', 'paused', 'archived'];
 const MINUTE_PRESETS = [5, 10, 15, 30];
 const HOUR_PRESETS = [1, 2, 3, 6, 12];
 const WEEKDAYS = [1, 2, 3, 4, 5, 6, 0]; // Mon..Sun (0 = Sunday in cron)
+const CLEANUP_DAYS = ['daily', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
 
 const DEFAULT_FORM = {
     name: '',
@@ -28,6 +29,11 @@ const DEFAULT_FORM = {
     status: 'active',
     useLlm: false,
     lookBackDays: '',
+    cleanupEnabled: true,
+    cleanupDay: 'daily',
+    cleanupBatchSize: 100,
+    cleanupHour: 3,
+    notificationEmails: [],
 };
 
 // Tiny help bubble. Keeps tooltip text inline so screen readers and touch users
@@ -44,6 +50,8 @@ const BotEditModal = ({ open, bot, onClose, onSave, onChanged }) => {
     const { clearBotFindings } = useCrawlerContext();
     const [form, setForm] = useState(DEFAULT_FORM);
     const [keywordInput, setKeywordInput] = useState('');
+    const [emailInput, setEmailInput] = useState('');
+    const [emailError, setEmailError] = useState('');
     const [saving, setSaving] = useState(false);
     const [clearOpen, setClearOpen] = useState(false);
     const [clearPending, setClearPending] = useState(false);
@@ -79,6 +87,11 @@ const BotEditModal = ({ open, bot, onClose, onSave, onChanged }) => {
                 status: bot.status || 'active',
                 useLlm: !!bot.useLlm,
                 lookBackDays: Number.isFinite(bot.lookBackDays) ? String(bot.lookBackDays) : '',
+                cleanupEnabled: bot.cleanupEnabled !== false,
+                cleanupDay: bot.cleanupDay || 'daily',
+                cleanupBatchSize: bot.cleanupBatchSize ?? 100,
+                cleanupHour: bot.cleanupHour ?? 3,
+                notificationEmails: Array.isArray(bot.notificationEmails) ? [...bot.notificationEmails] : [],
             });
         } else {
             setForm(DEFAULT_FORM);
@@ -132,6 +145,33 @@ const BotEditModal = ({ open, bot, onClose, onSave, onChanged }) => {
         }
     };
 
+    const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const addEmail = () => {
+        const v = emailInput.trim().toLowerCase();
+        if (!v) return;
+        if (!EMAIL_RE.test(v)) {
+            setEmailError(t('bot.notifications.invalidEmail'));
+            return;
+        }
+        if ((form.notificationEmails || []).includes(v)) { setEmailInput(''); setEmailError(''); return; }
+        setForm((prev) => ({ ...prev, notificationEmails: [...(prev.notificationEmails || []), v] }));
+        setEmailInput('');
+        setEmailError('');
+    };
+
+    const removeEmail = (em) => {
+        setForm((prev) => ({ ...prev, notificationEmails: (prev.notificationEmails || []).filter((e) => e !== em) }));
+    };
+
+    const handleEmailKey = (e) => {
+        if (e.key === 'Enter' || e.key === ',' || e.key === ' ') {
+            e.preventDefault();
+            addEmail();
+        } else if (e.key === 'Backspace' && !emailInput && (form.notificationEmails || []).length > 0) {
+            removeEmail(form.notificationEmails[form.notificationEmails.length - 1]);
+        }
+    };
+
     const toggleDay = (d) => {
         const cur = new Set(form.schedule.days || []);
         if (cur.has(d)) cur.delete(d); else cur.add(d);
@@ -154,6 +194,11 @@ const BotEditModal = ({ open, bot, onClose, onSave, onChanged }) => {
             status: form.status,
             useLlm: form.useLlm,
             lookBackDays: form.lookBackDays === '' ? null : parseInt(form.lookBackDays, 10),
+            cleanupEnabled: form.cleanupEnabled,
+            cleanupDay: form.cleanupDay,
+            cleanupBatchSize: parseInt(form.cleanupBatchSize, 10) || 100,
+            cleanupHour: parseInt(form.cleanupHour, 10) || 3,
+            notificationEmails: form.notificationEmails || [],
         };
         try {
             await onSave?.(payload);
@@ -432,6 +477,123 @@ const BotEditModal = ({ open, bot, onClose, onSave, onChanged }) => {
                             <Hint text={t('bot.help.caseSensitive')} />
                         </span>
                     </label>
+
+                    {/* ── Auto cleanup ──────────────────────────────────── */}
+                    <div className="bcem-section-title">{t('bot.section.cleanup')}</div>
+
+                    <label className="bcem-checkbox">
+                        <input
+                            type="checkbox"
+                            checked={form.cleanupEnabled}
+                            onChange={(e) => updateField('cleanupEnabled', e.target.checked)}
+                        />
+                        <span>
+                            {t('bot.fields.cleanupEnabled')}
+                            <Hint text={t('bot.help.cleanupEnabled')} />
+                        </span>
+                    </label>
+
+                    <div className="bcem-field-row">
+                        <label className="bcem-field bcem-field-half">
+                            <span className="bcem-label">
+                                {t('bot.fields.cleanupDay')}
+                                <Hint text={t('bot.help.cleanupDay')} />
+                            </span>
+                            <select
+                                className="bcem-input"
+                                value={form.cleanupDay}
+                                onChange={(e) => updateField('cleanupDay', e.target.value)}
+                                disabled={!form.cleanupEnabled}
+                            >
+                                {CLEANUP_DAYS.map((d) => (
+                                    <option key={d} value={d}>{t(`bot.cleanupDay.${d}`)}</option>
+                                ))}
+                            </select>
+                        </label>
+                        <label className="bcem-field bcem-field-half">
+                            <span className="bcem-label">
+                                {t('bot.fields.cleanupHour')}
+                                <Hint text={t('bot.help.cleanupHour')} />
+                            </span>
+                            <select
+                                className="bcem-input"
+                                value={form.cleanupHour}
+                                onChange={(e) => updateField('cleanupHour', parseInt(e.target.value, 10))}
+                                disabled={!form.cleanupEnabled}
+                            >
+                                {Array.from({ length: 24 }, (_, h) => (
+                                    <option key={h} value={h}>{`${String(h).padStart(2, '0')}:00`}</option>
+                                ))}
+                            </select>
+                        </label>
+                    </div>
+
+                    <label className="bcem-field">
+                        <span className="bcem-label">
+                            {t('bot.fields.cleanupBatchSize')}
+                            <Hint text={t('bot.help.cleanupBatchSize')} />
+                        </span>
+                        <input
+                            type="number"
+                            className="bcem-input"
+                            min={10}
+                            max={10000}
+                            step={10}
+                            value={form.cleanupBatchSize}
+                            onChange={(e) => updateField('cleanupBatchSize', e.target.value)}
+                            disabled={!form.cleanupEnabled}
+                        />
+                    </label>
+
+                    {form.cleanupEnabled && (
+                        <div className="bcem-cleanup-summary">
+                            {t('bot.cleanupSummary', {
+                                day: t(`bot.cleanupDay.${form.cleanupDay}`),
+                                time: `${String(form.cleanupHour).padStart(2, '0')}:00`,
+                                count: parseInt(form.cleanupBatchSize, 10) || 100,
+                            })}
+                        </div>
+                    )}
+
+                    {/* ── Notifications ─────────────────────────────────── */}
+                    <div className="bcem-section-title">{t('bot.section.notifications')}</div>
+
+                    <div className="bcem-field">
+                        <span className="bcem-label">
+                            {t('bot.fields.notificationEmails')}
+                            <Hint text={t('bot.help.notificationEmails')} />
+                        </span>
+                        <div className="bcem-chips">
+                            {(form.notificationEmails || []).map((em) => (
+                                <span key={em} className="bcem-chip">
+                                    <span className="bcem-chip-text">{em}</span>
+                                    <button
+                                        type="button"
+                                        className="bcem-chip-remove"
+                                        onClick={() => removeEmail(em)}
+                                        aria-label={`remove ${em}`}
+                                    >
+                                        <X size={12} aria-hidden="true" />
+                                    </button>
+                                </span>
+                            ))}
+                            <input
+                                type="email"
+                                className="bcem-chip-input"
+                                value={emailInput}
+                                onChange={(e) => { setEmailInput(e.target.value); setEmailError(''); }}
+                                onKeyDown={handleEmailKey}
+                                onBlur={addEmail}
+                                placeholder={t('bot.placeholder.email')}
+                            />
+                        </div>
+                        {emailError && <div className="bcem-email-error">{emailError}</div>}
+                        {(!form.notificationEmails || form.notificationEmails.length === 0) && (
+                            <div className="bcem-emails-fallback-hint">
+                                {t('bot.notifications.fallbackHint')}
+                            </div>
+                        )}
+                    </div>
 
                     {/* ── State ─────────────────────────────────────────── */}
                     <div className="bcem-section-title">{t('bot.section.state')}</div>
