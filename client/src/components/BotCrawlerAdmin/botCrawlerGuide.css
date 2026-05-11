@@ -1,0 +1,586 @@
+/* BotCrawlerGuide — prefix `bcg-` */
+
+.bcg-page {
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  /* Top padding clears the global Pensa header (~88px on desktop). */
+  padding: 110px 20px 40px;
+  min-width: 0;
+  box-sizing: border-box;
+  font-size: 16px;
+  color: #1f2937;
+}
+
+@media (max-width: 768px) {
+  .bcg-page {
+    padding-top: 90px;
+  }
+}
+
+.bcg-page * {
+  box-sizing: border-box;
+}
+
+/* Long unbreakable tokens (ENV var names, URLs, error codes) must wrap
+   inside narrow containers — otherwise they push the layout sideways
+   on mobile. `anywhere` is more aggressive than `break-word` and works
+   for ALL CAPS_WITH_UNDERSCORES patterns. */
+.bcg-p,
+.bcg-list li,
+.bcg-faq-line,
+.bcg-faq summary,
+.bcg-card-body,
+.bcg-callout-body,
+.bcg-step-text,
+.bcg-table td,
+.bcg-subtitle {
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.bcg-header {
+  margin-bottom: 24px;
+}
+
+.bcg-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  margin-bottom: 12px;
+  color: #6b7280;
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-decoration: none;
+  border-radius: 6px;
+  transition: background-color 120ms ease, color 120ms ease;
+}
+
+.bcg-back:hover {
+  background: #f3f4f6;
+  color: #E26020;
+}
+
+.bcg-back span {
+  font-size: 0.875rem;
+}
+
+.bcg-title-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 6px;
+}
+
+.bcg-title-icon {
+  color: #E26020;
+  flex-shrink: 0;
+}
+
+.bcg-title {
+  margin: 0;
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #111827;
+  line-height: 1.2;
+}
+
+.bcg-subtitle {
+  margin: 0;
+  font-size: 1rem;
+  color: #6b7280;
+  line-height: 1.5;
+}
+
+/* ── Layout: sticky TOC + content ─────────────────────────────────────── */
+
+.bcg-layout {
+  display: grid;
+  grid-template-columns: 240px minmax(0, 1fr);
+  gap: 28px;
+  align-items: flex-start;
+}
+
+@media (max-width: 900px) {
+  .bcg-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+.bcg-toc {
+  position: sticky;
+  /* Below the fixed Pensa header — leave a bit of breathing room. */
+  top: 100px;
+  align-self: start;
+  padding: 16px 14px;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  max-height: calc(100vh - 120px);
+  overflow-y: auto;
+}
+
+@media (max-width: 900px) {
+  .bcg-toc {
+    position: static;
+    max-height: none;
+  }
+}
+
+.bcg-toc-title {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #6b7280;
+  padding: 0 8px 10px;
+  border-bottom: 1px solid #f3f4f6;
+  margin-bottom: 8px;
+}
+
+.bcg-toc-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.bcg-toc-link {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  color: #4b5563;
+  font-size: 0.85rem;
+  font-weight: 500;
+  text-decoration: none;
+  transition: background-color 120ms ease, color 120ms ease;
+}
+
+.bcg-toc-link:hover {
+  background: #f9fafb;
+  color: #E26020;
+}
+
+.bcg-toc-link-active {
+  background: #fff7ed;
+  color: #E26020;
+  font-weight: 700;
+}
+
+.bcg-toc-icon {
+  flex-shrink: 0;
+  color: inherit;
+}
+
+.bcg-toc-link span {
+  font-size: 0.85rem;
+}
+
+/* ── Content sections ─────────────────────────────────────────────────── */
+
+.bcg-content {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.bcg-section {
+  padding: 24px 28px;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+  scroll-margin-top: 16px;
+}
+
+.bcg-h2 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0 0 14px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid #fed7aa;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #111827;
+}
+
+.bcg-h2-icon {
+  color: #E26020;
+  flex-shrink: 0;
+}
+
+.bcg-h2 span {
+  font-size: 1.3rem;
+}
+
+.bcg-h3 {
+  margin: 18px 0 8px;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #1f2937;
+}
+
+.bcg-section-body {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.bcg-p {
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.65;
+  color: #374151;
+}
+
+.bcg-p strong {
+  font-size: 0.95rem;
+  color: #111827;
+}
+
+.bcg-list {
+  margin: 4px 0;
+  padding-left: 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.bcg-list li {
+  font-size: 0.92rem;
+  line-height: 1.6;
+  color: #374151;
+}
+
+/* ── Steps ────────────────────────────────────────────────────────────── */
+
+.bcg-steps {
+  list-style: none;
+  padding: 0;
+  margin: 4px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  counter-reset: step;
+}
+
+.bcg-step {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding: 10px 12px;
+  background: #f9fafb;
+  border-left: 3px solid #E26020;
+  border-radius: 6px;
+}
+
+.bcg-step-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: #E26020;
+  color: #ffffff;
+  font-size: 0.82rem;
+  font-weight: 700;
+  flex-shrink: 0;
+  font-variant-numeric: tabular-nums;
+}
+
+.bcg-step-text {
+  font-size: 0.92rem;
+  line-height: 1.55;
+  color: #1f2937;
+  padding-top: 2px;
+}
+
+/* ── Callouts (tip / info / warning) ──────────────────────────────────── */
+
+.bcg-callout {
+  padding: 12px 14px;
+  border-radius: 8px;
+  border-left: 4px solid;
+  font-size: 0.9rem;
+  line-height: 1.55;
+}
+
+.bcg-callout-body {
+  font-size: 0.9rem;
+  display: block;
+}
+
+.bcg-callout-info {
+  background: #eff6ff;
+  border-color: #3b82f6;
+  color: #1e3a8a;
+}
+
+.bcg-callout-tip {
+  background: #ecfdf5;
+  border-color: #10b981;
+  color: #065f46;
+}
+
+.bcg-callout-warning {
+  background: #fffbeb;
+  border-color: #f59e0b;
+  color: #78350f;
+}
+
+/* ── Source-type cards grid ───────────────────────────────────────────── */
+
+.bcg-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 12px;
+}
+
+.bcg-card {
+  padding: 14px 16px;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  transition: transform 160ms ease, box-shadow 160ms ease;
+}
+
+.bcg-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.06);
+}
+
+.bcg-card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.bcg-card-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #111827;
+}
+
+.bcg-card-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  background: #fff7ed;
+  color: #E26020;
+  border: 1px solid #fed7aa;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.bcg-card-body {
+  margin: 0;
+  font-size: 0.85rem;
+  line-height: 1.55;
+  color: #4b5563;
+}
+
+/* ── Table ───────────────────────────────────────────────────────────── */
+
+.bcg-table {
+  width: 100%;
+  border-collapse: collapse;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid #e5e7eb;
+}
+
+.bcg-table th,
+.bcg-table td {
+  padding: 10px 12px;
+  text-align: left;
+  font-size: 0.88rem;
+  border-bottom: 1px solid #f3f4f6;
+  vertical-align: top;
+}
+
+.bcg-table th {
+  background: #f9fafb;
+  font-weight: 700;
+  color: #374151;
+  text-transform: uppercase;
+  font-size: 0.7rem;
+  letter-spacing: 0.04em;
+}
+
+.bcg-table tr:last-child td {
+  border-bottom: 0;
+}
+
+.bcg-table strong {
+  font-size: 0.88rem;
+  color: #111827;
+}
+
+.bcg-code {
+  display: inline-block;
+  padding: 2px 8px;
+  background: #1f2937;
+  color: #ecfdf5;
+  border-radius: 4px;
+  font-family: 'Menlo', 'Consolas', monospace;
+  font-size: 0.82rem;
+  font-weight: 500;
+  word-break: break-all;
+  white-space: normal;
+  max-width: 100%;
+}
+
+/* On narrow viewports, transform the 3-column table into stacked cards so
+   nothing overflows or hyphenates mid-word. Each row becomes a labelled
+   card with the field name, code example and note vertically stacked. */
+@media (max-width: 640px) {
+  .bcg-table,
+  .bcg-table thead,
+  .bcg-table tbody,
+  .bcg-table tr,
+  .bcg-table td {
+    display: block;
+    width: 100%;
+  }
+  .bcg-table thead {
+    display: none;
+  }
+  .bcg-table tr {
+    padding: 12px;
+    margin-bottom: 10px;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    background: #ffffff;
+  }
+  .bcg-table tr:last-child {
+    margin-bottom: 0;
+  }
+  .bcg-table td {
+    padding: 4px 0;
+    border-bottom: 0;
+    position: relative;
+    padding-left: 90px;
+    min-height: 24px;
+  }
+  .bcg-table td::before {
+    content: attr(data-label);
+    position: absolute;
+    left: 0;
+    top: 4px;
+    width: 80px;
+    font-size: 0.68rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: #6b7280;
+  }
+}
+
+/* ── FAQ ─────────────────────────────────────────────────────────────── */
+
+.bcg-faq {
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  padding: 12px 14px;
+  margin-bottom: 8px;
+  background: #ffffff;
+}
+
+.bcg-faq summary {
+  cursor: pointer;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #111827;
+  list-style: none;
+  padding-right: 24px;
+  position: relative;
+}
+
+.bcg-faq summary::-webkit-details-marker {
+  display: none;
+}
+
+.bcg-faq summary::after {
+  content: '+';
+  position: absolute;
+  right: 4px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1.2rem;
+  color: #E26020;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.bcg-faq[open] summary::after {
+  content: '−';
+}
+
+.bcg-faq-body {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid #f3f4f6;
+}
+
+.bcg-faq-line {
+  margin: 0 0 6px;
+  font-size: 0.88rem;
+  line-height: 1.55;
+  color: #4b5563;
+}
+
+.bcg-faq-line:last-child {
+  margin-bottom: 0;
+}
+
+/* ── Footer ──────────────────────────────────────────────────────────── */
+
+.bcg-footer {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 16px;
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  color: #6b7280;
+  font-size: 0.85rem;
+}
+
+.bcg-footer span {
+  font-size: 0.85rem;
+}
+
+/* ── Print-friendly ──────────────────────────────────────────────────── */
+
+@media print {
+  .bcg-toc,
+  .bcg-back,
+  .bcg-footer {
+    display: none;
+  }
+  .bcg-layout {
+    grid-template-columns: 1fr;
+  }
+  .bcg-section {
+    page-break-inside: avoid;
+    box-shadow: none;
+    border: 1px solid #ddd;
+  }
+  .bcg-faq[open] {
+    page-break-inside: avoid;
+  }
+  .bcg-faq summary::after {
+    display: none;
+  }
+}

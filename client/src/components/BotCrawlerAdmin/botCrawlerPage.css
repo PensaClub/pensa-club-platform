@@ -80,6 +80,27 @@
   box-shadow: 0 6px 14px rgba(226, 96, 32, 0.35);
 }
 
+.bca-btn-secondary {
+  background: #ffffff;
+  color: #4b5563;
+  border: 1px solid #d1d5db;
+  text-decoration: none;
+}
+.bca-btn-secondary:hover:not(:disabled) {
+  border-color: #E26020;
+  color: #E26020;
+}
+.bca-btn-secondary span {
+  font-size: inherit;
+}
+
+.bca-header-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
 .bca-filters {
   display: flex;
   flex-wrap: wrap;

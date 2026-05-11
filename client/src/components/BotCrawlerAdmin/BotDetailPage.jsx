@@ -7,10 +7,11 @@ import { useCrawlerContext } from '../contexts/CrawlerContext';
 import FindingsList from './FindingsList';
 import BotSourcesList from './BotSourcesList';
 import BotSettings from './BotSettings';
+import BotAiSettings from './BotAiSettings';
 import RunHistory from './RunHistory';
 import './botDetailPage.css';
 
-const TABS = ['findings', 'sources', 'settings', 'history'];
+const TABS = ['findings', 'sources', 'ai', 'settings', 'history'];
 
 const BotDetailPage = () => {
   const { t } = useTranslation('botCrawler');
@@ -77,6 +78,7 @@ const BotDetailPage = () => {
       <div className="bcd-tab-panel">
         {tab === 'findings' && bot && <FindingsList botId={botId} />}
         {tab === 'sources' && bot && <BotSourcesList botId={botId} />}
+        {tab === 'ai' && bot && <BotAiSettings bot={bot} onChanged={refresh} />}
         {tab === 'settings' && bot && <BotSettings bot={bot} onChanged={refresh} />}
         {tab === 'history' && bot && <RunHistory botId={botId} />}
         {!bot && !loading && (

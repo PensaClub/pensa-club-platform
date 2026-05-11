@@ -25,6 +25,13 @@ const {
     looksLikeFeed,
     discoverRssUrl,
 } = require('../services/crawlerEngine');
+const {
+    scoreFinding,
+    buildSystemPrompt,
+    buildUserPrompt,
+    DEFAULT_SYSTEM_PROMPT,
+    MODELS: LLM_MODELS,
+} = require('../services/llmScorer');
 const { parseRss } = require('../utils/rssParser');
 const { extractItems, autoExtractItems } = require('../utils/htmlScraper');
 const { evaluateRobots, OUR_AGENT } = require('../utils/robotsTxt');
@@ -184,6 +191,73 @@ const validateBotPayload = (body, { partial = false } = {}) => {
             out.cleanupHour = n;
         }
     }
+    // ── Phase 4 LLM fields ──
+    if (body.llmModel !== undefined) {
+        const allowed = ['claude-haiku-4-5', 'claude-sonnet-4-6', 'claude-opus-4-7'];
+        if (!allowed.includes(String(body.llmModel))) {
+            errors.push({ field: 'llmModel', message: `must be one of: ${allowed.join(', ')}` });
+        } else {
+            out.llmModel = String(body.llmModel);
+        }
+    }
+    if (body.llmMinScore !== undefined) {
+        const n = parseInt(body.llmMinScore, 10);
+        if (!Number.isFinite(n) || n < 0 || n > 100) {
+            errors.push({ field: 'llmMinScore', message: 'must be 0-100' });
+        } else {
+            out.llmMinScore = n;
+        }
+    }
+    if (body.llmAutoDismiss !== undefined) {
+        out.llmAutoDismiss = !!body.llmAutoDismiss;
+    }
+    if (body.llmTemperature !== undefined) {
+        const n = Number(body.llmTemperature);
+        if (!Number.isFinite(n) || n < 0 || n > 1) {
+            errors.push({ field: 'llmTemperature', message: 'must be 0.0-1.0' });
+        } else {
+            out.llmTemperature = n;
+        }
+    }
+    if (body.llmMaxTokens !== undefined) {
+        const n = parseInt(body.llmMaxTokens, 10);
+        if (!Number.isFinite(n) || n < 50 || n > 2000) {
+            errors.push({ field: 'llmMaxTokens', message: 'must be 50-2000' });
+        } else {
+            out.llmMaxTokens = n;
+        }
+    }
+    if (body.llmSystemPrompt !== undefined) {
+        if (body.llmSystemPrompt === null || body.llmSystemPrompt === '') {
+            out.llmSystemPrompt = null;
+        } else if (typeof body.llmSystemPrompt !== 'string') {
+            errors.push({ field: 'llmSystemPrompt', message: 'must be a string or null' });
+        } else if (body.llmSystemPrompt.length > 8000) {
+            errors.push({ field: 'llmSystemPrompt', message: 'max 8000 chars' });
+        } else {
+            out.llmSystemPrompt = body.llmSystemPrompt;
+        }
+    }
+    if (body.llmExtraInstructions !== undefined) {
+        if (body.llmExtraInstructions === null || body.llmExtraInstructions === '') {
+            out.llmExtraInstructions = null;
+        } else if (typeof body.llmExtraInstructions !== 'string') {
+            errors.push({ field: 'llmExtraInstructions', message: 'must be a string or null' });
+        } else if (body.llmExtraInstructions.length > 4000) {
+            errors.push({ field: 'llmExtraInstructions', message: 'max 4000 chars' });
+        } else {
+            out.llmExtraInstructions = body.llmExtraInstructions;
+        }
+    }
+    if (body.llmDailyCostCap !== undefined) {
+        const n = Number(body.llmDailyCostCap);
+        if (!Number.isFinite(n) || n < 0 || n > 1000) {
+            errors.push({ field: 'llmDailyCostCap', message: 'must be 0-1000 USD' });
+        } else {
+            out.llmDailyCostCap = n;
+        }
+    }
+
     if (body.notificationEmails !== undefined) {
         if (body.notificationEmails === null || body.notificationEmails === '') {
             out.notificationEmails = null;
@@ -299,6 +373,19 @@ const serializeBot = (bot, extras = {}) => ({
     cleanupBatchSize: bot.cleanupBatchSize ?? 100,
     cleanupHour: bot.cleanupHour ?? 3,
     notificationEmails: Array.isArray(bot.notificationEmails) ? bot.notificationEmails : [],
+    // ── Phase 4 LLM ──
+    llmModel: bot.llmModel || 'claude-haiku-4-5',
+    llmMinScore: bot.llmMinScore ?? 40,
+    llmAutoDismiss: bot.llmAutoDismiss !== false,
+    llmTemperature: bot.llmTemperature !== undefined && bot.llmTemperature !== null ? Number(bot.llmTemperature) : 0,
+    llmMaxTokens: bot.llmMaxTokens ?? 300,
+    llmSystemPrompt: bot.llmSystemPrompt || null,
+    llmExtraInstructions: bot.llmExtraInstructions || null,
+    llmDailyCostCap: bot.llmDailyCostCap !== undefined && bot.llmDailyCostCap !== null ? Number(bot.llmDailyCostCap) : 1.0,
+    llmTokensInToday: bot.llmTokensInToday ?? 0,
+    llmTokensOutToday: bot.llmTokensOutToday ?? 0,
+    llmCostToday: bot.llmCostToday !== undefined && bot.llmCostToday !== null ? Number(bot.llmCostToday) : 0,
+    llmCostResetDate: bot.llmCostResetDate || null,
     lastRunAt: bot.lastRunAt,
     lastRunStatus: bot.lastRunStatus,
     createdById: bot.createdById,
@@ -360,6 +447,7 @@ const serializeFinding = (f) => ({
     topic: f.topic,
     publishedAt: f.publishedAt,
     relevanceScore: f.relevanceScore,
+    llmReasoning: f.llmReasoning,
     foundAt: f.foundAt,
     status: f.status,
     usedInArticleId: f.usedInArticleId,
@@ -1085,6 +1173,16 @@ crawlerController.get(
                 case 'found_desc':
                     order = [['foundAt', 'DESC'], ['id', 'DESC']];
                     break;
+                case 'relevance_desc':
+                    // Highest AI score first; null scores go to bottom (Postgres
+                    // sorts NULL last by default for DESC, but we use a literal
+                    // for explicit NULLS LAST regardless of dialect default).
+                    order = [
+                        sequelize.literal('"crawler_finding"."relevanceScore" DESC NULLS LAST'),
+                        [coalesce, 'DESC'],
+                        ['id', 'DESC'],
+                    ];
+                    break;
                 case 'published_desc':
                 default:
                     order = [[coalesce, 'DESC'], ['id', 'DESC']];
@@ -1253,6 +1351,140 @@ crawlerController.get(
                 limit,
             });
             res.json({ items: items.map(serializeRun) });
+        } catch (err) { next(err); }
+    },
+);
+
+// ─────────────────────────────────────────────────────────────────────────
+// LLM (Phase 4)
+// ─────────────────────────────────────────────────────────────────────────
+
+// Static catalog: returns the supported models + pricing for the AI tab UI.
+crawlerController.get(
+    '/llm/models',
+    isAuth,
+    checkPermission('crawler', 'read'),
+    async (req, res) => {
+        res.json({
+            items: Object.values(LLM_MODELS).map((m) => ({
+                id: m.id,
+                label: m.label,
+                inputPricePer1M: m.inputPricePer1M,
+                outputPricePer1M: m.outputPricePer1M,
+            })),
+            defaultSystemPrompt: DEFAULT_SYSTEM_PROMPT,
+        });
+    },
+);
+
+// Build the prompt that WOULD be sent for a given bot config — without
+// actually calling Claude. Lets the UI live-preview prompt edits.
+crawlerController.post(
+    '/bots/:id/llm/preview',
+    isAuth,
+    checkPermission('crawler', 'read'),
+    async (req, res, next) => {
+        try {
+            const id = parseInt(req.params.id, 10);
+            if (!Number.isFinite(id)) return res.status(400).json({ message: 'Invalid id', code: 'BAD_ID' });
+            const bot = await crawler_bot.findByPk(id);
+            if (!bot) return res.status(404).json({ message: 'Bot not found', code: 'NOT_FOUND' });
+
+            // Allow the request body to override prompt fields so the user
+            // can preview unsaved edits.
+            const overrides = req.body?.overrides || {};
+            const merged = { ...bot.toJSON(), ...overrides };
+            const sample = req.body?.sample || {
+                title: '(пример) Министерството на труда обяви индексация на пенсиите от 1 юли',
+                description: 'Очаква се средно увеличение от 6.5% за около 2.1 млн пенсионери. Минималната пенсия ще достигне 580 лв.',
+                externalUrl: 'https://example.com/article',
+            };
+
+            res.json({
+                systemPrompt: buildSystemPrompt(merged),
+                userPrompt: buildUserPrompt(sample),
+                sample,
+            });
+        } catch (err) { next(err); }
+    },
+);
+
+// Run a single LIVE scoring against a sample finding so the admin can verify
+// model behaviour before enabling on real findings. Counts toward cost cap.
+crawlerController.post(
+    '/bots/:id/llm/test',
+    isAuth,
+    checkPermission('crawler', 'update'),
+    async (req, res, next) => {
+        try {
+            const id = parseInt(req.params.id, 10);
+            if (!Number.isFinite(id)) return res.status(400).json({ message: 'Invalid id', code: 'BAD_ID' });
+            const bot = await crawler_bot.findByPk(id);
+            if (!bot) return res.status(404).json({ message: 'Bot not found', code: 'NOT_FOUND' });
+
+            // findingId — score an actual finding from this bot
+            // OR sample object — synthetic test
+            let sample;
+            if (req.body?.findingId) {
+                const fid = parseInt(req.body.findingId, 10);
+                const f = await crawler_finding.findOne({
+                    where: { id: fid, botId: id },
+                    attributes: ['id', 'title', 'description', 'externalUrl'],
+                });
+                if (!f) return res.status(404).json({ message: 'Finding not found', code: 'NOT_FOUND' });
+                sample = { title: f.title, description: f.description, externalUrl: f.externalUrl };
+            } else if (req.body?.sample) {
+                sample = req.body.sample;
+            } else {
+                sample = {
+                    title: '(пример) Министерството на труда обяви индексация на пенсиите от 1 юли',
+                    description: 'Очаква се средно увеличение от 6.5% за около 2.1 млн пенсионери.',
+                    externalUrl: 'https://example.com/article',
+                };
+            }
+
+            // Optional in-flight overrides — admin tweaks settings, hits Test,
+            // expects them to take effect without saving.
+            const overrides = req.body?.overrides || {};
+            const merged = bot;
+            for (const k of Object.keys(overrides)) {
+                if (k.startsWith('llm') || k === 'description' || k === 'criteria') {
+                    merged[k] = overrides[k];
+                }
+            }
+
+            const result = await scoreFinding(merged, sample);
+            res.json({
+                ok: !result.error,
+                ...result,
+                systemPromptPreview: buildSystemPrompt(merged),
+                userPromptPreview: buildUserPrompt(sample),
+                sample,
+            });
+        } catch (err) { next(err); }
+    },
+);
+
+// Manually reset the bot's daily cost counters (for testing or after upping
+// the cap mid-day).
+crawlerController.post(
+    '/bots/:id/llm/reset-counters',
+    isAuth,
+    checkPermission('crawler', 'update'),
+    async (req, res, next) => {
+        try {
+            const id = parseInt(req.params.id, 10);
+            if (!Number.isFinite(id)) return res.status(400).json({ message: 'Invalid id', code: 'BAD_ID' });
+            const bot = await crawler_bot.findByPk(id);
+            if (!bot) return res.status(404).json({ message: 'Bot not found', code: 'NOT_FOUND' });
+
+            await bot.update({
+                llmTokensInToday: 0,
+                llmTokensOutToday: 0,
+                llmCostToday: 0,
+                llmCostResetDate: new Date().toISOString().slice(0, 10),
+            });
+            res.json({ success: true });
         } catch (err) { next(err); }
     },
 );
