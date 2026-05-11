@@ -2,10 +2,163 @@
   "page": {
     "title": "Bot Crawler",
     "newBot": "New bot",
+    "help": "Help",
     "empty": {
       "title": "No bots yet",
       "subtitle": "Create your first bot to start monitoring news from RSS feeds.",
       "cta": "Create bot"
+    }
+  },
+  "guide": {
+    "pageTitle": "Bot Crawler — Guide",
+    "pageSubtitle": "Full documentation on how to create and manage news-monitoring bots. Each section is navigable from the menu on the left.",
+    "backToBots": "Back to bots",
+    "toc": {
+      "label": "Table of contents",
+      "title": "In this guide"
+    },
+    "footer": "If something isn't clear, skip it and try in the UI. Bot Crawler is forgiving: you can clear everything with one click and try again.",
+    "sections": {
+      "overview": {
+        "title": "What is Bot Crawler",
+        "p1": "Bot Crawler is a tool for automatically monitoring news sites by keywords. You create a bot with a topic (e.g. 'Pensions in Bulgaria'), give it sources (RSS feeds or HTML pages) and keyword filters. On a schedule you choose, the bot crawls the sources, finds articles matching the keywords and shows them to you in the admin panel.",
+        "p2": "The goal is to save hours of manual browsing — instead of you cycling through 24chasa, NOI, btv, etc., the bot does it and hands you a ready list of relevant articles. Click 'Start article' → a new article form opens pre-filled from the finding.",
+        "callout": "Bot Crawler does NOT publish automatically. It is an editorial pre-filtering tool. The final article is written by you, through the usual flow."
+      },
+      "create": {
+        "title": "Creating a bot",
+        "intro": "Steps to create a new bot:",
+        "steps": [
+          "Open /admin/bot-crawler → click 'New bot'",
+          "Give it a descriptive name (e.g. 'Pensions and social')",
+          "Description (optional) — for your convenience and future AI scoring",
+          "Pick a schedule — how many minutes/hours/days between runs. Default: hourly.",
+          "Add keywords — press Enter after each. 5-15 is recommended.",
+          "Match mode: 'Any' = OR (broader), 'All' = AND (stricter)",
+          "How far back to look — older articles are skipped",
+          "Save → the bot appears in the list with status 'Active'"
+        ],
+        "tip": "After creation the bot is empty — you need to add at least 1 source (Sources tab) before the first run."
+      },
+      "sources": {
+        "title": "Adding a source",
+        "intro": "A source is a URL where the bot reads articles. 3 types:",
+        "rss": {
+          "title": "RSS",
+          "body": "Machine-readable format. Fast, reliable, but usually contains only the last ~24-48 hours. Example: https://www.24chasa.bg/rss/bulgaria"
+        },
+        "html": {
+          "title": "HTML",
+          "body": "A regular web page. The bot scrapes it with CSS selectors. Supports pagination (page=2, page=3, etc.). Ideal for search pages and historical extraction."
+        },
+        "auto": {
+          "title": "Auto",
+          "body": "Default — the bot decides. If the URL is RSS, uses RSS. If HTML, scrapes it. If you set maxPages > 1 → forces HTML for pagination."
+        },
+        "warning": "After 'Test' always check the sample articles — if nothing is found, go to 'Advanced → Selectors' and check/fix the CSS selectors."
+      },
+      "selectors": {
+        "title": "CSS selectors (for HTML)",
+        "intro": "Selectors tell the bot WHERE in the HTML page the articles are. Standard CSS syntax + @attr suffix for attributes:",
+        "tableField": "Field",
+        "tableExample": "Example",
+        "tableNote": "Note",
+        "rows": [
+          { "field": "item", "example": "article.news-card", "note": "Wrapper of each article" },
+          { "field": "title", "example": "h2.entry-title", "note": "Title — text" },
+          { "field": "link", "example": "a@href", "note": "Link — href attribute of the first <a>" },
+          { "field": "image", "example": "img@src", "note": "Image — src attribute of the first <img>" },
+          { "field": "description", "example": "p.summary", "note": "Short description (optional)" },
+          { "field": "published", "example": "time@datetime", "note": "Publish date (optional)" }
+        ],
+        "tip": "When adding a source and clicking 'Test', auto-detection suggests pre-filled selectors when possible. You can keep them as-is or refine them."
+      },
+      "pagination": {
+        "title": "Pagination (Max pages)",
+        "p1": "For HTML sources, 'Max pages' controls how many pagination pages the bot crawls each run. Default = 1 (first page only). With 10, it'll crawl /page/1, /page/2, ..., /page/10 (or ?page=1..10).",
+        "p2": "When to use: when you want HISTORICAL data (e.g. all 'pensions' articles from the last month, not just today's). The bot stops early if all items are already seen or all are older than 'How far back to look'.",
+        "warning": "RSS feeds do NOT support pagination — they have a fixed ~10-50 most recent items. For historical depth, use an HTML source with a search URL."
+      },
+      "lookback": {
+        "title": "How far back to look",
+        "p1": "Lookback limits how old articles the bot accepts. E.g. 'Last 3 days' skips anything older than 3 days (by publish date). 'Unlimited' accepts everything.",
+        "p2": "Useful for fresh news — you don't want a 'pensions' bot pulling 2018 articles from a blog archive. Older articles auto-dismiss on find."
+      },
+      "cleanup": {
+        "title": "Findings cleanup",
+        "intro": "Bot Crawler stores every article found. Over time the DB grows. Cleanup controls the size:",
+        "autoTitle": "Auto cleanup",
+        "autoBody": "In bot Edit → 'Auto cleanup of findings' section. Configure: day of week, hour, how many oldest findings to delete each run. Default: daily at 03:00 EEST, 100 oldest deleted.",
+        "autoExample": "Example: you have 320 findings. At 03:00 the bot deletes the 100 oldest → 220 remain. Next day if you have 320 again → delete 100 → 220. Stable window.",
+        "manualTitle": "Manual cleanup",
+        "manualBody": "In Settings tab → 'Cleanup findings' section — 3 buttons:",
+        "manualList": [
+          "Clear all dismissed — deletes every finding with status 'dismissed'",
+          "Clear used older than X months — deletes 'used' findings older than X months",
+          "Clear everything (Clear findings) — full wipe; useful when you change keywords and want re-evaluation"
+        ]
+      },
+      "bulk": {
+        "title": "Bulk operations on findings",
+        "intro": "When you have 200+ findings, manually marking each takes time. Bulk select solves this:",
+        "steps": [
+          "In 'Findings' → check the checkbox of each card you want",
+          "Or click 'Select all on this page' (checks the visible 20)",
+          "A dark toolbar appears at the top with the selected count",
+          "Click 'Reviewed' / 'Dismiss' / 'Used' → all selected get marked at once"
+        ],
+        "tip": "Selection clears automatically on filter / page / sort change — so you don't accidentally mark articles you can't see."
+      },
+      "emails": {
+        "title": "Email notifications",
+        "p1": "After every bot run (manual or scheduled), the system sends a summary email: status, seen / new articles, top 5 findings with thumbnail + link.",
+        "p2": "Recipients are configured in bot Edit → 'Email notifications' section. Chip-input style: type email → Enter → it becomes a chip. Multiple addresses OK (CC all). Leave empty to use the system defaults (env: CRAWLER_DEFAULT_NOTIFICATION_EMAILS).",
+        "callout": "Emails are sent on EVERY run, not only when there are new findings. If that's too noisy, change the schedule (every 6h instead of every 1h) — a digest option will be added later."
+      },
+      "fromFinding": {
+        "title": "Starting an article from a finding",
+        "intro": "The most useful feature — turns a finding into a ready article form with 2 clicks:",
+        "steps": [
+          "In 'Findings' → find an interesting one → click 'Start article'",
+          "The usual new-article form opens with title, description, main image and useful link pre-filled",
+          "A yellow banner on top shows the source + an 'Open original' button",
+          "Write your OWN content (do NOT copy the original!) → save"
+        ],
+        "warning": "IMPORTANT: The pre-fill is a starting point, not a final. Always read the original and write your own content — to avoid plagiarism. The title is a suggestion too, not mandatory."
+      },
+      "faq": {
+        "title": "FAQ + Troubleshooting",
+        "items": [
+          {
+            "q": "Why can't I find articles older than 1-2 days?",
+            "a": "Because most RSS feeds contain only the last ~24-48 hours.\nFor historical articles: add an HTML source (e.g. /search?q=pensions) with maxPages = 10+.\nCheck the source type is 'HTML' or 'Auto' with maxPages > 1."
+          },
+          {
+            "q": "What does NO_ITEMS_EXTRACTED mean?",
+            "a": "Auto-scraper didn't recognise the page structure.\nFix: edit the source → Advanced → Selectors (custom) → manually fill the CSS selectors (item, title, link).\nUse browser DevTools (F12 → Elements) to find the right selectors."
+          },
+          {
+            "q": "Email not arriving. Why?",
+            "a": "1. Check bot settings → email recipients or ENV fallback present?\n2. Check spam folder.\n3. See server logs (docker compose logs server | grep CrawlerEmail).\n4. If you see 'SDK_NOT_INSTALLED' or similar — tell the developer."
+          },
+          {
+            "q": "How do I add a new admin to the email recipients?",
+            "a": "Edit the bot → 'Email notifications' → add the email as a chip → Save.\nOr update ENV: CRAWLER_DEFAULT_NOTIFICATION_EMAILS=email1@..,email2@.. (for all bots)."
+          },
+          {
+            "q": "Why do some findings have no date (shows 'Found on X')?",
+            "a": "Because the original page doesn't expose a machine-readable date (<time datetime>) or doesn't expose one at all.\nUI shows 'Found on' (foundAt) as a fallback, italic + grey — so you know it's approximate, not exact."
+          },
+          {
+            "q": "How do I change keywords without losing old findings?",
+            "a": "Just edit the bot, change keywords, Save. Old findings stay as they are.\nIf you want to re-evaluate OLD findings with the new keywords → after the edit, click 'Clear findings' → the next run will find them again and apply the new criteria."
+          },
+          {
+            "q": "How many sources per bot?",
+            "a": "Recommendation: 3-7 sources per topic. More than 10 starts slowing down runs and generating noise.\nIf you have many topics — make separate bots, don't overload one."
+          }
+        ]
+      }
     }
   },
   "tabs": {

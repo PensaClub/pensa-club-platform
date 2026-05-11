@@ -2,10 +2,163 @@
   "page": {
     "title": "Bot Crawler",
     "newBot": "Neuer Bot",
+    "help": "Hilfe",
     "empty": {
       "title": "Noch keine Bots",
       "subtitle": "Erstellen Sie Ihren ersten Bot, um Nachrichten aus RSS-Feeds zu beobachten.",
       "cta": "Bot erstellen"
+    }
+  },
+  "guide": {
+    "pageTitle": "Bot Crawler — Anleitung",
+    "pageSubtitle": "Vollständige Dokumentation zur Erstellung und Verwaltung von Nachrichten-Beobachtungsbots. Jeder Abschnitt ist über das linke Menü navigierbar.",
+    "backToBots": "Zurück zu Bots",
+    "toc": {
+      "label": "Inhaltsverzeichnis",
+      "title": "In dieser Anleitung"
+    },
+    "footer": "Wenn etwas unklar ist — überspringe es und probiere in der UI aus. Bot Crawler verzeiht Fehler: Du kannst alles mit einem Klick löschen und neu versuchen.",
+    "sections": {
+      "overview": {
+        "title": "Was ist Bot Crawler",
+        "p1": "Bot Crawler ist ein Tool zur automatischen Beobachtung von Nachrichtenseiten nach Stichwörtern. Du erstellst einen Bot mit einem Thema (z. B. 'Renten in Bulgarien'), gibst ihm Quellen (RSS-Feeds oder HTML-Seiten) und Stichwort-Filter. Nach einem von dir gewählten Zeitplan durchsucht der Bot die Quellen, findet Artikel passend zu den Stichwörtern und zeigt sie im Admin-Panel an.",
+        "p2": "Ziel ist es, Stunden manuellen Browsens zu sparen — statt selbst 24chasa, NOI, btv etc. zu durchsuchen, macht es der Bot und liefert dir eine fertige Liste relevanter Artikel. Klick 'Artikel beginnen' → ein neues Artikelformular öffnet sich vorausgefüllt vom Fund.",
+        "callout": "Bot Crawler veröffentlicht NICHT automatisch. Er ist ein editoriales Pre-Filtering-Tool. Den finalen Artikel schreibst du im üblichen Flow."
+      },
+      "create": {
+        "title": "Bot erstellen",
+        "intro": "Schritte zur Erstellung eines neuen Bots:",
+        "steps": [
+          "Öffne /admin/bot-crawler → klicke 'Neuer Bot'",
+          "Gib einen aussagekräftigen Namen (z. B. 'Renten und Soziales')",
+          "Beschreibung (optional) — für deine Referenz und zukünftige KI-Bewertung",
+          "Wähle Zeitplan — wie oft (Minuten/Stunden/Tage). Standard: stündlich.",
+          "Stichwörter hinzufügen — Enter nach jedem. 5-15 empfohlen.",
+          "Match-Modus: 'Beliebig' = OR (weiter), 'Alle' = AND (strenger)",
+          "Wie weit zurückblicken — ältere Artikel werden übersprungen",
+          "Speichern → Bot erscheint in der Liste mit Status 'Aktiv'"
+        ],
+        "tip": "Nach Erstellung ist der Bot leer — füge mindestens 1 Quelle (Sources-Tab) vor dem ersten Lauf hinzu."
+      },
+      "sources": {
+        "title": "Quelle hinzufügen",
+        "intro": "Eine Quelle ist eine URL, von der der Bot Artikel liest. 3 Typen:",
+        "rss": {
+          "title": "RSS",
+          "body": "Maschinen-lesbares Format. Schnell, zuverlässig, enthält aber meist nur die letzten ~24-48 Stunden. Beispiel: https://www.24chasa.bg/rss/bulgaria"
+        },
+        "html": {
+          "title": "HTML",
+          "body": "Eine normale Webseite. Der Bot scraped sie mit CSS-Selektoren. Unterstützt Pagination (page=2, page=3, etc.). Ideal für Suchseiten und historische Extraktion."
+        },
+        "auto": {
+          "title": "Automatisch",
+          "body": "Standard — der Bot entscheidet. RSS → RSS. HTML → scrapen. Bei maxPages > 1 → erzwingt HTML für Pagination."
+        },
+        "warning": "Nach 'Testen' immer die Beispielartikel ansehen — wird nichts gefunden, geh zu 'Erweitert → Selektoren' und prüfe/korrigiere die CSS-Selektoren."
+      },
+      "selectors": {
+        "title": "CSS-Selektoren (für HTML)",
+        "intro": "Selektoren teilen dem Bot mit, WO in der HTML-Seite die Artikel sind. Standard-CSS-Syntax + @attr-Suffix für Attribute:",
+        "tableField": "Feld",
+        "tableExample": "Beispiel",
+        "tableNote": "Hinweis",
+        "rows": [
+          { "field": "item", "example": "article.news-card", "note": "Wrapper jedes Artikels" },
+          { "field": "title", "example": "h2.entry-title", "note": "Titel — Text" },
+          { "field": "link", "example": "a@href", "note": "Link — href-Attribut des ersten <a>" },
+          { "field": "image", "example": "img@src", "note": "Bild — src-Attribut des ersten <img>" },
+          { "field": "description", "example": "p.summary", "note": "Kurze Beschreibung (optional)" },
+          { "field": "published", "example": "time@datetime", "note": "Veröffentlichungsdatum (optional)" }
+        ],
+        "tip": "Beim Hinzufügen einer Quelle und Klick auf 'Testen' schlägt die Auto-Erkennung vorausgefüllte Selektoren vor. Du kannst sie behalten oder anpassen."
+      },
+      "pagination": {
+        "title": "Pagination (Max. Seiten)",
+        "p1": "Bei HTML-Quellen steuert 'Max. Seiten', wie viele Pagination-Seiten der Bot pro Lauf durchsucht. Standard = 1 (nur erste Seite). Mit 10 werden /page/1, /page/2, ..., /page/10 durchsucht (oder ?page=1..10).",
+        "p2": "Wann verwenden: wenn du HISTORISCHE Daten willst (z. B. alle 'Renten'-Artikel des letzten Monats, nicht nur heute). Der Bot stoppt früher, wenn alle Items bereits gesehen oder älter als 'Wie weit zurückblicken' sind.",
+        "warning": "RSS-Feeds unterstützen KEINE Pagination — sie haben eine feste Anzahl (~10-50) neuester Items. Für historische Tiefe nutze eine HTML-Quelle mit Such-URL."
+      },
+      "lookback": {
+        "title": "Wie weit zurückblicken",
+        "p1": "Lookback limitiert, wie alte Artikel der Bot akzeptiert. Z. B. 'Letzte 3 Tage' überspringt alles älter als 3 Tage (nach Veröffentlichungsdatum). 'Unbegrenzt' akzeptiert alles.",
+        "p2": "Nützlich für aktuelle Nachrichten — du willst keinen 'Renten'-Bot der 2018-Artikel aus einem Blog-Archiv zieht. Ältere Artikel werden beim Finden automatisch verworfen."
+      },
+      "cleanup": {
+        "title": "Funde bereinigen",
+        "intro": "Bot Crawler speichert jeden gefundenen Artikel. Mit der Zeit wächst die DB. Cleanup steuert die Größe:",
+        "autoTitle": "Auto-Bereinigung",
+        "autoBody": "Im Bot-Edit → Sektion 'Auto-Bereinigung der Funde'. Konfiguriere: Wochentag, Uhrzeit, wie viele älteste Funde pro Lauf gelöscht werden. Standard: täglich 03:00 EEST, 100 älteste.",
+        "autoExample": "Beispiel: du hast 320 Funde. Um 03:00 löscht der Bot die 100 ältesten → 220 bleiben. Am nächsten Tag wieder 320 → 100 gelöscht → 220. Stabiles Fenster.",
+        "manualTitle": "Manuelle Bereinigung",
+        "manualBody": "Im Settings-Tab → Sektion 'Funde bereinigen' — 3 Buttons:",
+        "manualList": [
+          "Alle verworfenen löschen — löscht alle mit Status 'verworfen'",
+          "Verwendete älter als X Monate löschen — löscht 'verwendet'-Funde älter als X Monate",
+          "Alles löschen — komplette Löschung; nützlich bei Stichwort-Änderung für Re-Evaluation"
+        ]
+      },
+      "bulk": {
+        "title": "Bulk-Operationen auf Funden",
+        "intro": "Bei 200+ Funden dauert manuelles Markieren zu lange. Bulk-Select löst das:",
+        "steps": [
+          "In 'Funde' → Checkbox jeder gewünschten Karte aktivieren",
+          "Oder 'Alle auf dieser Seite auswählen' (markiert die sichtbaren 20)",
+          "Eine dunkle Toolbar erscheint oben mit der Anzahl",
+          "Klick 'Geprüft' / 'Verwerfen' / 'Verwendet' → alle ausgewählten werden gleichzeitig markiert"
+        ],
+        "tip": "Auswahl wird automatisch bei Filter-/Seiten-/Sortier-Wechsel zurückgesetzt — damit du nicht versehentlich nicht-sichtbare Artikel markierst."
+      },
+      "emails": {
+        "title": "E-Mail-Benachrichtigungen",
+        "p1": "Nach jedem Bot-Lauf (manuell oder geplant) sendet das System eine Zusammenfassungs-E-Mail: Status, gesehen / neue Artikel, Top-5-Funde mit Thumbnail + Link.",
+        "p2": "Empfänger werden im Bot-Edit → Sektion 'E-Mail-Benachrichtigungen' konfiguriert. Chip-Input-Stil: E-Mail eingeben → Enter → wird Chip. Mehrere Adressen OK (CC alle). Leer = System-Standards (env: CRAWLER_DEFAULT_NOTIFICATION_EMAILS).",
+        "callout": "E-Mails werden bei JEDEM Lauf gesendet, nicht nur bei neuen Funden. Zu laut? Zeitplan ändern (alle 6h statt 1h). Eine Digest-Option kommt später."
+      },
+      "fromFinding": {
+        "title": "Artikel aus einem Fund starten",
+        "intro": "Die nützlichste Funktion — verwandelt einen Fund in ein fertiges Artikelformular mit 2 Klicks:",
+        "steps": [
+          "In 'Funde' → interessanten finden → klick 'Artikel beginnen'",
+          "Übliches Formular öffnet sich mit Titel, Beschreibung, Hauptbild und Useful Link vorausgefüllt",
+          "Gelbes Banner oben zeigt die Quelle + 'Original öffnen'-Button",
+          "Schreibe DEINEN Inhalt (KEINE Kopie des Originals!) → speichern"
+        ],
+        "warning": "WICHTIG: Pre-Fill ist Startpunkt, nicht Endprodukt. Lies das Original immer und schreibe eigenen Inhalt — um Plagiate zu vermeiden. Der Titel ist auch nur Vorschlag."
+      },
+      "faq": {
+        "title": "FAQ + Fehlerbehebung",
+        "items": [
+          {
+            "q": "Warum finde ich keine Artikel älter als 1-2 Tage?",
+            "a": "Weil die meisten RSS-Feeds nur die letzten ~24-48 Stunden enthalten.\nFür historische Artikel: HTML-Quelle hinzufügen (z. B. /search?q=renten) mit maxPages = 10+.\nQuellentyp prüfen: 'HTML' oder 'Auto' mit maxPages > 1."
+          },
+          {
+            "q": "Was bedeutet NO_ITEMS_EXTRACTED?",
+            "a": "Auto-Scraper hat die Seitenstruktur nicht erkannt.\nLösung: Quelle bearbeiten → Erweitert → Selektoren (benutzerdefiniert) → CSS-Selektoren manuell ausfüllen (item, title, link).\nBrowser-DevTools (F12 → Elements) verwenden, um die richtigen Selektoren zu finden."
+          },
+          {
+            "q": "E-Mail kommt nicht an. Warum?",
+            "a": "1. Bot-Einstellungen prüfen → E-Mail-Empfänger oder ENV-Fallback vorhanden?\n2. Spam-Ordner prüfen.\n3. Server-Logs ansehen (docker compose logs server | grep CrawlerEmail).\n4. Bei 'SDK_NOT_INSTALLED' oder ähnlich — Entwickler informieren."
+          },
+          {
+            "q": "Wie füge ich einen neuen Admin zu den E-Mail-Empfängern hinzu?",
+            "a": "Bot bearbeiten → 'E-Mail-Benachrichtigungen' → E-Mail als Chip hinzufügen → Speichern.\nOder ENV anpassen: CRAWLER_DEFAULT_NOTIFICATION_EMAILS=email1@..,email2@.. (für alle Bots)."
+          },
+          {
+            "q": "Warum haben einige Funde kein Datum (zeigt 'Gefunden am X')?",
+            "a": "Weil die Originalseite kein maschinenlesbares Datum exponiert (<time datetime>) oder gar keines.\nUI zeigt 'Gefunden am' (foundAt) als Fallback, kursiv + grau — damit du weißt, dass es ungefähr ist, nicht exakt."
+          },
+          {
+            "q": "Wie ändere ich Stichwörter ohne alte Funde zu verlieren?",
+            "a": "Einfach Bot bearbeiten, Stichwörter ändern, Speichern. Alte Funde bleiben.\nWenn du ALTE Funde mit neuen Stichwörtern re-evaluieren willst → nach dem Edit 'Funde löschen' klicken → nächster Lauf findet sie wieder und wendet neue Kriterien an."
+          },
+          {
+            "q": "Wie viele Quellen pro Bot?",
+            "a": "Empfehlung: 3-7 Quellen pro Thema. Mehr als 10 verlangsamt die Läufe und erzeugt Rauschen.\nBei vielen Themen — separate Bots erstellen, nicht einen überladen."
+          }
+        ]
+      }
     }
   },
   "tabs": {
