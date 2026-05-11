@@ -78,6 +78,10 @@ module.exports = (sequelize, DataTypes) => {
                 type: DataTypes.INTEGER,
                 allowNull: true,
             },
+            llmReasoning: {
+                type: DataTypes.TEXT,
+                allowNull: true,
+            },
             foundAt: {
                 type: DataTypes.DATE,
                 allowNull: false,

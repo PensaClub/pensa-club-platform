@@ -242,6 +242,46 @@ export const CrawlerProvider = ({ children }) => {
     }
   }, [crawlerService]);
 
+  // ---------- LLM (Phase 4) ----------
+  const getLlmModels = useCallback(async () => {
+    try {
+      return await crawlerService.getLlmModels();
+    } catch (error) {
+      console.error('CrawlerContext.getLlmModels error:', error);
+      return { items: [], defaultSystemPrompt: '' };
+    }
+  }, [crawlerService]);
+
+  const previewLlmPrompt = useCallback(async (botId, payload) => {
+    try {
+      return await crawlerService.previewLlmPrompt(botId, payload);
+    } catch (error) {
+      console.error('CrawlerContext.previewLlmPrompt error:', error);
+      notify('error', error);
+      throw error;
+    }
+  }, [crawlerService]);
+
+  const testLlmScoring = useCallback(async (botId, payload) => {
+    try {
+      return await crawlerService.testLlmScoring(botId, payload);
+    } catch (error) {
+      console.error('CrawlerContext.testLlmScoring error:', error);
+      notify('error', error);
+      throw error;
+    }
+  }, [crawlerService]);
+
+  const resetLlmCounters = useCallback(async (botId) => {
+    try {
+      return await crawlerService.resetLlmCounters(botId);
+    } catch (error) {
+      console.error('CrawlerContext.resetLlmCounters error:', error);
+      notify('error', error);
+      throw error;
+    }
+  }, [crawlerService]);
+
   // ---------- Runs ----------
   const listRuns = useCallback(async (botId, limit = 20) => {
     try {
@@ -273,11 +313,16 @@ export const CrawlerProvider = ({ children }) => {
     bulkUpdateFindingStatus,
     bulkClearFindings,
     listRuns,
+    getLlmModels,
+    previewLlmPrompt,
+    testLlmScoring,
+    resetLlmCounters,
   }), [
     listBots, getBot, createBot, updateBot, deleteBot, runBotNow, clearBotFindings,
     listSources, createSource, updateSource, deleteSource,
     validateSourceUrl, revalidateSource,
     listFindings, getFinding, updateFindingStatus, bulkUpdateFindingStatus, bulkClearFindings, listRuns,
+    getLlmModels, previewLlmPrompt, testLlmScoring, resetLlmCounters,
   ]);
 
   return (

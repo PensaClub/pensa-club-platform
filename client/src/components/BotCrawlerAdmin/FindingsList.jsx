@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { ExternalLink, FilePlus, EyeOff, Check, Search, Eye, X as XIcon } from 'lucide-react';
+import { ExternalLink, FilePlus, EyeOff, Check, Search, Eye, X as XIcon, Sparkles } from 'lucide-react';
 import { LocalizedLink } from '../LocalizedLink/LocalizedLink';
 import { useCrawlerContext } from '../contexts/CrawlerContext';
 import { notify } from '../../utils/notify.jsx';
@@ -8,7 +8,7 @@ import { getResizedUrl } from '../../utils/firebaseImageResize';
 import './findingsList.css';
 
 const STATUS_FILTERS = ['new', 'reviewed', 'dismissed', 'used'];
-const ORDER_OPTIONS = ['published_desc', 'published_asc', 'found_desc'];
+const ORDER_OPTIONS = ['published_desc', 'published_asc', 'found_desc', 'relevance_desc'];
 const PAGE_SIZE = 20;
 
 const FindingsList = ({ botId }) => {
@@ -346,9 +346,28 @@ const FindingsList = ({ botId }) => {
                   </div>
                 )}
                 <div className="bcfl-body">
-                  <h3 className="bcfl-title">{f.title || '(no title)'}</h3>
+                  <div className="bcfl-title-row">
+                    <h3 className="bcfl-title">{f.title || '(no title)'}</h3>
+                    {Number.isFinite(f.relevanceScore) && (
+                      <span
+                        className={`bcfl-score bcfl-score-${
+                          f.relevanceScore >= 80 ? 'high'
+                          : f.relevanceScore >= 50 ? 'mid'
+                          : 'low'
+                        }`}
+                        title={f.llmReasoning || ''}
+                      >
+                        AI: {f.relevanceScore}
+                      </span>
+                    )}
+                  </div>
                   {f.description && (
                     <p className="bcfl-desc">{truncate(f.description, 280)}</p>
+                  )}
+                  {f.llmReasoning && (
+                    <p className="bcfl-reasoning" title={f.llmReasoning}>
+                      <Sparkles size={12} aria-hidden="true" /> {truncate(f.llmReasoning, 200)}
+                    </p>
                   )}
                   <div className="bcfl-meta">
                     {f.source?.name && <span className="bcfl-source">{f.source.name}</span>}

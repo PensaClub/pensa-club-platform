@@ -119,6 +119,22 @@ export const crawlerServiceFactory = (token) => {
     },
 
     // ===========================================================
+    // LLM (Phase 4)
+    // ===========================================================
+    getLlmModels: async () => {
+      return requester.get(`${apiUrl}/crawler/llm/models`);
+    },
+    previewLlmPrompt: async (botId, payload) => {
+      return requester.post(`${apiUrl}/crawler/bots/${botId}/llm/preview`, payload || {});
+    },
+    testLlmScoring: async (botId, payload) => {
+      return requester.post(`${apiUrl}/crawler/bots/${botId}/llm/test`, payload || {});
+    },
+    resetLlmCounters: async (botId) => {
+      return requester.post(`${apiUrl}/crawler/bots/${botId}/llm/reset-counters`, {});
+    },
+
+    // ===========================================================
     // Runs (history per bot)
     // ===========================================================
     listRuns: async (botId, limit = 20) => {

@@ -164,6 +164,7 @@
   "tabs": {
     "findings": "Funde",
     "sources": "Quellen",
+    "ai": "KI",
     "settings": "Einstellungen",
     "history": "Verlauf"
   },
@@ -213,7 +214,7 @@
       "match": "Wie zuordnen",
       "caseSensitive": "Groß-/Kleinschreibung beachten",
       "status": "Bot-Status",
-      "useLlm": "KI-Bewertung mit Claude (in Kürze)",
+      "useLlm": "KI-Bewertung mit Claude",
       "lookBackDays": "Wie weit zurückblicken",
       "cleanupEnabled": "Auto-Bereinigung aktivieren",
       "cleanupDay": "Bereinigungstag",
@@ -236,7 +237,7 @@
       "match": "'Beliebig' = wenn mindestens ein Stichwort vorhanden → behalten. 'Alle' = jedes Stichwort muss vorhanden sein.",
       "caseSensitive": "Wenn aus (empfohlen), werden 'NOI' und 'noi' als dasselbe Wort behandelt.",
       "status": "Aktiv — läuft nach Zeitplan. Pausiert — temporär aus, Verlauf bleibt. Archiviert — aus der Hauptliste ausgeblendet.",
-      "useLlm": "KI bewertet jeden Fund auf Themenrelevanz (0-100). Kommt in Phase 4.",
+      "useLlm": "KI bewertet jeden Fund auf Themenrelevanz (0-100). Detaillierte Einstellungen (Modell, Prompt, Score-Schwellwert, Tageslimit) findest du im 'KI'-Tab.",
       "lookBackDays": "Artikel überspringen, die älter als der gewählte Zeitraum sind (anhand des RSS-Veröffentlichungsdatums). Nützlich für aktuelle Nachrichten. 'Unbegrenzt' akzeptiert alles.",
       "cleanupEnabled": "Wenn aktiv, werden am gewählten Tag und zur gewählten Stunde die N ältesten Funde dieses Bots automatisch gelöscht — unabhängig vom Status. Deaktiviere diese Option, wenn du nur manuell mit den Schaltflächen unten bereinigen willst.",
       "cleanupDay": "An welchem Wochentag die Auto-Bereinigung läuft. 'Täglich' = jede Nacht.",
@@ -422,7 +423,8 @@
       "label": "Sortierung",
       "published_desc": "Neueste (nach Veröffentlichung)",
       "published_asc": "Älteste (nach Veröffentlichung)",
-      "found_desc": "Neueste (nach Funddatum)"
+      "found_desc": "Neueste (nach Funddatum)",
+      "relevance_desc": "Nach KI-Relevanz (höchste)"
     },
     "sourceFilter": {
       "label": "Quelle",
@@ -471,6 +473,66 @@
       "title": "Funde löschen",
       "help": "Entfernt alle Funde dieses Bots. Nützlich, wenn du die Stichwörter änderst und der Bot beim nächsten Lauf alles neu auswerten soll.",
       "message": "Möchten Sie ALLE Funde dieses Bots wirklich löschen? Sie werden beim nächsten Lauf neu ausgewertet."
+    }
+  },
+  "ai": {
+    "master": {
+      "label": "KI-Bewertung mit Claude aktivieren",
+      "desc": "Wenn aktiviert, wird jeder neue Fund an Claude gesendet für eine 0-100 Relevanzbewertung gegen das Bot-Thema. Unter dem Schwellwert → automatisch verworfen (wenn auto-dismiss aktiv). Pro Bot — beeinflusst andere Bots nicht."
+    },
+    "model": { "title": "Modell und Kosten" },
+    "scoring": { "title": "Score und Verhalten" },
+    "prompt": {
+      "title": "Prompt-Anweisungen",
+      "resetToDefault": "Auf Standard zurücksetzen"
+    },
+    "test": {
+      "title": "Vor Aktivierung testen",
+      "desc": "Schicke einen Artikel mit aktuellen Einstellungen durch die KI. Sieh exakten Prompt + Antwort. Zählt zum Tageslimit.",
+      "pickFinding": "Wähle einen Fund zum Testen",
+      "useSample": "(Beispielartikel verwenden)",
+      "run": "Test starten",
+      "running": "Sende...",
+      "score": "Score",
+      "reasoning": "Begründung",
+      "tokensIn": "Eingabe-Tokens",
+      "tokensOut": "Ausgabe-Tokens",
+      "cost": "Kosten",
+      "showPrompt": "Vollständigen Prompt anzeigen",
+      "error": "Fehler"
+    },
+    "stats": {
+      "title": "Heute",
+      "tokensIn": "Eingabe-Tokens",
+      "tokensOut": "Ausgabe-Tokens",
+      "costToday": "Heute ausgegeben",
+      "reset": "Zähler zurücksetzen",
+      "modelInfo": "Preis des gewählten Modells:"
+    },
+    "fields": {
+      "model": "Modell",
+      "minScore": "Minimaler Score zum Behalten",
+      "autoDismiss": "Unter Minimum automatisch verwerfen",
+      "temperature": "Temperatur",
+      "maxTokens": "Max. Ausgabe-Tokens",
+      "dailyCostCap": "Tageslimit ($)",
+      "systemPrompt": "System-Prompt (Hauptanweisungen)",
+      "extraInstructions": "Zusätzliche Anweisungen"
+    },
+    "placeholder": {
+      "extraInstructions": "z. B. Ignoriere Artikel über das Ausland, außer es geht um Renten. Bewerte Artikel mit konkreten Zahlen höher."
+    },
+    "help": {
+      "minScore": "Artikel mit niedrigerem KI-Score → automatisch verworfen (wenn der Toggle unten aktiv ist).",
+      "autoDismiss": "Wenn aus: alle Artikel bleiben als 'neu', bekommen nur ein Score-Badge — du entscheidest manuell.",
+      "temperature": "0 = streng und stabil (gleiche Eingabe = gleicher Score). Höher = vielfältigere Bewertungen.",
+      "maxTokens": "Max. Tokens, die Claude zurückgeben darf. 300 reicht für Score + 1-2 Sätze Begründung.",
+      "dailyCostCap": "Bei Erreichen stoppt KI-Scoring für den Tag. Neue Funde werden ohne Score gespeichert, nichts crasht. Reset um Mitternacht Sofia-Zeit.",
+      "systemPrompt": "Hauptanweisungen, die jedes Mal gesendet werden. Du kannst {{bot_description}}, {{keywords}}, {{bot_name}} Platzhalter verwenden. Leer = eingebauter Standard.",
+      "extraInstructions": "Zusätzliche Anweisungen, die an den System-Prompt angehängt werden. Themen-spezifische Anpassungen hier."
+    },
+    "toast": {
+      "countersReset": "Tageszähler zurückgesetzt."
     }
   },
   "cleanup": {

@@ -18,6 +18,7 @@ const { canonicalize, urlHash } = require('../utils/urlCanonical');
 const { safeFetchValidate } = require('../utils/networkSafety');
 const { extractItems, autoExtractItems } = require('../utils/htmlScraper');
 const { sendBotRunEmail } = require('../utils/botCrawlerEmail');
+const { scoreFinding } = require('./llmScorer');
 
 // Some sites (esp. govt + Cloudflare-protected ones like noi.bg) actively
 // reject any UA that mentions "bot" — they drop the TCP connection at the
@@ -508,6 +509,34 @@ const runBot = async (botId, { trigger = 'cron' } = {}) => {
             const haystack = `${item.title || ''} ${item.description || ''}`;
             if (!matchCriteria(bot.criteria, haystack)) continue;
 
+            // ── Phase 4: optional LLM scoring ─────────────────────────
+            // After keyword match passes (cheap), but before the DB insert
+            // (so we can short-circuit save status / score in one write).
+            // Scoring failure or cost cap → save anyway, just without score.
+            let llmScore = null;
+            let llmReasoning = null;
+            let initialStatus = 'new';
+            if (bot.useLlm) {
+                try {
+                    const scored = await scoreFinding(bot, {
+                        title: item.title,
+                        description: item.description,
+                        externalUrl: canonical,
+                    });
+                    if (scored && Number.isFinite(scored.score)) {
+                        llmScore = scored.score;
+                        llmReasoning = scored.reasoning;
+                        const minScore = Number.isFinite(bot.llmMinScore) ? bot.llmMinScore : 40;
+                        if (bot.llmAutoDismiss && llmScore < minScore) {
+                            initialStatus = 'dismissed';
+                        }
+                    }
+                } catch (err) {
+                    // Never fail the whole engine on a scoring error.
+                    console.error(`[crawlerEngine] LLM score failed for bot ${botId}:`, err?.message);
+                }
+            }
+
             try {
                 await crawler_finding.create({
                     botId,
@@ -519,7 +548,9 @@ const runBot = async (botId, { trigger = 'cron' } = {}) => {
                     description: item.description || null,
                     imageUrl: item.image ? truncate(item.image, 1000) : null,
                     publishedAt: item.publishedAt || null,
-                    status: 'new',
+                    status: initialStatus,
+                    relevanceScore: llmScore,
+                    llmReasoning: llmReasoning || null,
                 });
                 itemsNew += 1;
             } catch (err) {

@@ -428,6 +428,71 @@
   color: #6b7280;
 }
 
+.bcfl-title-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 4px;
+}
+
+.bcfl-title-row .bcfl-title {
+  margin: 0;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.bcfl-score {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 9px;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  cursor: help;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.bcfl-score-high {
+  background: #d1fae5;
+  color: #065f46;
+  border: 1px solid #6ee7b7;
+}
+
+.bcfl-score-mid {
+  background: #fef3c7;
+  color: #92400e;
+  border: 1px solid #fcd34d;
+}
+
+.bcfl-score-low {
+  background: #fee2e2;
+  color: #991b1b;
+  border: 1px solid #fca5a5;
+}
+
+.bcfl-reasoning {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  margin: 6px 0 8px;
+  padding: 6px 10px;
+  background: #f0f9ff;
+  border-left: 3px solid #38bdf8;
+  border-radius: 4px;
+  font-size: 0.78rem;
+  color: #075985;
+  line-height: 1.4;
+  font-style: italic;
+}
+
+.bcfl-reasoning svg {
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
 .bcfl-source {
   font-weight: 600;
   color: #4b5563;
