@@ -30,11 +30,17 @@ jobs:
           docker exec digital-literacy-wellbeing-60-plus-db-1 pg_dump -U postgres pensaclub_db | gzip > /root/backups/pensaclub_db_before_deploy_$(date +%Y%m%d_%H%M%S).sql.gz
           echo "Backup created"
 
-          # 2. Pull new code
-          git pull origin main
+          # 2. Sync to origin/main (hard reset — гарантира че VPS е огледало
+          # на main, без локални merge bubbles. .env / docker-compose.yml.save
+          # / nginx-proxy-manager/* са untracked → НЕ се пипат.)
+          git fetch origin main
+          git reset --hard origin/main
 
-          # 3. Build new images (сайтът работи докато build-ва)
-          docker compose build client server
+          # 3. Build new images (сайтът работи докато build-ва).
+          # --no-cache форсира пълен rebuild — иначе Docker layer cache
+          # понякога hit-ва грешно и деплоят минава за 30s без реална
+          # промяна на bundle-а.
+          docker compose build --no-cache client server
           echo "Build completed"
 
           # 4. Restart with new images (downtime < 5 секунди)

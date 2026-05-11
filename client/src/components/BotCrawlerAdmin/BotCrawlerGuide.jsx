@@ -27,6 +27,14 @@ const SECTIONS = [
   { id: 'faq',          icon: HelpCircle },
 ];
 
+// Helper: i18next sometimes returns the key string (or other non-array values)
+// when `returnObjects` isn't honoured or the namespace isn't fully loaded yet.
+// Always coerce to a safe array before mapping.
+const arrayT = (t, key) => {
+  const v = t(key, { returnObjects: true });
+  return Array.isArray(v) ? v : [];
+};
+
 const BotCrawlerGuide = () => {
   const { t } = useTranslation('botCrawler');
   const [activeId, setActiveId] = useState(SECTIONS[0].id);
@@ -112,7 +120,7 @@ const BotCrawlerGuide = () => {
 
           <Section id="create" icon={BotIcon} title={t('guide.sections.create.title')}>
             <P>{t('guide.sections.create.intro')}</P>
-            <Steps items={t('guide.sections.create.steps', { returnObjects: true })} />
+            <Steps items={arrayT(t, 'guide.sections.create.steps')} />
             <Callout type="tip">{t('guide.sections.create.tip')}</Callout>
           </Section>
 
@@ -137,7 +145,7 @@ const BotCrawlerGuide = () => {
                 </tr>
               </thead>
               <tbody>
-                {(t('guide.sections.selectors.rows', { returnObjects: true }) || []).map((row, i) => (
+                {arrayT(t, 'guide.sections.selectors.rows').map((row, i) => (
                   <tr key={i}>
                     <td data-label={t('guide.sections.selectors.tableField')}><strong>{row.field}</strong></td>
                     <td data-label={t('guide.sections.selectors.tableExample')}><code className="bcg-code">{row.example}</code></td>
@@ -168,7 +176,7 @@ const BotCrawlerGuide = () => {
             <h3 className="bcg-h3">{t('guide.sections.cleanup.manualTitle')}</h3>
             <P>{t('guide.sections.cleanup.manualBody')}</P>
             <ul className="bcg-list">
-              {(t('guide.sections.cleanup.manualList', { returnObjects: true }) || []).map((item, i) => (
+              {arrayT(t, 'guide.sections.cleanup.manualList').map((item, i) => (
                 <li key={i}>{item}</li>
               ))}
             </ul>
@@ -176,7 +184,7 @@ const BotCrawlerGuide = () => {
 
           <Section id="bulk" icon={CheckSquare} title={t('guide.sections.bulk.title')}>
             <P>{t('guide.sections.bulk.intro')}</P>
-            <Steps items={t('guide.sections.bulk.steps', { returnObjects: true })} />
+            <Steps items={arrayT(t, 'guide.sections.bulk.steps')} />
             <Callout type="tip">{t('guide.sections.bulk.tip')}</Callout>
           </Section>
 
@@ -188,16 +196,16 @@ const BotCrawlerGuide = () => {
 
           <Section id="fromFinding" icon={FilePlus} title={t('guide.sections.fromFinding.title')}>
             <P>{t('guide.sections.fromFinding.intro')}</P>
-            <Steps items={t('guide.sections.fromFinding.steps', { returnObjects: true })} />
+            <Steps items={arrayT(t, 'guide.sections.fromFinding.steps')} />
             <Callout type="warning">{t('guide.sections.fromFinding.warning')}</Callout>
           </Section>
 
           <Section id="faq" icon={HelpCircle} title={t('guide.sections.faq.title')}>
-            {(t('guide.sections.faq.items', { returnObjects: true }) || []).map((q, i) => (
+            {arrayT(t, 'guide.sections.faq.items').map((q, i) => (
               <details key={i} className="bcg-faq">
                 <summary>{q.q}</summary>
                 <div className="bcg-faq-body">
-                  {q.a.split('\n').map((line, idx) => (
+                  {(q.a || '').split('\n').map((line, idx) => (
                     <p key={idx} className="bcg-faq-line">{line}</p>
                   ))}
                 </div>
