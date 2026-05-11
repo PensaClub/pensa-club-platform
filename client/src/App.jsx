@@ -132,6 +132,7 @@ const AdminNewsletters = lazyWithRetry(() => import('./components/AdminNewslette
 // ✅ LAZY LOADING - BOT CRAWLER (Phase 1 — admin-only RSS news monitor)
 const BotCrawlerPage = lazyWithRetry(() => import('./components/BotCrawlerAdmin/BotCrawlerPage.jsx'));
 const BotDetailPage = lazyWithRetry(() => import('./components/BotCrawlerAdmin/BotDetailPage.jsx'));
+const BotCrawlerGuide = lazyWithRetry(() => import('./components/BotCrawlerAdmin/BotCrawlerGuide.jsx'));
 
 // ✅ LAZY LOADING - PUBLIC SUBSCRIBE PAGES (token-protected)
 const SubscribePreferences = lazyWithRetry(() => import('./components/Subscribe/SubscribePreferences/SubscribePreferences.jsx').then(m => ({ default: m.SubscribePreferences })));
@@ -269,6 +270,7 @@ function AppRoutes() {
         <Route path="/admin/site-settings" element={<AdminGuard><SiteSettingsAdmin /></AdminGuard>} />
         <Route path="/admin/newsletters" element={<ManagementGuard><Suspense fallback={<LazyLoadingFallback />}><AdminNewsletters /></Suspense></ManagementGuard>} />
         <Route path="/admin/bot-crawler" element={<ManagementGuard><Suspense fallback={<LazyLoadingFallback />}><BotCrawlerPage /></Suspense></ManagementGuard>} />
+        <Route path="/admin/bot-crawler/guide" element={<ManagementGuard><Suspense fallback={<LazyLoadingFallback />}><BotCrawlerGuide /></Suspense></ManagementGuard>} />
         <Route path="/admin/bot-crawler/:id" element={<ManagementGuard><Suspense fallback={<LazyLoadingFallback />}><BotDetailPage /></Suspense></ManagementGuard>} />
         <Route path="/admin/fact-check" element={<ManagementGuard><IpManagementProvider><Suspense fallback={<LazyLoadingFallback />}><AdminFactCheck /></Suspense></IpManagementProvider></ManagementGuard>} />
         <Route path="/reaction/my" element={<Suspense fallback={<LazyLoadingFallback />}><ReActionMy /></Suspense>} />

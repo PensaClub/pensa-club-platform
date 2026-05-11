@@ -1,8 +1,9 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Plus, Bot as BotIcon } from 'lucide-react';
+import { Plus, Bot as BotIcon, BookOpen } from 'lucide-react';
 import { useCrawlerContext } from '../contexts/CrawlerContext';
 import { notify } from '../../utils/notify.jsx';
+import { LocalizedLink } from '../LocalizedLink/LocalizedLink';
 import BotCard from './BotCard';
 import BotEditModal from './BotEditModal';
 import DeleteConfirmModal from '../Articles/AdminArticles/DeleteConfirmModal/DeleteConfirmModal';
@@ -110,10 +111,16 @@ const BotCrawlerPage = () => {
           <BotIcon size={28} className="bca-title-icon" aria-hidden="true" />
           <h1 className="bca-title">{t('page.title')}</h1>
         </div>
-        <button type="button" className="bca-btn bca-btn-primary" onClick={handleNew}>
-          <Plus size={18} aria-hidden="true" />
-          <span>{t('page.newBot')}</span>
-        </button>
+        <div className="bca-header-actions">
+          <LocalizedLink to="/admin/bot-crawler/guide" className="bca-btn bca-btn-secondary">
+            <BookOpen size={18} aria-hidden="true" />
+            <span>{t('page.help')}</span>
+          </LocalizedLink>
+          <button type="button" className="bca-btn bca-btn-primary" onClick={handleNew}>
+            <Plus size={18} aria-hidden="true" />
+            <span>{t('page.newBot')}</span>
+          </button>
+        </div>
       </div>
 
       <div className="bca-filters" role="tablist" aria-label={t('page.title')}>
