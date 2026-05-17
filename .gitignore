@@ -1,7 +1,15 @@
 node_modules/
+
+# Environment files - all variants, including renamed copies
 .env
 .env.*
-# Firebase
-server/config/firebase-service-account.json
+.env*
+*.env
+
+# Firebase service account key - never commit (any location)
+**/firebase-service-account.json
+firebase-service-account.json
+
 # YouTube OAuth tokens
+**/youtube-tokens.json
 server/youtube-tokens.json
