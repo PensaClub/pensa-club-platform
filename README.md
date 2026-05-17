@@ -34,6 +34,7 @@ high-contrast light/dark theme, and carefully simplified user flows.
    - [8.7 Fact-Check](#87-fact-check)
    - [8.8 Clubs, Map, Classifieds & Games](#88-clubs-map-classifieds--games)
    - [8.9 Notifications](#89-notifications)
+   - [8.10 Statistics & Analytics](#810-statistics--analytics)
 9. [AI Integration](#9-ai-integration)
 10. [Authentication & Authorization](#10-authentication--authorization)
 11. [SEO System](#11-seo-system)
@@ -101,12 +102,13 @@ Concrete, verified figures for the codebase:
 |-------|--------------|
 | **Frontend** | React 18.3, Vite 6.3, React Router 6, react-i18next, Leaflet / React-Leaflet (+ marker clustering), Recharts, TipTap / Draft.js / Slate (rich-text editors), Framer Motion, Socket.IO client, Firebase JS SDK, jsPDF, qrcode.react |
 | **Backend** | Node.js, Express 4.19, Sequelize 6.37, Socket.IO 4.8, node-cron, Zod, bcrypt, jsonwebtoken |
-| **Database** | PostgreSQL 16 |
+| **Database** | PostgreSQL 16 (primary) · Firebase Realtime Database (real-time mentor–student chat) |
 | **Authentication** | JWT (access + rotating refresh tokens), bcrypt, Firebase Admin, Google OAuth |
 | **AI** | Anthropic Claude API (`@anthropic-ai/sdk`) — Haiku 4.5 / Sonnet 4.6 / Opus 4.7 |
 | **Storage** | Firebase Storage / Google Cloud Storage (`@google-cloud/storage`), Google Drive API (`googleapis`) |
 | **Messaging** | Zoho Mail REST API (email), Twilio (SMS), web-push (browser push) |
 | **Media** | YouTube Data API (live streaming & video hosting), Firebase Resize Images extension |
+| **Analytics & Charts** | Google Analytics 4 + Google Ads conversion tracking (gtag.js, `react-ga4`), Recharts dashboards, first-party content-view tracker |
 | **Infrastructure** | Docker, Docker Compose, Nginx Proxy Manager, Let's Encrypt, GitHub Actions, Ubuntu VPS |
 | **Other** | cheerio (HTML scraping), geoip-lite, pdfkit, archiver, multer, node-cache |
 
@@ -333,10 +335,13 @@ stored in a Docker volume and auto-refreshed; admins connect a YouTube account,
 upload videos directly, and the lecture/seminar `start`/`stop` lifecycle flips
 the entity to `live` with the stream URL embedded on the detail page.
 
-**Mentors** — a become-a-mentor application flow, mentor directory, mentor
-dashboards with chat, student-to-mentor pairing applications, and a detailed
-mentor-statistics suite that reconciles Firebase chat activity with PostgreSQL
-data via daily snapshots.
+**Mentors** — a become-a-mentor application flow, mentor directory,
+student-to-mentor pairing applications, and mentor dashboards. Mentors and
+students communicate through a **real-time chat backed by Firebase Realtime
+Database** (conversation list, chat windows, online presence). A detailed
+mentor-statistics suite reconciles the Firebase chat activity — online time,
+message volume, response times, session quality — with PostgreSQL data via
+daily snapshots.
 
 **Credits & evaluation** — students earn credits per entity (course, lecture,
 seminar, test). Seminar credits combine attendance credits with a participation
@@ -484,6 +489,35 @@ of expired subscriptions), **in-app notifications** (a notification bell with
 unread counts), **admin notifications** (a separate admin bell), and **email**
 (Zoho) / **SMS** (Twilio). The `notification_queue` table is the reactive
 backbone connecting content publication to the newsletter digests.
+
+### 8.10 Statistics & Analytics
+
+The platform measures itself in depth — with both third-party analytics and a
+first-party tracker — and surfaces everything through charted admin dashboards.
+
+- **Google Analytics 4** — integrated via `gtag.js` and the `react-ga4`
+  library; route changes are tracked as page views, and **Google Ads conversion
+  tracking** is wired in for campaign measurement.
+- **First-party content-view tracker** — a `content_view` table records views
+  of every content type (articles, seminars, courses, initiatives, projects,
+  publications, clubs) with bot filtering and a 30-minute per-IP de-duplication
+  window, so "top content" rankings do not depend on an external service.
+- **Recharts dashboards** — across the admin surface, statistics are visualized
+  with **Recharts** (used in ~30+ components):
+  - **Mentor statistics** — activity trends, response times, session quality,
+    online time, mentors by specialization, top mentors by courses / online
+    time, plus a detailed table and PDF export.
+  - **Student statistics** — enrollment, progress, and credit overviews.
+  - **Seminar statistics** — attendance, participation levels, monthly reports.
+  - **Newsletter analytics** — open and click rates, unique clicks, top links,
+    and weekly time-series, broken down by newsletter type.
+  - **Forum analytics** — posts / comments / reactions over time, top authors
+    and posts, growth comparisons, with PDF export.
+  - **SEO statistics** — a dedicated admin view over the bot-detection logs.
+  - **Platform dashboard** — user growth, active vs. inactive users, unfinished
+    profiles, and overall platform metrics.
+- A `statisticsCache` middleware caches expensive statistics responses for five
+  minutes to keep these dashboards fast.
 
 ---
 
